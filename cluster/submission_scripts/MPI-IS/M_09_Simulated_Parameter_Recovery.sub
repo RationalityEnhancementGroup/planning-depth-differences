@@ -1,0 +1,11 @@
+project_path = $(save_path:/home/vfelso)/irl-project
+executable = $(project_path)/env/bin/python
+filename = $(project_path)/analysis/methods/static/src/simulated_parameter_recovery.py
+arguments = $(filename) -e $(experiment:SoftmaxRecovery)
+output = $(project_path)/analysis/methods/static/log/$(output_string:out_M9).stdout
+error  = log/$(output_string:out_M9).stderr
+log   = log/$(output_string:out_M9).log
+request_memory = 10000
+request_cpus = 1
+
+queue

@@ -1,0 +1,11 @@
+project_path = $(save_path:/home/vfelso)/irl-project
+executable = $(project_path)/env/bin/python
+filename = $(project_path)/analysis/methods/static/src/investigate_structure_knowledge.py
+arguments = $(filename) -e $(experiment:TrialByTrial)
+output = $(project_path)/analysis/methods/static/log//$(output_string:out_M8).stdout
+error  = log/$(output_string:out_M8).stderr
+log   = log/$(output_string:out_M8).log
+request_memory = 50000
+request_cpus = 1
+
+queue

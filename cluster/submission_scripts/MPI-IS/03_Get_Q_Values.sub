@@ -1,0 +1,11 @@
+project_path = $(save_path:/home/vfelso)/irl-project
+executable = $(project_path)/env/bin/python
+filename = $(project_path)/cluster/src/get_q_values.py
+arguments = $(filename) -s $(experiment_setting:high_increasing) -c $(cost_function:linear_depth) -v=$(reward_line)
+output = log/$(output_string:out_3).stdout
+error  = log/$(output_string:out_3).stderr
+log   = log/$(output_string:out_3).log
+request_memory = 190000
+request_cpus = 1
+
+queue reward_line from $(project_path)/cluster/parameters/cost/$(param_file:params_full).txt

@@ -1,0 +1,11 @@
+project_path = $(save_path:/home/vfelso)/irl-project
+executable = $(project_path)/env/bin/python
+filename = $(project_path)/cluster/submission_scripts/MPI-IS/07_Infer_Simulated_Params.py
+arguments = $(filename) -p $(policy) -c $(cost_function:linear_depth) -t $(temperature_file:expon)
+output = log/$(output_string:out_7).stdout
+error  = log/$(output_string:out_7).stderr
+log   = log/$(output_string:out_7).log
+request_memory = 500
+request_cpus = 1
+
+queue

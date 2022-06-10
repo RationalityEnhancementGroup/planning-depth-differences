@@ -1,0 +1,11 @@
+project_path = $(save_path:/home/vfelso)/irl-project
+executable = $(project_path)/env/bin/python
+filename = $(project_path)/analysis/methods/static/src/plot_bic.py
+arguments = $(filename) -e $(experiment:MainExperiment)
+output = $(project_path)/analysis/methods/static/log/$(output_string:out_M4).stdout
+error  = log/$(output_string:out_M4).stderr
+log   = log/$(output_string:out_M4).log
+request_memory = 10000
+request_cpus = 1
+
+queue
