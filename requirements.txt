@@ -1,0 +1,14 @@
+wheel
+mouselab @ git+https://github.com/RationalityEnhancementGroup/mouselab-mdp-tools.git@main#egg=mouselab  # noqa
+costometer @ git+https://github.com/RationalityEnhancementGroup/costometer.git#egg=costometer # noqa https://stackoverflow.com/a/26988592
+download_tools @ git+https://github.com/RationalityEnhancementGroup/download-tools.git@main#egg=download_tools # noqa
+ipykernel
+papermill
+numpy
+pandas
+pyarrow
+matplotlib
+seaborn
+pingouin
+colorcet
+pre-commit
