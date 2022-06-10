@@ -1,0 +1,21 @@
+sessions:
+        - methods_main
+post_quizzes:
+        - 'mouselab-quiz-post_Q0'
+        - 'mouselab-quiz-post_Q1'
+        - 'mouselab-quiz-post_Q2'
+        - 'mouselab-quiz-post_Q3'
+cost_functions:
+        - backward_search_cost
+        - distance_graph_cost
+        - forward_search_cost
+        - linear_depth
+#        - neighbor_search_cost
+group: false
+prior : 'expon'
+block: ['None']
+include_null : true
+preferred_cost: 'linear_depth'
+title_extras: ''
+simulated: False
+palette_name: MainExperiment

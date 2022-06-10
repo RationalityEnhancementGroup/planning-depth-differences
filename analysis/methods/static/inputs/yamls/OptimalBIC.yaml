@@ -1,0 +1,11 @@
+sessions:
+        - OptimalQ/high_increasing
+cost_functions:
+        - linear_depth
+simulated: True
+number_trials : 30
+group: False
+prior: 'expon'
+include_null: True
+preferred_cost: 'linear_depth'
+params: [""]
