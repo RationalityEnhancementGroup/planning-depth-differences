@@ -1,0 +1,19 @@
+database_key: NEW
+bonus_function: 'lambda row: round(.002*([350, 600, 100, 600, 850, 350, 850, 1100, 600, 1100, 1350, 850, 350, 600, 100, 600, 850, 350, 850, 1100, 600, 1100, 1350, 850][int(row["cond"])]+row["score"]),2)'
+simulated: false
+sessions:
+  - irl_validation
+experiment_setting: 'high_increasing'
+COST : {'irlexp9_23': [5,10,2,5,10,2,5,10,2,5,10,2,5,10,2,5,10,2,5,10,2,5,10,2]}
+DEPTH : {'irlexp9_23':[0,0,0,2,2,2,5,5,5,10,10,10,0,0,0,2,2,2,5,5,5,10,10,10]}
+html_survey_names: {}
+old_experiment: False
+manual_age_mapping: {}
+experiment_specific_mapping: {}
+trials_per_block: {'test':15, 'training':20, 'fairy':15}
+ranges_to_extract: null
+mouselab_column_identifier: name
+mouselab_mapping: {'0.0-1.*-1.*':'mouselab-quiz-pre', '0.0-3.*-5*': 'mouselab-quiz-post', '0.0-3.*-6*': 'mouselab-quiz-post', '0.0-3.*-3*': 'mouselab-fairy', '0.0-3.*-2*': 'mouselab-fairy'}
+max_attempts: {'mouselab-quiz-pre': 4, 'mouselab-quiz-post': 1, 'mouselab-fairy': 4}
+passing_score: {'mouselab-quiz-pre': 5, 'mouselab-quiz-post': 0, 'mouselab-fairy': 3}
+mouselab_quiz_solutions: {mouselab-fairy: {Q0 : "No",  Q1: "No, the cost is always $1.00.", Q2: 'There is no limit'}, mouselab-quiz-pre: {Q0 : '$-48 to $48', Q1: "No, the cost is always $1.00.", Q2: 'There is no limit', Q3: 'The better I perform the higher my bonus will be.', Q4: 'No, the amount of cash at each node of the web may be different each time.'}, mouselab-quiz-post: { "Q0":"$-4 to $4", "Q1":"$-8 to $8", "Q2":"$-48 to $48","Q3":"No, the cost is always $1.00.","Q4":{"Very unmotivated":-2, "Slightly unmotivated":-1, "Neither motivated nor unmotivated":0, "Slightly motivated":1, "Very motivated":2, "":0}}}
