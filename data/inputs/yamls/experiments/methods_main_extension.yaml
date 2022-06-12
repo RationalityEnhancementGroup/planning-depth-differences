@@ -1,0 +1,2 @@
+database_key: NEW
+bonus_function: 'lambda row: round((row["score"] + 50) * .002, 2)'

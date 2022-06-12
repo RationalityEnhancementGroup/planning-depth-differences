@@ -1,0 +1,10 @@
+success,trial_type,time_elapsed,internal_node_id,view_history,rt,responses,correct,pid,revealed_states,num_clicks_accrued,state_rewards,trial_id,block,trial_index,score,simulation_mode,rewards,path,actions,action_times,queries,displayed_time,trial_time,stimulus,button_pressed
+,survey-html-form,977222,0.0-3.0-4.0,,10260.70000000298,"{""gender"":""male"",""age"":""35"",""colorblind"":""0"",""effort"":""0""}",,1731,,,,,,,,,,,,,,,,,
+,survey-html-form,593644,0.0-3.0-4.0,,9543.199999809265,"{""gender"":""male"",""age"":""26"",""colorblind"":""0"",""effort"":""0""}",,2372,,,,,,,,,,,,,,,,,
+,survey-html-form,636623,0.0-3.0-4.0,,11160.900000035763,"{""gender"":""female"",""age"":""52"",""colorblind"":""0"",""effort"":""0""}",,2373,,,,,,,,,,,,,,,,,
+,survey-html-form,799446,0.0-3.0-4.0,,16132.700000047684,"{""gender"":""female"",""age"":""42"",""colorblind"":""0"",""effort"":""0""}",,1737,,,,,,,,,,,,,,,,,
+,survey-html-form,2573560,0.0-3.0-4.0,,30320,"{""gender"":""male"",""age"":""69"",""colorblind"":""0"",""effort"":""0""}",,2368,,,,,,,,,,,,,,,,,
+,survey-html-form,620672,0.0-3.0-4.0,,39606.80000001192,"{""gender"":""male"",""age"":""20"",""colorblind"":""0"",""effort"":""0""}",,2370,,,,,,,,,,,,,,,,,
+,survey-html-form,785830,0.0-3.0-4.0,,22405.700000047684,"{""gender"":""male"",""age"":""55"",""colorblind"":""2"",""effort"":""0""}",,1754,,,,,,,,,,,,,,,,,
+,survey-html-form,660499,0.0-3.0-4.0,,14700.799999982119,"{""gender"":""female"",""age"":""30"",""colorblind"":""0"",""effort"":""0""}",,2367,,,,,,,,,,,,,,,,,
+,survey-html-form,549246,0.0-3.0-4.0,,15440,"{""gender"":""male"",""age"":""46"",""colorblind"":""0"",""effort"":""0""}",,2374,,,,,,,,,,,,,,,,,

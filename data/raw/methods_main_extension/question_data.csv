@@ -1,0 +1,13 @@
+pid,CODE,DEPTH,COST,MIN_TIME,inspectCost,startTime,bonusRate,variance,branching,final_bonus,displayed_bonus
+2371,hedgehog,0,0,7,1,Wed Mar 09 2022 11:48:25 GMT-0800 (Pacific Standard Time),0.002,2_4_24,312,,
+2204,walrus,0,0,7,1,Wed Mar 09 2022 15:40:27 GMT-0700 (Mountain Standard Time),0.002,2_4_24,312,,
+1731,hedgehog,0,0,7,1,Wed Mar 09 2022 14:09:28 GMT-0600 (Central Standard Time),0.002,2_4_24,312,3.44,3.44
+2365,bighorn,0,0,7,1,Wed Mar 09 2022 14:01:00 GMT-0500 (Eastern Standard Time),0.002,2_4_24,312,0.1,0
+2372,chinchilla,0,0,7,1,Wed Mar 09 2022 22:08:45 GMT-0500 (Eastern Standard Time),0.002,2_4_24,312,3.29,3.29
+2373,porcupine,0,0,7,1,Wed Mar 09 2022 15:42:15 GMT-0600 (Central Standard Time),0.002,2_4_24,312,3.23,3.23
+1737,dromedary,0,0,7,1,Wed Mar 09 2022 14:01:20 GMT-0500 (Eastern Standard Time),0.002,2_4_24,312,2.11,2.11
+2368,rooster,0,0,7,1,Wed Mar 09 2022 13:06:58 GMT-0600 (Central Standard Time),0.002,2_4_24,312,3.39,3.39
+2370,iguana,0,0,7,1,Wed Mar 09 2022 13:35:15 GMT-0600 (Central Standard Time),0.002,2_4_24,312,3.39,3.39
+1754,bighorn,0,0,7,1,Wed Mar 09 2022 15:37:42 GMT-0500 (Eastern Standard Time),0.002,2_4_24,312,2.9,2.90
+2367,porcupine,0,0,7,1,Wed Mar 09 2022 14:03:48 GMT-0500 (Eastern Standard Time),0.002,2_4_24,312,,
+2374,dromedary,0,0,7,1,Wed Mar 09 2022 18:01:43 GMT-0500 (Eastern Standard Time),0.002,2_4_24,312,3.25,3.25
