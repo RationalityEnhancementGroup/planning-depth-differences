@@ -1,3 +1,4 @@
+dill
 wheel
 mouselab @ git+https://github.com/RationalityEnhancementGroup/mouselab-mdp-tools.git@main#egg=mouselab  # noqa
 costometer @ git+https://github.com/RationalityEnhancementGroup/costometer.git#egg=costometer # noqa https://stackoverflow.com/a/26988592
