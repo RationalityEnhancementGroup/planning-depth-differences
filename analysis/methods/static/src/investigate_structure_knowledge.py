@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from itertools import combinations
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -136,18 +137,30 @@ if __name__ == "__main__":
         print(get_kruskal_wallis_text(omnibus))
 
         print("----------")
-        comparison_perfect = pg.mwu(
-            optimization_data[optimization_data["score"] == 4][obs_var],
-            optimization_data[optimization_data["score"] < 4][obs_var],
-        )
-        print("Comparison for perfect post-test scorers vs everyone else")
+        print(f"Pair-wise comparisons: {obs_var}")
         print("----------")
-        print(get_mann_whitney_text(comparison_perfect))
-        mean_perfect = np.mean(
-            optimization_data[optimization_data["score"] == 4][obs_var]
-        )
-        mean_other = np.mean(optimization_data[optimization_data["score"] < 4][obs_var])
-        print(
-            f"$M_{{\\text{{perfect}}}}={mean_perfect:.2f}$ vs "
-            f"$M_{{\\text{{other}}}}={mean_other:.2f}$"
-        )
+        pairs = combinations(optimization_data["score"].unique(), 2)
+
+        for pair in pairs:
+            score1, score2 = pair
+            print("----------")
+            print(f"Pair-wise comparison: {obs_var} {score1}, {score2}")
+            print("----------")
+
+            pair_comparison = pg.mwu(
+                optimization_data[optimization_data["score"] == score1][obs_var],
+                optimization_data[optimization_data["score"] == score2][obs_var],
+            )
+
+            print(get_mann_whitney_text(pair_comparison))
+
+            mean1 = np.mean(
+                optimization_data[optimization_data["score"] == score1][obs_var]
+            )
+            mean2 = np.mean(
+                optimization_data[optimization_data["score"] == score2][obs_var]
+            )
+            print(
+                f"$M_{{\\text{{{score1:.0f}}}}}={mean1:.2f}$ "
+                f"vs $M_{{\\text{{{score2:.0f}}}}}={mean2:.2f}$"
+            )

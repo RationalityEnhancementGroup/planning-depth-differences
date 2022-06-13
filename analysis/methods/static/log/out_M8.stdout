@@ -4,27 +4,111 @@ Comparisons for avg
 Omnibus test
 Kruskal-Wallis $H(3) = 0.75, p > 0.05$
 ----------
-Comparison for perfect post-test scorers vs everyone else
+Pair-wise comparisons: avg
 ----------
-Mann-Whitney $U=723.50, p > 0.05$, two-sided
-$M_{\text{perfect}}=0.28$ vs $M_{\text{other}}=0.33$
+----------
+Pair-wise comparison: avg 4.0, 3.0
+----------
+Mann-Whitney $U=555.50, p > 0.05$, two-sided
+$M_{\text{4}}=0.28$ vs $M_{\text{3}}=0.34$
+----------
+Pair-wise comparison: avg 4.0, 2.0
+----------
+Mann-Whitney $U=95.00, p > 0.05$, two-sided
+$M_{\text{4}}=0.28$ vs $M_{\text{2}}=0.31$
+----------
+Pair-wise comparison: avg 4.0, 1.0
+----------
+Mann-Whitney $U=73.00, p > 0.05$, two-sided
+$M_{\text{4}}=0.28$ vs $M_{\text{1}}=0.33$
+----------
+Pair-wise comparison: avg 3.0, 2.0
+----------
+Mann-Whitney $U=10.00, p > 0.05$, two-sided
+$M_{\text{3}}=0.34$ vs $M_{\text{2}}=0.31$
+----------
+Pair-wise comparison: avg 3.0, 1.0
+----------
+Mann-Whitney $U=7.00, p > 0.05$, two-sided
+$M_{\text{3}}=0.34$ vs $M_{\text{1}}=0.33$
+----------
+Pair-wise comparison: avg 2.0, 1.0
+----------
+Mann-Whitney $U=2.00, p > 0.05$, two-sided
+$M_{\text{2}}=0.31$ vs $M_{\text{1}}=0.33$
 ==========
 Comparisons for static_cost_weight
 ----------
 Omnibus test
 Kruskal-Wallis $H(3) = 3.33, p > 0.05$
 ----------
-Comparison for perfect post-test scorers vs everyone else
+Pair-wise comparisons: static_cost_weight
 ----------
-Mann-Whitney $U=899.00, p > 0.05$, two-sided
-$M_{\text{perfect}}=3.62$ vs $M_{\text{other}}=2.63$
+----------
+Pair-wise comparison: static_cost_weight 4.0, 3.0
+----------
+Mann-Whitney $U=724.50, p > 0.05$, two-sided
+$M_{\text{4}}=3.62$ vs $M_{\text{3}}=1.77$
+----------
+Pair-wise comparison: static_cost_weight 4.0, 2.0
+----------
+Mann-Whitney $U=121.00, p > 0.05$, two-sided
+$M_{\text{4}}=3.62$ vs $M_{\text{2}}=2.50$
+----------
+Pair-wise comparison: static_cost_weight 4.0, 1.0
+----------
+Mann-Whitney $U=53.50, p > 0.05$, two-sided
+$M_{\text{4}}=3.62$ vs $M_{\text{1}}=7.50$
+----------
+Pair-wise comparison: static_cost_weight 3.0, 2.0
+----------
+Mann-Whitney $U=9.00, p > 0.05$, two-sided
+$M_{\text{3}}=1.77$ vs $M_{\text{2}}=2.50$
+----------
+Pair-wise comparison: static_cost_weight 3.0, 1.0
+----------
+Mann-Whitney $U=4.00, p > 0.05$, two-sided
+$M_{\text{3}}=1.77$ vs $M_{\text{1}}=7.50$
+----------
+Pair-wise comparison: static_cost_weight 2.0, 1.0
+----------
+Mann-Whitney $U=0.00, p > 0.05$, two-sided
+$M_{\text{2}}=2.50$ vs $M_{\text{1}}=7.50$
 ==========
 Comparisons for depth_cost_weight
 ----------
 Omnibus test
 Kruskal-Wallis $H(3) = 8.71, p = 0.03$
 ----------
-Comparison for perfect post-test scorers vs everyone else
+Pair-wise comparisons: depth_cost_weight
 ----------
-Mann-Whitney $U=584.50, p > 0.05$, two-sided
-$M_{\text{perfect}}=0.40$ vs $M_{\text{other}}=1.77$
+----------
+Pair-wise comparison: depth_cost_weight 4.0, 3.0
+----------
+Mann-Whitney $U=313.50, p = 0.01$, two-sided
+$M_{\text{4}}=0.40$ vs $M_{\text{3}}=2.60$
+----------
+Pair-wise comparison: depth_cost_weight 4.0, 2.0
+----------
+Mann-Whitney $U=105.00, p > 0.05$, two-sided
+$M_{\text{4}}=0.40$ vs $M_{\text{2}}=0.30$
+----------
+Pair-wise comparison: depth_cost_weight 4.0, 1.0
+----------
+Mann-Whitney $U=166.00, p > 0.05$, two-sided
+$M_{\text{4}}=0.40$ vs $M_{\text{1}}=-1.30$
+----------
+Pair-wise comparison: depth_cost_weight 3.0, 2.0
+----------
+Mann-Whitney $U=17.50, p > 0.05$, two-sided
+$M_{\text{3}}=2.60$ vs $M_{\text{2}}=0.30$
+----------
+Pair-wise comparison: depth_cost_weight 3.0, 1.0
+----------
+Mann-Whitney $U=20.50, p > 0.05$, two-sided
+$M_{\text{3}}=2.60$ vs $M_{\text{1}}=-1.30$
+----------
+Pair-wise comparison: depth_cost_weight 2.0, 1.0
+----------
+Mann-Whitney $U=4.00, p > 0.05$, two-sided
+$M_{\text{2}}=0.30$ vs $M_{\text{1}}=-1.30$
