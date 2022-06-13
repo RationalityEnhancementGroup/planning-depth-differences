@@ -1,0 +1,39 @@
+==========
+----------
+Correlation between BIC and spread for static_cost_weight
+----------
+$r(122) = -0.57, p < 0.001, 95\%\ C.\ I.\: [-0.68, -0.43]$
+----------
+Correlation between BIC and MAP parameter value for static_cost_weight
+----------
+$r(122) = -0.60, p < 0.001, 95\%\ C.\ I.\: [-0.71, -0.48]$
+----------
+Correlation between parameter spread and MAP parameter value for static_cost_weight
+----------
+$r(122) = 0.73, p < 0.001, 95\%\ C.\ I.\: [0.63, 0.80]$
+==========
+----------
+Correlation between BIC and spread for depth_cost_weight
+----------
+$r(122) = -0.47, p < 0.001, 95\%\ C.\ I.\: [-0.60, -0.32]$
+----------
+Correlation between BIC and MAP parameter value for depth_cost_weight
+----------
+$r(122) = 0.20, p = 0.03, 95\%\ C.\ I.\: [0.02, 0.36]$
+----------
+Correlation between parameter spread and MAP parameter value for depth_cost_weight
+----------
+$r(122) = -0.36, p < 0.001, 95\%\ C.\ I.\: [-0.50, -0.19]$
+==========
+----------
+Correlation between BIC and spread for temp
+----------
+$r(122) = 0.30, p < 0.001, 95\%\ C.\ I.\: [0.13, 0.45]$
+----------
+Correlation between BIC and MAP parameter value for temp
+----------
+$r(122) = 0.33, p < 0.001, 95\%\ C.\ I.\: [0.17, 0.48]$
+----------
+Correlation between parameter spread and MAP parameter value for temp
+----------
+$r(122) = 0.63, p < 0.001, 95\%\ C.\ I.\: [0.51, 0.73]$
