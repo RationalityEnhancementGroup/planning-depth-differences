@@ -1,0 +1,59 @@
+==========
+----------
+Correlation between inferred static_cost_weight and depth_cost_weight for simulated participants
+----------
+$r(143000) = -0.16, p < 0.001, 95\%\ C.\ I.\: [-0.17, -0.16]$
+----------
+Correlation between inferred static_cost_weight and temp for simulated participants
+----------
+$r(143000) = -0.20, p < 0.001, 95\%\ C.\ I.\: [-0.20, -0.19]$
+----------
+Correlation between inferred depth_cost_weight and temp for simulated participants
+----------
+$r(143000) = 0.18, p < 0.001, 95\%\ C.\ I.\: [0.18, 0.19]$
+==========
+----------
+RMSE for parameter static_cost_weight
+----------
+3.548272681316787
+----------
+RMSE for parameter depth_cost_weight
+----------
+2.41217268514032
+----------
+RMSE for parameter temp
+----------
+40.2558552060955
+==========
+Regression with static_cost_weight as dependent variable
+----------
+$\costweight$  &  $\hat{Intercept}$ & $0.193 (0.012)^{***}$ & $16.096$ \\
+$\costweight$  &  $\hat{\costweight}$ & $0.680 (0.002)^{***}$ & $319.826$ \\
+$\costweight$  &  $\hat{\depthweight}$ & $0.121 (0.002)^{***}$ & $48.909$ \\
+$\costweight$  &  $\hat{\beta}$ & $0.154 (0.002)^{***}$ & $70.014$ \\
+----------
+adj. $R^2=0.42, F(3, 142996) = 34208.55, p < 0.001$
+==========
+Regression with depth_cost_weight as dependent variable
+----------
+$\depthweight$  &  $\hat{Intercept}$ & $-0.383 (0.009)^{***}$ & $-44.897$ \\
+$\depthweight$  &  $\hat{\costweight}$ & $0.230 (0.002)^{***}$ & $151.933$ \\
+$\depthweight$  &  $\hat{\depthweight}$ & $1.020 (0.002)^{***}$ & $579.001$ \\
+$\depthweight$  &  $\hat{\beta}$ & $-0.053 (0.002)^{***}$ & $-33.999$ \\
+----------
+adj. $R^2=0.71, F(3, 142996) = 114347.33, p < 0.001$
+==========
+Regression with temp as dependent variable
+----------
+$\beta$  &  $\hat{Intercept}$ & $-7.359 (0.070)^{***}$ & $-105.429$ \\
+$\beta$  &  $\hat{\costweight}$ & $-0.590 (0.012)^{***}$ & $-47.713$ \\
+$\beta$  &  $\hat{\depthweight}$ & $-0.572 (0.014)^{***}$ & $-39.716$ \\
+$\beta$  &  $\hat{\beta}$ & $8.974 (0.013)^{***}$ & $702.985$ \\
+----------
+adj. $R^2=0.79, F(3, 142996) = 177880.67, p < 0.001$
+Absolute error for static_cost_weight
+Median: 0.00, Range: [-15.00, 15.00]
+Absolute error for depth_cost_weight
+Median: 0.00, Range: [-7.60, 10.00]
+Absolute error for temp
+Median: -0.90, Range: [-95.00, 2.50]
