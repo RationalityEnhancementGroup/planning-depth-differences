@@ -1,0 +1,30 @@
+==========
+Comparisons for avg
+----------
+Omnibus test
+Kruskal-Wallis $H(3) = 0.75, p > 0.05$
+----------
+Comparison for perfect post-test scorers vs everyone else
+----------
+Mann-Whitney $U=723.50, p > 0.05$, two-sided
+$M_{\text{perfect}}=0.28$ vs $M_{\text{other}}=0.33$
+==========
+Comparisons for static_cost_weight
+----------
+Omnibus test
+Kruskal-Wallis $H(3) = 3.33, p > 0.05$
+----------
+Comparison for perfect post-test scorers vs everyone else
+----------
+Mann-Whitney $U=899.00, p > 0.05$, two-sided
+$M_{\text{perfect}}=3.62$ vs $M_{\text{other}}=2.63$
+==========
+Comparisons for depth_cost_weight
+----------
+Omnibus test
+Kruskal-Wallis $H(3) = 8.71, p = 0.03$
+----------
+Comparison for perfect post-test scorers vs everyone else
+----------
+Mann-Whitney $U=584.50, p > 0.05$, two-sided
+$M_{\text{perfect}}=0.40$ vs $M_{\text{other}}=1.77$
