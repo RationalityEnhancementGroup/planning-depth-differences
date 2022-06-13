@@ -1,0 +1,797 @@
+Descriptive statistics for main experiment (MainExperiment) static_cost_weight
+$M: 3.50, SD: 4.72$
+Descriptive statistics for experiment (ValidationExperiment), test block static_cost_weight
+$M: 5.89, SD: 4.84$
+Descriptive statistics for experiment (ValidationExperiment), baseline block static_cost_weight
+$M: 4.56, SD: 5.11$
+Comparison between experiment (ValidationExperiment) test block and main experiment (MainExperiment) for cost parameter: static_cost_weight
+Mann-Whitney $U=26630.00, p < 0.001$, two-sided
+Comparison between experiment (ValidationExperiment) baseline block and main experiment (MainExperiment) for cost parameter: static_cost_weight
+Mann-Whitney $U=23080.50, p = 0.03$, two-sided
+Comparison between experiment (ValidationExperiment)'s test and baseline blocks for cost parameter: static_cost_weight
+$W = 9201.00, RBC = 0.29, p < 0.001$, two-sided
+Descriptive statistics for main experiment (MainExperiment) depth_cost_weight
+$M: 0.57, SD: 2.60$
+Descriptive statistics for experiment (ValidationExperiment), test block depth_cost_weight
+$M: 3.89, SD: 4.59$
+Descriptive statistics for experiment (ValidationExperiment), baseline block depth_cost_weight
+$M: 1.16, SD: 4.05$
+Comparison between experiment (ValidationExperiment) test block and main experiment (MainExperiment) for cost parameter: depth_cost_weight
+Mann-Whitney $U=28310.50, p < 0.001$, two-sided
+Comparison between experiment (ValidationExperiment) baseline block and main experiment (MainExperiment) for cost parameter: depth_cost_weight
+Mann-Whitney $U=19502.50, p > 0.05$, two-sided
+Comparison between experiment (ValidationExperiment)'s test and baseline blocks for cost parameter: depth_cost_weight
+$W = 3092.00, RBC = 0.80, p < 0.001$, two-sided
+Descriptive statistics for main experiment (MainExperiment) temp
+$M: 1.09, SD: 1.63$
+Descriptive statistics for experiment (ValidationExperiment), test block temp
+$M: 0.91, SD: 1.29$
+Descriptive statistics for experiment (ValidationExperiment), baseline block temp
+$M: 1.28, SD: 1.78$
+Comparison between experiment (ValidationExperiment) test block and main experiment (MainExperiment) for cost parameter: temp
+Mann-Whitney $U=18080.50, p > 0.05$, two-sided
+Comparison between experiment (ValidationExperiment) baseline block and main experiment (MainExperiment) for cost parameter: temp
+Mann-Whitney $U=21089.50, p > 0.05$, two-sided
+Comparison between experiment (ValidationExperiment)'s test and baseline blocks for cost parameter: temp
+$W = 12297.50, RBC = -0.26, p < 0.001$, two-sided
+RMSE for static_cost_weight
+5.801186188533329
+RMSE for depth_cost_weight
+4.776053451037182
+RMSE for LOO for COST, static_cost_weight
+M: $3.24$ (SD: $nan$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   COST   R-squared:                       0.030
+Model:                            OLS   Adj. R-squared:                  0.003
+Method:                 Least Squares   F-statistic:                     1.121
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):              0.347
+Time:                        10:17:36   Log-Likelihood:                -870.05
+No. Observations:                 335   AIC:                             1760.
+Df Residuals:                     325   BIC:                             1798.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                5.6949      0.729      7.812      0.000       4.261       7.129
+C(FAIRY_GOD_CONDITION)[T.True]          -0.0615      0.376     -0.163      0.870      -0.801       0.678
+static_cost_weight                       0.0714      0.078      0.913      0.362      -0.082       0.225
+depth_cost_weight                        0.1337      0.094      1.418      0.157      -0.052       0.319
+temp                                    -0.9731      0.451     -2.157      0.032      -1.861      -0.086
+temp:static_cost_weight                  0.0680      0.037      1.855      0.064      -0.004       0.140
+temp:depth_cost_weight                   0.0715      0.047      1.508      0.132      -0.022       0.165
+static_cost_weight:depth_cost_weight    -0.0171      0.009     -1.833      0.068      -0.035       0.001
+static_cost_weight_fairy                -0.0523      0.043     -1.223      0.222      -0.136       0.032
+depth_cost_weight_fairy                 -0.0589      0.064     -0.922      0.357      -0.185       0.067
+==============================================================================
+Omnibus:                     6899.916   Durbin-Watson:                   2.023
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               32.227
+Skew:                           0.228   Prob(JB):                     1.00e-07
+Kurtosis:                       1.551   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for COST
+adj. $R^2=0.00, F(9, 325) = 1.12, p > 0.05$
+RMSE for LOO for COST, static_cost_weight
+M: $3.18$ (SD: $0.07$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   COST   R-squared:                       0.030
+Model:                            OLS   Adj. R-squared:                  0.003
+Method:                 Least Squares   F-statistic:                     1.121
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):              0.347
+Time:                        10:17:36   Log-Likelihood:                -870.05
+No. Observations:                 335   AIC:                             1760.
+Df Residuals:                     325   BIC:                             1798.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                5.6949      0.729      7.812      0.000       4.261       7.129
+C(FAIRY_GOD_CONDITION)[T.True]          -0.0615      0.376     -0.163      0.870      -0.801       0.678
+static_cost_weight                       0.0714      0.078      0.913      0.362      -0.082       0.225
+depth_cost_weight                        0.1337      0.094      1.418      0.157      -0.052       0.319
+temp                                    -0.9731      0.451     -2.157      0.032      -1.861      -0.086
+temp:static_cost_weight                  0.0680      0.037      1.855      0.064      -0.004       0.140
+temp:depth_cost_weight                   0.0715      0.047      1.508      0.132      -0.022       0.165
+static_cost_weight:depth_cost_weight    -0.0171      0.009     -1.833      0.068      -0.035       0.001
+static_cost_weight_fairy                -0.0523      0.043     -1.223      0.222      -0.136       0.032
+depth_cost_weight_fairy                 -0.0589      0.064     -0.922      0.357      -0.185       0.067
+==============================================================================
+Omnibus:                     6899.916   Durbin-Watson:                   2.023
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               32.227
+Skew:                           0.228   Prob(JB):                     1.00e-07
+Kurtosis:                       1.551   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for COST
+adj. $R^2=0.00, F(9, 325) = 1.12, p > 0.05$
+RMSE for LOO for COST, static_cost_weight
+M: $3.16$ (SD: $0.13$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   COST   R-squared:                       0.030
+Model:                            OLS   Adj. R-squared:                  0.003
+Method:                 Least Squares   F-statistic:                     1.121
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):              0.347
+Time:                        10:17:36   Log-Likelihood:                -870.05
+No. Observations:                 335   AIC:                             1760.
+Df Residuals:                     325   BIC:                             1798.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                5.6949      0.729      7.812      0.000       4.261       7.129
+C(FAIRY_GOD_CONDITION)[T.True]          -0.0615      0.376     -0.163      0.870      -0.801       0.678
+static_cost_weight                       0.0714      0.078      0.913      0.362      -0.082       0.225
+depth_cost_weight                        0.1337      0.094      1.418      0.157      -0.052       0.319
+temp                                    -0.9731      0.451     -2.157      0.032      -1.861      -0.086
+temp:static_cost_weight                  0.0680      0.037      1.855      0.064      -0.004       0.140
+temp:depth_cost_weight                   0.0715      0.047      1.508      0.132      -0.022       0.165
+static_cost_weight:depth_cost_weight    -0.0171      0.009     -1.833      0.068      -0.035       0.001
+static_cost_weight_fairy                -0.0523      0.043     -1.223      0.222      -0.136       0.032
+depth_cost_weight_fairy                 -0.0589      0.064     -0.922      0.357      -0.185       0.067
+==============================================================================
+Omnibus:                     6899.916   Durbin-Watson:                   2.023
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               32.227
+Skew:                           0.228   Prob(JB):                     1.00e-07
+Kurtosis:                       1.551   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for COST
+adj. $R^2=0.00, F(9, 325) = 1.12, p > 0.05$
+RMSE for LOO for COST, static_cost_weight
+M: $3.19$ (SD: $0.14$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   COST   R-squared:                       0.030
+Model:                            OLS   Adj. R-squared:                  0.003
+Method:                 Least Squares   F-statistic:                     1.121
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):              0.347
+Time:                        10:17:36   Log-Likelihood:                -870.05
+No. Observations:                 335   AIC:                             1760.
+Df Residuals:                     325   BIC:                             1798.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                5.6949      0.729      7.812      0.000       4.261       7.129
+C(FAIRY_GOD_CONDITION)[T.True]          -0.0615      0.376     -0.163      0.870      -0.801       0.678
+static_cost_weight                       0.0714      0.078      0.913      0.362      -0.082       0.225
+depth_cost_weight                        0.1337      0.094      1.418      0.157      -0.052       0.319
+temp                                    -0.9731      0.451     -2.157      0.032      -1.861      -0.086
+temp:static_cost_weight                  0.0680      0.037      1.855      0.064      -0.004       0.140
+temp:depth_cost_weight                   0.0715      0.047      1.508      0.132      -0.022       0.165
+static_cost_weight:depth_cost_weight    -0.0171      0.009     -1.833      0.068      -0.035       0.001
+static_cost_weight_fairy                -0.0523      0.043     -1.223      0.222      -0.136       0.032
+depth_cost_weight_fairy                 -0.0589      0.064     -0.922      0.357      -0.185       0.067
+==============================================================================
+Omnibus:                     6899.916   Durbin-Watson:                   2.023
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               32.227
+Skew:                           0.228   Prob(JB):                     1.00e-07
+Kurtosis:                       1.551   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for COST
+adj. $R^2=0.00, F(9, 325) = 1.12, p > 0.05$
+RMSE for LOO for COST, static_cost_weight
+M: $3.21$ (SD: $0.14$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   COST   R-squared:                       0.030
+Model:                            OLS   Adj. R-squared:                  0.003
+Method:                 Least Squares   F-statistic:                     1.121
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):              0.347
+Time:                        10:17:36   Log-Likelihood:                -870.05
+No. Observations:                 335   AIC:                             1760.
+Df Residuals:                     325   BIC:                             1798.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                5.6949      0.729      7.812      0.000       4.261       7.129
+C(FAIRY_GOD_CONDITION)[T.True]          -0.0615      0.376     -0.163      0.870      -0.801       0.678
+static_cost_weight                       0.0714      0.078      0.913      0.362      -0.082       0.225
+depth_cost_weight                        0.1337      0.094      1.418      0.157      -0.052       0.319
+temp                                    -0.9731      0.451     -2.157      0.032      -1.861      -0.086
+temp:static_cost_weight                  0.0680      0.037      1.855      0.064      -0.004       0.140
+temp:depth_cost_weight                   0.0715      0.047      1.508      0.132      -0.022       0.165
+static_cost_weight:depth_cost_weight    -0.0171      0.009     -1.833      0.068      -0.035       0.001
+static_cost_weight_fairy                -0.0523      0.043     -1.223      0.222      -0.136       0.032
+depth_cost_weight_fairy                 -0.0589      0.064     -0.922      0.357      -0.185       0.067
+==============================================================================
+Omnibus:                     6899.916   Durbin-Watson:                   2.023
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               32.227
+Skew:                           0.228   Prob(JB):                     1.00e-07
+Kurtosis:                       1.551   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for COST
+adj. $R^2=0.00, F(9, 325) = 1.12, p > 0.05$
+RMSE for LOO for COST, static_cost_weight
+M: $3.22$ (SD: $0.12$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   COST   R-squared:                       0.030
+Model:                            OLS   Adj. R-squared:                  0.003
+Method:                 Least Squares   F-statistic:                     1.121
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):              0.347
+Time:                        10:17:36   Log-Likelihood:                -870.05
+No. Observations:                 335   AIC:                             1760.
+Df Residuals:                     325   BIC:                             1798.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                5.6949      0.729      7.812      0.000       4.261       7.129
+C(FAIRY_GOD_CONDITION)[T.True]          -0.0615      0.376     -0.163      0.870      -0.801       0.678
+static_cost_weight                       0.0714      0.078      0.913      0.362      -0.082       0.225
+depth_cost_weight                        0.1337      0.094      1.418      0.157      -0.052       0.319
+temp                                    -0.9731      0.451     -2.157      0.032      -1.861      -0.086
+temp:static_cost_weight                  0.0680      0.037      1.855      0.064      -0.004       0.140
+temp:depth_cost_weight                   0.0715      0.047      1.508      0.132      -0.022       0.165
+static_cost_weight:depth_cost_weight    -0.0171      0.009     -1.833      0.068      -0.035       0.001
+static_cost_weight_fairy                -0.0523      0.043     -1.223      0.222      -0.136       0.032
+depth_cost_weight_fairy                 -0.0589      0.064     -0.922      0.357      -0.185       0.067
+==============================================================================
+Omnibus:                     6899.916   Durbin-Watson:                   2.023
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               32.227
+Skew:                           0.228   Prob(JB):                     1.00e-07
+Kurtosis:                       1.551   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for COST
+adj. $R^2=0.00, F(9, 325) = 1.12, p > 0.05$
+RMSE for LOO for COST, static_cost_weight
+M: $3.26$ (SD: $0.17$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   COST   R-squared:                       0.030
+Model:                            OLS   Adj. R-squared:                  0.003
+Method:                 Least Squares   F-statistic:                     1.121
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):              0.347
+Time:                        10:17:36   Log-Likelihood:                -870.05
+No. Observations:                 335   AIC:                             1760.
+Df Residuals:                     325   BIC:                             1798.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                5.6949      0.729      7.812      0.000       4.261       7.129
+C(FAIRY_GOD_CONDITION)[T.True]          -0.0615      0.376     -0.163      0.870      -0.801       0.678
+static_cost_weight                       0.0714      0.078      0.913      0.362      -0.082       0.225
+depth_cost_weight                        0.1337      0.094      1.418      0.157      -0.052       0.319
+temp                                    -0.9731      0.451     -2.157      0.032      -1.861      -0.086
+temp:static_cost_weight                  0.0680      0.037      1.855      0.064      -0.004       0.140
+temp:depth_cost_weight                   0.0715      0.047      1.508      0.132      -0.022       0.165
+static_cost_weight:depth_cost_weight    -0.0171      0.009     -1.833      0.068      -0.035       0.001
+static_cost_weight_fairy                -0.0523      0.043     -1.223      0.222      -0.136       0.032
+depth_cost_weight_fairy                 -0.0589      0.064     -0.922      0.357      -0.185       0.067
+==============================================================================
+Omnibus:                     6899.916   Durbin-Watson:                   2.023
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               32.227
+Skew:                           0.228   Prob(JB):                     1.00e-07
+Kurtosis:                       1.551   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for COST
+adj. $R^2=0.00, F(9, 325) = 1.12, p > 0.05$
+RMSE for LOO for COST, static_cost_weight
+M: $3.27$ (SD: $0.15$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   COST   R-squared:                       0.030
+Model:                            OLS   Adj. R-squared:                  0.003
+Method:                 Least Squares   F-statistic:                     1.121
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):              0.347
+Time:                        10:17:36   Log-Likelihood:                -870.05
+No. Observations:                 335   AIC:                             1760.
+Df Residuals:                     325   BIC:                             1798.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                5.6949      0.729      7.812      0.000       4.261       7.129
+C(FAIRY_GOD_CONDITION)[T.True]          -0.0615      0.376     -0.163      0.870      -0.801       0.678
+static_cost_weight                       0.0714      0.078      0.913      0.362      -0.082       0.225
+depth_cost_weight                        0.1337      0.094      1.418      0.157      -0.052       0.319
+temp                                    -0.9731      0.451     -2.157      0.032      -1.861      -0.086
+temp:static_cost_weight                  0.0680      0.037      1.855      0.064      -0.004       0.140
+temp:depth_cost_weight                   0.0715      0.047      1.508      0.132      -0.022       0.165
+static_cost_weight:depth_cost_weight    -0.0171      0.009     -1.833      0.068      -0.035       0.001
+static_cost_weight_fairy                -0.0523      0.043     -1.223      0.222      -0.136       0.032
+depth_cost_weight_fairy                 -0.0589      0.064     -0.922      0.357      -0.185       0.067
+==============================================================================
+Omnibus:                     6899.916   Durbin-Watson:                   2.023
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               32.227
+Skew:                           0.228   Prob(JB):                     1.00e-07
+Kurtosis:                       1.551   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for COST
+adj. $R^2=0.00, F(9, 325) = 1.12, p > 0.05$
+RMSE for LOO for COST, static_cost_weight
+M: $3.28$ (SD: $0.14$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   COST   R-squared:                       0.030
+Model:                            OLS   Adj. R-squared:                  0.003
+Method:                 Least Squares   F-statistic:                     1.121
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):              0.347
+Time:                        10:17:36   Log-Likelihood:                -870.05
+No. Observations:                 335   AIC:                             1760.
+Df Residuals:                     325   BIC:                             1798.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                5.6949      0.729      7.812      0.000       4.261       7.129
+C(FAIRY_GOD_CONDITION)[T.True]          -0.0615      0.376     -0.163      0.870      -0.801       0.678
+static_cost_weight                       0.0714      0.078      0.913      0.362      -0.082       0.225
+depth_cost_weight                        0.1337      0.094      1.418      0.157      -0.052       0.319
+temp                                    -0.9731      0.451     -2.157      0.032      -1.861      -0.086
+temp:static_cost_weight                  0.0680      0.037      1.855      0.064      -0.004       0.140
+temp:depth_cost_weight                   0.0715      0.047      1.508      0.132      -0.022       0.165
+static_cost_weight:depth_cost_weight    -0.0171      0.009     -1.833      0.068      -0.035       0.001
+static_cost_weight_fairy                -0.0523      0.043     -1.223      0.222      -0.136       0.032
+depth_cost_weight_fairy                 -0.0589      0.064     -0.922      0.357      -0.185       0.067
+==============================================================================
+Omnibus:                     6899.916   Durbin-Watson:                   2.023
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               32.227
+Skew:                           0.228   Prob(JB):                     1.00e-07
+Kurtosis:                       1.551   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for COST
+adj. $R^2=0.00, F(9, 325) = 1.12, p > 0.05$
+RMSE for LOO for COST, static_cost_weight
+M: $3.25$ (SD: $0.13$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   COST   R-squared:                       0.030
+Model:                            OLS   Adj. R-squared:                  0.003
+Method:                 Least Squares   F-statistic:                     1.121
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):              0.347
+Time:                        10:17:36   Log-Likelihood:                -870.05
+No. Observations:                 335   AIC:                             1760.
+Df Residuals:                     325   BIC:                             1798.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                5.6949      0.729      7.812      0.000       4.261       7.129
+C(FAIRY_GOD_CONDITION)[T.True]          -0.0615      0.376     -0.163      0.870      -0.801       0.678
+static_cost_weight                       0.0714      0.078      0.913      0.362      -0.082       0.225
+depth_cost_weight                        0.1337      0.094      1.418      0.157      -0.052       0.319
+temp                                    -0.9731      0.451     -2.157      0.032      -1.861      -0.086
+temp:static_cost_weight                  0.0680      0.037      1.855      0.064      -0.004       0.140
+temp:depth_cost_weight                   0.0715      0.047      1.508      0.132      -0.022       0.165
+static_cost_weight:depth_cost_weight    -0.0171      0.009     -1.833      0.068      -0.035       0.001
+static_cost_weight_fairy                -0.0523      0.043     -1.223      0.222      -0.136       0.032
+depth_cost_weight_fairy                 -0.0589      0.064     -0.922      0.357      -0.185       0.067
+==============================================================================
+Omnibus:                     6899.916   Durbin-Watson:                   2.023
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               32.227
+Skew:                           0.228   Prob(JB):                     1.00e-07
+Kurtosis:                       1.551   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for COST
+adj. $R^2=0.00, F(9, 325) = 1.12, p > 0.05$
+Number of participants recovered in at least 1 SD for COST:  0.96
+RMSE for LOO for DEPTH, depth_cost_weight
+M: $0.33$ (SD: $1.03$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  DEPTH   R-squared:                       0.233
+Model:                            OLS   Adj. R-squared:                  0.212
+Method:                 Least Squares   F-statistic:                     10.98
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):           5.96e-15
+Time:                        10:17:36   Log-Likelihood:                -876.47
+No. Observations:                 335   AIC:                             1773.
+Df Residuals:                     325   BIC:                             1811.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                1.2215      0.743      1.644      0.101      -0.240       2.683
+C(FAIRY_GOD_CONDITION)[T.True]           0.6231      0.383      1.626      0.105      -0.131       1.377
+static_cost_weight                       0.1557      0.080      1.953      0.052      -0.001       0.312
+depth_cost_weight                        0.6646      0.096      6.915      0.000       0.476       0.854
+temp                                    -0.1815      0.460     -0.395      0.693      -1.086       0.723
+temp:static_cost_weight                  0.0647      0.037      1.731      0.084      -0.009       0.138
+temp:depth_cost_weight                  -0.0294      0.048     -0.609      0.543      -0.124       0.066
+static_cost_weight:depth_cost_weight    -0.0192      0.010     -2.017      0.045      -0.038      -0.000
+static_cost_weight_fairy                 0.0038      0.044      0.087      0.931      -0.082       0.089
+depth_cost_weight_fairy                 -0.2784      0.065     -4.276      0.000      -0.406      -0.150
+==============================================================================
+Omnibus:                       14.889   Durbin-Watson:                   1.235
+Prob(Omnibus):                  0.001   Jarque-Bera (JB):               10.089
+Skew:                           0.297   Prob(JB):                      0.00645
+Kurtosis:                       2.392   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for DEPTH
+adj. $R^2=0.21, F(9, 325) = 10.98, p < 0.001$
+RMSE for LOO for DEPTH, depth_cost_weight
+M: $3.31$ (SD: $0.27$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  DEPTH   R-squared:                       0.233
+Model:                            OLS   Adj. R-squared:                  0.212
+Method:                 Least Squares   F-statistic:                     10.98
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):           5.96e-15
+Time:                        10:17:36   Log-Likelihood:                -876.47
+No. Observations:                 335   AIC:                             1773.
+Df Residuals:                     325   BIC:                             1811.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                1.2215      0.743      1.644      0.101      -0.240       2.683
+C(FAIRY_GOD_CONDITION)[T.True]           0.6231      0.383      1.626      0.105      -0.131       1.377
+static_cost_weight                       0.1557      0.080      1.953      0.052      -0.001       0.312
+depth_cost_weight                        0.6646      0.096      6.915      0.000       0.476       0.854
+temp                                    -0.1815      0.460     -0.395      0.693      -1.086       0.723
+temp:static_cost_weight                  0.0647      0.037      1.731      0.084      -0.009       0.138
+temp:depth_cost_weight                  -0.0294      0.048     -0.609      0.543      -0.124       0.066
+static_cost_weight:depth_cost_weight    -0.0192      0.010     -2.017      0.045      -0.038      -0.000
+static_cost_weight_fairy                 0.0038      0.044      0.087      0.931      -0.082       0.089
+depth_cost_weight_fairy                 -0.2784      0.065     -4.276      0.000      -0.406      -0.150
+==============================================================================
+Omnibus:                       14.889   Durbin-Watson:                   1.235
+Prob(Omnibus):                  0.001   Jarque-Bera (JB):               10.089
+Skew:                           0.297   Prob(JB):                      0.00645
+Kurtosis:                       2.392   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for DEPTH
+adj. $R^2=0.21, F(9, 325) = 10.98, p < 0.001$
+RMSE for LOO for DEPTH, depth_cost_weight
+M: $3.31$ (SD: $0.28$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  DEPTH   R-squared:                       0.233
+Model:                            OLS   Adj. R-squared:                  0.212
+Method:                 Least Squares   F-statistic:                     10.98
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):           5.96e-15
+Time:                        10:17:36   Log-Likelihood:                -876.47
+No. Observations:                 335   AIC:                             1773.
+Df Residuals:                     325   BIC:                             1811.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                1.2215      0.743      1.644      0.101      -0.240       2.683
+C(FAIRY_GOD_CONDITION)[T.True]           0.6231      0.383      1.626      0.105      -0.131       1.377
+static_cost_weight                       0.1557      0.080      1.953      0.052      -0.001       0.312
+depth_cost_weight                        0.6646      0.096      6.915      0.000       0.476       0.854
+temp                                    -0.1815      0.460     -0.395      0.693      -1.086       0.723
+temp:static_cost_weight                  0.0647      0.037      1.731      0.084      -0.009       0.138
+temp:depth_cost_weight                  -0.0294      0.048     -0.609      0.543      -0.124       0.066
+static_cost_weight:depth_cost_weight    -0.0192      0.010     -2.017      0.045      -0.038      -0.000
+static_cost_weight_fairy                 0.0038      0.044      0.087      0.931      -0.082       0.089
+depth_cost_weight_fairy                 -0.2784      0.065     -4.276      0.000      -0.406      -0.150
+==============================================================================
+Omnibus:                       14.889   Durbin-Watson:                   1.235
+Prob(Omnibus):                  0.001   Jarque-Bera (JB):               10.089
+Skew:                           0.297   Prob(JB):                      0.00645
+Kurtosis:                       2.392   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for DEPTH
+adj. $R^2=0.21, F(9, 325) = 10.98, p < 0.001$
+RMSE for LOO for DEPTH, depth_cost_weight
+M: $3.31$ (SD: $0.27$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  DEPTH   R-squared:                       0.233
+Model:                            OLS   Adj. R-squared:                  0.212
+Method:                 Least Squares   F-statistic:                     10.98
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):           5.96e-15
+Time:                        10:17:36   Log-Likelihood:                -876.47
+No. Observations:                 335   AIC:                             1773.
+Df Residuals:                     325   BIC:                             1811.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                1.2215      0.743      1.644      0.101      -0.240       2.683
+C(FAIRY_GOD_CONDITION)[T.True]           0.6231      0.383      1.626      0.105      -0.131       1.377
+static_cost_weight                       0.1557      0.080      1.953      0.052      -0.001       0.312
+depth_cost_weight                        0.6646      0.096      6.915      0.000       0.476       0.854
+temp                                    -0.1815      0.460     -0.395      0.693      -1.086       0.723
+temp:static_cost_weight                  0.0647      0.037      1.731      0.084      -0.009       0.138
+temp:depth_cost_weight                  -0.0294      0.048     -0.609      0.543      -0.124       0.066
+static_cost_weight:depth_cost_weight    -0.0192      0.010     -2.017      0.045      -0.038      -0.000
+static_cost_weight_fairy                 0.0038      0.044      0.087      0.931      -0.082       0.089
+depth_cost_weight_fairy                 -0.2784      0.065     -4.276      0.000      -0.406      -0.150
+==============================================================================
+Omnibus:                       14.889   Durbin-Watson:                   1.235
+Prob(Omnibus):                  0.001   Jarque-Bera (JB):               10.089
+Skew:                           0.297   Prob(JB):                      0.00645
+Kurtosis:                       2.392   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for DEPTH
+adj. $R^2=0.21, F(9, 325) = 10.98, p < 0.001$
+RMSE for LOO for DEPTH, depth_cost_weight
+M: $3.33$ (SD: $0.29$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  DEPTH   R-squared:                       0.233
+Model:                            OLS   Adj. R-squared:                  0.212
+Method:                 Least Squares   F-statistic:                     10.98
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):           5.96e-15
+Time:                        10:17:36   Log-Likelihood:                -876.47
+No. Observations:                 335   AIC:                             1773.
+Df Residuals:                     325   BIC:                             1811.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                1.2215      0.743      1.644      0.101      -0.240       2.683
+C(FAIRY_GOD_CONDITION)[T.True]           0.6231      0.383      1.626      0.105      -0.131       1.377
+static_cost_weight                       0.1557      0.080      1.953      0.052      -0.001       0.312
+depth_cost_weight                        0.6646      0.096      6.915      0.000       0.476       0.854
+temp                                    -0.1815      0.460     -0.395      0.693      -1.086       0.723
+temp:static_cost_weight                  0.0647      0.037      1.731      0.084      -0.009       0.138
+temp:depth_cost_weight                  -0.0294      0.048     -0.609      0.543      -0.124       0.066
+static_cost_weight:depth_cost_weight    -0.0192      0.010     -2.017      0.045      -0.038      -0.000
+static_cost_weight_fairy                 0.0038      0.044      0.087      0.931      -0.082       0.089
+depth_cost_weight_fairy                 -0.2784      0.065     -4.276      0.000      -0.406      -0.150
+==============================================================================
+Omnibus:                       14.889   Durbin-Watson:                   1.235
+Prob(Omnibus):                  0.001   Jarque-Bera (JB):               10.089
+Skew:                           0.297   Prob(JB):                      0.00645
+Kurtosis:                       2.392   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for DEPTH
+adj. $R^2=0.21, F(9, 325) = 10.98, p < 0.001$
+RMSE for LOO for DEPTH, depth_cost_weight
+M: $3.31$ (SD: $0.28$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  DEPTH   R-squared:                       0.233
+Model:                            OLS   Adj. R-squared:                  0.212
+Method:                 Least Squares   F-statistic:                     10.98
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):           5.96e-15
+Time:                        10:17:37   Log-Likelihood:                -876.47
+No. Observations:                 335   AIC:                             1773.
+Df Residuals:                     325   BIC:                             1811.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                1.2215      0.743      1.644      0.101      -0.240       2.683
+C(FAIRY_GOD_CONDITION)[T.True]           0.6231      0.383      1.626      0.105      -0.131       1.377
+static_cost_weight                       0.1557      0.080      1.953      0.052      -0.001       0.312
+depth_cost_weight                        0.6646      0.096      6.915      0.000       0.476       0.854
+temp                                    -0.1815      0.460     -0.395      0.693      -1.086       0.723
+temp:static_cost_weight                  0.0647      0.037      1.731      0.084      -0.009       0.138
+temp:depth_cost_weight                  -0.0294      0.048     -0.609      0.543      -0.124       0.066
+static_cost_weight:depth_cost_weight    -0.0192      0.010     -2.017      0.045      -0.038      -0.000
+static_cost_weight_fairy                 0.0038      0.044      0.087      0.931      -0.082       0.089
+depth_cost_weight_fairy                 -0.2784      0.065     -4.276      0.000      -0.406      -0.150
+==============================================================================
+Omnibus:                       14.889   Durbin-Watson:                   1.235
+Prob(Omnibus):                  0.001   Jarque-Bera (JB):               10.089
+Skew:                           0.297   Prob(JB):                      0.00645
+Kurtosis:                       2.392   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for DEPTH
+adj. $R^2=0.21, F(9, 325) = 10.98, p < 0.001$
+RMSE for LOO for DEPTH, depth_cost_weight
+M: $3.31$ (SD: $0.29$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  DEPTH   R-squared:                       0.233
+Model:                            OLS   Adj. R-squared:                  0.212
+Method:                 Least Squares   F-statistic:                     10.98
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):           5.96e-15
+Time:                        10:17:37   Log-Likelihood:                -876.47
+No. Observations:                 335   AIC:                             1773.
+Df Residuals:                     325   BIC:                             1811.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                1.2215      0.743      1.644      0.101      -0.240       2.683
+C(FAIRY_GOD_CONDITION)[T.True]           0.6231      0.383      1.626      0.105      -0.131       1.377
+static_cost_weight                       0.1557      0.080      1.953      0.052      -0.001       0.312
+depth_cost_weight                        0.6646      0.096      6.915      0.000       0.476       0.854
+temp                                    -0.1815      0.460     -0.395      0.693      -1.086       0.723
+temp:static_cost_weight                  0.0647      0.037      1.731      0.084      -0.009       0.138
+temp:depth_cost_weight                  -0.0294      0.048     -0.609      0.543      -0.124       0.066
+static_cost_weight:depth_cost_weight    -0.0192      0.010     -2.017      0.045      -0.038      -0.000
+static_cost_weight_fairy                 0.0038      0.044      0.087      0.931      -0.082       0.089
+depth_cost_weight_fairy                 -0.2784      0.065     -4.276      0.000      -0.406      -0.150
+==============================================================================
+Omnibus:                       14.889   Durbin-Watson:                   1.235
+Prob(Omnibus):                  0.001   Jarque-Bera (JB):               10.089
+Skew:                           0.297   Prob(JB):                      0.00645
+Kurtosis:                       2.392   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for DEPTH
+adj. $R^2=0.21, F(9, 325) = 10.98, p < 0.001$
+RMSE for LOO for DEPTH, depth_cost_weight
+M: $3.31$ (SD: $0.26$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  DEPTH   R-squared:                       0.233
+Model:                            OLS   Adj. R-squared:                  0.212
+Method:                 Least Squares   F-statistic:                     10.98
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):           5.96e-15
+Time:                        10:17:37   Log-Likelihood:                -876.47
+No. Observations:                 335   AIC:                             1773.
+Df Residuals:                     325   BIC:                             1811.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                1.2215      0.743      1.644      0.101      -0.240       2.683
+C(FAIRY_GOD_CONDITION)[T.True]           0.6231      0.383      1.626      0.105      -0.131       1.377
+static_cost_weight                       0.1557      0.080      1.953      0.052      -0.001       0.312
+depth_cost_weight                        0.6646      0.096      6.915      0.000       0.476       0.854
+temp                                    -0.1815      0.460     -0.395      0.693      -1.086       0.723
+temp:static_cost_weight                  0.0647      0.037      1.731      0.084      -0.009       0.138
+temp:depth_cost_weight                  -0.0294      0.048     -0.609      0.543      -0.124       0.066
+static_cost_weight:depth_cost_weight    -0.0192      0.010     -2.017      0.045      -0.038      -0.000
+static_cost_weight_fairy                 0.0038      0.044      0.087      0.931      -0.082       0.089
+depth_cost_weight_fairy                 -0.2784      0.065     -4.276      0.000      -0.406      -0.150
+==============================================================================
+Omnibus:                       14.889   Durbin-Watson:                   1.235
+Prob(Omnibus):                  0.001   Jarque-Bera (JB):               10.089
+Skew:                           0.297   Prob(JB):                      0.00645
+Kurtosis:                       2.392   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for DEPTH
+adj. $R^2=0.21, F(9, 325) = 10.98, p < 0.001$
+RMSE for LOO for DEPTH, depth_cost_weight
+M: $3.30$ (SD: $0.28$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  DEPTH   R-squared:                       0.233
+Model:                            OLS   Adj. R-squared:                  0.212
+Method:                 Least Squares   F-statistic:                     10.98
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):           5.96e-15
+Time:                        10:17:37   Log-Likelihood:                -876.47
+No. Observations:                 335   AIC:                             1773.
+Df Residuals:                     325   BIC:                             1811.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                1.2215      0.743      1.644      0.101      -0.240       2.683
+C(FAIRY_GOD_CONDITION)[T.True]           0.6231      0.383      1.626      0.105      -0.131       1.377
+static_cost_weight                       0.1557      0.080      1.953      0.052      -0.001       0.312
+depth_cost_weight                        0.6646      0.096      6.915      0.000       0.476       0.854
+temp                                    -0.1815      0.460     -0.395      0.693      -1.086       0.723
+temp:static_cost_weight                  0.0647      0.037      1.731      0.084      -0.009       0.138
+temp:depth_cost_weight                  -0.0294      0.048     -0.609      0.543      -0.124       0.066
+static_cost_weight:depth_cost_weight    -0.0192      0.010     -2.017      0.045      -0.038      -0.000
+static_cost_weight_fairy                 0.0038      0.044      0.087      0.931      -0.082       0.089
+depth_cost_weight_fairy                 -0.2784      0.065     -4.276      0.000      -0.406      -0.150
+==============================================================================
+Omnibus:                       14.889   Durbin-Watson:                   1.235
+Prob(Omnibus):                  0.001   Jarque-Bera (JB):               10.089
+Skew:                           0.297   Prob(JB):                      0.00645
+Kurtosis:                       2.392   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for DEPTH
+adj. $R^2=0.21, F(9, 325) = 10.98, p < 0.001$
+RMSE for LOO for DEPTH, depth_cost_weight
+M: $3.31$ (SD: $0.27$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  DEPTH   R-squared:                       0.233
+Model:                            OLS   Adj. R-squared:                  0.212
+Method:                 Least Squares   F-statistic:                     10.98
+Date:                Mon, 13 Jun 2022   Prob (F-statistic):           5.96e-15
+Time:                        10:17:37   Log-Likelihood:                -876.47
+No. Observations:                 335   AIC:                             1773.
+Df Residuals:                     325   BIC:                             1811.
+Df Model:                           9                                         
+Covariance Type:            nonrobust                                         
+========================================================================================================
+                                           coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------
+Intercept                                1.2215      0.743      1.644      0.101      -0.240       2.683
+C(FAIRY_GOD_CONDITION)[T.True]           0.6231      0.383      1.626      0.105      -0.131       1.377
+static_cost_weight                       0.1557      0.080      1.953      0.052      -0.001       0.312
+depth_cost_weight                        0.6646      0.096      6.915      0.000       0.476       0.854
+temp                                    -0.1815      0.460     -0.395      0.693      -1.086       0.723
+temp:static_cost_weight                  0.0647      0.037      1.731      0.084      -0.009       0.138
+temp:depth_cost_weight                  -0.0294      0.048     -0.609      0.543      -0.124       0.066
+static_cost_weight:depth_cost_weight    -0.0192      0.010     -2.017      0.045      -0.038      -0.000
+static_cost_weight_fairy                 0.0038      0.044      0.087      0.931      -0.082       0.089
+depth_cost_weight_fairy                 -0.2784      0.065     -4.276      0.000      -0.406      -0.150
+==============================================================================
+Omnibus:                       14.889   Durbin-Watson:                   1.235
+Prob(Omnibus):                  0.001   Jarque-Bera (JB):               10.089
+Skew:                           0.297   Prob(JB):                      0.00645
+Kurtosis:                       2.392   Cond. No.                         215.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for DEPTH
+adj. $R^2=0.21, F(9, 325) = 10.98, p < 0.001$
+Number of participants recovered in at least 1 SD for DEPTH:  0.54
+Number of participants recovered in at least 1 SD of Experiment 1 value for both:  0.19
+Test subject difference vs variance COST
+$t(334) = -0.84, p > 0.05$
+10.553406281545474 10.913718830994728
+Test subject difference vs variance DEPTH
+$t(334) = -4.77, p < 0.001$
+10.96571484571854 14.342693717043526
+Difference in block order for baseline block MAP estimates static_cost_weight
+Mann-Whitney $U=13509.00, p > 0.05$, two-sided
+Difference in block order for test block MAP estimates static_cost_weight
+Mann-Whitney $U=14011.50, p > 0.05$, two-sided
+Difference in block order for baseline block MAP estimates depth_cost_weight
+Mann-Whitney $U=15779.50, p = 0.05$, two-sided
+Difference in block order for test block MAP estimates depth_cost_weight
+Mann-Whitney $U=12617.00, p > 0.05$, two-sided
