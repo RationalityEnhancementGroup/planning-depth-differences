@@ -1,8 +1,8 @@
 dill
 wheel
-mouselab @ git+https://github.com/RationalityEnhancementGroup/mouselab-mdp-tools.git@main#egg=mouselab  # noqa
-costometer @ git+https://github.com/RationalityEnhancementGroup/costometer.git#egg=costometer # noqa https://stackoverflow.com/a/26988592
-download_tools @ git+https://github.com/RationalityEnhancementGroup/download-tools.git@main#egg=download_tools # noqa
+mouselab @ git+https://github.com/RationalityEnhancementGroup/mouselab-mdp-tools.git@v0.0.1#egg=mouselab  # noqa
+costometer @ git+https://github.com/RationalityEnhancementGroup/costometer.git@v0.0.1#egg=costometer # noqa
+download_tools @ git+https://github.com/RationalityEnhancementGroup/download-tools.git@v0.0.1#egg=download_tools # noqa
 ipykernel
 papermill
 numpy
