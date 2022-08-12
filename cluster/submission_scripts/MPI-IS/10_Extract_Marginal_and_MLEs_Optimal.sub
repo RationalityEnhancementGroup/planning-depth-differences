@@ -1,4 +1,4 @@
-project_path = $(save_path:/home/vfelso)/irl-project
+project_path = $(save_path:/home/jliu)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/analysis/methods/static/src/extract_marginal_likelihood_and_hdis.py
 arguments = $(filename) -e $(experiment:OptimalBIC) -c $(cost_function:linear_depth) -p $(ProcId)
