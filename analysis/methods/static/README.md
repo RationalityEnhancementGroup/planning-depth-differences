@@ -7,7 +7,7 @@ This directory contains notebooks that are associated with developing the IRL me
 ## Human data computations on cluster
 
 0. Before running, make a log file in the `cluster` directory as well as the `analysis/methods/static directory: `mkdir log`
-1. Create a virtual environment as outlined in the top folder `irl-project` both on your local machine and the cluster
+1. Create a virtual environment as outlined in the top folder `planning-depth-differences` both on your local machine and the cluster
 2. On the cluster, calculate the Q values (~12+ hours):
    ```
    cd <path to planning-depth-differences>/cluster
@@ -18,17 +18,17 @@ This directory contains notebooks that are associated with developing the IRL me
       do condor_submit_bid 2 submission_scripts/MPI-IS/03_Get_Q_Values.sub param_file=params_full_three experiment_setting=high_increasing cost_function=$cost_function;
    done;
    ```
-3. Download and preprocess the participant data, outside the cluster and then transfer to cluster (if needed, see instructions for downloading data in the `irl-project/data` subfolder):
+3. Download and preprocess the participant data, outside the cluster and then transfer to cluster (if needed, see instructions for downloading data in the `planning-depth-differences/data` subfolder):
    ```
-   cd <path to irl-project>
+   cd <path to planning-depth-differences>
    source env/bin/activate
-   cd <path to irl-project>/data
+   cd <path to planning-depth-differences>/data
    for experiment in methods_main irl_validation;
       do python src/download_exp.py -e $experiment
       python src/preprocess_human_runs.py -e $experiment
    done;
    ```
-   Then, transfer by adding the subfolder in `irl-project/data/processed/<experiment>` to git or via rsync/scp.
+   Then, transfer by adding the subfolder in `planning-depth-differences/data/processed/<experiment>` to git or via rsync/scp.
 4. Get the computational microscope strategies (~2 hours):
    ```
    for experiment in methods_main irl_validation;
@@ -38,7 +38,7 @@ This directory contains notebooks that are associated with developing the IRL me
    If needed, move the files to your local computer.
 5. Once the Q values are calculated On the cluster, infer parameters for a participant file (~30 minutes):
    ```
-   cd <path to irl-project>/cluster
+   cd <path to planning-depth-differences>/cluster
    for experiment in methods_main irl_validation;
        do for cost_function in 'distance_graph_cost' 'linear_depth';
           do condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub param_file=params_full experiment=$experiment cost_function=$cost_function;
@@ -50,7 +50,7 @@ This directory contains notebooks that are associated with developing the IRL me
    ```
 6. Combine the human data (~15 minutes):
    ```
-   cd <path to irl-project>/cluster
+   cd <path to planning-depth-differences>/cluster
    for experiment in methods_main irl_validation;
       do for cost_function in 'neighbor_search_cost' 'forward_search_cost' 'backward_search_cost' 'distance_graph_cost' 'linear_depth'; 
           do condor_submit_bid 2 submission_scripts/MPI-IS/05_Combine_Human.sub experiment=$experiment cost_function=$cost_function;
@@ -59,7 +59,7 @@ This directory contains notebooks that are associated with developing the IRL me
    ```
 7. Once the inference is done for the participants, get the best parameters by running (~30 minutes):
    ```
-   cd <path to irl-project>/cluster
+   cd <path to planning-depth-differences>/cluster
    for experiment in methods_main irl_validation;
       do for cost_function in 'neighbor_search_cost' 'forward_search_cost' 'backward_search_cost' 'distance_graph_cost' 'linear_depth'; 
          do condor_submit_bid 2 submission_scripts/MPI-IS/M_01_Get_MAP_File.sub experiment=$experiment cost_function=$cost_function
@@ -80,14 +80,14 @@ This directory contains notebooks that are associated with developing the IRL me
 
 1. At the same time, you can simulate new trajectories on the cluster (~90 minutes):
    ```
-   cd <path to irl-project>/cluster
+   cd <path to planning-depth-differences>/cluster
    condor_submit_bid 2 submission_scripts/MPI-IS/06_Simulate_Optimal.sub
    condor_submit_bid 2 submission_scripts/MPI-IS/06_Simulate_Random.sub
    condor_submit_bid 2 submission_scripts/MPI-IS/06_Simulate_Softmax.sub
    ```
 2. Once the simulation jobs are done, on the cluster, start the jobs to infer parameters for the simulations (~30 minutes):
    ```
-   cd <path to irl-project>/cluster
+   cd <path to planning-depth-differences>/cluster
    condor_submit_bid 2 submission_scripts/MPI-IS/07_Submit_Inferrences.sub policy=RandomPolicy
    condor_submit_bid 2 submission_scripts/MPI-IS/07_Submit_Inferrences.sub policy=OptimalQ
    condor_submit_bid 2 submission_scripts/MPI-IS/07_Submit_Inferrences.sub policy=SoftmaxPolicy
@@ -96,14 +96,14 @@ This directory contains notebooks that are associated with developing the IRL me
    > **_Note_**: you should not run any other jobs at the same time, and should run each job in this step one at a time given the maximum number of jobs per user.
 3. Once the inference for the simulations are finished, combine the output files in the cluster (~12+ hours, 16 hours when tested):
     ```
-    cd <path to irl-project>/cluster
+    cd <path to planning-depth-differences>/cluster
     condor_submit_bid 2 submission_scripts/MPI-IS/08_Combine_Inferred.sub policy=RandomPolicy
     condor_submit_bid 2 submission_scripts/MPI-IS/08_Combine_Inferred.sub policy=OptimalQ
     condor_submit_bid 2 submission_scripts/MPI-IS/08_Combine_Inferred_by_Temp.sub policy=SoftmaxPolicy  -append request_memory=900000
     ```
 4. Next:
     ```
-    cd <path to irl-project>/cluster
+    cd <path to planning-depth-differences>/cluster
     condor_submit_bid 2 submission_scripts/MPI-IS/M_01_Get_MAP_Simulated.sub policy=RandomPolicy
     condor_submit_bid 2 submission_scripts/MPI-IS/M_01_Get_MAP_Simulated_by_Param.sub policy=OptimalQ
     cat parameters/temperatures/full.txt | while read line 
@@ -133,7 +133,7 @@ This directory contains notebooks that are associated with developing the IRL me
 
 ### SPM12 for BMS
 
-1. Download SPM12 for Bayesian model selection and place it in `irl-project/spm12`: [https://www.fil.ion.ucl.ac.uk/spm/software/spm12/](https://www.fil.ion.ucl.ac.uk/spm/software/spm12/)
+1. Download SPM12 for Bayesian model selection and place it in `planning-depth-differences/spm12`: [https://www.fil.ion.ucl.ac.uk/spm/software/spm12/](https://www.fil.ion.ucl.ac.uk/spm/software/spm12/)
 2. Get the Matlab API for python working on your computer for Bayesian model selection:
     - Locally:
       - Open MATLAB and get your MATLAB path by running `matlabroot`
@@ -179,13 +179,13 @@ This directory contains notebooks that are associated with developing the IRL me
 > # Tip for running locally / debugging
 > In order to have all the files the code is expecting, run these commands:
 >  ```
-> cd <path to irl-project on local computer>
-> rsync -aPzr <user>@login.cluster.is.localnet:<path to irl-project on cluster>/irl-project/analysis/methods/static/log/ analysis/methods/static/log
-> > rsync -aPzr <user>@login.cluster.is.localnet:<path to irl-project on cluster>/irl-project/analysis/methods/static/data/ analysis/methods/static/data
-> rsync -aPzr <user>@login.cluster.is.localnet:<path to irl-project on cluster>/irl-project/analysis/methods/static/figs/ analysis/methods/static/figs
-> rsync -aPzr <user>@login.cluster.is.localnet:<path to irl-project on cluster>/irl-project/cluster/data/OptimalQ cluster/data/OptimalQ
-> rsync -aPzr --include "*/*mle_and_map*" --include "*/" --exclude "*" <user>@login.cluster.is.localnet:<path to irl-project on cluster>/irl-project/data/processed/ data/processed
-> rsync -aPzr --include "*/*.feather" --include "*/" --exclude "*" <user>@login.cluster.is.localnet:<path to irl-project on cluster>/irl-project/cluster/data/logliks/ cluster/data/logliks
+> cd <path to planning-depth-differences on local computer>
+> rsync -aPzr <user>@login.cluster.is.localnet:<path to planning-depth-differences on cluster>/planning-depth-differences/analysis/methods/static/log/ analysis/methods/static/log
+> > rsync -aPzr <user>@login.cluster.is.localnet:<path to planning-depth-differences on cluster>/planning-depth-differences/analysis/methods/static/data/ analysis/methods/static/data
+> rsync -aPzr <user>@login.cluster.is.localnet:<path to planning-depth-differences on cluster>/planning-depth-differences/analysis/methods/static/figs/ analysis/methods/static/figs
+> rsync -aPzr <user>@login.cluster.is.localnet:<path to planning-depth-differences on cluster>/planning-depth-differences/cluster/data/OptimalQ cluster/data/OptimalQ
+> rsync -aPzr --include "*/*mle_and_map*" --include "*/" --exclude "*" <user>@login.cluster.is.localnet:<path to planning-depth-differences on cluster>/planning-depth-differences/data/processed/ data/processed
+> rsync -aPzr --include "*/*.feather" --include "*/" --exclude "*" <user>@login.cluster.is.localnet:<path to planning-depth-differences on cluster>/planning-depth-differences/cluster/data/logliks/ cluster/data/logliks
 
 > ```
 >  > **Note**: you can always check how large a directory is with:
