@@ -1,4 +1,4 @@
-project_path = $(save_path:/home/jliu)/planning-depth-differences
+project_path = $(save_path:/home/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/cluster/src/infer_parameters_static.py
 arguments = $(filename) -e $(sim_experiment_file) -c $(cost_function:linear_depth) -t $(temperature_file:expon) -v=$(reward_line)

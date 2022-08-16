@@ -1,4 +1,4 @@
-project_path = $(save_path:/home/jliu)/planning-depth-differences
+project_path = $(save_path:/home/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/analysis/methods/static/src/get_optimal_bic.py
 arguments = $(filename) -e $(experiment:OptimalBIC)
