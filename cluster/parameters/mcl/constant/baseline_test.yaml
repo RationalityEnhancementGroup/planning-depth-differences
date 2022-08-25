@@ -1,0 +1,7 @@
+subjective_cost: 0
+pr_weight: 0
+lik_sigma: 1
+gamma: -0.01005033585350145
+inverse_temperature: 0.0
+lr:  -0.6931471805599453
+value_lr:  -0.6931471805599453
