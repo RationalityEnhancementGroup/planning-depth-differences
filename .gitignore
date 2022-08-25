@@ -182,5 +182,16 @@ cython_debug/
 # would also be nice to keep HIT IDs out of this
 /data/hit_ids/*
 
+# let's only allow certain datasets
+/data/processed/*
+/data/raw/*
+
+!/data/raw/methods_main_extension/*
+!/data/raw/methods_main/*
+!/data/raw/irl_validation/*
+
+!/data/processed/methods_main/*
+!/data/processed/irl_validation/*
+
 # instructions for installing spm are in parent README of subproject(s) that require(s) it
 /spm12/
