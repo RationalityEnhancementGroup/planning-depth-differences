@@ -187,6 +187,7 @@ if __name__ == "__main__":
         simulated_participant.simulate_trajectory()
 
         trace_df = pd.DataFrame.from_dict(simulated_participant.trace)
+        trace_df["full_actions"] = trace_df["actions"]
         trace_df = trace_df.explode("actions")
 
         # add all information that might be useful
