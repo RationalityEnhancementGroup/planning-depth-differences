@@ -88,7 +88,10 @@ if __name__ == "__main__":
             "*", ""
         ).replace(".csv", "")
     else:
-        traces = get_human_trajectories(args["experiment"])
+        traces = get_human_trajectories(
+            args["experiment"],
+            include_last_action=args["env_params"]["include_last_action"],
+        )
         experiment_folder = args["experiment"]
         # data not simulated, no simulation params
         simulation_params = ""
