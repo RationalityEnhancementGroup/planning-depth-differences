@@ -1,6 +1,6 @@
 project_path = $(save_path:/home/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
-filename = /work/vfelso/irl-project/cluster/src/simulate_mcl_trajectories.py
+filename = $(project_path)/cluster/src/simulate_mcl_trajectories.py
 arguments = $(filename) -e $(experiment_setting:high_increasing) -m $(model_yaml:1729) -f $(features_yaml:habitual) -c $(cost_function:linear_depth) -o $(constant_yaml:baseline_null) -v=$(reward_line)
 output = log/$(output_string:out_L3).stdout
 error  = log/$(output_string:out_L3).stderr
