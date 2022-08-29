@@ -106,7 +106,9 @@ if __name__ == "__main__":
         experiment_folder = "simulated/" + "/".join(args["experiment"].split("/")[:-1])
     else:
         traces = get_human_trajectories(
-            args["experiment"], pids=[inputs.pid] if inputs.pid else inputs.pid
+            args["experiment"],
+            pids=[inputs.pid] if inputs.pid else inputs.pid,
+            include_last_action=args["env_params"]["include_last_action"],
         )
         experiment_folder = args["experiment"]
 
