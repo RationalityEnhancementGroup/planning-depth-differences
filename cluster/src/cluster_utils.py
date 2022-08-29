@@ -31,6 +31,7 @@ def get_human_trajectories(
     exp_name: str,
     data_path: Union[str, bytes, os.PathLike] = None,
     pids: List[int] = None,
+    include_last_action: bool = False,
 ) -> List[Dict[str, List]]:
     """
     Get human trajectories from experiment in data folder
@@ -39,6 +40,7 @@ def get_human_trajectories(
     :param data_path: path where data is saved, including YAMLs with \
     experiment information
     :param pids:
+    :param include_last_action:
     :return: traces for all participants
     """
     if not data_path:
@@ -57,6 +59,7 @@ def get_human_trajectories(
     traces = get_trajectories_from_participant_data(
         mouselab_data[mouselab_data["pid"].isin(pids)],
         experiment_setting=experiment_setting,
+        include_last_action=include_last_action,
     )
 
     return traces

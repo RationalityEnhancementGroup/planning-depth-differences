@@ -1,3 +1,4 @@
+cost_function: "lambda added_cost, distance_multiplier, depth_cost_weight: lambda state, action, graph: backward_search_cost(inspection_cost=inspection_cost, added_cost=added_cost, include_start=1.00)(state, action, graph=graph)"
 cost_parameter_args:
         - inspection_cost
         - added_cost
@@ -5,5 +6,6 @@ cost_parameter_args:
 cost_parameter_names:
         - Effort Cost
         - Added Cost
+env_params: {'include_last_action': false}
 constant_values: {'inspection_cost': 1, 'added_cost': 0}
 model_name: "{() : 'Backward Search Bonus and Effort Cost',('inspection_cost',): 'Backward Search Bonus Only',('added_cost',): 'Effort Cost Only',('inspection_cost', 'added_cost'): 'Null (Given Costs)'}"
