@@ -1,0 +1,11 @@
+project_path = $(save_path:/work/vfelso)/planning-depth-differences
+executable = $(project_path)/env/bin/python
+filename = $(project_path)/cluster/submission_scripts/MPI-IS/L_04_Infer_Params.py
+arguments = $(filename) -e $(experiment) -m $(model:1729) -f $(features:test1) -p $(priors:search_space) -c $(cost_function:linear_depth) -v $(cost_parameter_file:params_full) -o $(constant_params:test)
+output = log/$(output_string:out_L4).stdout
+error  = log/$(output_string:out_L4).stderr
+log   = log/$(output_string:out_L4).log
+request_memory = 500
+request_cpus = 1
+
+queue
