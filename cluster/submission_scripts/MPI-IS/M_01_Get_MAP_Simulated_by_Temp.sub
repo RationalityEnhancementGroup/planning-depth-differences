@@ -1,4 +1,4 @@
-project_path = $(save_path:/home/vfelso)/irl-project
+project_path = $(save_path:/home/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/analysis/methods/static/src/extract_simulated_mles.py
 arguments = $(filename) -p $(policy:SoftmaxPolicy) -c $(cost_function:linear_depth) -o $(simulated_cost_function:linear_depth) -e $(experiment_setting:high_increasing) -v $(temp) -a=$(reward_line)

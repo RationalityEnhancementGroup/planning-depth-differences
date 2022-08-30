@@ -10,7 +10,7 @@ This directory contains notebooks that are associated with developing the IRL me
 1. Create a virtual environment as outlined in the top folder `irl-project` both on your local machine and the cluster
 2. On the a cluster running htcondor, calculate the Q values (~12+ hours):
    ```
-   cd <path to irl-project>/cluster
+   cd <path to planning-depth-differences>/cluster
    for cost_function in 'distance_graph_cost' 'linear_depth';
       do condor_submit_bid 2 submission_scripts/MPI-IS/03_Get_Q_Values.sub param_file=params_full experiment_setting=high_increasing cost_function=$cost_function;
    done;

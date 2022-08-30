@@ -1,4 +1,4 @@
-project_path = $(save_path:/home/vfelso)/irl-project
+project_path = $(save_path:/home/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/analysis/methods/static/src/plot_validation_hdi.py
 arguments = $(filename) -e $(experiment:ValidationExperiment) -c $(cost_function:linear_depth)
