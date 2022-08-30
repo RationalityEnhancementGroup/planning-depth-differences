@@ -125,11 +125,6 @@ if __name__ == "__main__":
     else:
         priors = None
 
-    # make experiment folder if it doesn't already exist
-    path.joinpath(
-        f"cluster/data/logliks/{args['cost_function']}/{experiment_folder}"
-    ).mkdir(parents=True, exist_ok=True)
-
     if "structure" in args:
         with open(
             Path(__file__)
@@ -170,8 +165,14 @@ if __name__ == "__main__":
     softmax_ray_object.run()
 
     optimization_results = softmax_ray_object.get_optimization_results()
+
+    # make experiment folder if it doesn't already exist
+    path.joinpath(
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}"
+    ).mkdir(parents=True, exist_ok=True)
+
     filename = path.joinpath(
-        f"cluster/data/logliks/{cost_function.__name__}/{experiment_folder}/"
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
         f"SoftmaxPolicy_optimization_results_{get_param_string(cost_parameter_dict)}"
         f"{simulation_params}.csv"
     )
