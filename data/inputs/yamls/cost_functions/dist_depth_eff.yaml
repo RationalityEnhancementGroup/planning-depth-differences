@@ -1,0 +1,12 @@
+cost_function: "lambda given_cost, distance_multiplier, depth_cost_weight: lambda state, action, graph: linear_depth(depth_cost_weight=depth_cost_weight, static_cost_weight=0)(state, action, graph=graph) + distance_graph_cost(given_cost=given_cost, distance_multiplier=distance_multiplier)(state, action, graph=graph)"
+cost_parameter_args:
+        - given_cost
+        - distance_multiplier
+        - depth_cost_weight
+cost_parameter_names:
+        - Effort Cost
+        - Distance Cost
+        - Cost of Prospection
+env_params: {'include_last_action': true}
+constant_values: {'given_cost': 1, 'distance_multiplier': 0, 'depth_cost_weight': 0}
+model_name: "{(): 'Distance and Effort Costs',('given_cost',): 'Distance Cost Only',('distance_multiplier',): 'Effort Cost Only',('given_cost', 'distance_multiplier'): 'Null (Given Costs)'}"

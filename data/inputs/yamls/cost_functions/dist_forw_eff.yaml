@@ -1,0 +1,12 @@
+cost_function: "lambda given_cost, distance_multiplier, added_cost: lambda state, action, graph: forward_search_cost(inspection_cost=0, added_cost=added_cost, include_start=1.00)(state, action, graph=graph) + distance_graph_cost(given_cost=given_cost, distance_multiplier=distance_multiplier)(state, action, graph=graph)"
+cost_parameter_args:
+        - given_cost
+        - distance_multiplier
+        - added_cost
+cost_parameter_names:
+        - Effort Cost
+        - Distance Cost
+        - Added Cost
+env_params: {'include_last_action': true}
+constant_values: {'given_cost': 1, 'distance_multiplier': 0, 'added_cost': 0}
+model_name: "{(): 'Distance and Effort Costs with Forward Search Bonus', ('given_cost',): 'Distance Cost with Forward Search Bonus', ('distance_multiplier',): 'Forward Search Bonus and Effort Cost', ('added_cost',): 'Distance and Effort Costs', ('given_cost', 'distance_multiplier'): 'Forward Search Bonus Only', ('given_cost', 'added_cost'): 'Distance Cost Only', ('added_cost', 'distance_multiplier'): 'Effort Cost Only', ('given_cost', 'distance_multiplier', 'added_cost'): 'Null (Given Costs)'}"

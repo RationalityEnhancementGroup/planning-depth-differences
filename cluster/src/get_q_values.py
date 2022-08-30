@@ -17,8 +17,10 @@ def get_q_values(
     experiment_setting: str,
     cost_parameters: Dict[str, float],
     cost_function: Callable,
+    cost_function_name: str = None,
     structure: Dict[Any, Any] = None,
     ground_truths: List[List[float]] = None,
+    env_params: Dict[Any, Any] = None,
 ) -> Dict[Any, Any]:
     """
     Gets Q values for parameter setting for linear depth cost function
@@ -26,6 +28,7 @@ def get_q_values(
     :param experiment_setting: which experiment setting (e.g. high increasing)
     :param cost_parameters: a dictionary of inputs for the cost function
     :param cost_function: cost function to use
+    :param cost_function_name:
     :param structure: where nodes are
     :param ground_truths: ground truths to save
     :return: info dictionary which contains q_dictionary, \
@@ -36,13 +39,18 @@ def get_q_values(
     # make directory if it doesn't already exist
     location.mkdir(parents=True, exist_ok=True)
 
+    if env_params is None:
+        env_params = {}
+
     info = save_q_values_for_cost(
         experiment_setting,
         cost_function=cost_function,
+        cost_function_name=cost_function_name,
         cost_params=cost_parameters,
         structure=structure,
         ground_truths=ground_truths,
         path=location,
+        **env_params,
     )
     return info
 
@@ -95,6 +103,8 @@ if __name__ == "__main__":
                 f"data/inputs/exp_inputs/rewards/{args['ground_truth_file']}.json"
             )
         )
+    else:
+        ground_truths = None
 
     try:
         cost_parameters = {
@@ -121,10 +131,17 @@ if __name__ == "__main__":
     else:
         structure_dicts = None
 
+    if callable(eval(args["cost_function"])):
+        cost_function_name = inputs.cost_function
+    else:
+        cost_function_name = None
+
     get_q_values(
         experiment_setting,
         cost_parameters,
         structure=structure_dicts,
         ground_truths=ground_truths,
         cost_function=cost_function,
+        cost_function_name=cost_function_name,
+        env_params=args["env_params"],
     )
