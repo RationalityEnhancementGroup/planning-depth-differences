@@ -16,7 +16,6 @@ cost_function=$3
 
 # Get all the paths we're interested in
 job_directory=$PWD/job
-parent_dir="$(dirname "$PWD")"
 src_dir=$PWD/src
 parameters_dir=$PWD/parameters
 
@@ -39,9 +38,16 @@ do
 #SBATCH --cpus-per-task=1
 #SBATCH --qos=normal
 #SBATCH --mail-type=NONE
-srun ${parent_dir}/env/bin/python ${src_dir}/get_q_values.py -s ${experiment_setting} -c ${cost_function} -v=${line}" > $job_file
 
-    #sbatch $job_file
+module purge
+module load anaconda/3/2021.11
+
+# Set number of OMP threads to fit the number of available cpus, if applicable.
+export OMP_NUM_THREADS=1
+
+srun python ${src_dir}/get_q_values.py -s ${experiment_setting} -c ${cost_function} -v=${line}" > $job_file
+
+    sbatch $job_file
     num_job=$((num_job+1))
 
 done
