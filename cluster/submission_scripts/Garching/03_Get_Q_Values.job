@@ -12,6 +12,7 @@
 # get inputs
 experiment_setting=$1
 parameters_file_name=$2
+cost_function=$3
 
 # Get all the paths we're interested in
 job_directory=$PWD/job
@@ -22,24 +23,25 @@ parameters_dir=$PWD/parameters
 # Number of jobs for saving
 num_job=0
 # input parameters
-cat "${parameters_dir}/${parameters_file_name}.txt" | while read line
+cat "${parameters_dir}/cost/${parameters_file_name}.txt" | while read line || [ -n "$line" ]
 
 # for each line in parameter file, create a job file and submit to the cluster
 do
-    job_file="${job_directory}/get_q_values_${experiment_setting}_${parameters_file_name}_${num_job}.job"
+    job_file="${job_directory}/get_q_values_${experiment_setting}_${parameters_file_name}_${cost_function}_${num_job}.job"
 
     echo "#!/bin/bash
 #SBATCH --job-name=${job_file}
 #SBATCH --output=log/out_3.out
 #SBATCH --error=log/out_3.err
 #SBATCH --time=20:00:00
-#SBATCH --mem=50000
+#SBATCH --mem=40000
 #SBATCH --tasks-per-node=1
 #SBATCH --cpus-per-task=1
 #SBATCH --qos=normal
 #SBATCH --mail-type=NONE
-${parent_dir}/env/bin/python ${src_dir}/get_q_values.py ${experiment_setting} ${line//,/ }" > $job_file
-    sbatch $job_file
+srun ${parent_dir}/env/bin/python ${src_dir}/get_q_values.py -s ${experiment_setting} -c ${cost_function} -v=${line}" > $job_file
+
+    #sbatch $job_file
     num_job=$((num_job+1))
 
 done

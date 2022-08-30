@@ -21,8 +21,9 @@ This directory contains notebooks that are associated with developing the IRL me
    
    > If you are running on a slurm cluster, we have provided an old file which may need to be adapted:
    > ```
+   > mkdir job # for storing job files
    > chmod +x submission_scripts/Garching/03_Get _Q_Values.job
-   > ./submission_scripts/Garching/03_Get _Q_Values.job high_increasing params_full 
+   > ./submission_scripts/Garching/03_Get _Q_Values.job high_increasing params_full linear_depth
    > ```
 3. Download and preprocess the participant data, outside the cluster and then transfer to cluster (if needed, see instructions for downloading data in the `irl-project/data` subfolder):
    ```
