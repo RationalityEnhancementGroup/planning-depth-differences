@@ -191,7 +191,7 @@ if __name__ == "__main__":
 
     optimization_results = random_ray_object.get_optimization_results()
     filename = path.joinpath(
-        f"cluster/data/logliks/{cost_function.__name__}/{experiment_folder}/"
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
         f"RandomPolicy_optimization_results{simulation_params}.csv"
     )
     optimization_results.to_csv(filename, index=False)
