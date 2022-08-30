@@ -144,6 +144,10 @@ if __name__ == "__main__":
         structure_dicts = None
 
     cost_function = eval(args["cost_function"])
+    if callable(eval(args["cost_function"])):
+        cost_function_name = inputs.cost_function
+    else:
+        cost_function_name = None
 
     softmax_ray_object = GridRayInference(
         traces=traces,
@@ -160,6 +164,7 @@ if __name__ == "__main__":
         policy_parameters={"temp": priors},
         cost_function=cost_function,
         cost_parameters=cost_parameters,
+        cost_function_name=cost_function_name,
     )
 
     softmax_ray_object.run()
