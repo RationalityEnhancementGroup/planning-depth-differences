@@ -8,7 +8,7 @@ This directory contains notebooks that are associated with developing the IRL me
 
 0. Before running, make a log file in the `cluster` directory as well as the `analysis/methods/static directory: `mkdir log`
 1. Create a virtual environment as outlined in the top folder `irl-project` both on your local machine and the cluster
-2. On the cluster, calculate the Q values (~12+ hours):
+2. On the a cluster running htcondor, calculate the Q values (~12+ hours):
    ```
    cd <path to irl-project>/cluster
    for cost_function in 'distance_graph_cost' 'linear_depth';
@@ -18,6 +18,12 @@ This directory contains notebooks that are associated with developing the IRL me
       do condor_submit_bid 2 submission_scripts/MPI-IS/03_Get_Q_Values.sub param_file=params_full_three experiment_setting=high_increasing cost_function=$cost_function;
    done;
    ```
+   
+   > If you are running on a slurm cluster, we have provided an old file which may need to be adapted:
+   > ```
+   > chmod +x submission_scripts/Garching/03_Get _Q_Values.job
+   > ./submission_scripts/Garching/03_Get _Q_Values.job high_increasing params_full 
+   > ```
 3. Download and preprocess the participant data, outside the cluster and then transfer to cluster (if needed, see instructions for downloading data in the `irl-project/data` subfolder):
    ```
    cd <path to irl-project>
