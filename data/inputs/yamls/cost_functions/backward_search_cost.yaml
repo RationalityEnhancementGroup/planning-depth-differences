@@ -2,7 +2,6 @@ cost_function: "lambda added_cost, inspection_cost: lambda state, action, graph:
 cost_parameter_args:
         - inspection_cost
         - added_cost
-        - include_start
 cost_parameter_names:
         - Effort Cost
         - Added Cost
