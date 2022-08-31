@@ -97,12 +97,22 @@ if __name__ == "__main__":
         "--exp",
         dest="experiment_name",
     )
+    parser.add_argument(
+        "-s",
+        "--subdirectory",
+        dest="experiment_subdirectory",
+        metavar="experiment_subdirectory",
+    )
     inputs = parser.parse_args()
     static_directory = Path(__file__).resolve().parents[1]
     path_to_spm = Path(__file__).resolve().parents[4]
     irl_path = Path(__file__).resolve().parents[4]
 
-    analysis_obj = AnalysisObject(inputs.experiment_name, irl_path=irl_path)
+    analysis_obj = AnalysisObject(
+        inputs.experiment_name,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
+    )
 
     optimization_data = analysis_obj.query_optimization_data()
     bms_df = run_bms(optimization_data, path_to_spm=path_to_spm)

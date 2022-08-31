@@ -24,6 +24,12 @@ if __name__ == "__main__":
         "-e", "--exp", dest="experiment_name", type=str, default="ValidationExperiment"
     )
     parser.add_argument(
+        "-s",
+        "--subdirectory",
+        dest="experiment_subdirectory",
+        metavar="experiment_subdirectory",
+    )
+    parser.add_argument(
         "-m",
         "--main-exp",
         dest="main_experiment_name",
@@ -35,7 +41,11 @@ if __name__ == "__main__":
     static_directory = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[4]
 
-    analysis_obj = AnalysisObject(inputs.experiment_name, irl_path=irl_path)
+    analysis_obj = AnalysisObject(
+        inputs.experiment_name,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
+    )
     main_analysis_obj = AnalysisObject(inputs.main_experiment_name, irl_path=irl_path)
 
     model = "Effort Cost and Planning Depth"

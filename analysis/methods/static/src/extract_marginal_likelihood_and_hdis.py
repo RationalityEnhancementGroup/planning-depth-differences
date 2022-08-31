@@ -19,6 +19,12 @@ if __name__ == "__main__":
         metavar="experiment_name",
     )
     parser.add_argument(
+        "-s",
+        "--subdirectory",
+        dest="experiment_subdirectory",
+        metavar="experiment_subdirectory",
+    )
+    parser.add_argument(
         "-c",
         "--cost-function",
         dest="cost_function",
@@ -42,12 +48,16 @@ if __name__ == "__main__":
     inputs = parser.parse_args()
 
     data_path = Path(__file__).resolve().parents[1]
-    data_path.joinpath(f"data/{inputs.experiment_name}/").mkdir(
-        parents=True, exist_ok=True
-    )
     irl_path = Path(__file__).resolve().parents[4]
+    irl_path.joinpath(
+        f"analysis/{inputs.experiment_subdirectory}/" f"data/{inputs.experiment_name}/"
+    ).mkdir(parents=True, exist_ok=True)
 
-    analysis_obj = AnalysisObject(inputs.experiment_name, irl_path=irl_path)
+    analysis_obj = AnalysisObject(
+        inputs.experiment_name,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
+    )
 
     if inputs.pid is not None:
         pid_text = f"_{inputs.pid:.0f}"
@@ -61,7 +71,8 @@ if __name__ == "__main__":
 
     full_marginal_probabilities = {}
     for block in analysis_obj.block:
-        marginal_probability_file = data_path.joinpath(
+        marginal_probability_file = irl_path.joinpath(
+            f"analysis/{inputs.experiment_subdirectory}/"
             f"data/{inputs.experiment_name}/{inputs.experiment_name}"
             f"_{inputs.cost_function}_{block}_map_{analysis_obj.prior}"
             f"_marginal{pid_text}{temp_text}.pickle"
@@ -121,7 +132,8 @@ if __name__ == "__main__":
                 marginal_probabilities = pickle.load(f)
             full_marginal_probabilities[block] = marginal_probabilities
 
-    hdi_file = data_path.joinpath(
+    hdi_file = irl_path.joinpath(
+        f"analysis/{inputs.experiment_subdirectory}/"
         f"data/{inputs.experiment_name}/{inputs.experiment_name}_{inputs.cost_function}"
         f"_hdi{pid_text}{temp_text}.pickle"
     )

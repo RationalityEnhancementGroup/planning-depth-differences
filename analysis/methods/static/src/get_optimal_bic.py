@@ -26,6 +26,12 @@ if __name__ == "__main__":
         dest="experiment_name",
     )
     parser.add_argument(
+        "-s",
+        "--subdirectory",
+        dest="experiment_subdirectory",
+        metavar="experiment_subdirectory",
+    )
+    parser.add_argument(
         "-n",
         "--num-subjects",
         default=130,
@@ -36,7 +42,11 @@ if __name__ == "__main__":
     data_path = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[4]
 
-    analysis_obj = AnalysisObject(inputs.experiment_name, irl_path=irl_path)
+    analysis_obj = AnalysisObject(
+        inputs.experiment_name,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
+    )
 
     data_path.joinpath("log").mkdir(parents=True, exist_ok=True)
     data_path.joinpath("data").mkdir(parents=True, exist_ok=True)

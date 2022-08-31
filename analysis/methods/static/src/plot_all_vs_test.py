@@ -113,14 +113,28 @@ if __name__ == "__main__":
     parser.add_argument(
         "-f", "--exp2", dest="experiment_name2", default="TrialByTrialAll"
     )
+    parser.add_argument(
+        "-s",
+        "--subdirectory",
+        dest="experiment_subdirectory",
+        metavar="experiment_subdirectory",
+    )
 
     inputs = parser.parse_args()
 
     static_directory = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[4]
 
-    analysis_obj1 = AnalysisObject(inputs.experiment_name1, irl_path=irl_path)
-    analysis_obj2 = AnalysisObject(inputs.experiment_name2, irl_path=irl_path)
+    analysis_obj1 = AnalysisObject(
+        inputs.experiment_name1,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
+    )
+    analysis_obj2 = AnalysisObject(
+        inputs.experiment_name2,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
+    )
 
     trace_df1 = traces_to_df(
         get_trajectories_from_participant_data(analysis_obj1.mouselab_trials)
