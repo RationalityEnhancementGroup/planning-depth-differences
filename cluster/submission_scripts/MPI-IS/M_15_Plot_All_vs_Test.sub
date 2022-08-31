@@ -1,7 +1,7 @@
-project_path = $(save_path:/home/vfelso)/planning-depth-differences
+project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/analysis/methods/static/src/plot_all_vs_test.py
-arguments = $(filename) -e $(experiment1:TrialByTrial) -f $(experiment2:TrialByTrialAll)
+arguments = $(filename) -e $(experiment1:TrialByTrial) -s $(subdirectory:methods/static) -f $(experiment2:TrialByTrialAll)
 output = $(project_path)/analysis/methods/static/log/$(output_string:out_M15).stdout
 error  = log/$(output_string:out_M15).stderr
 log   = log/$(output_string:out_M15).log

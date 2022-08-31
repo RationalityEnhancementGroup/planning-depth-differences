@@ -1,7 +1,7 @@
-project_path = $(save_path:/home/vfelso)/planning-depth-differences
+project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/analysis/methods/static/src/get_optimal_bic.py
-arguments = $(filename) -e $(experiment:OptimalBIC)
+arguments = $(filename) -e $(experiment:OptimalBIC) -s $(subdirectory:methods/static)
 output = $(project_path)/analysis/methods/static/log/$(output_string:out_M2).stdout
 error  = log/$(output_string:out_M2).stderr
 log   = log/$(output_string:out_M2).log

@@ -1,4 +1,4 @@
-project_path = $(save_path:/home/vfelso)/planning-depth-differences
+project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/cluster/src/simulate_trajectories.py
 arguments = $(filename) -p $(policy:OptimalQ) -e $(experiment_setting:high_increasing) -c $(cost_function:linear_depth) -v=$(reward_line)

@@ -1,7 +1,7 @@
-project_path = $(save_path:/home/vfelso)/planning-depth-differences
+project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/analysis/methods/static/src/extract_marginal_likelihood_and_hdis.py
-arguments = $(filename) -e $(experiment:OptimalBIC) -c $(cost_function:linear_depth) -p $(ProcId)
+arguments = $(filename) -e $(experiment:OptimalBIC) -s $(subdirectory:methods/static) -c $(cost_function:linear_depth) -p $(ProcId)
 output = log/$(output_string:out_10_optimal).stdout
 error  = log/$(output_string:out_10_optimal).stderr
 log   = log/$(output_string:out_10_optimal).log

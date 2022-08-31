@@ -1,7 +1,7 @@
-project_path = $(save_path:/home/vfelso)/planning-depth-differences
+project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/analysis/methods/static/src/find_stable_point_with_cm.py
-arguments = $(filename) -e $(experiment:MainExperiment)
+arguments = $(filename) -e $(experiment:MainExperiment) -s $(subdirectory:methods/static)
 output = $(project_path)/analysis/methods/static/log/$(output_string:out_M3).stdout
 error  = log/$(output_string:out_M3).stderr
 log   = log/$(output_string:out_M3).log
