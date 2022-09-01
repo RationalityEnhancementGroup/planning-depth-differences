@@ -6,6 +6,7 @@ It also will add in the prior probability for cost parameters for MAP estimates.
 from argparse import ArgumentParser
 from pathlib import Path
 
+import dill as pickle
 import pandas as pd
 import yaml
 from costometer.utils import add_cost_priors_to_temp_priors, recalculate_maps_from_mles
@@ -83,4 +84,11 @@ if __name__ == "__main__":
         cluster_folder.joinpath(
             f"data/logliks/{inputs.cost_function}/{inputs.experiment}.feather"
         )
+    )
+
+    cluster_folder.joinpath(f"data/priors/{inputs.cost_function}").mkdir(
+        parents=True, exist_ok=True
+    )
+    pickle.dump(
+        full_priors, open(cluster_folder.joinpath(f"{inputs.experiment}.pkl"), "wb")
     )
