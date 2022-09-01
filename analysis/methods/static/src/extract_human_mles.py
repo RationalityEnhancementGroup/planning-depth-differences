@@ -50,7 +50,18 @@ if __name__ == "__main__":
         )
     )
 
-    best_parameter_values = extract_mles_and_maps(data, cost_details)
+    priors = pickle.load(
+        open(
+            irl_path.joinpath(
+                f"cluster/data/priors/"
+                f"{inputs.cost_function}/"
+                f"{inputs.experiment}.pkl"
+            ),
+            "rb",
+        ),
+    )
+
+    best_parameter_values = extract_mles_and_maps(data, cost_details, priors)
 
     # create cost subfolder if not already there
     irl_path.joinpath(
