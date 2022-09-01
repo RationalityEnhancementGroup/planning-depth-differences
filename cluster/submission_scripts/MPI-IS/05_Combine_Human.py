@@ -90,5 +90,11 @@ if __name__ == "__main__":
         parents=True, exist_ok=True
     )
     pickle.dump(
-        full_priors, open(cluster_folder.joinpath(f"{inputs.experiment}.pkl"), "wb")
+        full_priors,
+        open(
+            cluster_folder.joinpath(
+                f"data/priors/{inputs.cost_function}/{inputs.experiment}.pkl"
+            ),
+            "wb",
+        ),
     )
