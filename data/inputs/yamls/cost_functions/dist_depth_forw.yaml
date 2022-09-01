@@ -9,4 +9,4 @@ cost_parameter_names:
         - Cost of Prospection
 env_params: {'include_last_action': true}
 constant_values: {'added_cost': 0, 'distance_multiplier': 0, 'depth_cost_weight': 0}
-model_name: "{(): 'Distance and Effort Costs',('given_cost',): 'Distance Cost Only',('distance_multiplier',): 'Effort Cost Only',('given_cost', 'distance_multiplier'): 'Null (Given Costs)'}"
+model_name: null #TODO
