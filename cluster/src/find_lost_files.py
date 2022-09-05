@@ -50,12 +50,14 @@ if __name__ == "__main__":
         dest="q",
         help="If True, looks at Q files else looks at likelihood file",
         default=True,
-        type=bool,
+        action="store_false",
     )
 
     inputs = parser.parse_args()
 
-    if not inputs.q:
+    if inputs.q:
+        assert inputs.experiment is None
+    else:
         assert inputs.experiment is not None
 
     args = get_args_from_yamls(
