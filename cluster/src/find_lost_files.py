@@ -36,8 +36,28 @@ if __name__ == "__main__":
         help="Cost parameter file located in cluster/parameters/cost",
         type=str,
     )
+    parser.add_argument(
+        "-e",
+        "--experiment",
+        dest="experiment",
+        help="Experiment (only used for finding missing likelihood files)",
+        default=None,
+        type=str,
+    )
+    parser.add_argument(
+        "-t",
+        "--type",
+        dest="q",
+        help="If True, looks at Q files else looks at likelihood file",
+        default=True,
+        type=bool,
+    )
 
     inputs = parser.parse_args()
+
+    if not inputs.q:
+        assert inputs.experiment is not None
+
     args = get_args_from_yamls(
         vars(inputs), attributes=["cost_function", "experiment_setting"]
     )
@@ -64,13 +84,22 @@ if __name__ == "__main__":
 
         parameter_string = get_param_string(cost_params=cost_parameters)
 
-        files = list(
-            cluster_path.glob(
-                f"data/q_files/"
-                f"{inputs.experiment_setting}/{inputs.cost_function}/"
-                f"Q_{inputs.experiment_setting}_{parameter_string}_*.pickle"
+        if inputs.q:
+            files = list(
+                cluster_path.glob(
+                    f"data/q_files/"
+                    f"{inputs.experiment_setting}/{inputs.cost_function}/"
+                    f"Q_{inputs.experiment_setting}_{parameter_string}_*.pickle"
+                )
             )
-        )
+        else:
+            files = list(
+                cluster_path.glob(
+                    f"data/logliks/"
+                    f"{inputs.cost_function}/{inputs.experiment}/"
+                    f"SoftmaxPolicy_optimization_results_{parameter_string}.csv"
+                )
+            )
 
         if len(files) == 0:
             missing_parameters.append(curr_parameters)
@@ -81,7 +110,8 @@ if __name__ == "__main__":
     np.savetxt(
         cluster_path.joinpath(
             f"parameters/cost/"
-            f"{inputs.experiment_setting}_{inputs.cost_function}_missing.txt"
+            f"{inputs.experiment_setting if inputs.q else inputs.experiment}"
+            f"_{inputs.cost_function}_missing.txt"
         ),
         missing_parameters,
         fmt="%.02f",
