@@ -103,9 +103,6 @@ if __name__ == "__main__":
 
         if len(files) == 0:
             missing_parameters.append(curr_parameters)
-        else:
-            print(curr_parameters)
-            print(f"Q_{inputs.experiment_setting}_{parameter_string}_*.pickle")
 
     np.savetxt(
         cluster_path.joinpath(
