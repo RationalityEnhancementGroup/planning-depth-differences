@@ -48,7 +48,7 @@ if __name__ == "__main__":
         "-t",
         "--type",
         dest="q",
-        help="If True, looks at Q files else looks at likelihood file",
+        help="If included, looks at likelihood files and not Q files",
         default=True,
         action="store_false",
     )
