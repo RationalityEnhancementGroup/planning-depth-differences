@@ -9,4 +9,6 @@ cost_parameter_names:
         - Cost of Prospection
 env_params: {'include_last_action': true}
 constant_values: {'added_cost': 0, 'distance_multiplier': 0, 'depth_cost_weight': 0}
-model_name: null #TODO
+model_name:  "{(): 'Distance, Depth and Forward Search Bonus'}"# ('added_cost', 'distance_multiplier', 'depth_cost_weight'): 'Null (Given Costs)'}"
+# not the same since effort = 0, usually kept to 1
+#('added_cost',): 'Distance and Depth Costs', ('distance_multiplier',): 'Depth and Forward Search Bonus',('depth_cost_weight',): 'Distance and Forward Search Bonus', ('added_cost', 'depth_cost_weight'): 'Distance Cost Only', ('distance_multiplier', 'depth_cost_weight'): 'Forward Search Bonus Only',('added_cost', 'distance_multiplier'): 'Planning Depth Only',
