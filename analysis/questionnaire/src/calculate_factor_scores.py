@@ -27,35 +27,16 @@ if __name__ == "__main__":
         wise_weights=True,
     )
 
-    questionnaires = pd.concat(
+    individual_items = pd.concat(
         [
             pd.read_csv(
-                irl_path.joinpath(f"data/processed/{session}/questionnaires.csv")
+                irl_path.joinpath(f"data/processed/{session}/individual_items.csv")
             )
             for session in experiment_arguments["sessions"]
         ]
     )
-
-    # TODO add this to preprocessing
-    questionnaires["question_id"] = questionnaires.apply(
-        lambda row: "catch.1"
-        if (row["name"] == "UPPS-P") & (row["question_id"] == "catch.2")
-        else row["question_id"],
-        axis=1,
-    )
-    # TODO have as numeric originally
-    questionnaires = questionnaires[
-        questionnaires["score"].apply(lambda score: str(score).isnumeric())
-    ]
-    questionnaires["score"] = questionnaires["score"].apply(int)
-
-    individual_items = questionnaires.pivot_table(
-        index=["pid", "run"], columns="question_id", values="score"
-    )
+    individual_items = individual_items[individual_items.columns.difference(["gender"])]
 
     scores = get_psychiatric_scores(individual_items, weights, scale_cols=True)
 
-    data_path.joinpath(f"data/{inputs.experiment_name}").mkdir(
-        parents=True, exist_ok=True
-    )
     scores.to_csv(data_path.joinpath(f"data/{inputs.experiment_name}/scores.csv"))
