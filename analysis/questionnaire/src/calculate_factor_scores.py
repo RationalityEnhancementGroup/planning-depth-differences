@@ -36,6 +36,7 @@ if __name__ == "__main__":
         ]
     )
     individual_items = individual_items[individual_items.columns.difference(["gender"])]
+    individual_items = individual_items.set_index("pid")
 
     scores = get_psychiatric_scores(individual_items, weights, scale_cols=True)
 
