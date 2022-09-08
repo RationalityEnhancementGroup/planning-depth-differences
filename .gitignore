@@ -192,6 +192,8 @@ cython_debug/
 
 !/data/processed/methods_main/*
 !/data/processed/irl_validation/*
+!/data/processed/quest_first/*
+!/data/processed/quest_second/*
 
 # instructions for installing spm are in parent README of subproject(s) that require(s) it
 /spm12/

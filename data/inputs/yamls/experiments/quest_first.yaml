@@ -1,0 +1,25 @@
+database_key: NEW
+participants_to_remove: [1640]
+simulated: false
+sessions:
+        - QuestPilot1
+        - QuestPilot2
+        - QuestPilot3
+questionnaire_files: {"QuestPilot1": "questionnaires_json4","QuestPilot2": "questionnaires_json3","QuestPilot3": "questionnaires_json5"}
+experiment_setting: 'high_increasing'
+COST: null
+DEPTH: null
+html_survey_names: {'QuestPilot2' : {'0.0-4.0-18.0':'demographics'},'QuestPilot3' : {'0.0-4.0-18.0':'demographics'}}
+num_parts: null
+old_experiment: [True, False, False]
+manual_age_mapping: {}
+experiment_specific_mapping: {}
+trials_per_block: {'test':30}
+ranges_to_extract: {'training': "range(20)", "test": "range(20,30)"}
+mouselab_column_identifier: name
+mouselab_mapping : {'0.0-2.*-1.*':'mouselab-quiz-pre', '0.0-4.0-2.0':'mouselab-quiz-post', '0.0-3.0-*.0':'mouselab-quiz-post', '0.0-19.*-2.*':'mouselab-quiz-post','0.0-17.*-1.*':'mouselab-quiz-pre'}
+max_attempts: {'mouselab-quiz-pre': 4, 'mouselab-quiz-post': 1}
+passing_score: {'mouselab-quiz-pre': 4, 'mouselab-quiz-post': 0}
+mouselab_quiz_solutions: {mouselab-quiz-pre: {Q0 : '$-48 to $48', Q1: '$1', Q2: 'The better I perform the higher my bonus will be.', Q3: 'No, the amount of cash at each node of the web may be different each time.'}, mouselab-quiz-post: { "Q0":"$-4 to $4", "Q1":"$-8 to $8", "Q2":"$-48 to $48","Q3":"No, the cost is always $1.00.","Q4":{"Very unmotivated":-2, "Slightly unmotivated":-1, "Neither motivated nor unmotivated":0, "Slightly motivated":1, "Very motivated":2, "":0}}}
+#TODO check these
+crt_quiz_solutions: {"crt1": {".10":"intuitive", "10":"intuitive",".05":"correct", "5":"correct", "":"no response"}, "crt2": {"100":"intuitive",  "5":"correct", "":"no response"}, "crt3": {"24":"intuitive", "47":"correct", "":"no response"}, "crt4": {"9":"intuitive", "4":"correct", "":"no response"}, "crt5": {"30":"intuitive", "29":"correct", "":"no response"},"crt6": {"10":"intuitive","20":"correct", "":"no response"},"crt7": {"is ahead of where he began":"intuitive",  "has lost money":"correct", "":"no response"}}
