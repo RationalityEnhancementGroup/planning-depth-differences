@@ -1,0 +1,17 @@
+simulated: false
+sessions: ['c1.1']
+experiment_setting: 'low_constant'
+COST: null
+DEPTH: null
+html_survey_names: null
+old_experiment: false
+manual_age_mapping: null
+experiment_specific_mapping: null
+trials_per_block: {'training': 35}
+ranges_to_extract: {'training': "range(25)", "test": "range(25,35)"}
+mouselab_column_identifier: null
+mouselab_mapping: null
+max_attempts: null
+passing_score: null
+mouselab_quiz_solutions: null
+column_mapping: {'trial_type':'trial_type','time_elapsed':'time_elapsed','rt':'rt','pid':'pid','state_rewards':'state_rewards','block':'block','trial_index':'trial_index','score':'score','simulation_mode':'simulation_mode','reward':'rewards','path':'path','actions':'actions','action_time':'action_times','queries':'queries','trialTime':'trial_time','run':'run'}
