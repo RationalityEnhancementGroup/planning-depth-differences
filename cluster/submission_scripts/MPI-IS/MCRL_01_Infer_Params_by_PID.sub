@@ -1,7 +1,7 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/cluster/src/fit_mcrl_models.py
-arguments = $(filename) $(experiment) $(model:1729) $(optimization_criterion:likelihood) $(pid) $(num_trials:30)
+arguments = $(filename) $(experiment) $(model:1729) $(optimization_criterion:likelihood) $(num_trials:30)
 output = log/$(output_string:out_L4_MCRL).stdout
 error  = log/$(output_string:out_L4_MCRL).stderr
 log   = log/$(output_string:out_L4_MCRL).log
