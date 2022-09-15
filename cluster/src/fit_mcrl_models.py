@@ -54,6 +54,7 @@ if __name__ == "__main__":
             exp_name=exp_name,
             pid=pid,
             number_of_trials=number_of_trials,
+            data_path=data_path,
             model_index=model_index,
             optimization_criterion=optimization_criterion,
             **other_params,
