@@ -29,6 +29,13 @@ if __name__ == "__main__":
         help="Model row",
         type=str,
     )
+    parser.add_argument(
+        "-n",
+        "--num-trials",
+        dest="num_trials",
+        help="Number of trials",
+        type=str,
+    )
     inputs = parser.parse_args()
 
     irl_folder = Path(__file__).resolve().parents[3]
@@ -44,6 +51,7 @@ if __name__ == "__main__":
             f"experiment={inputs.experiment}",
             f"model={inputs.model}",
             f"pid={pid}",
+            f"num_trials={inputs.num_trials}",
         ]
         command = (
             f"condor_submit_bid {inputs.bid} "
