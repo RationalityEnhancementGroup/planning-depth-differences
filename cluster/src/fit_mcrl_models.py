@@ -36,7 +36,7 @@ if __name__ == "__main__":
         optimization_params = {
             "optimizer": "hyperopt",
             "num_simulations": 1,
-            "max_evals": 400,
+            "max_evals": 1,
         }
         other_params["optimization_params"] = optimization_params
 
@@ -45,6 +45,7 @@ if __name__ == "__main__":
         pid=pid,
         number_of_trials=number_of_trials,
         data_path=data_path,
+        save_path=save_path,
         model_index=model_index,
         optimization_criterion=optimization_criterion,
         **other_params,
