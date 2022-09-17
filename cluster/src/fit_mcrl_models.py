@@ -2,15 +2,14 @@ import ast
 import sys
 from pathlib import Path
 
-import numpy as np
-import pandas as pd
 from mcl_toolbox.fit_mcrl_models import fit_model
 
 if __name__ == "__main__":
     exp_name = sys.argv[1]
     model_index = int(sys.argv[2])
     optimization_criterion = sys.argv[3]
-    number_of_trials = int(sys.argv[4])
+    pid = int(sys.argv[4])
+    number_of_trials = int(sys.argv[5])
     # other_params = {"plotting": True}
     other_params = {}
     if len(sys.argv) > 6:
@@ -19,9 +18,7 @@ if __name__ == "__main__":
         other_params = {}
 
     # set data path
-    irl_folder = Path(__file__).resolve().parents[2]
-
-    data_path = irl_folder.joinpath("data/processed/")
+    data_path = Path(__file__).parents[2].joinpath("data/processed/")
     save_path = Path(__file__).parents[1].joinpath("data/mcrl")
 
     if "exp_attributes" not in other_params:
@@ -43,19 +40,12 @@ if __name__ == "__main__":
         }
         other_params["optimization_params"] = optimization_params
 
-    pid_range = np.unique(
-        pd.read_csv(irl_folder.joinpath(f"data/processed/{exp_name}/mouselab-mdp.csv"))[
-            "pid"
-        ]
+    fit_model(
+        exp_name=exp_name,
+        pid=pid,
+        number_of_trials=number_of_trials,
+        data_path=data_path,
+        model_index=model_index,
+        optimization_criterion=optimization_criterion,
+        **other_params,
     )
-
-    for pid in pid_range:
-        fit_model(
-            exp_name=exp_name,
-            pid=pid,
-            number_of_trials=number_of_trials,
-            data_path=data_path,
-            model_index=model_index,
-            optimization_criterion=optimization_criterion,
-            **other_params,
-        )
