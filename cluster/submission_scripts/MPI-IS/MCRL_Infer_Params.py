@@ -46,17 +46,22 @@ if __name__ == "__main__":
         )["pid"]
     )
 
-    for pid in pid_range:
-        submission_args = [
-            f"experiment={inputs.experiment}",
-            f"model={inputs.model}",
-            f"pid={pid}",
-            f"num_trials={inputs.num_trials}",
-        ]
-        command = (
-            f"condor_submit_bid {inputs.bid} "
-            f"{irl_folder}/cluster/submission_scripts/"
-            f"MPI-IS/L_04_Infer_Params_by_PID.sub "
-            f"{' '.join(submission_args)}"
-        )
-        os.system(command)
+    irl_folder.joinpath("cluster/parameters/pids").mkdir(parents=True, exist_ok=True)
+    np.savetxt(
+        irl_folder.joinpath(f"cluster/parameters/pids/{inputs.experiment}.txt"),
+        pid_range,
+        fmt="%i",
+    )
+
+    submission_args = [
+        f"experiment={inputs.experiment}",
+        f"model={inputs.model}",
+        f"num_trials={inputs.num_trials}",
+    ]
+    command = (
+        f"condor_submit_bid {inputs.bid} "
+        f"{irl_folder}/cluster/submission_scripts/"
+        f"MPI-IS/MCRL_01_Infer_Params_by_PID.sub "
+        f"{' '.join(submission_args)}"
+    )
+    os.system(command)

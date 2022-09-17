@@ -8,4 +8,4 @@ log   = log/$(output_string:out_L4_MCRL).log
 request_memory = 30000
 request_cpus = 1
 
-queue
+queue pid from $(project_path)/cluster/parameters/pids/$(experiment).txt
