@@ -9,8 +9,8 @@ from costometer.utils import (
     get_states_for_trace,
     get_trajectories_from_participant_data,
 )
+from mouselab.distributions import Categorical
 from mouselab.envs.registry import register
-from mouselab.envs.reward_settings import high_increasing_reward
 
 
 def create_test_env() -> None:
@@ -20,10 +20,10 @@ def create_test_env() -> None:
     :return: None
     """
     register(
-        name="small_increasing",
-        branching=[2, 2],
-        reward_inputs=["depth"],
-        reward_dictionary=high_increasing_reward,
+        name="small_test_case",
+        branching=[1, 2],
+        reward_inputs="depth",
+        reward_dictionary={1: Categorical([-500]), 2: Categorical([-60, 60])},
     )
 
 
