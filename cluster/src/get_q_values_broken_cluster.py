@@ -187,6 +187,7 @@ if __name__ == "__main__":
         f"cost_function={inputs.cost_function}",
         f"file_number={inputs.file_number + 1}",
         f"reward_line={inputs.value_line}",
+        f"bid={inputs.bid}",
     ]
     command = (
         f"condor_submit_bid {inputs.bid} "
