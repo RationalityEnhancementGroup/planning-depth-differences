@@ -1,7 +1,9 @@
 """
 Script helps calculate and save Q values for Mouselab environments
+Made for broken cluster where we cannot submit as many jobs simultaneously
 """
 import json
+import os
 from argparse import ArgumentParser
 from pathlib import Path
 from typing import Any, Callable, Dict, List
@@ -63,9 +65,18 @@ if __name__ == "__main__":
     # get arguments
     parser = ArgumentParser()
     parser.add_argument(
+        "-b",
+        "--bid",
+        dest="bid",
+        help="bid",
+        type=int,
+        default=2,
+    )
+    parser.add_argument(
         "-s",
         "--experiment-setting",
         dest="experiment_setting",
+        default="high_increasing",
         help="Experiment setting YAML file",
         type=str,
     )
@@ -73,14 +84,30 @@ if __name__ == "__main__":
         "-c",
         "--cost-function",
         dest="cost_function",
+        default="back_dist_depth_eff_forw",
         help="Cost function YAML file",
         type=str,
     )
     parser.add_argument(
-        "-v",
-        "--values",
-        dest="cost_parameter_values",
-        help="Cost parameter values as comma separated string, e.g. '1.00,2.00'",
+        "-n",
+        "--file-number",
+        dest="file_number",
+        help="Cost parameter file number",
+        type=int,
+    )
+    parser.add_argument(
+        "-l",
+        "--value-line",
+        dest="value_line",
+        help="Cost parameter values line",
+        type=int,
+    )
+    parser.add_argument(
+        "-f",
+        "--file-lambda",
+        dest="file_lambda",
+        help="Cost parameter file lambda function",
+        default='lambda num : f"params_full_five{num}.txt"',
         type=str,
     )
 
@@ -88,6 +115,15 @@ if __name__ == "__main__":
     args = get_args_from_yamls(
         vars(inputs), attributes=["cost_function", "experiment_setting"]
     )
+
+    with open(
+        Path(__file__)
+        .parents[1]
+        .joinpath("parameters/cost/" + eval(inputs.file_lambda)(inputs.file_number)),
+        "r",
+    ) as f:
+        full_parameters = f.read().splitlines()
+    inputs.cost_parameter_values = full_parameters[inputs.value_line]
 
     experiment_setting = args["experiment_setting"]
 
@@ -145,3 +181,17 @@ if __name__ == "__main__":
         cost_function_name=cost_function_name,
         env_params=args["env_params"],
     )
+
+    submission_args = [
+        f"experiment_setting={inputs.experiment_setting}",
+        f"cost_function={inputs.cost_function}",
+        f"file_number={inputs.file_number + 1}",
+        f"reward_line={inputs.value_line}",
+    ]
+    command = (
+        f"condor_submit_bid {inputs.bid} "
+        f"{Path(__file__).resolve().parents[2]}/cluster/submission_scripts/"
+        f"MPI-IS/03_Get_Q_Values_broken_cluster.sub "
+        f"{' '.join(submission_args)}"
+    )
+    os.system(command)
