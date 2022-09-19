@@ -91,7 +91,7 @@ if __name__ == "__main__":
                 cluster_path.glob(
                     f"data/q_files/"
                     f"{inputs.experiment_setting}/{inputs.cost_function}/"
-                    f"Q_{inputs.experiment_setting}_{parameter_string}_*.pickle"
+                    f"Q_{inputs.experiment_setting}_{parameter_string}_*.dat"
                 )
             )
         else:
