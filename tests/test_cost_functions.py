@@ -77,7 +77,7 @@ if __name__ == "__main__":
                     "structure_dicts"
                 ] = None
 
-    experiment_setting = "high_increasing"
+    experiment_setting = "high_decreasing"
 
     cost_envs = {}
 

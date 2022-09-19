@@ -1,4 +1,4 @@
-fcost_function: "lambda added_cost, depth_cost_weight, inspection_cost: lambda state, action, graph: linear_depth(depth_cost_weight=depth_cost_weight, static_cost_weight=0)(state, action, graph=graph) + forward_search_cost(inspection_cost=inspection_cost, added_cost=added_cost, include_start=1.00)(state, action, graph=graph)"
+cost_function: "lambda added_cost, depth_cost_weight, inspection_cost: lambda state, action, graph: linear_depth(depth_cost_weight=depth_cost_weight, static_cost_weight=0)(state, action, graph=graph) + forward_search_cost(inspection_cost=inspection_cost, added_cost=added_cost, include_start=1.00)(state, action, graph=graph)"
 cost_parameter_args:
         - added_cost
         - depth_cost_weight
