@@ -77,81 +77,83 @@ if __name__ == "__main__":
                     "structure_dicts"
                 ] = None
 
-    experiment_setting = "high_decreasing"
+    for experiment_setting in ["high_increasing", "high_decreasing", "low_constant"]:
+        print(experiment_setting)
+        cost_envs = {}
 
-    cost_envs = {}
+        for cost_name, curr_cost_details in cost_details.items():
+            if "cost_function" in curr_cost_details:
+                cost_function = eval(curr_cost_details["cost_function"])
+            else:
+                cost_function = eval(cost_name)
 
-    for cost_name, curr_cost_details in cost_details.items():
-        if "cost_function" in curr_cost_details:
-            cost_function = eval(curr_cost_details["cost_function"])
-        else:
-            cost_function = eval(cost_name)
-
-        for model, model_name in eval(curr_cost_details["model_name"]).items():
-            if len(model) < 2:
-                constant_parameter = {
-                    cost_parameter_arg: curr_cost_details["constant_values"][
+            for model, model_name in eval(curr_cost_details["model_name"]).items():
+                if len(model) < 2:
+                    constant_parameter = {
+                        cost_parameter_arg: curr_cost_details["constant_values"][
+                            cost_parameter_arg
+                        ]
+                        for cost_parameter_arg in model
+                    }
+                    varied_parameters = [
                         cost_parameter_arg
+                        for cost_parameter_arg in curr_cost_details[
+                            "cost_parameter_args"
+                        ]
+                        if cost_parameter_arg not in constant_parameter.keys()
                     ]
-                    for cost_parameter_arg in model
-                }
-                varied_parameters = [
-                    cost_parameter_arg
-                    for cost_parameter_arg in curr_cost_details["cost_parameter_args"]
-                    if cost_parameter_arg not in constant_parameter.keys()
-                ]
-                curr_env = create_env_with_cost(
-                    static_cost_dictionary=constant_parameter,
-                    cost_function=cost_function,
-                    experiment_settings=experiment_settings,
-                    experiment_setting=experiment_setting,
-                    curr_cost_details=curr_cost_details,
-                )
-
-                if model_name not in cost_envs:
-                    cost_envs[model_name] = [
-                        (
-                            varied_parameters,
-                            deepcopy(curr_env),
-                            cost_name,
-                            cost_function,
-                        )
-                    ]
-                else:
-                    cost_envs[model_name].append(
-                        (
-                            varied_parameters,
-                            deepcopy(curr_env),
-                            cost_name,
-                            cost_function,
-                        )
+                    curr_env = create_env_with_cost(
+                        static_cost_dictionary=constant_parameter,
+                        cost_function=cost_function,
+                        experiment_settings=experiment_settings,
+                        experiment_setting=experiment_setting,
+                        curr_cost_details=curr_cost_details,
                     )
 
-        for model_name, envs in cost_envs.items():
-            print(model_name)
-            if len(envs) > 1:
-                for cost_parameter_val in [2, 5, 10]:
-                    mouselab_envs = [
-                        env[1]({param: cost_parameter_val for param in env[0]})
-                        for env in envs
-                    ]
+                    if model_name not in cost_envs:
+                        cost_envs[model_name] = [
+                            (
+                                varied_parameters,
+                                deepcopy(curr_env),
+                                cost_name,
+                                cost_function,
+                            )
+                        ]
+                    else:
+                        cost_envs[model_name].append(
+                            (
+                                varied_parameters,
+                                deepcopy(curr_env),
+                                cost_name,
+                                cost_function,
+                            )
+                        )
 
-                agent = Agent()
-                agent.register(mouselab_envs[0])
+            for model_name, envs in cost_envs.items():
+                print(model_name)
+                if len(envs) > 1:
+                    for cost_parameter_val in [2, 5, 10]:
+                        mouselab_envs = [
+                            env[1]({param: cost_parameter_val for param in env[0]})
+                            for env in envs
+                        ]
 
-                agent.register(RandomPolicy())
+                    agent = Agent()
+                    agent.register(mouselab_envs[0])
 
-                trace = agent.run_many(num_episodes=10)
+                    agent.register(RandomPolicy())
 
-                for mouselab_env in mouselab_envs[1:]:
-                    mouselab_env.ground_truth = mouselab_envs[0].ground_truth
-                    rewards = []
-                    for episode in trace["actions"]:
-                        mouselab_env.reset()
-                        curr_episode_rewards = []
-                        for action in episode:
-                            _, reward, _, _ = mouselab_env.step(action)
-                            curr_episode_rewards.append(reward)
-                        rewards.append(curr_episode_rewards)
+                    trace = agent.run_many(num_episodes=10)
 
-                    assert np.all(trace["rewards"] == np.asarray(rewards))
+                    for mouselab_env in mouselab_envs[1:]:
+                        mouselab_env.ground_truth = mouselab_envs[0].ground_truth
+                        rewards = []
+                        for episode in trace["actions"]:
+                            mouselab_env.reset()
+                            curr_episode_rewards = []
+                            for action in episode:
+                                _, reward, _, _ = mouselab_env.step(action)
+                                curr_episode_rewards.append(reward)
+                            rewards.append(curr_episode_rewards)
+
+                        assert np.all(trace["rewards"] == np.asarray(rewards))
