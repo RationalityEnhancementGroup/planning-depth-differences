@@ -11,20 +11,57 @@ from costometer.utils import (
 )
 from mouselab.distributions import Categorical
 from mouselab.envs.registry import register
+from mouselab.envs.reward_settings import high_increasing_reward
 
 
-def create_test_env() -> None:
+def create_test_env(name) -> None:
     """
     Register a (given) test environment for unit tests
 
-    :return: None
+    :return: None, registers test env
     """
-    register(
-        name="small_test_case",
-        branching=[1, 2],
-        reward_inputs="depth",
-        reward_dictionary={1: Categorical([-500]), 2: Categorical([-60, 60])},
-    )
+    if name == "small_test_case":
+        register(
+            name=name,
+            branching=[1, 2],
+            reward_inputs="depth",
+            reward_dictionary={1: Categorical([-500]), 2: Categorical([-60, 60])},
+        )
+    elif name == "reduced_variance":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, 4]),
+                2: Categorical([-8, 8]),
+                3: Categorical([-48, 48]),
+            },
+        )
+    elif name == "reduced_root":
+        register(
+            name=name,
+            branching=[2, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary=high_increasing_reward,
+        )
+    elif name == "reduced_leaf":
+        register(
+            name=name,
+            branching=[3, 1, 1],
+            reward_inputs="depth",
+            reward_dictionary=high_increasing_reward,
+        )
+    elif name == "reduced_middle":
+        register(
+            name=name,
+            branching=[3, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-48, -24, 24, 48]),
+            },
+        )
 
 
 def get_human_trajectories(

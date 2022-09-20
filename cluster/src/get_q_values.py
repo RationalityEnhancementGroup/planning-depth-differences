@@ -92,8 +92,14 @@ if __name__ == "__main__":
     experiment_setting = args["experiment_setting"]
 
     # test setting unique to this work
-    if experiment_setting == "small_test_case":
-        create_test_env()
+    if experiment_setting in [
+        "small_test_case",
+        "reduced_leaf",
+        "reduced_middle",
+        "reduced_root",
+        "reduced_variance",
+    ]:
+        create_test_env(experiment_setting)
 
     if args["ground_truth_file"]:
         ground_truths = get_ground_truths_from_json(

@@ -89,11 +89,17 @@ if __name__ == "__main__":
 
     policy_kwargs = {"seed": inputs.seed}
 
-    if args["experiment_setting"] == "test":
-        create_test_env()
-        experiment_setting = "small_increasing"
-    else:
-        experiment_setting = args["experiment_setting"]
+    experiment_setting = args["experiment_setting"]
+
+    # test setting unique to this work
+    if experiment_setting in [
+        "small_test_case",
+        "reduced_leaf",
+        "reduced_middle",
+        "reduced_root",
+        "reduced_variance",
+    ]:
+        create_test_env(experiment_setting)
 
     if inputs.cost_function:
         cost_function = eval(args["cost_function"])

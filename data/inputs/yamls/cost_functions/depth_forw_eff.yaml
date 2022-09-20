@@ -1,12 +1,12 @@
-cost_function: "lambda added_cost, distance_multiplier, depth_cost_weight: lambda state, action, graph: linear_depth(depth_cost_weight=depth_cost_weight, static_cost_weight=0)(state, action, graph=graph) + forward_search_cost(inspection_cost=inspection_cost, added_cost=added_cost, include_start=1.00)(state, action, graph=graph)"
+cost_function: "lambda added_cost, depth_cost_weight, inspection_cost: lambda state, action, graph: linear_depth(depth_cost_weight=depth_cost_weight, static_cost_weight=0)(state, action, graph=graph) + forward_search_cost(inspection_cost=inspection_cost, added_cost=added_cost, include_start=1.00)(state, action, graph=graph)"
 cost_parameter_args:
-        - inspection_cost
         - added_cost
         - depth_cost_weight
+        - inspection_cost
 cost_parameter_names:
-        - Effort Cost
         - Added Cost
         - Cost of Prospection
+        - Effort Cost
 env_params: {'include_last_action': false}
-constant_values: {'given_cost': 1, 'added_cost': 0, 'depth_cost_weight': 0}
+constant_values: {'inspection_cost': 1, 'added_cost': 0, 'depth_cost_weight': 0}
 model_name: "{(): 'Effort, Depth and Forward Search Bonus', ('added_cost',): 'Effort Cost and Planning Depth', ('inspection_cost',): 'Depth and Forward Search Bonus',('depth_cost_weight',): 'Effort and Forward Search Bonus', ('added_cost', 'depth_cost_weight'): 'Effort Cost Only', ('inspection_cost', 'depth_cost_weight'): 'Forward Search Bonus Only',('inspection_cost', 'added_cost'): 'Planning Depth Only', ('inspection_cost', 'added_cost', 'depth_cost_weight'): 'Null (Given Costs)'}"
