@@ -169,9 +169,18 @@ if __name__ == "__main__":
     traces = []
 
     for simulation in range(inputs.num_simulated):
-        ground_truth_subsets = np.random.choice(
-            ground_truths, inputs.num_trials, replace=False
-        )
+
+        if inputs.num_trials < len(ground_truths):
+            ground_truth_subsets = np.random.choice(
+                ground_truths, inputs.num_trials, replace=False
+            )
+        else:
+            print(
+                "Less ground truths than number of trials requested, allowing replacement in sampling"  # noqa: E501
+            )
+            ground_truth_subsets = np.random.choice(
+                ground_truths, inputs.num_trials, replace=True
+            )
 
         cost_function = eval(args["cost_function"])
 
