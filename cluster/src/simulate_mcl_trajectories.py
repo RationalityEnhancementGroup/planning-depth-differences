@@ -170,7 +170,7 @@ if __name__ == "__main__":
 
     for simulation in range(inputs.num_simulated):
 
-        if input.num_trials < len(ground_truths):
+        if inputs.num_trials < len(ground_truths):
             ground_truth_subsets = np.random.choice(
                 ground_truths, inputs.num_trials, replace=False
             )
