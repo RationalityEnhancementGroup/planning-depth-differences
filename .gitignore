@@ -197,3 +197,4 @@ cython_debug/
 
 # instructions for installing spm are in parent README of subproject(s) that require(s) it
 /spm12/
+/analysis/questionnaire/data/rouault_et_al/
