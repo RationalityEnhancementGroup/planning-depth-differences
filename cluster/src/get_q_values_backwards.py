@@ -50,7 +50,7 @@ def get_q_values(
         structure=structure,
         ground_truths=ground_truths,
         path=location,
-        backwards=True,
+        solve_kwargs={"backwards": True, "dedup_by_hash": True},
         **env_params,
     )
     return info
