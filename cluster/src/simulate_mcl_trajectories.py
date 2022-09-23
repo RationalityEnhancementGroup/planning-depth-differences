@@ -12,7 +12,7 @@ import dill as pickle
 import numpy as np
 import pandas as pd
 import yaml
-from cluster_utils import get_args_from_yamls
+from cluster_utils import create_test_env, get_args_from_yamls
 from costometer.agents import SymmetricMCLParticipant
 from costometer.utils import get_param_string
 from mcl_toolbox.utils.feature_normalization import get_new_feature_normalization
@@ -89,6 +89,16 @@ if __name__ == "__main__":
     )
 
     inputs = parser.parse_args()
+
+    # test setting unique to this work
+    if inputs.experiment_setting in [
+        "small_test_case",
+        "reduced_leaf",
+        "reduced_middle",
+        "reduced_root",
+        "reduced_variance",
+    ]:
+        create_test_env(inputs.experiment_setting)
 
     args = get_args_from_yamls(
         vars(inputs), attributes=["cost_function", "experiment_setting"]
