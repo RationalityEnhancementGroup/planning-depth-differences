@@ -112,12 +112,16 @@ if __name__ == "__main__":
             )
         }
 
-        q_dictionary = load_q_file(
-            inputs.experiment_setting,
-            cost_function_name=inputs.cost_function,
-            cost_params=cost_parameters,
-            path=irl_path.joinpath("cluster/data/q_files"),
-        )
+        try:
+            q_dictionary = load_q_file(
+                inputs.experiment_setting,
+                cost_function_name=inputs.cost_function,
+                cost_params=cost_parameters,
+                path=irl_path.joinpath("cluster/data/q_files"),
+            )
+        except IndexError as e:
+            print(f"No q dictionary found: {e}")
+            q_dictionary = None
 
         curr_df["ground_truth"] = curr_df["ground_truth"].apply(eval)
         curr_df["taken_paths"] = curr_df["taken_paths"].apply(eval)
@@ -131,11 +135,11 @@ if __name__ == "__main__":
             curr_df,
             inputs.experiment_setting,
             ground_truths_dict,
-            q_dictionary,
             args["node_classification"],
             eval(inputs.cost_function),
             cost_parameters,
             human=False,
+            q_dictionary=q_dictionary,
         )
 
         simulated_datas.append(curr_df)
