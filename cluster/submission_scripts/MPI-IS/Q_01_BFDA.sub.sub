@@ -1,0 +1,11 @@
+universe = docker
+docker_image=docker.is.localnet:5000/$(username:vfelso)/docker_bda:latest
+questionnaire_path = $(save_path:/lustre/work/vfelso)/irl-project/analysis/questionnaire
+arguments = Rscript $(questionnaire_path)/Run_BFDA_Iter.R $(yaml_file:bfda_v1) $(Process)
+output = log/out.stdout
+error = log/out.stderr
+log = log/out.log
+request_memory = 16384
+request_cpus = 1
+
+queue $(num_iters:2)
