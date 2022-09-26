@@ -11,6 +11,7 @@ from costometer.utils import save_q_values_for_cost
 from mouselab.cost_functions import *  # noqa: F401, F403
 from mouselab.env_utils import get_ground_truths_from_json
 from mouselab.graph_utils import get_structure_properties
+from scipy.spatial import distance
 
 
 def get_q_values(
@@ -40,7 +41,24 @@ def get_q_values(
     location.mkdir(parents=True, exist_ok=True)
 
     if env_params is None:
-        env_params = {}
+        # default to not including last action
+        env_params = {"include_last_action": False}
+
+    # if we have structure dicts, and we are including last action,
+    # precompute the distances for the hash
+    if env_params["include_last_action"] and structure:
+        last_action_info = {
+            action_idx: [
+                distance.euclidean(
+                    structure["layout"][next_action_idx],
+                    structure["layout"][action_idx],
+                )
+                for next_action_idx in sorted(structure["layout"].keys())
+            ]
+            for action_idx in structure["layout"].keys()
+        }
+    else:
+        last_action_info = None
 
     info = save_q_values_for_cost(
         experiment_setting,
@@ -50,7 +68,11 @@ def get_q_values(
         structure=structure,
         ground_truths=ground_truths,
         path=location,
-        solve_kwargs={"backwards": True, "dedup_by_hash": True},
+        solve_kwargs={
+            "backwards": False,
+            "dedup_by_hash": True,
+            "last_action_info": last_action_info,
+        },
         **env_params,
     )
     return info

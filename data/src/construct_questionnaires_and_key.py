@@ -80,7 +80,7 @@ if __name__ == "__main__":
 
     if not args.file_name:
         if args.column:
-            args.file_name = f"questionnaire_{args.columns}"
+            args.file_name = f"questionnaire_{args.column}"
         else:
             args.file_name = "questionnaire"
 
