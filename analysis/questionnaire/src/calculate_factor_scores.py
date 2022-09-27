@@ -40,4 +40,7 @@ if __name__ == "__main__":
 
     scores = get_psychiatric_scores(individual_items, weights, scale_cols=True)
 
+    data_path.joinpath(f"data/{inputs.experiment_name}").mkdir(
+        parents=True, exist_ok=True
+    )
     scores.to_csv(data_path.joinpath(f"data/{inputs.experiment_name}/scores.csv"))
