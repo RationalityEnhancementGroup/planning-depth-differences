@@ -27,7 +27,7 @@ def create_test_env(name) -> None:
             reward_inputs="depth",
             reward_dictionary={1: Categorical([-500]), 2: Categorical([-60, 60])},
         )
-    elif name == "cogsci_learning":
+    elif name == "large_variance":
         register(
             name=name,
             branching=[3, 1, 2],
@@ -38,7 +38,7 @@ def create_test_env(name) -> None:
                 3: Categorical([-48, -24, 24, 48]),
             },
         )
-    elif name == "large_variance":
+    elif name == "larger_variance":
         register(
             name=name,
             branching=[3, 1, 2],
