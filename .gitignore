@@ -173,6 +173,9 @@ cython_debug/
 analysis/methods/learning/data/processed/simulated/*
 cluster/data/trajectories/*
 
+# plotting in Jupyter
+analysis/methods/learning/investigate_simulated_behavior.ipynb
+
 # in case we accidentally copied over identifiable bonuses
 /data/raw/*/bonuses.csv
 # because several people put their worker id in the free responses and we don't want to publish them
