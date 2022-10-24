@@ -164,10 +164,14 @@ cython_debug/
 */.DS_Store
 .DS_Store
 
-# remove large files, files that may have PII data (copy locally from cluster)
+# removeAir Jordan 1 Low large files, files that may have PII data (copy locally from cluster)
 /cluster/data/*
 /cluster/log/*
 /cluster/job/*
+
+# simulation results
+analysis/methods/learning/data/processed/simulated/*
+cluster/data/trajectories/*
 
 # in case we accidentally copied over identifiable bonuses
 /data/raw/*/bonuses.csv
