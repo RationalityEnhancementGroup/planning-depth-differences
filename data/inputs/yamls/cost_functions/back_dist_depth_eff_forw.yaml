@@ -11,6 +11,6 @@ cost_parameter_names:
         - Distance Cost
         - Forward Added Cost
         - Effort Cost
-env_params: {'include_last_action': true}
+env_params: {'include_last_action': true, 'last_action_info' : 'distance'}
 constant_values: {'forw_added_cost': 0, 'back_added_cost': 0,  'given_cost': 1, 'distance_multiplier': 0, 'depth_cost_weight': 0}
 model_name: "{() : 'All five'}"

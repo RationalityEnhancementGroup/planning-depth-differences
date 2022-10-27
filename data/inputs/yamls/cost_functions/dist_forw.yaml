@@ -5,6 +5,6 @@ cost_parameter_args:
 cost_parameter_names:
         - Distance Cost
         - Added Cost
-env_params: {'include_last_action': true}
+env_params: {'include_last_action': true, 'last_action_info' : 'distance'}
 constant_values: {'distance_multiplier': 0, 'added_cost': 0}
 model_name: "{(): 'Distance and Forward Search Bonus',('added_cost',): 'Distance Cost Only',('distance_multiplier',): 'Forward Search Bonus Only', ('distance_multiplier', 'added_cost'): 'Null (Given Costs)'}"
