@@ -1,0 +1,95 @@
+{
+  "data": ["quest_first","quest_second"],
+  "cost_function": "dist_depth_eff",
+  "tests": {
+             "regressions" : [
+              # Psychiatric measures
+               {
+                  "dependent": "depth_cost_weight",
+                  "independent": "CIT",
+                  "covariates": ["age", "IQ", "C(gender)"]
+               },
+               {
+                 "dependent": "average_node_cost",
+                 "independent": "AD",
+                 "covariates": [ "age", "IQ", "C(gender)" ]
+               },
+               {
+                 "dependent": "average_node_cost",
+                 "independent": "SW",
+                 "covariates": [ "age", "IQ", "C(gender)" ]
+               },
+               {
+                 "dependent": "average_node_cost",
+                 "independent": "STAI",
+                 "covariates": [ "age", "IQ", "C(gender)" ]
+               },
+              # Planning and future thinking measures
+               {
+                 "dependent": "depth_cost_weight",
+                  "independent": "CFC",
+                  "covariates": ["age", "IQ", "C(gender)"]
+               },
+               {
+                 "dependent": "average_node_cost",
+                 "independent": "ptp",
+                 "covariates": [ "age", "IQ", "C(gender)" ]
+               },
+               {
+                 "dependent": "depth_cost_weight",
+                 "independent": "ptp",
+                 "covariates": [ "age", "IQ", "C(gender)" ]
+               },
+#               {
+#                 "dependent": "depth_cost_weight",
+#                 "independent": "FOS",
+#                 "covariates": [ "age", "IQ", "C(gender)" ]
+#               },
+              # Life regret and life satisfaction measures
+               {
+                 "dependent": "depth_cost_weight",
+                "independent": "Q(\"life-regrets\")",
+                  "covariates": ["age", "IQ", "C(gender)"]
+               },
+               {
+                 "dependent": "depth_cost_weight",
+                 "independent": "satisfaction",
+                 "covariates": [ "age", "IQ", "C(gender)" ]
+               },
+#               {
+#                 "dependent": "depth_cost_weight",
+#                 "independent": "BIT",
+#                 "covariates": [ "age", "IQ", "C(gender)" ]
+#               },
+               # Impulsivity and risk-taking measures
+#               {
+#                 "dependent": "depth_cost_weight",
+#                 "independent": "Q(\"irrational-risk\")",
+#                 "covariates": [ "age", "IQ", "C(gender)" ]
+#               },
+#               {
+#                 "dependent": "average_node_cost",
+#                 "independent": "Q(\"pre-meditation\")",
+#                 "covariates": [ "age", "IQ", "C(gender)" ]
+#               },
+               # Intolerance of uncertainty measure
+#               {
+#                 "dependent": "average_node_cost",
+#                 "independent": "IUS_12",
+#                 "covariates": [ "age", "IQ", "C(gender)" ]
+#               },
+              # Distress intolerance measure
+#               {
+#                 "dependent": "average_node_cost",
+#                 "independent": "DTS",
+#                 "covariates": [ "age", "IQ", "C(gender)" ]
+#               },
+              # Cognitive styles (rationality)
+               {
+                 "dependent": "depth_cost_weight",
+                 "independent": "crt",
+                 "covariates": [ "age", "IQ", "C(gender)" ]
+               },
+             ]
+  }
+}

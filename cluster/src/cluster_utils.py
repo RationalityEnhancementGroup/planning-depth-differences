@@ -27,6 +27,50 @@ def create_test_env(name) -> None:
             reward_inputs="depth",
             reward_dictionary={1: Categorical([-500]), 2: Categorical([-60, 60])},
         )
+    elif name == "large_variance":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-8, -4, 4, 8]),  # usually ([-4, -2, 2, 4]),
+                2: Categorical([-8, -4, 4, 8]),
+                3: Categorical([-48, -24, 24, 48]),
+            },
+        )
+    elif name == "larger_variance":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-48, -24, 24, 48]),  # usually ([-4, -2, 2, 4]),
+                2: Categorical([-8, -4, 4, 8]),
+                3: Categorical([-48, -24, 24, 48]),
+            },
+        )
+    elif name == "zero_variance":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([1, 1, 1, 1]),  # usually ([-4, -2, 2, 4]),
+                2: Categorical([-8, -4, 4, 8]),
+                3: Categorical([-48, -24, 24, 48]),
+            },
+        )
+    elif name == "mini_variance":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-2, -1, 1, 2]),  # usually ([-4, -2, 2, 4]),
+                2: Categorical([-8, -4, 4, 8]),
+                3: Categorical([-48, -24, 24, 48]),
+            },
+        )
     elif name == "reduced_variance":
         register(
             name=name,
@@ -62,6 +106,8 @@ def create_test_env(name) -> None:
                 2: Categorical([-48, -24, 24, 48]),
             },
         )
+    else:
+        raise ValueError("No such environment specified")
 
 
 def get_human_trajectories(

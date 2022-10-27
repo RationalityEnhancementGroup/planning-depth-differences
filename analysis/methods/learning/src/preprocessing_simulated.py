@@ -1,4 +1,5 @@
 import json
+import sys
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -11,6 +12,9 @@ from costometer.utils import (
     load_q_file,
 )
 from mouselab.cost_functions import *  # noqa: F401,F403
+
+sys.path.append(str(Path(__file__).resolve().parents[4].joinpath("cluster/src")))
+from cluster_utils import create_test_env  # noqa : E402
 
 if __name__ == "__main__":
     # get arguments
@@ -72,6 +76,16 @@ if __name__ == "__main__":
     simulated_file_pattern = (
         f"{inputs.model_yaml}_{inputs.feature_yaml}_{inputs.constant_yaml}"
     )
+
+    if inputs.experiment_setting in [
+        "small_test_case",
+        "reduced_leaf",
+        "reduced_middle",
+        "reduced_root",
+        "reduced_variance",
+        "cogsci_learning",
+    ]:
+        create_test_env(inputs.experiment_setting)
 
     file_path.joinpath(
         f"data/processed/simulated/{inputs.experiment_setting}/MCL/"

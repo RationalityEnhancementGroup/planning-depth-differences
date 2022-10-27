@@ -97,6 +97,7 @@ if __name__ == "__main__":
         "reduced_middle",
         "reduced_root",
         "reduced_variance",
+        "cogsci_learning",
     ]:
         create_test_env(inputs.experiment_setting)
 
