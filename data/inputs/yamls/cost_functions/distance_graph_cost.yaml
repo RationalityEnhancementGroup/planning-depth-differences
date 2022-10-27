@@ -4,6 +4,6 @@ cost_parameter_args:
 cost_parameter_names:
         - Effort Cost
         - Distance Cost
-env_params: {'include_last_action': true}
+env_params: {'include_last_action': true, 'last_action_info' : 'distance'}
 constant_values: {'given_cost': 1, 'distance_multiplier': 0}
 model_name: "{(): 'Distance and Effort Costs',('given_cost',): 'Distance Cost Only',('distance_multiplier',): 'Effort Cost Only',('given_cost', 'distance_multiplier'): 'Null (Given Costs)'}"

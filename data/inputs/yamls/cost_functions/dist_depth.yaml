@@ -5,6 +5,6 @@ cost_parameter_args:
 cost_parameter_names:
         - Distance Cost
         - Cost of Prospection
-env_params: {'include_last_action': true}
+env_params: {'include_last_action': true, 'last_action_info' : 'distance'}
 constant_values: {'distance_multiplier': 0, 'depth_cost_weight': 0}
 model_name: "{(): 'Distance and Depth Costs',('depth_cost_weight',): 'Distance Cost Only',('distance_multiplier',): 'Planning Depth Only', ('distance_multiplier', 'depth_cost_weight'): 'Null (Given Costs)'}"
