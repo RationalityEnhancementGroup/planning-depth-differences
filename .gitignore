@@ -170,11 +170,10 @@ cython_debug/
 /cluster/job/*
 
 # simulation results
-analysis/methods/learning/data/processed/simulated/*
-cluster/data/trajectories/*
+/analysis/methods/learning/data/processed/simulated/*
 
 # plotting in Jupyter
-analysis/methods/learning/investigate_simulated_behavior.ipynb
+/analysis/methods/learning/investigate_simulated_behavior.ipynb
 
 # in case we accidentally copied over identifiable bonuses
 /data/raw/*/bonuses.csv
