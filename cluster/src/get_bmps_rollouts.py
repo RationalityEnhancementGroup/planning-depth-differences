@@ -100,7 +100,7 @@ def get_bmps_rollouts(
         sa_pair[1],
         env.tree,
         env.init,
-        ground_truths[:2],
+        ground_truths,
         cost=cost_function(**cost_parameters),
         features=features,
         env_params=env_params,
@@ -114,7 +114,7 @@ def get_bmps_rollouts(
         env,
         rollout_function,
         verbose=True,
-        ground_truths=ground_truths[:2],
+        ground_truths=ground_truths,
         hash_key=hash_tree,
         dedup_by_hash=True,
     )
