@@ -116,7 +116,7 @@ def get_bmps_rollouts(
         verbose=True,
         ground_truths=ground_truths,
         hash_key=hash_tree,
-        dedup_by_hash=True,
+        dedup_by_hash=False,
     )
 
     # saves res dict
