@@ -1,10 +1,10 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
-filename = $(project_path)/cluster/src/get_q_values_backwards.py
+filename = $(project_path)/cluster/src/get_bmps_weights.py
 arguments = $(filename) -s $(experiment_setting:high_increasing) -c $(cost_function:linear_depth) -v=$(reward_line)
-output = log/$(output_string:out_3).stdout
-error  = log/$(output_string:out_3).stderr
-log   = log/$(output_string:out_3).log
+output = log/$(output_string:out_3_weights).stdout
+error  = log/$(output_string:out_3_weights).stderr
+log   = log/$(output_string:out_3_weights).log
 request_memory = 50000
 request_cpus = 1
 

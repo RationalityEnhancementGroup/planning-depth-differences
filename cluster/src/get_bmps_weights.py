@@ -4,27 +4,33 @@ Script helps calculate and save Q values for Mouselab environments
 import json
 from argparse import ArgumentParser
 from pathlib import Path
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict
 
+import blosc
+import dill as pickle
 from cluster_utils import create_test_env, get_args_from_yamls
-from costometer.utils import save_q_values_for_cost
+from costometer.utils import get_param_string
 from mouselab.cost_functions import *  # noqa: F401, F403
 from mouselab.env_utils import get_ground_truths_from_json
 from mouselab.graph_utils import get_structure_properties
-from scipy.spatial import distance
+from mouselab.metacontroller.vanilla_BMPS import (
+    load_feature_file,
+    optimize_bmps_weights,
+)
+from mouselab.mouselab import MouselabEnv
 
 
-def get_q_values(
+def get_bmps_weights(
     experiment_setting: str,
+    bmps_file: str,
     cost_parameters: Dict[str, float],
     cost_function: Callable,
     cost_function_name: str = None,
     structure: Dict[Any, Any] = None,
-    ground_truths: List[List[float]] = None,
     env_params: Dict[Any, Any] = None,
 ) -> Dict[Any, Any]:
     """
-    Gets Q values for parameter setting for linear depth cost function
+    Gets BMPS weights for different cost functions
 
     :param experiment_setting: which experiment setting (e.g. high increasing)
     :param cost_parameters: a dictionary of inputs for the cost function
@@ -36,46 +42,72 @@ def get_q_values(
     function additionally saves this dictionary into data/q_files
     """
     # get path to save dictionary in
-    location = Path(__file__).parents[1].joinpath("data/q_files")
+    path = Path(__file__).parents[1].joinpath("data/bmps")
     # make directory if it doesn't already exist
-    location.mkdir(parents=True, exist_ok=True)
+    path.mkdir(parents=True, exist_ok=True)
 
     if env_params is None:
-        # default to not including last action
-        env_params = {"include_last_action": False}
+        env_params = {}
 
-    # if we have structure dicts, and we are including last action,
-    # precompute the distances for the hash
-    if env_params["include_last_action"] and structure:
-        last_action_info = {
-            action_idx: [
-                distance.euclidean(
-                    structure["layout"][next_action_idx],
-                    structure["layout"][action_idx],
-                )
-                for next_action_idx in sorted(structure["layout"].keys())
-            ]
-            for action_idx in structure["layout"].keys()
-        }
-    else:
-        last_action_info = None
-
-    info = save_q_values_for_cost(
+    env = MouselabEnv.new_symmetric_registered(
         experiment_setting,
-        cost_function=cost_function,
-        cost_function_name=cost_function_name,
-        cost_params=cost_parameters,
-        structure=structure,
-        ground_truths=ground_truths,
-        path=location,
-        solve_kwargs={
-            "backwards": False,
-            "dedup_by_hash": True,
-            "last_action_info": last_action_info,
-        },
+        cost=cost_function(**cost_parameters),
+        mdp_graph_properties=structure,
         **env_params,
     )
-    return info
+    (
+        optimization_kwargs,
+        features,
+        additional_kwargs,
+        secondary_variables,
+    ) = load_feature_file(
+        bmps_file, path=Path(__file__).parents[1].joinpath("parameters/bmps/")
+    )
+
+    W_vanilla, time_vanilla = optimize_bmps_weights(
+        tree=env.tree,
+        init=env.init,
+        cost=cost_function(**cost_parameters),
+        seed=91,
+        features=features,
+        optimization_kwargs=optimization_kwargs,
+        verbose=False,
+        secondary_variables=secondary_variables,
+        mdp_graph_properties=structure,
+        include_last_action=True,
+        **additional_kwargs,
+    )
+
+    res = {"weights": W_vanilla}
+
+    # add experiment and parameter settings to res dict
+    res["env_params"] = env_params
+    res["cost_params"] = cost_parameters
+    res["cost_function"] = cost_function_name
+    res["optimization_parameters"] = {
+        "optimization_kwargs": optimization_kwargs,
+        "features": features,
+    }
+
+    # saves res dict
+    if path is not None:
+        parameter_string = get_param_string(cost_parameters)
+        path.joinpath(f"{experiment_setting}/{cost_function_name}/").mkdir(
+            parents=True, exist_ok=True
+        )
+        filename = path.joinpath(
+            f"{experiment_setting}/{cost_function_name}/"
+            f"BMPS_{experiment_setting}_{parameter_string}.dat"  # noqa: E501
+        )
+
+        pickled_data = pickle.dumps(res)
+        compressed_pickle = blosc.compress(pickled_data)
+
+        with open(filename, "wb") as f:
+            f.write(compressed_pickle)
+
+    print(res)
+    return res
 
 
 if __name__ == "__main__":
@@ -90,6 +122,14 @@ if __name__ == "__main__":
         "--experiment-setting",
         dest="experiment_setting",
         help="Experiment setting YAML file",
+        type=str,
+    )
+    parser.add_argument(
+        "-b",
+        "--bmps-file",
+        dest="bmps_file",
+        default="Basic",
+        help="BMPS Features and Optimization",
         type=str,
     )
     parser.add_argument(
@@ -165,11 +205,11 @@ if __name__ == "__main__":
     else:
         cost_function_name = None
 
-    get_q_values(
+    get_bmps_weights(
         experiment_setting,
+        inputs.bmps_file,
         cost_parameters,
         structure=structure_dicts,
-        ground_truths=ground_truths,
         cost_function=cost_function,
         cost_function_name=cost_function_name,
         env_params=args["env_params"],
