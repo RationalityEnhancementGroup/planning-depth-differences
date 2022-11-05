@@ -35,7 +35,7 @@ data/inputs/yamls/experiment_settings/
 
 Generate ground truth for sampling
 - number of ground truth should larger than trial number when running simulation
-- e.g. wehn num_trial = 100, set num_ground_truths=500
+- e.g. when num_trial = 100, set num_ground_truths=500
 ```
 cluster/src/generate_test_rewards.py
 ```
