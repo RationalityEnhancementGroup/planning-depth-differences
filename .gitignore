@@ -159,6 +159,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
+# git keep
+!/**/.gitkeep
 
 # For Mac users
 */.DS_Store
@@ -185,6 +187,9 @@ analysis/methods/learning/investigate_simulated_behavior.ipynb
 # because several people put their worker id in the free responses and we don't want to publish them
 /data/raw/*/survey-text.csv
 /data/processed/*/survey-text.csv
+
+# NEVER commit private keys
+/data/inputs/keys/*
 
 # NEVER commit mapping of worker IDs to pseudonyms
 /data/mturk_id_mapping.pickle

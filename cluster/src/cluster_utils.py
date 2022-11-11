@@ -17,7 +17,6 @@ from mouselab.envs.reward_settings import high_increasing_reward
 def create_test_env(name) -> None:
     """
     Register a (given) test environment for unit tests
-
     :return: None, registers test env
     """
     if name == "small_test_case":
@@ -116,7 +115,6 @@ def get_human_trajectories(
 ) -> List[Dict[str, List]]:
     """
     Get human trajectories from experiment in data folder
-
     :param exp_name: name experiment is saved under
     :param data_path: path where data is saved, including YAMLs with \
     experiment information
@@ -154,7 +152,6 @@ def get_simulated_trajectories(
     """
     Given path to simulated trajectories and a file pattern, outputs traces \
     to be used in inference
-
     :param file_pattern: corresponding to the type of simulated trajectory \
     we're interested in, as a glob partner
     :param simulated_trajectory_path: where the simulated trajectories are located
@@ -221,7 +218,6 @@ def get_args_from_yamls(
 ) -> Dict[Any, Any]:
     """
     Loads and combined all information from input YAMLs into one dictionary
-
     :param input_dictionary: dictionary of input : input variable, for Namespace \
     object from ArgParse ars(obj) will give you this
     :param attributes: attributes expected to be in Namespace object
