@@ -6,13 +6,7 @@ from mouselab.env_utils import generate_ground_truth_file
 from mouselab.mouselab import MouselabEnv
 
 if __name__ == "__main__":
-    for experiment_setting in [
-        "small_test_case",
-        "reduced_leaf",
-        "reduced_middle",
-        "reduced_root",
-        "reduced_variance",
-    ]:
+    for experiment_setting in ["cogsci_learning"]:
         create_test_env(experiment_setting)
         save_path = Path(__file__).parents[2].joinpath("data/inputs/exp_inputs/rewards")
 
