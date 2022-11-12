@@ -45,9 +45,7 @@ def download_exp(experiment_name, data_path=None, save_path=None):
         private_key = None
 
     for session in kwargs["sessions"]:
-        raw_df = pd.read_csv(
-            data_path.joinpath(f"raw/csv/{inputs.experiment_name}.csv")
-        )
+        raw_df = pd.read_csv(data_path.joinpath(f"raw/csv/{session}.csv"))
         entries_with_data = raw_df[~pd.isnull(raw_df["datastring"])]
 
         # transform encrypted worker id > worker id
@@ -65,6 +63,12 @@ def download_exp(experiment_name, data_path=None, save_path=None):
             json.dumps
         )
         participant_dicts = pd.DataFrame.to_dict(entries_with_data, orient="records")
+        participant_dicts = [
+            participant_dict
+            for participant_dict in participant_dicts
+            if len(participant_dict["workerid"]) > 10
+            and len(participant_dict["workerid"]) < 30
+        ]
 
         save_participant_files(
             participant_dicts,
