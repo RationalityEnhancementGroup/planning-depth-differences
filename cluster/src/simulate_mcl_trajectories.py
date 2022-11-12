@@ -98,6 +98,10 @@ if __name__ == "__main__":
         "reduced_root",
         "reduced_variance",
         "cogsci_learning",
+        "high_increasing",
+        "large_variance",
+        "zero_variance",
+        "mini_variance"
     ]:
         create_test_env(inputs.experiment_setting)
 
