@@ -12,7 +12,6 @@ import numpy as np
 from cluster_utils import create_test_env, get_args_from_yamls
 from contexttimer import Timer
 from costometer.utils import get_param_string
-from mouselab.agents import Agent
 from mouselab.cost_functions import *  # noqa: F401, F403
 from mouselab.env_utils import (
     add_extended_state_to_sa_pairs,
@@ -22,14 +21,9 @@ from mouselab.env_utils import (
 )
 from mouselab.exact import hash_tree
 from mouselab.graph_utils import get_structure_properties
-from mouselab.metacontroller.inexact_utils import (
-    get_rollouts_for_ground_truths,
-    timed_solve_env,
-)
 from mouselab.metacontroller.mouselab_env import MetaControllerMouselab
 from mouselab.metacontroller.vanilla_BMPS import load_feature_file
 from mouselab.mouselab import MouselabEnv
-from mouselab.policies import LiederPolicy
 from toolz import unique
 
 
