@@ -51,7 +51,7 @@ def get_bmps_rollouts(
     """
     # get path to save dictionary in
     path = Path(__file__).parents[1].joinpath("data/bmps")
-    path.joinpath(f"{experiment_setting}/{cost_function_name}/").mkdir(
+    path.joinpath(f"preferences/{experiment_setting}/{cost_function_name}/").mkdir(
         parents=True, exist_ok=True
     )
 
