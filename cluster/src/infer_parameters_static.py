@@ -39,6 +39,14 @@ if __name__ == "__main__":
         type=str,
     )
     parser.add_argument(
+        "-x",
+        "--exact",
+        dest="exact",
+        help="Use exact Q values instead of approximate values",
+        default=True,
+        action="store_false",
+    )
+    parser.add_argument(
         "-c",
         "--cost-function",
         dest="cost_function",
@@ -174,7 +182,9 @@ if __name__ == "__main__":
         },
         held_constant_policy_kwargs={
             "noise": 0,
-            "q_path": path.joinpath("cluster/data/q_files"),
+            "q_path": path.joinpath("cluster/data/bmps/preferences")
+            if not inputs.exact
+            else path.joinpath("cluster/data/q_files"),
         },
         policy_parameters={"temp": priors},
         cost_function=cost_function,

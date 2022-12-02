@@ -42,6 +42,14 @@ if __name__ == "__main__":
         type=str,
     )
     parser.add_argument(
+        "-x",
+        "--exact",
+        dest="exact",
+        help="Use exact Q values instead of approximate values",
+        default=True,
+        action="store_false",
+    )
+    parser.add_argument(
         "-c",
         "--cost-function",
         dest="cost_function",
@@ -114,9 +122,11 @@ if __name__ == "__main__":
             raise e
         q_dictionary = load_q_file(
             experiment_setting,
-            cost_function,
-            cost_parameters,
-            path.joinpath("cluster/data/q_files"),
+            cost_function=cost_function,
+            cost_params=cost_parameters,
+            path=path.joinpath("cluster/data/bmps/preferences")
+            if not inputs.exact
+            else path.joinpath("cluster/data/q_files"),
         )
         policy_kwargs["preference"] = q_dictionary
     else:
