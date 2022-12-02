@@ -9,6 +9,7 @@ from pathlib import Path
 
 import yaml
 from cluster_utils import (
+    create_test_env,
     get_args_from_yamls,
     get_human_trajectories,
     get_simulated_trajectories,
@@ -72,6 +73,34 @@ if __name__ == "__main__":
 
     path = Path(__file__).resolve().parents[2]
 
+    # test setting unique to this work
+    if args["experiment_setting"] in [
+        "small_test_case",
+        "reduced_leaf",
+        "reduced_middle",
+        "reduced_root",
+        "reduced_variance",
+    ]:
+        create_test_env(args["experiment_setting"])
+    args = {
+        **args,
+        **get_args_from_yamls(
+            {"experiment_setting": args["experiment_setting"]},
+            attributes=["experiment_setting"],
+        ),
+    }
+
+    if "structure" in args:
+        with open(
+            path.joinpath(f"data/inputs/exp_inputs/structure/{args['structure']}.json"),
+            "rb",
+        ) as f:
+            structure_data = json.load(f)
+
+        structure_dicts = get_structure_properties(structure_data)
+    else:
+        structure_dicts = None
+
     # if wild card or .csv in experiment name, this is file pattern for
     # simulated trajectories
     if "*" in args["experiment"] or ".csv" in args["experiment"]:
@@ -79,6 +108,10 @@ if __name__ == "__main__":
             args["experiment"],
             args["experiment_setting"],
             simulated_trajectory_path=path.joinpath("cluster"),
+            additional_mouselab_kwargs={
+                "mdp_graph_properties": structure_dicts,
+                **args["env_params"],
+            },
         )
         experiment_folder = "simulated/" + "/".join(
             args["experiment"].split("/")[-3:-1]
@@ -124,19 +157,6 @@ if __name__ == "__main__":
         )
     else:
         priors = None
-
-    if "structure" in args:
-        with open(
-            Path(__file__)
-            .parents[2]
-            .joinpath(f"data/inputs/exp_inputs/structure/{args['structure']}.json"),
-            "rb",
-        ) as f:
-            structure_data = json.load(f)
-
-        structure_dicts = get_structure_properties(structure_data)
-    else:
-        structure_dicts = None
 
     cost_function = eval(args["cost_function"])
     if callable(eval(args["cost_function"])):

@@ -152,6 +152,7 @@ def get_simulated_trajectories(
     file_pattern: str,
     experiment_setting: str,
     simulated_trajectory_path: Union[str, bytes, os.PathLike] = None,
+    additional_mouselab_kwargs: dict = None,
 ) -> List[Dict[str, List]]:
     """
     Given path to simulated trajectories and a file pattern, outputs traces \
@@ -194,7 +195,10 @@ def get_simulated_trajectories(
 
     state_info = imploded_by_episode_df.apply(
         lambda row: get_states_for_trace(
-            row["actions"], experiment_setting, ground_truth=row["ground_truth"]
+            row["actions"],
+            experiment_setting,
+            ground_truth=row["ground_truth"],
+            **additional_mouselab_kwargs,
         ),
         axis=1,
     ).to_dict()
