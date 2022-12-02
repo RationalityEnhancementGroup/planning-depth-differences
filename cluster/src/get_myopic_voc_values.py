@@ -220,6 +220,7 @@ if __name__ == "__main__":
     if "structure" in args:
         with open(
             Path(__file__)
+            .resolve()
             .parents[2]
             .joinpath(f"data/inputs/exp_inputs/structure/{args['structure']}.json"),
             "rb",
