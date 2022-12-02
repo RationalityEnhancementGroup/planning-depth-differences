@@ -195,6 +195,7 @@ if __name__ == "__main__":
     if args["ground_truth_file"]:
         ground_truths = get_ground_truths_from_json(
             Path(__file__)
+            .resolve()
             .parents[2]
             .joinpath(
                 f"data/inputs/exp_inputs/rewards/{args['ground_truth_file']}.json"
