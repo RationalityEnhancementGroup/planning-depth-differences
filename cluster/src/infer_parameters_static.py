@@ -9,6 +9,7 @@ from pathlib import Path
 
 import yaml
 from cluster_utils import (
+    create_test_env,
     get_args_from_yamls,
     get_human_trajectories,
     get_simulated_trajectories,
@@ -36,6 +37,14 @@ if __name__ == "__main__":
         dest="experiment",
         help="Experiment",
         type=str,
+    )
+    parser.add_argument(
+        "-x",
+        "--exact",
+        dest="exact",
+        help="Use exact Q values instead of approximate values",
+        default=True,
+        action="store_false",
     )
     parser.add_argument(
         "-c",
@@ -72,6 +81,34 @@ if __name__ == "__main__":
 
     path = Path(__file__).resolve().parents[2]
 
+    # test setting unique to this work
+    if args["experiment_setting"] in [
+        "small_test_case",
+        "reduced_leaf",
+        "reduced_middle",
+        "reduced_root",
+        "reduced_variance",
+    ]:
+        create_test_env(args["experiment_setting"])
+    args = {
+        **args,
+        **get_args_from_yamls(
+            {"experiment_setting": args["experiment_setting"]},
+            attributes=["experiment_setting"],
+        ),
+    }
+
+    if "structure" in args:
+        with open(
+            path.joinpath(f"data/inputs/exp_inputs/structure/{args['structure']}.json"),
+            "rb",
+        ) as f:
+            structure_data = json.load(f)
+
+        structure_dicts = get_structure_properties(structure_data)
+    else:
+        structure_dicts = None
+
     # if wild card or .csv in experiment name, this is file pattern for
     # simulated trajectories
     if "*" in args["experiment"] or ".csv" in args["experiment"]:
@@ -79,6 +116,10 @@ if __name__ == "__main__":
             args["experiment"],
             args["experiment_setting"],
             simulated_trajectory_path=path.joinpath("cluster"),
+            additional_mouselab_kwargs={
+                "mdp_graph_properties": structure_dicts,
+                **args["env_params"],
+            },
         )
         experiment_folder = "simulated/" + "/".join(
             args["experiment"].split("/")[-3:-1]
@@ -125,19 +166,6 @@ if __name__ == "__main__":
     else:
         priors = None
 
-    if "structure" in args:
-        with open(
-            Path(__file__)
-            .parents[2]
-            .joinpath(f"data/inputs/exp_inputs/structure/{args['structure']}.json"),
-            "rb",
-        ) as f:
-            structure_data = json.load(f)
-
-        structure_dicts = get_structure_properties(structure_data)
-    else:
-        structure_dicts = None
-
     cost_function = eval(args["cost_function"])
     if callable(eval(args["cost_function"])):
         cost_function_name = inputs.cost_function
@@ -150,11 +178,16 @@ if __name__ == "__main__":
         participant_kwargs={
             "experiment_setting": args["experiment_setting"],
             "policy_function": SoftmaxPolicy,
-            # "additional_mouselab_kwargs": {"mdp_graph_properties": structure_dicts},
+            "additional_mouselab_kwargs": {
+                "mdp_graph_properties": structure_dicts,
+                **args["env_params"],
+            },
         },
         held_constant_policy_kwargs={
             "noise": 0,
-            "q_path": path.joinpath("cluster/data/q_files"),
+            "q_path": path.joinpath("cluster/data/bmps/preferences")
+            if not inputs.exact
+            else path.joinpath("cluster/data/q_files"),
         },
         policy_parameters={"temp": priors},
         cost_function=cost_function,
@@ -184,7 +217,10 @@ if __name__ == "__main__":
         participant_kwargs={
             "experiment_setting": args["experiment_setting"],
             "policy_function": RandomPolicy,
-            # "additional_mouselab_kwargs": {"mdp_graph_properties": structure_dicts},
+            "additional_mouselab_kwargs": {
+                "mdp_graph_properties": structure_dicts,
+                **args["env_params"],
+            },
         },
         cost_function=cost_function,
         cost_parameters=cost_parameters,
