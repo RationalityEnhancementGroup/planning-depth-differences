@@ -178,7 +178,10 @@ if __name__ == "__main__":
         participant_kwargs={
             "experiment_setting": args["experiment_setting"],
             "policy_function": SoftmaxPolicy,
-            # "additional_mouselab_kwargs": {"mdp_graph_properties": structure_dicts},
+            "additional_mouselab_kwargs": {
+                "mdp_graph_properties": structure_dicts,
+                **args["env_params"],
+            },
         },
         held_constant_policy_kwargs={
             "noise": 0,
@@ -214,7 +217,10 @@ if __name__ == "__main__":
         participant_kwargs={
             "experiment_setting": args["experiment_setting"],
             "policy_function": RandomPolicy,
-            # "additional_mouselab_kwargs": {"mdp_graph_properties": structure_dicts},
+            "additional_mouselab_kwargs": {
+                "mdp_graph_properties": structure_dicts,
+                **args["env_params"],
+            },
         },
         cost_function=cost_function,
         cost_parameters=cost_parameters,

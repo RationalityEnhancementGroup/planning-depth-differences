@@ -12,7 +12,7 @@ from cluster_utils import create_test_env, get_args_from_yamls
 from costometer.agents.vanilla import SymmetricMouselabParticipant
 from costometer.utils import get_param_string, load_q_file, traces_to_df
 from mouselab.cost_functions import *  # noqa
-from mouselab.graph_utils import annotate_mdp_graph, get_structure_properties
+from mouselab.graph_utils import get_structure_properties
 from mouselab.policies import OptimalQ, RandomPolicy, SoftmaxPolicy  # noqa
 from scipy import stats  # noqa
 
@@ -188,12 +188,11 @@ if __name__ == "__main__":
                 cost_kwargs=cost_parameters,
                 ground_truths=[trial["stateRewards"] for trial in ground_truth_subsets],
                 trial_ids=[trial["trial_id"] for trial in ground_truth_subsets],
+                additional_mouselab_kwargs={
+                    "mdp_graph_properties": structure_dicts,
+                    **args["env_params"],
+                },
             )
-            if "structure" in args:
-                simulated_participant.mouselab_envs = [
-                    annotate_mdp_graph(mouselab_env.mdp_graph, structure_dicts)
-                    for mouselab_env in simulated_participant.mouselab_envs
-                ]
             simulated_participant.simulate_trajectory()
 
             trace_df = traces_to_df([simulated_participant.trace])
