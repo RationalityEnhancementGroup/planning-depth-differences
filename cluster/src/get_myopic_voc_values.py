@@ -61,7 +61,7 @@ def get_bmps_rollouts(
         parents=True, exist_ok=True
     )
 
-    W = np.asarray([1, 0])
+    W = np.asarray([1, 1, 1])
 
     if env_params is None:
         env_params = {}

@@ -5,6 +5,9 @@ features:
   cost:
     'type': 'continuous'
     'domain': (1,9)
+  next_level_expected_term_reward:
+    'type': 'continuous'
+    'domain': (0,1)
 constraints:
   myopic_voc_leq:
     constraint : 'x[:,0] - 1' # myopic_voc <= 1
