@@ -68,7 +68,6 @@ def get_bmps_rollouts(
         **env_params,
     )
 
-    print(env_params)
     (
         optimization_kwargs,
         features,
@@ -135,7 +134,6 @@ def get_bmps_rollouts(
         with open(filename, "wb") as f:
             f.write(compressed_pickle)
 
-    print(info)
     return info
 
 
@@ -246,7 +244,6 @@ if __name__ == "__main__":
         }
     except ValueError as e:
         raise e
-    print(cost_parameters)
 
     cost_function = eval(args["cost_function"])
 
