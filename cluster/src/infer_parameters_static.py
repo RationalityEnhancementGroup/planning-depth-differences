@@ -16,7 +16,12 @@ from cluster_utils import (
 )
 from costometer.agents.vanilla import SymmetricMouselabParticipant
 from costometer.inference import GridInference
-from costometer.utils import get_param_string, get_temp_prior
+from costometer.utils import (
+    get_cost_params_from_string,
+    get_matching_q_files,
+    get_param_string,
+    get_temp_prior,
+)
 from mouselab.cost_functions import *  # noqa
 from mouselab.distributions import Categorical
 from mouselab.graph_utils import get_structure_properties
@@ -137,18 +142,64 @@ if __name__ == "__main__":
         # data not simulated, no simulation params
         simulation_params = ""
 
-    cost_parameters = {
-        cost_parameter_arg: Categorical([float(arg)], [1])
-        for arg, cost_parameter_arg in zip(
-            inputs.cost_parameter_values.split(","), args["cost_parameter_args"]
-        )
-    }
+    # add asterisks for missing param values
+    num_not_included_params = len(args["cost_parameter_args"]) - len(
+        inputs.cost_parameter_values.split(",")
+    )
+    inputs.cost_parameter_values = ",".join(
+        inputs.cost_parameter_values.split(",") + ["*"] * num_not_included_params
+    )
+
     cost_parameter_dict = {
-        cost_parameter_arg: float(arg)
+        cost_parameter_arg: arg
         for arg, cost_parameter_arg in zip(
             inputs.cost_parameter_values.split(","), args["cost_parameter_args"]
         )
     }
+
+    matching_files = get_matching_q_files(
+        args["experiment_setting"],
+        cost_function=eval(args["cost_function"]),
+        cost_function_name=inputs.cost_function
+        if callable(eval(args["cost_function"]))
+        else None,
+        cost_params=cost_parameter_dict,
+        path=path.joinpath("cluster/data/bmps/preferences")
+        if not inputs.exact
+        else path.joinpath("cluster/data/q_files"),
+    )
+    cost_parameter_strings = [
+        "_".join(
+            [
+                filename_part
+                for filename_part in matching_file.stem.split("_")
+                if "." in filename_part
+            ]
+        )
+        for matching_file in matching_files
+    ]
+    matching_cost_parameters = [
+        get_cost_params_from_string(cost_parameter_string, args["cost_parameter_args"])
+        for cost_parameter_string in cost_parameter_strings
+    ]
+
+    cost_parameters = {}
+    for arg, cost_parameter_arg in zip(
+        inputs.cost_parameter_values.split(","), args["cost_parameter_args"]
+    ):
+        if arg != "*":
+            cost_parameters[cost_parameter_arg] = Categorical([float(arg)], [1])
+        else:
+            # need to deduplicate list
+            possible_cost_parameters = list(
+                {
+                    matching_cost_parameter[cost_parameter_arg]
+                    for matching_cost_parameter in matching_cost_parameters
+                }
+            )
+            cost_parameters[cost_parameter_arg] = Categorical(
+                possible_cost_parameters, [1] * len(possible_cost_parameters)
+            )
 
     if inputs.temperature_file is not None:
         yaml_path = str(
