@@ -46,8 +46,8 @@ if __name__ == "__main__":
         "--exact",
         dest="exact",
         help="Use exact Q values instead of approximate values",
-        default=True,
-        action="store_false",
+        default=False,
+        action="store_true",
     )
     parser.add_argument(
         "-c",
