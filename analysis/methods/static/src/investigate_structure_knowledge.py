@@ -24,10 +24,14 @@ set_font_sizes()
 
 
 def plot_score_average_likelihoods(
-    optimization_data_trials, likelihood_field, static_directory, palette=None
+    optimization_data_trials,
+    likelihood_field,
+    static_directory,
+    experiment_name,
+    palette=None,
 ):
     if palette is None:
-        palette = get_static_palette(static_directory)
+        palette = get_static_palette(static_directory, experiment_name)
     plt.figure(figsize=(12, 8), dpi=80)
     ax = sns.pointplot(
         y=likelihood_field,
@@ -127,7 +131,12 @@ if __name__ == "__main__":
     )
     optimization_data = optimization_data.merge(scores, on=["pid"])
 
-    plot_score_average_likelihoods(optimization_data, "avg", static_directory)
+    plot_score_average_likelihoods(
+        optimization_data,
+        "avg",
+        static_directory,
+        experiment_name=inputs.experiment_name,
+    )
     plt.ylabel("Average planning operation likelihood")
     plt.savefig(
         static_directory.joinpath(f"figs/{inputs.experiment_name}_score_lik.png"),

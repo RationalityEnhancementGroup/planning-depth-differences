@@ -14,9 +14,11 @@ set_font_sizes()
 ###################################################
 
 
-def bic_plot(optimization_data, static_directory, bic_field="bic", palette=None):
+def bic_plot(
+    optimization_data, static_directory, experiment_name, bic_field="bic", palette=None
+):
     if palette is None:
-        palette = get_static_palette(static_directory)
+        palette = get_static_palette(static_directory, experiment_name)
     plt.figure(figsize=(12, 8), dpi=80)
     sum_bic = optimization_data.groupby(["Model Name"])[bic_field].sum()
     order = sum_bic.sort_values().index
@@ -77,7 +79,12 @@ if __name__ == "__main__":
     with open(data_path.joinpath("data/OptimalBIC.pickle"), "rb") as f:
         simulated_means = pickle.load(f)["intended"]
 
-    bic_plot(bic_df, static_directory, bic_field="bic")
+    bic_plot(
+        bic_df,
+        static_directory,
+        experiment_name=inputs.experiment_name,
+        bic_field="bic",
+    )
     plt.axvline(x=np.mean(simulated_means))
     title_extras = f" ({', '.join(analysis_obj.title_extras)})"
     plt.title(

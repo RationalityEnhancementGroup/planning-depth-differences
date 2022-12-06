@@ -23,10 +23,15 @@ set_font_sizes()
 
 
 def plot_participant_average_likelihoods(
-    optimization_data, likelihood_field, static_directory, palette=None, dodge=False
+    optimization_data,
+    likelihood_field,
+    static_directory,
+    experiment_name,
+    palette=None,
+    dodge=False,
 ):
     if palette is None:
-        palette = get_static_palette(static_directory)
+        palette = get_static_palette(static_directory, experiment_name)
     plt.figure(figsize=(16, 8), dpi=80)
     ax = sns.pointplot(
         y=likelihood_field,
@@ -71,12 +76,13 @@ def plot_trial_by_trial_logliks(
     optimization_data,
     likelihood_field,
     static_directory,
+    experiment_name,
     agg_func=np.mean,
     palette=None,
     dodge=False,
 ):
     if palette is None:
-        palette = get_static_palette(static_directory)
+        palette = get_static_palette(static_directory, experiment_name)
     plt.figure(figsize=(11.7, 8.27))
     ax = sns.pointplot(
         y=likelihood_field,
@@ -160,6 +166,7 @@ if __name__ == "__main__":
         trial_by_trial_df[trial_by_trial_df["i_episode"].isin(relevant_trials)],
         "avg",
         static_directory,
+        experiment_name=inputs.experiment_name,
         dodge=0.25,
     )
     plt.savefig(
@@ -173,6 +180,7 @@ if __name__ == "__main__":
         trial_by_trial_df[trial_by_trial_df["i_episode"].isin(relevant_trials)],
         "avg",
         static_directory,
+        experiment_name=inputs.experiment_name,
         agg_func=np.mean,
         dodge=0.25,
     )
@@ -184,6 +192,7 @@ if __name__ == "__main__":
         trial_by_trial_df[trial_by_trial_df["i_episode"].isin(relevant_trials)],
         "avg",
         static_directory,
+        experiment_name=inputs.experiment_name,
         agg_func=np.sum,
         dodge=0.25,
     )
