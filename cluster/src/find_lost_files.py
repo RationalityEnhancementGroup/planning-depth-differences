@@ -87,11 +87,18 @@ if __name__ == "__main__":
         parameter_string = get_param_string(cost_params=cost_parameters)
 
         if inputs.q:
+            # files = list(
+            #     cluster_path.glob(
+            #         f"data/q_files/"
+            #         f"{inputs.experiment_setting}/{inputs.cost_function}/"
+            #         f"Q_{inputs.experiment_setting}_{parameter_string}_*.dat"
+            #     )
+            # )
             files = list(
                 cluster_path.glob(
-                    f"data/q_files/"
+                    f"data/bmps/preferences/"
                     f"{inputs.experiment_setting}/{inputs.cost_function}/"
-                    f"Q_{inputs.experiment_setting}_{parameter_string}_*.dat"
+                    f"*_{inputs.experiment_setting}_{parameter_string}*.dat"
                 )
             )
         else:
