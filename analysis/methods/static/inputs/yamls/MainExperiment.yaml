@@ -6,11 +6,7 @@ post_quizzes:
         - 'mouselab-quiz-post_Q2'
         - 'mouselab-quiz-post_Q3'
 cost_functions:
-        - backward_search_cost
-        - distance_graph_cost
-        - forward_search_cost
-        - linear_depth
-#        - neighbor_search_cost
+        - back_dist_depth_eff_forw
 group: false
 prior : 'expon'
 block: ['test']
