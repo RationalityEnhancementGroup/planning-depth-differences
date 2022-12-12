@@ -22,6 +22,13 @@ if __name__ == "__main__":
         help="Cost Function",
         metavar="cost_function",
     )
+    parser.add_argument(
+        "-p",
+        "--pid",
+        dest="pid",
+        help="Participant ID (optional)",
+        default=None,
+    )
 
     inputs = parser.parse_args()
     irl_path = Path(__file__).resolve().parents[4]
@@ -43,12 +50,20 @@ if __name__ == "__main__":
     with open(yaml_path, "r") as stream:
         cost_details = yaml.safe_load(stream)
 
-    data = pd.read_feather(
-        irl_path.joinpath(
-            f"cluster/data/logliks/{inputs.cost_function}/"
-            f"{inputs.experiment}.feather"
+    if inputs.pid:
+        data = pd.read_feather(
+            irl_path.joinpath(
+                f"cluster/data/logliks/{inputs.cost_function}/"
+                f"{inputs.experiment}_{inputs.pid}.feather"
+            )
         )
-    )
+    else:
+        data = pd.read_feather(
+            irl_path.joinpath(
+                f"cluster/data/logliks/{inputs.cost_function}/"
+                f"{inputs.experiment}.feather"
+            )
+        )
 
     priors = pickle.load(
         open(
