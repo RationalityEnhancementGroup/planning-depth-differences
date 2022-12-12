@@ -82,11 +82,21 @@ if __name__ == "__main__":
     irl_path.joinpath(
         f"data/processed/{inputs.experiment}/{inputs.cost_function}"
     ).mkdir(parents=True, exist_ok=True)
-    with open(
-        irl_path.joinpath(
-            f"data/processed/{inputs.experiment}/{inputs.cost_function}/"
-            f"mle_and_map.pickle"
-        ),
-        "wb",
-    ) as f:
-        pickle.dump(best_parameter_values, f)
+    if inputs.pid:
+        with open(
+            irl_path.joinpath(
+                f"data/processed/{inputs.experiment}/{inputs.cost_function}/"
+                f"mle_and_map_{inputs.pid}.pickle"
+            ),
+            "wb",
+        ) as f:
+            pickle.dump(best_parameter_values, f)
+    else:
+        with open(
+            irl_path.joinpath(
+                f"data/processed/{inputs.experiment}/{inputs.cost_function}/"
+                f"mle_and_map.pickle"
+            ),
+            "wb",
+        ) as f:
+            pickle.dump(best_parameter_values, f)
