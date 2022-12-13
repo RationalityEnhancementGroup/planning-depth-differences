@@ -1,11 +1,11 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/cluster/src/simulate_trajectories.py
-arguments = $(filename) -p $(policy:OptimalQ) -e $(experiment_setting:high_increasing) -c $(cost_function:linear_depth) -v=$(reward_line)
+arguments = $(filename) -p $(policy:OptimalQ) -e $(experiment_setting:high_increasing) -c $(cost_function:dist_depth_forw) -v=$(reward_line)
 output = log/$(output_string:out_6).stdout
 error  = log/$(output_string:out_6).stderr
 log   = log/$(output_string:out_6).log
 request_memory = 30000
 request_cpus = 1
 
-queue reward_line from $(project_path)/cluster/parameters/cost/$(param_file:params_full).txt
+queue reward_line from $(project_path)/cluster/parameters/cost/$(param_file:params_full_three).txt
