@@ -1,21 +1,18 @@
 sessions:
         - SoftmaxPolicy/high_increasing
 cost_functions:
-        - linear_depth
+        - dist_depth_forw
 simulated: True
 number_trials : 30
 group: False
 prior: 'expon'
 include_null: True
-preferred_cost: 'linear_depth'
+preferred_cost: 'dist_depth_forw'
 static_cost_weight:
   - -5.0
   - -2.5
   - -1.0
-  - -0.1
   - 0.0
-  - 0.1
-  - 0.5
   - 1.0
   - 2.5
   - 5.0
@@ -25,10 +22,7 @@ depth_cost_weight:
   - -5.0
   - -2.5
   - -1.0
-  - -0.1
   - 0.0
-  - 0.1
-  - 0.5
   - 1.0
   - 2.5
   - 5.0
