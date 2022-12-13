@@ -39,7 +39,7 @@ if __name__ == "__main__":
         if ";" in row["Scoring"]:
             scores = [int(score.strip()) for score in row["Scoring"].split(";")]
             solutions[row["Measure"]][row_id] = {
-                option: scores[ans_idx] for ans_idx, option in enumerate(options)
+                ans_idx: scores[ans_idx] for ans_idx, option in enumerate(options)
             }
         else:
             try:  # if this doesn't work, the answer is a string
@@ -48,7 +48,8 @@ if __name__ == "__main__":
                 solutions[row["Measure"]][row_id] = row["Scoring"]
 
     pickle.dump(
-        solutions, open(questionnaire_files_path.joinpath("solutions.pkl"), "wb")
+        solutions,
+        open(questionnaire_files_path.joinpath(f"solutions_{args.column}.pkl"), "wb"),
     )
 
     if args.column:

@@ -1,7 +1,6 @@
 database_key: NEW
 participants_to_remove: [679, 916]
 simulated: false
-
 sessions:
         - 2PartPilot1Part1
         - 2PartPilot2Part1
