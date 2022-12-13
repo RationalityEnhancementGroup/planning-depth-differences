@@ -325,6 +325,7 @@ if __name__ == "__main__":
     )
     optimization_results.to_csv(filename, index=False)
 
+    print(inputs.value_line, len(full_parameters))
     if inputs.value_line + 1 < len(full_parameters):
         submission_args = [
             f"sim_experiment_file={inputs.sim_experiment_file}",
@@ -340,4 +341,5 @@ if __name__ == "__main__":
             f"MPI-IS/07_Infer_Simulated_Params.sub "
             f"{' '.join(submission_args)}"
         )
+        print(command)
         os.system(command)

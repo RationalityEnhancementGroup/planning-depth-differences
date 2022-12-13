@@ -21,6 +21,7 @@ def bic_plot(
         palette = get_static_palette(static_directory, experiment_name)
     plt.figure(figsize=(12, 8), dpi=80)
     sum_bic = optimization_data.groupby(["Model Name"])[bic_field].sum()
+    print(sum_bic.sort_values().round(5))
     order = sum_bic.sort_values().index
     sns.barplot(
         y="Model Name",
