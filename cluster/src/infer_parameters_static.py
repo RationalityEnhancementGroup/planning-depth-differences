@@ -274,7 +274,12 @@ if __name__ == "__main__":
             },
         },
         cost_function=cost_function,
-        cost_parameters=cost_parameters,
+        cost_parameters={
+            cost_parameter_arg: Categorical([cost_parameter_val], [1])
+            for cost_parameter_arg, cost_parameter_val in args[
+                "constant_values"
+            ].items()
+        },
         cost_function_name=cost_function_name,
     )
 
