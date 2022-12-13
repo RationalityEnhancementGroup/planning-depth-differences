@@ -74,13 +74,39 @@ if __name__ == "__main__":
     )
 
     for curr_field in list(experiment_setting_details["node_classification"].keys()):
-        plot_heat_map_for_simulated(
-            sum_clicks,
-            curr_field,
-            *sim_cost_parameters,
-            *cost_parameter_names,
-        )
-        plt.savefig(
-            static_directory.joinpath(f"figs/optimal_{curr_field}.png"),
-            bbox_inches="tight",
-        )
+        if len(sim_cost_parameters) == 2:
+            plot_heat_map_for_simulated(
+                sum_clicks,
+                curr_field,
+                *sim_cost_parameters,
+                *cost_parameter_names,
+            )
+            plt.title(f"{curr_field.title()}")
+            plt.savefig(
+                static_directory.joinpath(f"figs/optimal_{curr_field}.png"),
+                bbox_inches="tight",
+            )
+        else:
+            held_cost_parameter = sim_cost_parameters[2]
+            held_cost_parameter_name = cost_parameter_names[2]
+            for held_cost_parameter_value in sum_clicks[held_cost_parameter].unique():
+                curr_sum_df = sum_clicks[
+                    sum_clicks[held_cost_parameter] == held_cost_parameter_value
+                ].reset_item()
+                plot_heat_map_for_simulated(
+                    curr_sum_df,
+                    curr_field,
+                    *sim_cost_parameters,
+                    *cost_parameter_names,
+                )
+                plt.title(
+                    f"{curr_field.title()}, {held_cost_parameter_name}"
+                    f"={held_cost_parameter_value}"
+                )
+                plt.savefig(
+                    static_directory.joinpath(
+                        f"figs/optimal_{curr_field}_{held_cost_parameter_name}"
+                        f"_{held_cost_parameter_value}.png"
+                    ),
+                    bbox_inches="tight",
+                )
