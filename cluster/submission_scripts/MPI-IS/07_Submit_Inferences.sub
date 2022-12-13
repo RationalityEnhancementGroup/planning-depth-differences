@@ -1,7 +1,7 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/cluster/submission_scripts/MPI-IS/07_Infer_Simulated_Params.py
-arguments = $(filename) -p $(policy) -c $(cost_function:dist_depth_forw) -t $(temperature_file:expon) -v $(param_file:params_full_two)
+arguments = $(filename) -p $(policy) -c $(cost_function:dist_depth_forw) -t $(temperature_file:expon) -v $(inference_param_file:params_full_three)
 output = log/$(output_string:out_7).stdout
 error  = log/$(output_string:out_7).stderr
 log   = log/$(output_string:out_7).log
