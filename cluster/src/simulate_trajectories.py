@@ -195,10 +195,7 @@ if __name__ == "__main__":
                 cost_kwargs=cost_parameters,
                 ground_truths=[trial["stateRewards"] for trial in ground_truth_subsets],
                 trial_ids=[trial["trial_id"] for trial in ground_truth_subsets],
-                additional_mouselab_kwargs={
-                    "mdp_graph_properties": structure_dicts,
-                    **args["env_params"],
-                },
+                additional_mouselab_kwargs=additional_mouselab_kwargs,
             )
             simulated_participant.simulate_trajectory()
 
