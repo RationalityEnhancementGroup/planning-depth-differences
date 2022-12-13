@@ -32,7 +32,7 @@ if __name__ == "__main__":
         dest="cost_function",
         help="Cost function YAML file",
         type=str,
-        default="linear_depth",
+        default="dist_depth_forw",
     )
     parser.add_argument(
         "-o",
@@ -40,7 +40,7 @@ if __name__ == "__main__":
         dest="simulated_cost_function",
         help="Simulated cost function YAML file",
         type=str,
-        default="linear_depth",
+        default="dist_depth_forw",
     )
     parser.add_argument(
         "-e",

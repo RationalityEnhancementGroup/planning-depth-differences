@@ -29,7 +29,7 @@ if __name__ == "__main__":
         "--cost-function",
         dest="cost_function",
         type=str,
-        default="linear_depth",
+        default="dist_depth_forw",
     )
     parser.add_argument(
         "-t",

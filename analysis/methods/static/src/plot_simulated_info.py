@@ -24,7 +24,7 @@ def plot_heat_map_for_simulated(sum_df, field, rew1, rew2, name1, name2):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("-c", "--cost", dest="cost_function", default="linear_depth")
+    parser.add_argument("-c", "--cost", dest="cost_function", default="dist_depth_forw")
     parser.add_argument(
         "-e",
         "--experiment-setting",

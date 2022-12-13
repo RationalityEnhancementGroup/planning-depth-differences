@@ -17,7 +17,7 @@ if __name__ == "__main__":
         "-c",
         "--cost-function",
         dest="cost_function",
-        default="linear_depth",
+        default="dist_depth_forw",
         type=str,
     )
     parser.add_argument(
