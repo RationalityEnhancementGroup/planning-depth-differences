@@ -120,9 +120,16 @@ if __name__ == "__main__":
             }
         except ValueError as e:
             raise e
+
+        if callable(eval(args["cost_function"])):
+            cost_function_name = inputs.cost_function
+        else:
+            cost_function_name = None
+
         q_dictionary = load_q_file(
             experiment_setting,
             cost_function=cost_function,
+            cost_function_name=cost_function_name,
             cost_params=cost_parameters,
             path=path.joinpath("cluster/data/bmps/preferences")
             if not inputs.exact
