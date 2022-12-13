@@ -92,7 +92,7 @@ if __name__ == "__main__":
             for held_cost_parameter_value in sum_clicks[held_cost_parameter].unique():
                 curr_sum_df = sum_clicks[
                     sum_clicks[held_cost_parameter] == held_cost_parameter_value
-                ].reset_item()
+                ].reset_index()
                 plot_heat_map_for_simulated(
                     curr_sum_df,
                     curr_field,
