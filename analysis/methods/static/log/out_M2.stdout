@@ -1,12 +1,1 @@
-----------
-Correlation between static_cost_weight and BIC
-----------
-$r(144) = -0.53, p < 0.001, 95\%\ C.\ I.\: [-0.64, -0.40]$
-----------
-Correlation between depth_cost_weight and BIC
-----------
-$r(144) = -0.78, p < 0.001, 95\%\ C.\ I.\: [-0.84, -0.71]$
-----------
-Correlation between temp and BIC
-----------
-$r(144) = 0.09, p > 0.05, 95\%\ C.\ I.\: [-0.07, 0.25]$
+Error importing rpy2: cannot import name 'ri2py' from 'rpy2.robjects.conversion' (/work/vfelso/planning-depth-differences/env/lib/python3.8/site-packages/rpy2/robjects/conversion.py)

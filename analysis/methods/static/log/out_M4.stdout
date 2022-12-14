@@ -1,2 +1,38 @@
+Error importing rpy2: cannot import name 'ri2py' from 'rpy2.robjects.conversion' (/work/vfelso/planning-depth-differences/env/lib/python3.8/site-packages/rpy2/robjects/conversion.py)
+Model Name
+Distance, Depth and Forward Search Bonus                      4.163470e+04
+Distance, Effort, Depth and Forward Search Bonus              4.171367e+04
+Distance, Depth, Backward and Forward Search Bonus            4.184262e+04
+Distance, Depth and Effort Costs                              4.203677e+04
+Distance and Depth Costs                                      4.205367e+04
+All five                                                      4.212243e+04
+Distance, Depth and Backward Search Bonus                     4.237470e+04
+Distance, Depth and Effort Costs and Backward Search Bonus    4.246711e+04
+Distance and Effort Costs                                     4.316147e+04
+Distance, Effort and Forward Search Bonus                     4.316669e+04
+Distance, Effort, Backward and Forward Search Bonus           4.348142e+04
+Distance and Effort Costs and Backward Search Bonus           4.364615e+04
+Distance, Backward and Forward Search Bonus                   4.376270e+04
+Distance and Forward Search Bonus                             4.399263e+04
+Effort, Depth and Forward Search Bonus                        4.414425e+04
+Distance Cost Only                                            4.415379e+04
+Distance and Backward Search Bonus                            4.423059e+04
+Effort Cost and Planning Depth                                4.445589e+04
+Depth and Forward Search Bonus                                4.447724e+04
+Effort, Depth, Backward and Forward Search Bonus              4.451460e+04
+Depth, Backward and Forward Search Bonus                      4.466159e+04
+Planning Depth Only                                           4.489614e+04
+Depth and Effort Costs and Backward Search Bonus              4.490052e+04
+Depth and Backward Search Bonus                               4.527857e+04
+Effort Cost Only                                              4.626501e+04
+Effort and Forward Search Bonus                               4.629313e+04
+Effort, Backward and Forward Search Bonus                     4.664385e+04
+Backward Search Bonus and Effort Cost                         4.678122e+04
+Backward and Forward Search Bonus                             4.813319e+04
+Backward Search Bonus Only                                    4.920024e+04
+Forward Search Bonus Only                                     4.932790e+04
+Null (Given Costs)                                            4.954702e+04
+Null                                                          4.482658e+06
+Name: bic, dtype: float64
 Log Bayes factor approximation, difference between top two models
-689.377225619879
+78.96525118609861
