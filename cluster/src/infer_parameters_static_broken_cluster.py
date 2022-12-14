@@ -93,19 +93,20 @@ if __name__ == "__main__":
         "--file",
         dest="file",
         help="Cost parameter file lambda function",
-        default="params_full_three.txt",
+        default="params_full_two.txt",
         type=str,
     )
 
     inputs = parser.parse_args()
 
+    inputs.sim_experiment_file = inputs.experiment
     with open(
         Path(__file__).parents[1].joinpath("parameters/cost/" + inputs.file),
         "r",
     ) as f:
         full_parameters = f.read().splitlines()
     inputs.experiment = (
-        f"{inputs.experiment}_{'_'.join(full_parameters[inputs.value_line])}*"
+        f"{inputs.experiment}_{full_parameters[inputs.value_line].replace(',','_')}*"
     )
 
     if "*" in inputs.experiment or ".csv" in inputs.experiment:
