@@ -14,3 +14,4 @@ include_null : true
 preferred_cost: 'dist_depth_forw'
 title_extras: ''
 simulated: False
+q_path: 'cluster/data/bmps/preferences'
