@@ -185,6 +185,15 @@ if __name__ == "__main__":
         ground_truth_subsets = np.random.choice(
             ground_truths, inputs.num_trials, replace=False
         )
+
+        if inputs.cost_function:
+            additional_mouselab_kwargs = {
+                "mdp_graph_properties": structure_dicts,
+                **args["env_params"],
+            }
+        else:
+            additional_mouselab_kwargs = {}
+
         for possible_parameter in possible_parameters:
             simulated_participant = SymmetricMouselabParticipant(
                 experiment_setting,
