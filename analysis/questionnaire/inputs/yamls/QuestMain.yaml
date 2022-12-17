@@ -1,0 +1,11 @@
+sessions:
+        - quest_main
+cost_functions:
+        - dist_depth_forw
+loadings: WiseEtAl2020_weights
+group: false
+prior : 'expon'
+block: ['test']
+include_null : true
+title_extras: ''
+simulated: False
