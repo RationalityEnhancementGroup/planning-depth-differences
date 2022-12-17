@@ -66,6 +66,13 @@ if __name__ == "__main__":
         type=str,
     )
     parser.add_argument(
+        "-p",
+        "--participant-subset-file",
+        dest="participant_subset_file",
+        default=None,
+        type=str,
+    )
+    parser.add_argument(
         "-v",
         "--values",
         dest="cost_parameter_values",
@@ -134,13 +141,30 @@ if __name__ == "__main__":
             "*", ""
         ).replace(".csv", "")
     else:
+        if inputs.participant_subset_file:
+            pids = (
+                Path(__file__)
+                .resolve()
+                .parents[2]
+                .joinpath("data")
+                .joinpath(
+                    f"processed/{inputs.experiment}/"
+                    f"{inputs.participant_subset_file}.csv"
+                )
+            )
+        else:
+            pids = None
         traces = get_human_trajectories(
-            args["experiment"],
+            inputs.experiment,
+            pids=pids,
             include_last_action=args["env_params"]["include_last_action"],
         )
         experiment_folder = args["experiment"]
         # data not simulated, no simulation params
-        simulation_params = ""
+        if inputs.participant_subset_file:
+            simulation_params = inputs.participant_subset_file
+        else:
+            simulation_params = ""
 
     # add asterisks for missing param values
     num_not_included_params = len(args["cost_parameter_args"]) - len(
