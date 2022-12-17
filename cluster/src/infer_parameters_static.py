@@ -152,6 +152,10 @@ if __name__ == "__main__":
                     f"{inputs.participant_subset_file}.csv"
                 )
             )
+
+            with open(pids, "r") as f:
+                pids = [int(line.replace("\n", "")) for line in f.readlines()]
+
         else:
             pids = None
         traces = get_human_trajectories(
