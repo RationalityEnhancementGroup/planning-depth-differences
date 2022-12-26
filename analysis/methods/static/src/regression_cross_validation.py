@@ -38,8 +38,8 @@ if __name__ == "__main__":
     )
     inputs = parser.parse_args()
 
-    static_directory = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[4]
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/data")
 
     analysis_obj = AnalysisObject(
         inputs.experiment_name,
@@ -55,7 +55,7 @@ if __name__ == "__main__":
         main_optimization_data["Model Name"] == model
     ]
 
-    static_directory.joinpath("data/regressions").mkdir(parents=True, exist_ok=True)
+    subdirectory.joinpath("data/regressions").mkdir(parents=True, exist_ok=True)
     data = analysis_obj.add_individual_variables(
         analysis_obj.query_optimization_data(),
         variables_of_interest=["DEPTH", "COST", "FAIRY_GOD_CONDITION", "cond"],
@@ -218,7 +218,7 @@ if __name__ == "__main__":
             res = mod.fit()
             print(res.summary())
             res.save(
-                static_directory.joinpath(f"data/regressions/{assigned_cost}_model.pkl")
+                subdirectory.joinpath(f"data/regressions/{assigned_cost}_model.pkl")
             )
             print(f"Regression for {assigned_cost}")
             print(get_regression_text(res))

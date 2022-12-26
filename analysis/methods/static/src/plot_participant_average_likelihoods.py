@@ -25,13 +25,13 @@ set_font_sizes()
 def plot_participant_average_likelihoods(
     optimization_data,
     likelihood_field,
-    static_directory,
+    subdirectory,
     experiment_name,
     palette=None,
     dodge=False,
 ):
     if palette is None:
-        palette = get_static_palette(static_directory, experiment_name)
+        palette = get_static_palette(subdirectory, experiment_name)
     plt.figure(figsize=(16, 8), dpi=80)
     ax = sns.pointplot(
         y=likelihood_field,
@@ -75,14 +75,14 @@ def plot_participant_average_likelihoods(
 def plot_trial_by_trial_logliks(
     optimization_data,
     likelihood_field,
-    static_directory,
+    subdirectory,
     experiment_name,
     agg_func=np.mean,
     palette=None,
     dodge=False,
 ):
     if palette is None:
-        palette = get_static_palette(static_directory, experiment_name)
+        palette = get_static_palette(subdirectory, experiment_name)
     plt.figure(figsize=(11.7, 8.27))
     ax = sns.pointplot(
         y=likelihood_field,
@@ -132,8 +132,8 @@ if __name__ == "__main__":
 
     inputs = parser.parse_args()
 
-    static_directory = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[4]
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/data")
 
     analysis_obj = AnalysisObject(
         inputs.experiment_name,
@@ -165,12 +165,12 @@ if __name__ == "__main__":
     plot_participant_average_likelihoods(
         trial_by_trial_df[trial_by_trial_df["i_episode"].isin(relevant_trials)],
         "avg",
-        static_directory,
+        subdirectory,
         experiment_name=inputs.experiment_name,
         dodge=0.25,
     )
     plt.savefig(
-        static_directory.joinpath(
+        subdirectory.joinpath(
             f"figs/{inputs.experiment_name}_participant_lik_ten.png"
         ),
         bbox_inches="tight",
@@ -179,25 +179,25 @@ if __name__ == "__main__":
     plot_trial_by_trial_logliks(
         trial_by_trial_df[trial_by_trial_df["i_episode"].isin(relevant_trials)],
         "avg",
-        static_directory,
+        subdirectory,
         experiment_name=inputs.experiment_name,
         agg_func=np.mean,
         dodge=0.25,
     )
     plt.savefig(
-        static_directory.joinpath(f"figs/{inputs.experiment_name}_average_ll.png")
+        subdirectory.joinpath(f"figs/{inputs.experiment_name}_average_ll.png")
     )
 
     plot_trial_by_trial_logliks(
         trial_by_trial_df[trial_by_trial_df["i_episode"].isin(relevant_trials)],
         "avg",
-        static_directory,
+        subdirectory,
         experiment_name=inputs.experiment_name,
         agg_func=np.sum,
         dodge=0.25,
     )
     plt.savefig(
-        static_directory.joinpath(f"figs/{inputs.experiment_name}_total_ll.png")
+        subdirectory.joinpath(f"figs/{inputs.experiment_name}_total_ll.png")
     )
 
     participant_df = (

@@ -46,7 +46,7 @@ if __name__ == "__main__":
     inputs = parser.parse_args()
 
     irl_path = Path(__file__).resolve().parents[4]
-    static_directory = Path(__file__).resolve().parents[1]
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/data")
 
     analysis_obj = AnalysisObject(
         inputs.experiment_name,
@@ -119,7 +119,7 @@ if __name__ == "__main__":
     for curr_field in experiment_setting_details["node_classification"].keys():
         plot_heat_map_for_human(sum_clicks, curr_field)
         plt.savefig(
-            static_directory.joinpath(f"figs/ppc_{curr_field}.png"),
+            subdirectory.joinpath(f"figs/ppc_{curr_field}.png"),
             bbox_inches="tight",
         )
 
@@ -147,9 +147,9 @@ if __name__ == "__main__":
         .reset_index()
     )
 
-    static_directory.joinpath("processed/human").mkdir(parents=True, exist_ok=True)
+    subdirectory.joinpath("processed/human").mkdir(parents=True, exist_ok=True)
     sum_over_pids.to_csv(
-        static_directory.joinpath(f"processed/human/{inputs.experiment_name}_bias.csv")
+        subdirectory.joinpath(f"processed/human/{inputs.experiment_name}_bias.csv")
     )
 
     cost_function = optimization_data["cost_function"].unique()[0]

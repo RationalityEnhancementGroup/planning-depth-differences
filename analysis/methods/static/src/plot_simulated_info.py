@@ -34,7 +34,7 @@ if __name__ == "__main__":
     inputs = parser.parse_args()
 
     irl_path = Path(__file__).resolve().parents[4]
-    static_directory = Path(__file__).resolve().parents[1]
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/data")
 
     optimal_df = pd.read_csv(
         irl_path.joinpath(f"cluster/data/OptimalQ/OptimalQ_{inputs.cost_function}.csv")
@@ -83,7 +83,7 @@ if __name__ == "__main__":
             )
             plt.title(f"{curr_field.title()}")
             plt.savefig(
-                static_directory.joinpath(f"figs/optimal_{curr_field}.png"),
+                subdirectory.joinpath(f"figs/optimal_{curr_field}.png"),
                 bbox_inches="tight",
             )
         else:
@@ -104,7 +104,7 @@ if __name__ == "__main__":
                     f"={held_cost_parameter_value}"
                 )
                 plt.savefig(
-                    static_directory.joinpath(
+                    subdirectory.joinpath(
                         f"figs/optimal_{curr_field}_{held_cost_parameter_name}"
                         f"_{held_cost_parameter_value}.png"
                     ),
