@@ -37,7 +37,7 @@ def run_bms(optimization_data: pd.DataFrame, path_to_spm: Path = None) -> pd.Dat
     )
     evidences = pivoted_df.values
 
-    evidences = matlab.double(list([list(-evidence) for evidence in evidences]))
+    evidences = matlab.double(list([list(-.5 * evidence) for evidence in evidences]))
 
     eng = matlab.engine.start_matlab()
     eng.addpath(str(path_to_spm.joinpath("spm12")))
