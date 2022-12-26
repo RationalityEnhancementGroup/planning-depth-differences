@@ -15,10 +15,10 @@ set_font_sizes()
 
 
 def bic_plot(
-    optimization_data, static_directory, experiment_name, bic_field="bic", palette=None
+    optimization_data, subdirectory, experiment_name, bic_field="bic", palette=None
 ):
     if palette is None:
-        palette = get_static_palette(static_directory, experiment_name)
+        palette = get_static_palette(subdirectory, experiment_name)
     plt.figure(figsize=(12, 8), dpi=80)
     sum_bic = optimization_data.groupby(["Model Name"])[bic_field].sum()
     print(sum_bic.sort_values().round(5))
@@ -58,9 +58,8 @@ if __name__ == "__main__":
     )
     inputs = parser.parse_args()
 
-    static_directory = Path(__file__).resolve().parents[1]
-    data_path = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[4]
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/data")
 
     analysis_obj = AnalysisObject(
         inputs.experiment_name,
@@ -77,12 +76,12 @@ if __name__ == "__main__":
         .reset_index()
     )
 
-    with open(data_path.joinpath("data/OptimalBIC.pickle"), "rb") as f:
+    with open(irl_path.joinpath(f"analysis/methods/static/data/OptimalBIC.pickle"), "rb") as f:
         simulated_means = pickle.load(f)["intended"]
 
     bic_plot(
         bic_df,
-        static_directory,
+        subdirectory,
         experiment_name=inputs.experiment_name,
         bic_field="bic",
     )
@@ -93,7 +92,7 @@ if __name__ == "__main__":
         f"{title_extras if analysis_obj.title_extras else ''}"
     )
     plt.savefig(
-        static_directory.joinpath(f"figs/{inputs.experiment_name}_bic.png"),
+        subdirectory.joinpath(f"figs/{inputs.experiment_name}_bic.png"),
         bbox_inches="tight",
     )
 
