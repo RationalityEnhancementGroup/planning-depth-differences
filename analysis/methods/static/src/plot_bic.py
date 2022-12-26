@@ -99,4 +99,4 @@ if __name__ == "__main__":
 
     # Bayes Factor approximation
     print("Log Bayes factor approximation, difference between top two models")
-    print(bic_df["bic"].sort_values().iloc[1] - bic_df["bic"].sort_values().iloc[0])
+    print((bic_df["bic"].sort_values().iloc[1] - bic_df["bic"].sort_values().iloc[0])/2)
