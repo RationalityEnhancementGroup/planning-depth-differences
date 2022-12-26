@@ -22,9 +22,10 @@ if __name__ == "__main__":
         help="Prior",
         metavar="prior_file",
     )
-    irl_path = Path(__file__).resolve().parents[4]
-    static_directory = Path(__file__).resolve().parents[1]
     inputs = parser.parse_args()
+
+    irl_path = Path(__file__).resolve().parents[4]
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/data")
 
     yaml_file = str(
         irl_path.joinpath(f"data/inputs/yamls/temperatures/{inputs.prior_file}.yaml")
@@ -61,8 +62,8 @@ if __name__ == "__main__":
     ax.set_xscale("log")
     plt.xlabel("Possible temperatures (log scale)")
     plt.ylabel("Prior probability")
-    print(static_directory.joinpath(f"figs/prior_temp_{inputs.prior_file}.png"))
+    print(subdirectory.joinpath(f"figs/prior_temp_{inputs.prior_file}.png"))
     plt.savefig(
-        static_directory.joinpath(f"figs/prior_temp_{inputs.prior_file}.png"),
+        subdirectory.joinpath(f"figs/prior_temp_{inputs.prior_file}.png"),
         bbox_inches="tight",
     )
