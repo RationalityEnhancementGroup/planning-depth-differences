@@ -166,7 +166,7 @@ if __name__ == "__main__":
         experiment_folder = args["experiment"]
         # data not simulated, no simulation params
         if inputs.participant_subset_file:
-            simulation_params = inputs.participant_subset_file
+            simulation_params = "_" + inputs.participant_subset_file
         else:
             simulation_params = ""
 

@@ -5,7 +5,9 @@ arguments = $(filename) -e $(sim_experiment_file) -c $(cost_function:dist_depth_
 output = log/$(output_string:out_7)_$(reward_line).stdout
 error  = log/$(output_string:out_7)_$(reward_line).stderr
 log   = log/$(output_string:out_7)_$(reward_line).log
-request_memory = 100000
+request_memory = 24000
 request_cpus = 1
++MaxRunningPrice = 20
++RunningPriceExceededAction = "kill"
 
 queue

@@ -35,6 +35,7 @@ def run_bms(optimization_data: pd.DataFrame, path_to_spm: Path = None) -> pd.Dat
     pivoted_df = optimization_data.pivot(
         index="trace_pid", columns="Model Name", values="bic"
     )
+
     evidences = pivoted_df.values
 
     evidences = matlab.double(list([list(-.5 * evidence) for evidence in evidences]))

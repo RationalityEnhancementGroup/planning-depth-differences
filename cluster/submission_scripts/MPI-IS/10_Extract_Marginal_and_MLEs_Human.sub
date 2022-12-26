@@ -5,7 +5,7 @@ arguments = $(filename) -e $(experiment:ValidationExperiment) -s $(subdirectory:
 output = log/$(output_string:out_10).stdout
 error  = log/$(output_string:out_10).stderr
 log   = log/$(output_string:out_10).log
-request_memory = 300000
+request_memory = 8100
 request_cpus = 1
 
 queue

@@ -193,7 +193,7 @@ if __name__ == "__main__":
         "--file-lambda",
         dest="file_lambda",
         help="Cost parameter file lambda function",
-        default='lambda num : f"params_full_five{num}.txt"',
+        default='lambda num : f"params_full_five_modified{num}.txt"',
         type=str,
     )
 
