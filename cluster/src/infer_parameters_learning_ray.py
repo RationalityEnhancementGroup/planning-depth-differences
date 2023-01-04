@@ -201,13 +201,13 @@ if __name__ == "__main__":
             structure_data = json.load(f)
 
         structure_dicts = get_structure_properties(structure_data)
+
+        # for cost functions that need graph properties
+        participant_kwargs["additional_mouselab_kwargs"] = {
+            "mdp_graph_properties": structure_dicts
+        }
     else:
         structure_dicts = None
-
-    # for cost functions that need graph properties
-    participant_kwargs["additional_mouselab_kwargs"] = {
-        "mdp_graph_properties": structure_dicts
-    }
 
     cost_function = eval(args["cost_function"])
 

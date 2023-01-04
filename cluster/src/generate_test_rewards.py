@@ -16,7 +16,7 @@ if __name__ == "__main__":
         "high_increasing",
         "zero_variance",
         "mini_variance",
-        "large_variance"
+        "large_variance",
     ]:
         create_test_env(experiment_setting)
         save_path = Path(__file__).parents[2].joinpath("data/inputs/exp_inputs/rewards")

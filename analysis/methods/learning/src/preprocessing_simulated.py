@@ -12,6 +12,7 @@ from costometer.utils import (
     load_q_file,
 )
 from mouselab.cost_functions import *  # noqa: F401,F403
+from mouselab.envs.registry import registry
 
 sys.path.append(str(Path(__file__).resolve().parents[4].joinpath("cluster/src")))
 from cluster_utils import create_test_env  # noqa : E402
@@ -77,18 +78,9 @@ if __name__ == "__main__":
         f"{inputs.model_yaml}_{inputs.feature_yaml}_{inputs.constant_yaml}"
     )
 
-    if inputs.experiment_setting in [
-        "small_test_case",
-        "reduced_leaf",
-        "reduced_middle",
-        "reduced_root",
-        "reduced_variance",
-        "cogsci_learning",
-        "high_increasing",
-        "mini_variance",
-        "zero_variance",
-        "large_variance"
-    ]:
+    try:
+        registry(inputs.experiment_setting)
+    except:  # noqa: E722
         create_test_env(inputs.experiment_setting)
 
     file_path.joinpath(
