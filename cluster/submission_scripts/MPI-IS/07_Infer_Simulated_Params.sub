@@ -1,11 +1,11 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/cluster/src/infer_parameters_static_broken_cluster.py
-arguments = $(filename) -e $(sim_experiment_file) -c $(cost_function:dist_depth_forw) -t $(temperature_file:expon) -d $(bid:1) -l=$(simulated_reward_line) -v=$(reward_line)
+arguments = $(filename) -e $(sim_experiment_file) -c $(cost_function:dist_depth_eff_forw) -t $(temperature_file:expon) -d $(bid:1) -l=$(simulated_reward_line) -v=$(reward_line)
 output = log/$(output_string:out_7)_$(reward_line).stdout
 error  = log/$(output_string:out_7)_$(reward_line).stderr
 log   = log/$(output_string:out_7)_$(reward_line).log
-request_memory = 100000
+request_memory = 40960
 request_cpus = 1
 
 queue
