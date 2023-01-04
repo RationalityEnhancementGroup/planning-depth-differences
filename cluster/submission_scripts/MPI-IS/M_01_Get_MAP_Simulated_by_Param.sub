@@ -1,6 +1,6 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
-filename = $(project_path)/analysis/methods/static/src/extract_simulated_mles.py
+filename = $(project_path)/analysis/$(subdirectory:methods/static)/src/extract_simulated_mles.py
 arguments = $(filename) -p $(policy:OptimalQ) -c $(cost_function:dist_depth_forw) -o $(simulated_cost_function:linear_depth) -e $(experiment_setting:high_increasing) -a=$(reward_line)
 output = log/$(output_string:out_M1_param).stdout
 error  = log/$(output_string:out_M1_param).stderr
