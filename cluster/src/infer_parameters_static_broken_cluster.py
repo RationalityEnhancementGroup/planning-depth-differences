@@ -93,7 +93,7 @@ if __name__ == "__main__":
         "--file",
         dest="file",
         help="Cost parameter file lambda function",
-        default="params_full_two.txt",
+        default="params_full_four.txt",
         type=str,
     )
 
