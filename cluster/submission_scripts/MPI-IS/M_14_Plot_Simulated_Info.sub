@@ -1,8 +1,8 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
-filename = $(project_path)/analysis/methods/static/src/plot_simulated_info.py
+filename = $(project_path)/analysis/$(subdirectory:methods/static)/src/plot_simulated_info.py
 arguments = $(filename) -e $(experiment_setting:high_increasing) -c $(cost_function:dist_depth_forw)
-output = $(project_path)/analysis/methods/static/log/$(output_string:out_M14).stdout
+output = $(project_path)/analysis/$(subdirectory:methods/static)/log/$(output_string:out_M14).stdout
 error  = log/$(output_string:out_M14).stderr
 log   = log/$(output_string:out_M14).log
 request_memory = 20000
