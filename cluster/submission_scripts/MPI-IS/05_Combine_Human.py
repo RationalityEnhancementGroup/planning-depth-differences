@@ -55,6 +55,10 @@ if __name__ == "__main__":
             prior_inputs = yaml.safe_load(stream)
         temp_prior_details[prior] = prior_inputs
 
+    Path(f"data/logliks/{inputs.cost_function}/" f"{inputs.experiment}_by_pid/").mkdir(
+        exist_ok=True, parents=True
+    )
+
     all_dfs = []
     for applied_policy in ["RandomPolicy", "SoftmaxPolicy"]:
         file_pattern = (
@@ -80,11 +84,11 @@ if __name__ == "__main__":
 
     full_df = pd.concat(all_dfs)
 
-    full_df.reset_index(drop=True).to_feather(
-        cluster_folder.joinpath(
-            f"data/logliks/{inputs.cost_function}/{inputs.experiment}.feather"
+    for pid in full_df["trace_pid"].unique():
+        full_df[full_df["trace_pid"] == pid].reset_index(drop=True).to_feather(
+            f"data/logliks/{inputs.cost_function}/"
+            f"{inputs.experiment}_by_pid/{pid}.feather"
         )
-    )
 
     cluster_folder.joinpath(f"data/priors/{inputs.cost_function}").mkdir(
         parents=True, exist_ok=True
