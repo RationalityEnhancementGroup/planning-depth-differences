@@ -29,7 +29,7 @@ if __name__ == "__main__":
         "--cost-function",
         dest="cost_function",
         type=str,
-        default="dist_depth_forw",
+        default="dist_depth_eff_forw",
     )
     parser.add_argument(
         "-t",
@@ -47,10 +47,10 @@ if __name__ == "__main__":
     )
     inputs = parser.parse_args()
 
-    data_path = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[4]
+    data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
     irl_path.joinpath(
-        f"analysis/{inputs.experiment_subdirectory}/" f"data/{inputs.experiment_name}/"
+        f"analysis/{inputs.experiment_subdirectory}/data/{inputs.experiment_name}/"
     ).mkdir(parents=True, exist_ok=True)
 
     analysis_obj = AnalysisObject(

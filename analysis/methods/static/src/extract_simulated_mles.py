@@ -10,12 +10,12 @@ from scipy import stats  # noqa
 
 if __name__ == "__main__":
     """
-    python extract_simulated_mles.py -p OptimalQ -c linear_depth -o \
-    linear_depth -e high_increasing
-    python extract_simulated_mles.py -p SoftmaxPolicy -c linear_depth -o \
-    linear_depth -e high_increasing
-    python extract_simulated_mles.py -p RandomPolicy -c linear_depth -o \
-    linear_depth -e high_increasing
+    python extract_simulated_mles.py -p OptimalQ -c dist_depth_eff_forw -o \
+    dist_depth_eff_forw -e high_increasing
+    python extract_simulated_mles.py -p SoftmaxPolicy -c dist_depth_eff_forw -o \
+    dist_depth_eff_forw -e high_increasing
+    python extract_simulated_mles.py -p RandomPolicy -c dist_depth_eff_forw -o \
+    dist_depth_eff_forw -e high_increasing
     """
     parser = ArgumentParser()
     parser.add_argument(
@@ -32,7 +32,7 @@ if __name__ == "__main__":
         dest="cost_function",
         help="Cost function YAML file",
         type=str,
-        default="dist_depth_forw",
+        default="dist_depth_eff_forw",
     )
     parser.add_argument(
         "-o",
@@ -40,7 +40,7 @@ if __name__ == "__main__":
         dest="simulated_cost_function",
         help="Simulated cost function YAML file",
         type=str,
-        default="dist_depth_forw",
+        default="dist_depth_eff_forw",
     )
     parser.add_argument(
         "-e",

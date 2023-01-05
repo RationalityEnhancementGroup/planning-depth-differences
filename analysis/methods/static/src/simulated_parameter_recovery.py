@@ -61,8 +61,8 @@ if __name__ == "__main__":
     )
     inputs = parser.parse_args()
 
-    data_path = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[4]
+    data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
 
     analysis_obj = AnalysisObject(
         inputs.experiment_name,
@@ -97,11 +97,13 @@ if __name__ == "__main__":
         del optimization_data["Unnamed: 0"]
 
     if "sim_temp" in optimization_data:
-        model_params = analysis_obj.cost_details["linear_depth"][
+        model_params = analysis_obj.cost_details["dist_depth_eff_forw"][
             "cost_parameter_args"
         ] + ["temp"]
     else:
-        model_params = analysis_obj.cost_details["linear_depth"]["cost_parameter_args"]
+        model_params = analysis_obj.cost_details["dist_depth_eff_forw"][
+            "cost_parameter_args"
+        ]
 
     print("==========")
     for param in model_params:
@@ -126,7 +128,7 @@ if __name__ == "__main__":
         optimization_data.reset_index(),
         value_vars=[
             f"{cost_param}_rmse"
-            for cost_param in analysis_obj.cost_details["linear_depth"][
+            for cost_param in analysis_obj.cost_details["dist_depth_eff_forw"][
                 "cost_parameter_args"
             ]
         ],
