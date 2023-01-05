@@ -1,7 +1,7 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/cluster/src/reduce_q_file_sizes.py
-arguments = $(filename) -s $(experiment_setting:high_increasing) -c $(cost_function:dist_depth_forw)
+arguments = $(filename) -s $(experiment_setting:high_increasing) -c $(cost_function:dist_depth_eff_forw)
 output = log/$(output_string:out_3_reduce).stdout
 error  = log/$(output_string:out_3_reduce).stderr
 log   = log/$(output_string:out_3_reduce).log

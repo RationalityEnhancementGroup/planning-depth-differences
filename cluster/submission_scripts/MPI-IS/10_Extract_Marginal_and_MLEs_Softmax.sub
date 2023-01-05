@@ -1,7 +1,7 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/analysis/methods/static/src/extract_marginal_likelihood_and_hdis.py
-arguments = $(filename) -e $(experiment:SoftmaxRecovery) -s $(subdirectory:methods/static)  -c $(cost_function:dist_depth_forw) -p $(pid) -t $(temp)
+arguments = $(filename) -e $(experiment:SoftmaxRecovery) -s $(subdirectory:methods/static)  -c $(cost_function:dist_depth_eff_forw) -p $(pid) -t $(temp)
 output = log/$(output_string:out_10_softmax).stdout
 error  = log/$(output_string:out_10_softmax).stderr
 log   = log/$(output_string:out_10_softmax).log
