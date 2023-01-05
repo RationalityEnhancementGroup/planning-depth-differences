@@ -1,6 +1,6 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
-filename = $(project_path)/analysis/$(subdirectory:methods/static)/src/extract_human_mles.py
+filename = $(project_path)/analysis/methods/static/src/extract_human_mles.py
 arguments = $(filename) -e $(experiment:BiasInductionPilot) -c $(cost_function:dist_depth_forw)
 output = log/$(output_string:out_M1).stdout
 error  = log/$(output_string:out_M1).stderr
