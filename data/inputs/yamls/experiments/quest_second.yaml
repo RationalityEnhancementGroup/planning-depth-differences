@@ -16,7 +16,8 @@ html_survey_names: {'2PartPilot1Part1': {'0.0-4.0-12.0': 'crt', '0.0-4.0-14.0': 
 old_experiment: false
 manual_age_mapping: {}
 experiment_specific_mapping: {}
-trials_per_block: {'test':30}
+original_trials_per_block: {'test':30}
+trials_per_block: {'training': 20, 'test': 10}
 ranges_to_extract: {'training': "range(20)", "test": "range(20,30)"}
 mouselab_column_identifier: name
 mouselab_mapping : {'0.0-2.*-1.*':'mouselab-quiz-pre', '0.0-4.0-2.0':'mouselab-quiz-post', '0.0-3.0-*.0':'mouselab-quiz-post', '0.0-19.*-2.*':'mouselab-quiz-post','0.0-17.*-1.*':'mouselab-quiz-pre'}
