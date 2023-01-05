@@ -7,7 +7,8 @@ html_survey_names: null
 old_experiment: false
 manual_age_mapping: null
 experiment_specific_mapping: null
-trials_per_block: {'training': 35}
+original_trials_per_block: {'training': 35}
+trials_per_block: {'training': 25, 'test': 10}
 ranges_to_extract: {'training': "range(25)", "test": "range(25,35)"}
 mouselab_column_identifier: null
 mouselab_mapping: null
