@@ -1,6 +1,6 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
-filename = $(project_path)/analysis/$(subdirectory:methods/static)/src/plot_participant_average_likelihoods.py
+filename = $(project_path)/analysis/methods/static/src/plot_participant_average_likelihoods.py
 arguments = $(filename) -e $(experiment:TrialByTrial) -s $(subdirectory:methods/static)
 output = $(project_path)/analysis/$(subdirectory:methods/static)/log/$(output_string:out_M6).stdout
 error  = log/$(output_string:out_M6).stderr

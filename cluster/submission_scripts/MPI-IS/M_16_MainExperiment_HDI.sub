@@ -1,6 +1,6 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
-filename = $(project_path)/analysis/$(subdirectory:methods/static)/src/plot_main_hdi.py
+filename = $(project_path)/analysis/methods/static/src/plot_main_hdi.py
 arguments = $(filename) -e $(experiment:MainExperiment) -s $(subdirectory:methods/static) -c $(cost_function:dist_depth_forw)
 output = $(project_path)/analysis/$(subdirectory:methods/static)/log/$(output_string:out_M16).stdout
 error  = log/$(output_string:out_M16).stderr

@@ -1,6 +1,6 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
-filename = $(project_path)/analysis/$(subdirectory:methods/static)/src/calculate_trial_by_trial_likelihoods.py
+filename = $(project_path)/analysis/methods/static/src/calculate_trial_by_trial_likelihoods.py
 arguments = $(filename) -e $(experiment:MainExperiment) -s $(subdirectory:methods/static)
 output = log/$(output_string:out_11).stdout
 error  = log/$(output_string:out_11).stderr

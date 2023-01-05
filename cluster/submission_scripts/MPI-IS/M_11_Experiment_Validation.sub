@@ -1,6 +1,6 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
-filename = $(project_path)/analysis/$(subdirectory:methods/static)/src/validation_experiment_validation.py
+filename = $(project_path)/analysis/methods/static/src/validation_experiment_validation.py
 arguments = $(filename) -e $(experiment:ValidationCostModel) -s $(subdirectory:methods/static)
 output = $(project_path)/analysis/$(subdirectory:methods/static)/log/$(output_string:out_M11).stdout
 error  = log/$(output_string:out_M11).stderr
