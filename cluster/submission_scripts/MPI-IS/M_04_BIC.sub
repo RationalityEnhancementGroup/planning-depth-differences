@@ -5,7 +5,7 @@ arguments = $(filename) -e $(experiment:MainExperiment) -s $(subdirectory:method
 output = $(project_path)/analysis/$(subdirectory:methods/static)/log/$(output_string:out_M4).stdout
 error  = log/$(output_string:out_M4).stderr
 log   = log/$(output_string:out_M4).log
-request_memory = 10000
+request_memory = 16000
 request_cpus = 1
 
 queue

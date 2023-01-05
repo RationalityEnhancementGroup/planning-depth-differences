@@ -1,39 +1,54 @@
+Error importing rpy2: cannot import name 'ri2py' from 'rpy2.robjects.conversion' (/work/vfelso/planning-depth-differences/env/lib/python3.8/site-packages/rpy2/robjects/conversion.py)
 Number of strategies per participant in trial subset (1 is better)
        type
 count      
-1        61
-2        24
-3        21
-4        11
-5         4
-6         1
+1       103
+2        60
+3        35
+4        18
+5        15
+6         8
+7         5
+8         1
+9         1
+10        1
+11        1
 Into percentags for reporting
            type
 count          
-1      0.500000
-2      0.196721
-3      0.172131
-4      0.090164
-5      0.032787
-6      0.008197
+1      0.415323
+2      0.241935
+3      0.141129
+4      0.072581
+5      0.060484
+6      0.032258
+7      0.020161
+8      0.004032
+9      0.004032
+10     0.004032
+11     0.004032
 Number of trials using mode strategy per participant in trial subset (20 is better)
        type
 count      
-8         3
-9         4
-10        4
-11        4
-12        5
-13        3
-14        5
-15       11
-16        2
-17        4
-18        5
-19       11
-20       61
+4         1
+5         2
+6         5
+7         5
+8        10
+9        12
+10       11
+11        6
+12       11
+13       10
+14       13
+15       13
+16        9
+17       15
+18       10
+19       12
+20      103
 T-Test 1 vs number of strategies per participant
-$t(121) = 8.96, p < 0.001$
-$M: 1.984, SD: 1.213$
+$t(247) = 12.37, p < 0.001$
+$M: 2.403, SD: 1.786$
 Most common strategies (strategy number, number of participants)
-[(21, 74), (31, 7), (37, 6), (85, 4), (57, 3), (26, 2), (27, 2), (29, 2), (30, 2), (23, 2), (65, 2), (82, 2), (17, 2), (64, 1), (80, 1), (61, 1), (43, 1), (88, 1), (18, 1), (76, 1), (28, 1), (22, 1), (49, 1), (63, 1), (50, 1)]
+[(21, 92), (30, 40), (31, 19), (57, 8), (76, 8), (23, 8), (17, 7), (27, 7), (65, 6), (67, 5), (37, 5), (22, 4), (26, 4), (4, 3), (16, 3), (50, 3), (54, 2), (78, 2), (79, 2), (11, 2), (43, 2), (18, 1), (6, 1), (42, 1), (28, 1), (24, 1), (56, 1), (12, 1), (33, 1), (49, 1), (87, 1), (63, 1), (88, 1), (85, 1), (70, 1), (40, 1), (82, 1)]

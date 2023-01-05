@@ -164,6 +164,7 @@ def get_simulated_trajectories(
         )
 
     if "*" in file_pattern:
+        print(simulated_trajectory_path.joinpath(file_pattern))
         files = simulated_trajectory_path.glob(file_pattern)
     else:
         files = [file_pattern]
