@@ -54,7 +54,7 @@ if __name__ == "__main__":
         data = pd.read_feather(
             irl_path.joinpath(
                 f"cluster/data/logliks/{inputs.cost_function}/"
-                f"{inputs.experiment}_{inputs.pid}.feather"
+                f"{inputs.experiment}_by_pid/{inputs.pid}.feather"
             )
         )
     else:
