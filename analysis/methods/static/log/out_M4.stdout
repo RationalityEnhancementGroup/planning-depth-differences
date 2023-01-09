@@ -1,38 +1,6 @@
 Error importing rpy2: cannot import name 'ri2py' from 'rpy2.robjects.conversion' (/work/vfelso/planning-depth-differences/env/lib/python3.8/site-packages/rpy2/robjects/conversion.py)
-Model Name
-Distance, Effort, Depth and Forward Search Bonus              40490.81774
-Distance, Depth and Forward Search Bonus                      40812.27974
-All five                                                      41043.62314
-Distance, Depth, Backward and Forward Search Bonus            41486.96667
-Distance, Depth and Effort Costs                              41960.62983
-Distance and Depth Costs                                      41971.82261
-Distance, Effort and Forward Search Bonus                     42486.27082
-Distance, Depth and Effort Costs and Backward Search Bonus    42600.54938
-Distance, Depth and Backward Search Bonus                     42672.65061
-Effort, Depth and Forward Search Bonus                        43015.22986
-Distance and Effort Costs                                     43085.02993
-Distance, Effort, Backward and Forward Search Bonus           43111.33090
-Effort, Depth, Backward and Forward Search Bonus              43463.98546
-Distance and Forward Search Bonus                             43526.15796
-Distance and Effort Costs and Backward Search Bonus           43789.26696
-Depth and Forward Search Bonus                                43834.50941
-Distance Cost Only                                            44054.85458
-Distance, Backward and Forward Search Bonus                   44237.06720
-Depth, Backward and Forward Search Bonus                      44424.87993
-Effort Cost and Planning Depth                                44455.89204
-Distance and Backward Search Bonus                            44774.70738
-Planning Depth Only                                           44896.14214
-Depth and Effort Costs and Backward Search Bonus              45025.57102
-Depth and Backward Search Bonus                               45540.83529
-Effort and Forward Search Bonus                               45795.68781
-Effort Cost Only                                              46265.00855
-Effort, Backward and Forward Search Bonus                     46313.33088
-Backward Search Bonus and Effort Cost                         46898.33092
-Forward Search Bonus Only                                     49297.32468
-Null (Given Costs)                                            49547.02319
-Backward and Forward Search Bonus                             50042.29630
-Backward Search Bonus Only                                    50297.14306
-Null                                                          55341.45901
-Name: bic, dtype: float64
-Log Bayes factor approximation, difference between top two models
-321.4620007598496
+/lustre/work/vfelso/planning-depth-differences/data/processed/c2.1/back_dist_depth_eff_forw/mle_and_map*.pickle
+Series([], Name: bic, dtype: float64)
+Error importing rpy2: cannot import name 'ri2py' from 'rpy2.robjects.conversion' (/work/vfelso/planning-depth-differences/env/lib/python3.8/site-packages/rpy2/robjects/conversion.py)
+/lustre/work/vfelso/planning-depth-differences/data/processed/c1.1/back_dist_depth_eff_forw/mle_and_map*.pickle
+Series([], Name: bic, dtype: float64)
