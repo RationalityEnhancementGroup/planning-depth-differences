@@ -147,7 +147,7 @@ if __name__ == "__main__":
         optimization_data["Model Name"] == "Effort Cost and Planning Depth"
     ]
 
-    for obs_var in ["avg", "static_cost_weight", "depth_cost_weight"]:
+    for obs_var in ["avg", "given_cost", "depth_cost_weight"]:
         print("==========")
         print(f"Comparisons for {obs_var}")
         omnibus = pg.kruskal(data=optimization_data, dv=obs_var, between="score")
