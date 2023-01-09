@@ -1,11 +1,11 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/cluster/src/get_bmps_rollouts.py
-arguments = $(filename) -s $(experiment_setting:high_increasing) -c $(cost_function:dist_depth_forw) -v=$(reward_line)
+arguments = $(filename) -s $(experiment_setting:high_increasing) -c $(cost_function:dist_depth_eff_forw) -v=$(reward_line)
 output = log/$(output_string:out_3_rollouts).stdout
 error  = log/$(output_string:out_3_rollouts).stderr
 log   = log/$(output_string:out_3_rollouts).log
 request_memory = 300000
 request_cpus = 1
 
-queue reward_line from $(project_path)/cluster/parameters/cost/$(param_file:params_full_three).txt
+queue reward_line from $(project_path)/cluster/parameters/cost/$(param_file:params_full_four).txt

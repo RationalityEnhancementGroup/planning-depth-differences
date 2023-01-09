@@ -17,7 +17,7 @@ if __name__ == "__main__":
         "-c",
         "--cost-function",
         dest="cost_function",
-        default="dist_depth_forw",
+        default="dist_depth_eff_forw",
         type=str,
     )
     parser.add_argument(
@@ -39,8 +39,8 @@ if __name__ == "__main__":
     )
     inputs = parser.parse_args()
 
-    data_path = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[4]
+    data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
 
     analysis_obj = AnalysisObject(
         inputs.experiment_name,

@@ -8,22 +8,18 @@ This directory contains notebooks that are associated with developing the IRL me
 
 0. Before running, make a log file in the `cluster` directory as well as the `analysis/methods/static directory: `mkdir log`
 1. Create a virtual environment as outlined in the top folder `irl-project` both on your local machine and the cluster
-2. On the a cluster running htcondor, calculate the Q values (~12+ hours):
+2. On a cluster running htcondor, calculate the Q values (2-3 days; ~3+ hours):
    ```
    cd <path to planning-depth-differences>/cluster
-   for cost_function in 'distance_graph_cost' 'linear_depth' 'dist_depth';
-      do condor_submit_bid 2 submission_scripts/MPI-IS/03_Get_Q_Values.sub param_file=params_full experiment_setting=high_increasing cost_function=$cost_function;
-   done;
-   for cost_function in 'neighbor_search_cost' 'forward_search_cost' 'backward_search_cost' 'dist_depth_eff'; 
-      do condor_submit_bid 2 submission_scripts/MPI-IS/03_Get_Q_Values.sub param_file=params_full_three experiment_setting=high_increasing cost_function=$cost_function;
-   done;
+   condor_submit_bid 2 submission_scripts/MPI-IS/03_Get_Q_Values_temp_params.sub file_number=0 cost_function=back_dist_depth_eff_forw;
+   condor_submit_bid 2 submission_scripts/MPI-IS/03_Get_Q_Values.sub param_file=params_full_three experiment_setting=high_increasing cost_function=dist_depth_eff_forw;
    ```
    
    > If you are running on a slurm cluster, we have provided an old file which may need to be adapted:
    > ```
    > mkdir job # for storing job files
    > chmod +x submission_scripts/Garching/03_Get _Q_Values.job
-   > ./submission_scripts/Garching/03_Get _Q_Values.job high_increasing params_full linear_depth
+   > ./submission_scripts/Garching/03_Get _Q_Values.job high_increasing params_full dist_depth_eff_forw
    > ```
 3. Download and preprocess the participant data, outside the cluster and then transfer to cluster (if needed, see instructions for downloading data in the `irl-project/data` subfolder):
    ```
@@ -43,36 +39,63 @@ This directory contains notebooks that are associated with developing the IRL me
    done;
    ```
    If needed, move the files to your local computer.
-5. Once the Q values are calculated On the cluster, infer parameters for a participant file (~30 minutes):
+5. Once the Q values are calculated On the cluster, infer parameters for a participant file (~30 minutes for dist_depth_eff_forw):
    ```
    cd <path to irl-project>/cluster
    for experiment in methods_main irl_validation;
-       do for cost_function in 'distance_graph_cost' 'linear_depth';
-          do condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub param_file=params_full experiment=$experiment cost_function=$cost_function;
-       done;
-       for cost_function in 'neighbor_search_cost' 'forward_search_cost' 'backward_search_cost'; 
+       do for cost_function in 'dist_depth_eff_forw'; 
           do condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub param_file=params_full_three experiment=$experiment cost_function=$cost_function;
        done;
    done;
+   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub param_file=params_full_three experiment=methods_main cost_function=back_dist_depth_eff_forw
    ```
-6. Combine the human data (~15 minutes):
+6. Combine the human data (~15 minutes for dist_depth_eff_forw, 8 hours for back_dist_depth_eff_forw):
    ```
    cd <path to irl-project>/cluster
    for experiment in methods_main irl_validation;
-      do for cost_function in 'neighbor_search_cost' 'forward_search_cost' 'backward_search_cost' 'distance_graph_cost' 'linear_depth'; 
+      do for cost_function in 'dist_depth_eff_forw'; 
           do condor_submit_bid 2 submission_scripts/MPI-IS/05_Combine_Human.sub experiment=$experiment cost_function=$cost_function;
       done;
    done;
+   condor_submit_bid 2 submission_scripts/MPI-IS/05_Combine_Human.sub experiment=methods_main cost_function=back_dist_depth_eff_forw 
    ```
+   For back_dist_depth_eff_forw, it is better to separate the `*.feather` file for individual participants before the next step. You can do this in an interactive cluster session, in the same python virtual environment:
+   ```
+   condor_submit_bid 5 -i -a request_memory=5000
+   source ../env/bin/activate
+   python
+   import pandas as pd
+   data = pd.read_feather("data/logliks/back_dist_depth_eff_forw/methods_main.feather")
+
+   for pid in data["trace_pid"].unique():
+        data[data["trace_pid"]==pid].reset_index(drop=True).to_feather(f"data/logliks/back_dist_depth_eff_forw/methods_main_{pid}.feather") 
+   ```
+   
+
+   ```
+   condor_submit_bid 5 -i -a request_memory=5000
+   source ../env/bin/activate
+   python
+   import pandas as pd
+   data = pd.read_feather("data/logliks/dist_depth_eff_forw/irl_validation.feather")
+
+   for pid in data["trace_pid"].unique():
+        data[data["trace_pid"]==pid].reset_index(drop=True).to_feather(f"data/logliks/dist_depth_eff_forw/irl_validation_{pid}.feather") 
+   ```
+   
 7. Once the inference is done for the participants, get the best parameters by running (~30 minutes):
    ```
    cd <path to irl-project>/cluster
    for experiment in methods_main irl_validation;
-      do for cost_function in 'neighbor_search_cost' 'forward_search_cost' 'backward_search_cost' 'distance_graph_cost' 'linear_depth'; 
-         do condor_submit_bid 2 submission_scripts/MPI-IS/M_01_Get_MAP_File.sub experiment=$experiment cost_function=$cost_function
+      do for cost_function in 'dist_depth_eff_forw'; 
+         do condor_submit_bid 2 submission_scripts/MPI-IS/M_01_Get_MAP_File.sub experiment=$experiment cost_function=$cost_function;
       done;
    done;
+   ls data/logliks/back_dist_depth_eff_forw/methods_main*.feather | sed -e s/[^0-9]//g | for pid in $(cat); do condor_submit_bid 2 submission_scripts/MPI-IS/M_01_Get_MAP_File_by_PID.sub experiment=methods_main cost_function=back_dist_depth_eff_forw pid=$pid; done;
    ```
+   
+ls data/logliks/dist_depth_eff_forw/irl_validation*.feather | sed -e s/[^0-9]//g | for pid in $(cat); do condor_submit_bid 2 submission_scripts/MPI-IS/M_01_Get_MAP_File_by_PID.sub experiment=irl_validation cost_function=dist_depth_eff_forw pid=$pid; done;
+   
 8. Extract marginal and MLEs for human trajectories (~1 hour):
    ```
    condor_submit_bid 2 submission_scripts/MPI-IS/10_Extract_Marginal_and_MLEs_Human.sub experiment=ValidationExperiment
@@ -88,32 +111,33 @@ This directory contains notebooks that are associated with developing the IRL me
 1. At the same time, you can simulate new trajectories on the cluster (~90 minutes):
    ```
    cd <path to irl-project>/cluster
-   condor_submit_bid 2 submission_scripts/MPI-IS/06_Simulate_Optimal.sub
+   condor_submit_bid 2 submission_scripts/MPI-IS/06_Simulate_Optimal.sub param_file=params_full_four0
+   condor_submit_bid 2 submission_scripts/MPI-IS/06_Simulate_Optimal.sub param_file=params_full_four1
    condor_submit_bid 2 submission_scripts/MPI-IS/06_Simulate_Random.sub
-   condor_submit_bid 2 submission_scripts/MPI-IS/06_Simulate_Softmax.sub
+   condor_submit_bid 2 submission_scripts/MPI-IS/06_Simulate_Softmax.sub param_file=params_full_four0
+   condor_submit_bid 2 submission_scripts/MPI-IS/06_Simulate_Softmax.sub param_file=params_full_four1
    ```
 2. Once the simulation jobs are done, on the cluster, start the jobs to infer parameters for the simulations (~30 minutes):
+   > **_Note_**: you should not run any other jobs at the same time, and should run each job in this step one at a time given the maximum number of jobs per user.
    ```
    cd <path to irl-project>/cluster
-   condor_submit_bid 2 submission_scripts/MPI-IS/07_Submit_Inferrences.sub policy=RandomPolicy
    condor_submit_bid 2 submission_scripts/MPI-IS/07_Submit_Inferrences.sub policy=OptimalQ
    condor_submit_bid 2 submission_scripts/MPI-IS/07_Submit_Inferrences.sub policy=SoftmaxPolicy
+   condor_submit_bid 1 submission_scripts/MPI-IS/07_Infer_Simulated_Params_start.sub policy=SoftmaxPolicy param_file=params_full_four0 simulated_reward_line=0
+
    ```
    This runs quite a few jobs, so depending on activity in the cluster could take more time. 
-   > **_Note_**: you should not run any other jobs at the same time, and should run each job in this step one at a time given the maximum number of jobs per user.
 3. Once the inference for the simulations are finished, combine the output files in the cluster (~12+ hours, 16 hours when tested):
     ```
     cd <path to irl-project>/cluster
-    condor_submit_bid 2 submission_scripts/MPI-IS/08_Combine_Inferred.sub policy=RandomPolicy
     condor_submit_bid 2 submission_scripts/MPI-IS/08_Combine_Inferred.sub policy=OptimalQ
-    condor_submit_bid 2 submission_scripts/MPI-IS/08_Combine_Inferred_by_Temp.sub policy=SoftmaxPolicy  -append request_memory=900000
+    condor_submit_bid 2 submission_scripts/MPI-IS/08_Combine_Inferred_by_Temp.sub policy=SoftmaxPolicy
     ```
 4. Next:
     ```
     cd <path to irl-project>/cluster
-    condor_submit_bid 2 submission_scripts/MPI-IS/M_01_Get_MAP_Simulated.sub policy=RandomPolicy
     condor_submit_bid 2 submission_scripts/MPI-IS/M_01_Get_MAP_Simulated_by_Param.sub policy=OptimalQ
-    cat parameters/temperatures/full.txt | while read line 
+    cat parameters/temperatures/partial.txt | while read line 
     do
        condor_submit_bid 2 submission_scripts/MPI-IS/M_01_Get_MAP_Simulated_by_Temp.sub temp=$line policy=SoftmaxPolicy;
     done;

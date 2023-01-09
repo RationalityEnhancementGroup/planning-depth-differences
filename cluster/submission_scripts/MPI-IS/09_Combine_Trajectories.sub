@@ -1,7 +1,7 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/cluster/src/combine_trajectories.py
-arguments = $(filename) -p $(policy:OptimalQ) -s $(experiment_setting:high_increasing) -c $(cost_function:dist_depth_forw)
+arguments = $(filename) -p $(policy:OptimalQ) -s $(experiment_setting:high_increasing) -c $(cost_function:dist_depth_eff_forw)
 output = log/$(output_string:out_9).stdout
 error  = log/$(output_string:out_9).stderr
 log   = log/$(output_string:out_9).log

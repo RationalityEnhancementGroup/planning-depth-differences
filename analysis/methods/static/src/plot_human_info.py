@@ -197,7 +197,9 @@ if __name__ == "__main__":
 
     sum_over_params = (
         sum_over_pids.groupby(
-            analysis_obj.cost_details["linear_depth"]["cost_parameter_args"]
+            analysis_obj.cost_details[analysis_obj.preferred_cost][
+                "cost_parameter_args"
+            ]
         )
         .mean()
         .reset_index()

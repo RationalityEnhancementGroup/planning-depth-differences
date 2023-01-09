@@ -64,7 +64,8 @@ if __name__ == "__main__":
     fairy_subset = data[(data["Model Name"] == model) & (data["Block"] == "fairy")]
     test_subset = data[(data["Model Name"] == model) & (data["Block"] == "test")]
 
-    for param in analysis_obj.cost_details["linear_depth"]["cost_parameter_args"] + [
+    cost_details = analysis_obj.cost_details[analysis_obj.preferred_cost]
+    for param in cost_details["cost_parameter_args"] + [
         "temp"
     ]:
         print(
@@ -121,7 +122,8 @@ if __name__ == "__main__":
 
     combined = test_subset.merge(
         fairy_subset[
-            analysis_obj.cost_details["linear_depth"]["cost_parameter_args"] + ["pid"]
+            analysis_obj.cost_details[analysis_obj.preferred_cost]
+            ["cost_parameter_args"] + ["pid"]
         ],
         suffixes=("", "_fairy"),
         how="left",
@@ -146,7 +148,7 @@ if __name__ == "__main__":
 
     sd_values = {
         cost_param: main_optimization_data[cost_param].std()
-        for cost_param in analysis_obj.cost_details["linear_depth"][
+        for cost_param in cost_details[
             "cost_parameter_args"
         ]
     }

@@ -59,7 +59,7 @@ if __name__ == "__main__":
     inputs = parser.parse_args()
 
     irl_path = Path(__file__).resolve().parents[4]
-    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/data")
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
 
     analysis_obj = AnalysisObject(
         inputs.experiment_name,
@@ -76,7 +76,9 @@ if __name__ == "__main__":
         .reset_index()
     )
 
-    with open(irl_path.joinpath(f"analysis/methods/static/data/OptimalBIC.pickle"), "rb") as f:
+    with open(
+        irl_path.joinpath("analysis/methods/" "static/data/OptimalBIC.pickle"), "rb"
+    ) as f:
         simulated_means = pickle.load(f)["intended"]
 
     bic_plot(
@@ -98,4 +100,6 @@ if __name__ == "__main__":
 
     # Bayes Factor approximation
     print("Log Bayes factor approximation, difference between top two models")
-    print((bic_df["bic"].sort_values().iloc[1] - bic_df["bic"].sort_values().iloc[0])/2)
+    print(
+        (bic_df["bic"].sort_values().iloc[1] - bic_df["bic"].sort_values().iloc[0]) / 2
+    )
