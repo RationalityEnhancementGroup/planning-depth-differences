@@ -1,0 +1,13 @@
+project_path = $(save_path:/work/vfelso)/planning-depth-differences
+executable = $(project_path)/env/bin/python
+filename = $(project_path)/cluster/src/infer_parameters_static.py
+arguments = $(filename) -e data/trajectories/$(experiment_setting:high_increasing)/$(policy:SoftmaxPolicy)/$(policy:SoftmaxPolicy)_$(sim_cost_function:dist_depth_eff_forw)* -c $(cost_function:dist_depth_eff_forw) -t $(temperature_file:expon) -v=$(reward_line)
+output = log/$(output_string:out_7)_$(Process).stdout
+error  = log/$(output_string:out_7)_$(Process).stderr
+log   = log/$(output_string:out_7)_$(Process).log
+request_memory = 24000
+request_cpus = 1
++MaxRunningPrice = 20
++RunningPriceExceededAction = "kill"
+
+queue reward_line from $(project_path)/cluster/parameters/cost/$(param_file:params_full_four).txt
