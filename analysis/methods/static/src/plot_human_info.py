@@ -21,7 +21,7 @@ set_font_sizes()
 def plot_heat_map_for_human(sum_df, field):
     plt.figure(figsize=(16, 12))
     heat_map_data = sum_df.pivot(
-        index="static_cost_weight", columns="depth_cost_weight", values=field
+        index="given_cost", columns="depth_cost_weight", values=field
     )
     sns.heatmap(data=heat_map_data, annot=True, fmt=".2f")
     plt.ylabel("Planning Depth Cost")
@@ -107,11 +107,11 @@ if __name__ == "__main__":
 
     sum_clicks = (
         trace_df.groupby(
-            ["pid", "i_episode", "static_cost_weight", "depth_cost_weight", "trial_id"]
+            ["pid", "i_episode", "given_cost", "depth_cost_weight", "trial_id"]
         )
         .sum()
         .reset_index()
-        .groupby(["static_cost_weight", "depth_cost_weight"])
+        .groupby(["given_cost", "depth_cost_weight"])
         .mean()
         .reset_index()
     )
@@ -128,7 +128,7 @@ if __name__ == "__main__":
             [
                 "pid",
                 "i_episode",
-                "static_cost_weight",
+                "given_cost",
                 "depth_cost_weight",
                 "temp",
             ]
@@ -138,7 +138,7 @@ if __name__ == "__main__":
         .groupby(
             [
                 "pid",
-                "static_cost_weight",
+                "given_cost",
                 "depth_cost_weight",
                 "temp",
             ]
@@ -177,7 +177,7 @@ if __name__ == "__main__":
     )
     sum_over_pids = sum_over_pids.merge(
         mean_over_cost,
-        left_on=["static_cost_weight", "depth_cost_weight"],
+        left_on=["given_cost", "depth_cost_weight"],
         right_on=["sim_static_cost_weight", "sim_depth_cost_weight"],
         suffixes=("", "_optimal"),
     )

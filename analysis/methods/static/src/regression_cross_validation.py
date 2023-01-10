@@ -131,7 +131,7 @@ if __name__ == "__main__":
     )
 
     for cost_variable_tuple in [
-        ("COST", "static_cost_weight"),
+        ("COST", "given_cost"),
         ("DEPTH", "depth_cost_weight"),
     ]:
         assigned_cost, inferred_cost = cost_variable_tuple
@@ -154,7 +154,7 @@ if __name__ == "__main__":
     }
 
     for cost_variable_tuple in [
-        ("COST", "static_cost_weight"),
+        ("COST", "given_cost"),
         ("DEPTH", "depth_cost_weight"),
     ]:
         assigned_cost, inferred_cost = cost_variable_tuple
@@ -167,10 +167,10 @@ if __name__ == "__main__":
             test_data = combined.iloc[test_index]
 
             mod = smf.ols(
-                formula=f"{assigned_cost} ~ static_cost_weight + "
-                f"depth_cost_weight + temp + temp:static_cost_weight + "
+                formula=f"{assigned_cost} ~ given_cost + "
+                f"depth_cost_weight + temp + temp:given_cost + "
                 f"temp:depth_cost_weight + "
-                f" + static_cost_weight:depth_cost_weight +  "
+                f" + given_cost:depth_cost_weight +  "
                 f"C(FAIRY_GOD_CONDITION) +"
                 f"static_cost_weight_fairy + depth_cost_weight_fairy + 1",
                 data=train_data,
@@ -210,9 +210,9 @@ if __name__ == "__main__":
 
             # fit model to all data, save
             mod = smf.ols(
-                formula=f"{assigned_cost} ~ static_cost_weight + depth_cost_weight + "
-                f"temp + temp:static_cost_weight + temp:depth_cost_weight + "
-                f"static_cost_weight:depth_cost_weight +  "
+                formula=f"{assigned_cost} ~ given_cost + depth_cost_weight + "
+                f"temp + temp:given_cost + temp:depth_cost_weight + "
+                f"given_cost:depth_cost_weight +  "
                 f"C(FAIRY_GOD_CONDITION) +"
                 f"static_cost_weight_fairy + depth_cost_weight_fairy + 1",
                 data=combined,
@@ -265,7 +265,7 @@ if __name__ == "__main__":
     plt.show()
 
     for cost_variable_tuple in [
-        ("COST", "static_cost_weight"),
+        ("COST", "given_cost"),
         ("DEPTH", "depth_cost_weight"),
     ]:
         assigned_cost, inferred_cost = cost_variable_tuple
@@ -282,7 +282,7 @@ if __name__ == "__main__":
         )
 
     for cost_variable_tuple in [
-        ("COST", "static_cost_weight"),
+        ("COST", "given_cost"),
         ("DEPTH", "depth_cost_weight"),
     ]:
         assigned_cost, inferred_cost = cost_variable_tuple

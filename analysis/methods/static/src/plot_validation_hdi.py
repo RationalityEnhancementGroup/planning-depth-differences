@@ -60,7 +60,7 @@ if __name__ == "__main__":
         "cost_parameter_args"
     ] + ["temp"]
 
-    model_params_given = {"depth_cost_weight": "DEPTH", "static_cost_weight": "COST"}
+    model_params_given = {"depth_cost_weight": "DEPTH", "given_cost": "COST"}
 
     hdi_file = data_path.joinpath(
         f"data/{inputs.experiment_name}/"

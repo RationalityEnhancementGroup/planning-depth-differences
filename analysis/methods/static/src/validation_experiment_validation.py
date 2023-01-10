@@ -92,7 +92,7 @@ if __name__ == "__main__":
 
     results_df = node_classification_per_block.merge(
         optimization_data[
-            ["pid", "DEPTH", "COST", "temp", "depth_cost_weight", "static_cost_weight"]
+            ["pid", "DEPTH", "COST", "temp", "depth_cost_weight", "given_cost"]
         ]
     )
 

@@ -24,7 +24,7 @@ def plot_simulated_recovery(mle):
     melted_mle = pd.melt(
         mle,
         id_vars=sim_cols,
-        value_vars=["static_cost_weight", "depth_cost_weight"],
+        value_vars=["given_cost", "depth_cost_weight"],
         ignore_index=False,
     ).reset_index()
     melted_mle["inferred"] = melted_mle.value
@@ -32,7 +32,7 @@ def plot_simulated_recovery(mle):
         lambda row: row["sim_" + row["variable"]], axis=1
     )
     pretty_names = {
-        "static_cost_weight": "Effort Cost",
+        "given_cost": "Effort Cost",
         "depth_cost_weight": "Planning Depth",
     }
     melted_mle["variable"] = melted_mle["variable"].apply(lambda var: pretty_names[var])
@@ -77,7 +77,7 @@ if __name__ == "__main__":
 
     print("==========")
     for subset in itertools.combinations(
-        ["static_cost_weight", "depth_cost_weight", "temp"], 2
+        ["given_cost", "depth_cost_weight", "temp"], 2
     ):
         correlation_object = pg.corr(
             optimization_data[subset[0]],
@@ -153,7 +153,7 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.show()
     latex_names = {
-        "static_cost_weight": "\\costweight",
+        "given_cost": "\\costweight",
         "depth_cost_weight": "\\depthweight",
         "Intercept": "Intercept",
         "temp": "\\beta",
@@ -163,9 +163,7 @@ if __name__ == "__main__":
         print(f"Regression with {param} as dependent variable")
         print("----------")
         mod = smf.ols(
-            formula=f"sim_{param}  ~ static_cost_weight "
-            f"+ depth_cost_weight + "
-            "temp + 1",
+            formula=f"sim_{param}  ~ given_cost " f"+ depth_cost_weight + " "temp + 1",
             data=optimization_data,
         )
         res = mod.fit()
