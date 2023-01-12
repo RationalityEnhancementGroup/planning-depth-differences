@@ -72,12 +72,12 @@ if __name__ == "__main__":
 
     optimization_data = analysis_obj.query_optimization_data()
     optimization_data = optimization_data[
-        optimization_data["Model Name"] == "Effort Cost and Planning Depth"
+        optimization_data["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'"
     ]
 
     print("==========")
     for subset in itertools.combinations(
-        ["given_cost", "depth_cost_weight", "temp"], 2
+        ["given_cost", "depth_cost_weight", "distance_multiplier", "forw_added_cost", "temp"], 2
     ):
         correlation_object = pg.corr(
             optimization_data[subset[0]],
@@ -155,6 +155,8 @@ if __name__ == "__main__":
     latex_names = {
         "given_cost": "\\costweight",
         "depth_cost_weight": "\\depthweight",
+        "distance_multiplier": "\\distancemultiplier",
+        "forw_added_cost": "\\forwaddedcost",
         "Intercept": "Intercept",
         "temp": "\\beta",
     }
@@ -163,7 +165,7 @@ if __name__ == "__main__":
         print(f"Regression with {param} as dependent variable")
         print("----------")
         mod = smf.ols(
-            formula=f"sim_{param}  ~ given_cost " f"+ depth_cost_weight + " "temp + 1",
+            formula=f"sim_{param}  ~ given_cost + distance_multiplier + forw_added_cost + depth_cost_weight + temp + 1",
             data=optimization_data,
         )
         res = mod.fit()

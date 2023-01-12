@@ -73,7 +73,7 @@ if __name__ == "__main__":
     )
     optimization_data = analysis_obj.query_optimization_data()
     optimization_data = optimization_data[
-        optimization_data["Model Name"] == "Effort Cost and Planning Depth"
+        optimization_data["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'"
     ]
 
     hdi_file = data_path.joinpath(

@@ -144,7 +144,7 @@ if __name__ == "__main__":
     )
 
     optimization_data = optimization_data[
-        optimization_data["Model Name"] == "Effort Cost and Planning Depth"
+        optimization_data["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'"
     ]
 
     for obs_var in ["avg", "given_cost", "depth_cost_weight"]:

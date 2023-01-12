@@ -48,7 +48,7 @@ if __name__ == "__main__":
     )
     main_analysis_obj = AnalysisObject(inputs.main_experiment_name, irl_path=irl_path)
 
-    model = "Effort Cost and Planning Depth"
+    model = "'Distance, Effort, Depth and Forward Search Bonus'"
 
     main_optimization_data = main_analysis_obj.query_optimization_data()
     main_optimization_data = main_optimization_data[

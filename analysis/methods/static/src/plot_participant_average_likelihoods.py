@@ -241,7 +241,7 @@ if __name__ == "__main__":
 
     full_models = participant_df[
         participant_df["Model Name"].isin(
-            ["Distance and Effort Costs", "Effort Cost and Planning Depth"]
+            ["Distance and Effort Costs", "'Distance, Effort, Depth and Forward Search Bonus'"]
         )
     ]
     print("==========")
@@ -258,7 +258,7 @@ if __name__ == "__main__":
 
     print("==========")
     for model in participant_df["Model Name"].unique():
-        if model != "Effort Cost and Planning Depth":
+        if model != "'Distance, Effort, Depth and Forward Search Bonus'":
             print("----------")
             print(
                 f"Difference between meta-level action likelihoods "
@@ -268,14 +268,14 @@ if __name__ == "__main__":
             wilcoxon_object = pg.wilcoxon(
                 participant_df[participant_df["Model Name"] == model]["avg"],
                 participant_df[
-                    participant_df["Model Name"] == "Effort Cost and Planning Depth"
+                    participant_df["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'"
                 ]["avg"],
                 alternative="two-sided",
             )
             print(
                 f"M_{{\\text{{{model}}}}} = {np.median(participant_df[participant_df['Model Name'] == model]['avg']):.2f}\n"  # noqa: E501
-                f"M_{{\\text{{Effort Cost and Planning Depth}}}} ="
-                f"{np.median(participant_df[participant_df['Model Name'] == 'Effort Cost and Planning Depth']['avg']):.2f}"  # noqa: E501
+                f"M_{{\\text{{'Distance, Effort, Depth and Forward Search Bonus'}}}} ="
+                f"{np.median(participant_df[participant_df['Model Name'] == ''Distance, Effort, Depth and Forward Search Bonus'']['avg']):.2f}"  # noqa: E501
             )
             print(get_wilcoxon_text(wilcoxon_object))
 
@@ -297,11 +297,11 @@ if __name__ == "__main__":
     correlation = pg.corr(
         trial_by_trial_df[
             (trial_by_trial_df["i_episode"].isin(relevant_trials))
-            & (participant_df["Model Name"] == "Effort Cost and Planning Depth")
+            & (participant_df["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'")
         ]["avg"],
         trial_by_trial_df[
             (trial_by_trial_df["i_episode"].isin(relevant_trials))
-            & (participant_df["Model Name"] == "Effort Cost and Planning Depth")
+            & (participant_df["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'")
         ]["i_episode"],
     )
     print(get_correlation_text(correlation))
