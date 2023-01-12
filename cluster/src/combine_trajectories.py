@@ -58,6 +58,8 @@ if __name__ == "__main__":
     else:
         save_path = f"{inputs.policy}_{inputs.cost_function}"
 
-    path.joinpath(f"data/{inputs.policy}/").mkdir(parents=True, exist_ok=True)
-
-    mouselab_data.to_csv(path.joinpath(f"data/{inputs.policy}/{save_path}.csv"))
+    mouselab_data.to_csv(
+        trajectory_path.joinpath(
+            f"{inputs.experiment_setting}/{inputs.policy}/" f"{save_path}.csv"
+        )
+    )
