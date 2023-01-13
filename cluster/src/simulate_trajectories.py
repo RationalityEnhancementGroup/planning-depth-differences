@@ -12,6 +12,7 @@ from cluster_utils import create_test_env, get_args_from_yamls
 from costometer.agents.vanilla import SymmetricMouselabParticipant
 from costometer.utils import get_param_string, load_q_file, traces_to_df
 from mouselab.cost_functions import *  # noqa
+from mouselab.envs.registry import registry
 from mouselab.graph_utils import get_structure_properties
 from mouselab.policies import OptimalQ, RandomPolicy, SoftmaxPolicy  # noqa
 from scipy import stats  # noqa
@@ -99,14 +100,9 @@ if __name__ == "__main__":
 
     experiment_setting = args["experiment_setting"]
 
-    # test setting unique to this work
-    if experiment_setting in [
-        "small_test_case",
-        "reduced_leaf",
-        "reduced_middle",
-        "reduced_root",
-        "reduced_variance",
-    ]:
+    try:
+        registry(experiment_setting)
+    except:  # noqa: E722
         create_test_env(experiment_setting)
 
     if inputs.cost_function:

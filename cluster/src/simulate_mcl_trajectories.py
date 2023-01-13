@@ -17,6 +17,7 @@ from costometer.agents import SymmetricMCLParticipant
 from costometer.utils import get_param_string
 from mcl_toolbox.utils.feature_normalization import get_new_feature_normalization
 from mouselab.cost_functions import *  # noqa : F401
+from mouselab.envs.registry import registry
 
 if __name__ == "__main__":
     """# noqa
@@ -90,19 +91,9 @@ if __name__ == "__main__":
 
     inputs = parser.parse_args()
 
-    # test setting unique to this work
-    if inputs.experiment_setting in [
-        "small_test_case",
-        "reduced_leaf",
-        "reduced_middle",
-        "reduced_root",
-        "reduced_variance",
-        "cogsci_learning",
-        "high_increasing",
-        "large_variance",
-        "zero_variance",
-        "mini_variance"
-    ]:
+    try:
+        registry(inputs.experiment_setting)
+    except:  # noqa: E722
         create_test_env(inputs.experiment_setting)
 
     args = get_args_from_yamls(
