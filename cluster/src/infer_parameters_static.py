@@ -24,6 +24,7 @@ from costometer.utils import (
 )
 from mouselab.cost_functions import *  # noqa
 from mouselab.distributions import Categorical
+from mouselab.envs.registry import registry
 from mouselab.graph_utils import get_structure_properties
 from mouselab.policies import RandomPolicy, SoftmaxPolicy
 from scipy import stats  # noqa
@@ -79,6 +80,14 @@ if __name__ == "__main__":
         help="Cost parameter values as comma separated string, e.g. '1.00,2.00'",
         type=str,
     )
+    parser.add_argument(
+        "-g",
+        "--gamma",
+        dest="gamma",
+        help="If included, adds discount factor (gamma)",
+        default=True,
+        action="store_false",
+    )
 
     inputs = parser.parse_args()
 
@@ -93,15 +102,11 @@ if __name__ == "__main__":
 
     path = Path(__file__).resolve().parents[2]
 
-    # test setting unique to this work
-    if args["experiment_setting"] in [
-        "small_test_case",
-        "reduced_leaf",
-        "reduced_middle",
-        "reduced_root",
-        "reduced_variance",
-    ]:
-        create_test_env(args["experiment_setting"])
+    try:
+        registry(inputs.experiment_setting)
+    except:  # noqa: E722
+        create_test_env(inputs.experiment_setting)
+
     args = {
         **args,
         **get_args_from_yamls(
