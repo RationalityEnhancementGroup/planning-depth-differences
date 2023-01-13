@@ -185,10 +185,10 @@ if __name__ == "__main__":
     )
 
     trial_by_trial_df1 = trial_by_trial_df1[
-        trial_by_trial_df1["Model Name"] == "Effort Cost and Planning Depth"
+        trial_by_trial_df1["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'"
     ]
     trial_by_trial_df2 = trial_by_trial_df2[
-        trial_by_trial_df2["Model Name"] == "Effort Cost and Planning Depth"
+        trial_by_trial_df2["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'"
     ]
 
     for model in trial_by_trial_df1["Model Name"].unique():

@@ -8,30 +8,4 @@ group: False
 prior: 'expon'
 include_null: True
 preferred_cost: 'dist_depth_eff_forw'
-static_cost_weight:
-  - -5.0
-  - -2.5
-  - -1.0
-  - 0.0
-  - 1.0
-  - 2.5
-  - 5.0
-  - 7.5
-  - 10
-depth_cost_weight:
-  - -5.0
-  - -2.5
-  - -1.0
-  - 0.0
-  - 1.0
-  - 2.5
-  - 5.0
-  - 7.5
-  - 10
-temp:
-  - 0.5
-  - 1.0
-  - 2.5
-  - 7.5
-  - 100
-params: null
+params: [""]

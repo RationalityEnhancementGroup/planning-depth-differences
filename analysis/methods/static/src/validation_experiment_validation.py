@@ -52,7 +52,7 @@ if __name__ == "__main__":
         variables_of_interest=["DEPTH", "COST", "FAIRY_GOD_CONDITION", "cond"],
     )
     optimization_data = optimization_data[
-        optimization_data["Model Name"] == "Effort Cost and Planning Depth"
+        optimization_data["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'"
     ]
 
     # read in experiment setting variables
