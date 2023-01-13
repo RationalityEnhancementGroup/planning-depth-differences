@@ -105,6 +105,83 @@ def create_test_env(name) -> None:
                 2: Categorical([-48, -24, 24, 48]),
             },
         )
+    elif name == "high_increasing0.5":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-4.0, -2.0, 2.0, 4.0]),
+                3: Categorical([-12.0, -6.0, 6.0, 12.0]),
+            },
+        )
+    elif name == "high_increasing0.75":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-6.0, -3.0, 3.0, 6.0]),
+                3: Categorical([-27.0, -13.5, 13.5, 27.0]),
+            },
+        )
+    elif name == "high_increasing0.85":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-6.8, -3.4, 3.4, 6.8]),
+                3: Categorical([-34.68, -17.34, 17.34, 34.68]),
+            },
+        )
+    elif name == "high_increasing0.9":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-7.2, -3.6, 3.6, 7.2]),
+                3: Categorical([-38.88, -19.44, 19.44, 38.88]),
+            },
+        )
+    elif name == "high_increasing0.95":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-7.6, -3.8, 3.8, 7.6]),
+                3: Categorical([-43.32, -21.66, 21.66, 43.32]),
+            },
+        )
+    elif name == "high_increasing0.975":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-7.8, -3.9, 3.9, 7.8]),
+                3: Categorical([-45.63, -22.81, 22.81, 45.63]),
+            },
+        )
+    elif name == "high_increasing0.999":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-7.99, -4.0, 4.0, 7.99]),
+                3: Categorical([-47.9, -23.95, 23.95, 47.9]),
+            },
+        )
 
 
 def get_human_trajectories(

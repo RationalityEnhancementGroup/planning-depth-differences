@@ -1,0 +1,31 @@
+ground_truth_file: high_increasing0.75
+node_classification:
+  clicks:
+  - 1
+  - 5
+  - 9
+  - 2
+  - 6
+  - 10
+  - 3
+  - 4
+  - 7
+  - 8
+  - 11
+  - 12
+  early:
+  - 1
+  - 5
+  - 9
+  late:
+  - 3
+  - 4
+  - 7
+  - 8
+  - 11
+  - 12
+  middle:
+  - 2
+  - 6
+  - 10
+structure: high_increasing0.75
