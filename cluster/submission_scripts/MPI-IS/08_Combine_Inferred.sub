@@ -5,7 +5,7 @@ arguments = $(filename) -p $(policy:SoftmaxPolicy) -c $(cost_function:dist_depth
 output = log/$(output_string:out_8).stdout
 error  = log/$(output_string:out_8).stderr
 log   = log/$(output_string:out_8).log
-request_memory = 900000
+request_memory = 1500000
 request_cpus = 1
 
 queue

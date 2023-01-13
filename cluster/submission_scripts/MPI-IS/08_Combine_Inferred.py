@@ -10,6 +10,7 @@ from pathlib import Path
 import pandas as pd
 import yaml
 from costometer.utils import add_cost_priors_to_temp_priors, recalculate_maps_from_mles
+import dill as pickle
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -86,7 +87,7 @@ if __name__ == "__main__":
         file_pattern = (
             f"cluster/data/logliks/{inputs.cost_function}/simulated/"
             f"{inputs.experiment_setting}/{inputs.policy}/"
-            f"{applied_policy}_optimization_results*simulated_agents"
+            f"{applied_policy}_optimization_results*"
             f"_{inputs.simulated_cost_function}*"
         )
 
@@ -111,6 +112,13 @@ if __name__ == "__main__":
         temp_string = f"_{inputs.simulated_temperature:.2f}"
     else:
         temp_string = ""
+    print(irl_folder.joinpath(
+            f"cluster/data/logliks/{inputs.cost_function}/simulated/"
+            f"{inputs.experiment_setting}/"
+            f"{inputs.policy}{'_' if len(inputs.simulated_cost_function)>0 else ''}"
+            f"{inputs.simulated_cost_function}_applied{temp_string}.feather"
+        )
+    )
     pd.concat(all_dfs).reset_index(drop=True).to_feather(
         irl_folder.joinpath(
             f"cluster/data/logliks/{inputs.cost_function}/simulated/"
@@ -119,3 +127,21 @@ if __name__ == "__main__":
             f"{inputs.simulated_cost_function}_applied{temp_string}.feather"
         )
     )
+
+    
+    irl_folder.joinpath(f"cluster/data/priors/{inputs.cost_function}").mkdir(
+        parents=True, exist_ok=True
+    )
+    pickle.dump(
+        full_priors,
+        open(
+            irl_folder.joinpath(
+                f"cluster/data/priors/"
+                f"{inputs.cost_function}/{inputs.policy}{'_' if len(inputs.simulated_cost_function)>0 else ''}"
+                f"{inputs.simulated_cost_function}_applied{temp_string}.pkl"
+            ),
+            "wb",
+        ),
+    )
+
+

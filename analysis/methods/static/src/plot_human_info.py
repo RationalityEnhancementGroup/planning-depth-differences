@@ -46,7 +46,7 @@ if __name__ == "__main__":
     inputs = parser.parse_args()
 
     irl_path = Path(__file__).resolve().parents[4]
-    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/data")
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
 
     analysis_obj = AnalysisObject(
         inputs.experiment_name,
@@ -154,7 +154,7 @@ if __name__ == "__main__":
 
     cost_function = optimization_data["cost_function"].unique()[0]
     optimal_df = pd.read_csv(
-        irl_path.joinpath(f"cluster/data/OptimalQ/OptimalQ_{cost_function}.csv")
+        irl_path.joinpath(f"cluster/data/trajectories/{experiment_setting}/OptimalQ/OptimalQ_{cost_function}.csv")
     )
 
     # add node classification columns

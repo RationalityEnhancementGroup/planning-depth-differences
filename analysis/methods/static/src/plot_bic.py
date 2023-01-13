@@ -76,18 +76,22 @@ if __name__ == "__main__":
         .reset_index()
     )
 
-    with open(
-        irl_path.joinpath("analysis/methods/" "static/data/OptimalBIC.pickle"), "rb"
-    ) as f:
-        simulated_means = pickle.load(f)["intended"]
-
+    if irl_path.joinpath("analysis/methods/" "static/data/OptimalBIC.pickle").is_file():
+        with open(
+            irl_path.joinpath("analysis/methods/" "static/data/OptimalBIC.pickle"), "rb"
+        ) as f:
+            simulated_means    = pickle.load(f)["intended"]
+    else:
+        simulated_means = None
+    
     bic_plot(
         bic_df,
         subdirectory,
         experiment_name=inputs.experiment_name,
         bic_field="bic",
     )
-    plt.axvline(x=np.mean(simulated_means))
+    if simulated_means:
+        plt.axvline(x=np.mean(simulated_means))
     title_extras = f" ({', '.join(analysis_obj.title_extras)})"
     plt.title(
         f"Bayesian Information Criterion"

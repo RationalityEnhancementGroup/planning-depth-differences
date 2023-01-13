@@ -7,6 +7,8 @@ import pandas as pd
 import yaml
 from costometer.utils import extract_mles_and_maps, get_param_string
 from scipy import stats  # noqa
+import os
+from costometer.utils import get_param_string
 
 if __name__ == "__main__":
     """
@@ -88,14 +90,33 @@ if __name__ == "__main__":
     if inputs.policy == "RandomPolicy":
         inputs.simulated_cost_function = ""
 
-    data = pd.read_feather(
-        irl_path.joinpath(
-            f"cluster/data/logliks/{inputs.cost_function}/simulated/"
-            f"{inputs.experiment_setting}/{inputs.policy}"
-            f"{'_' if len(inputs.simulated_cost_function) > 0 else ''}"
-            f"{inputs.simulated_cost_function}_applied{temp_string}.feather"
+    if inputs.cost_parameter_values:
+        yaml_path = irl_path.joinpath(
+            f"data/inputs/yamls/cost_functions/{inputs.cost_function}.yaml"
         )
-    )
+        with open(yaml_path, "r") as stream:
+            cost_details = yaml.safe_load(stream)
+        param_string = get_param_string({cost_parameter_arg: arg for arg, cost_parameter_arg in zip( inputs.cost_parameter_values.split(","), cost_details["cost_parameter_args"])})
+        
+        data = pd.read_feather(
+            irl_path.joinpath(
+                f"cluster/data/logliks/{inputs.cost_function}/simulated/"
+                f"{inputs.experiment_setting}/"
+                f"{inputs.policy}_by_pid/"
+                f"{inputs.policy}"
+                f"{'_' if len(inputs.simulated_cost_function) > 0 else ''}"
+                f"{inputs.simulated_cost_function}_applied_{param_string}{temp_string}.feather"
+            )
+        )
+    else:
+        data = pd.read_feather(
+            irl_path.joinpath(
+                f"cluster/data/logliks/{inputs.cost_function}/simulated/"
+                f"{inputs.experiment_setting}/{inputs.policy}"
+                f"{'_' if len(inputs.simulated_cost_function) > 0 else ''}"
+                f"{inputs.simulated_cost_function}_applied{temp_string}.feather"
+            )
+        )
 
     if inputs.simulated_temperature is not None:
         data = data[data["sim_temp"] == inputs.simulated_temperature].reset_index()
@@ -126,8 +147,22 @@ if __name__ == "__main__":
             )
         ]
         cost_string = f"_{get_param_string(cost_parameters)}"
+    else:
+        cost_string = ""
 
-    best_parameter_values = extract_mles_and_maps(data, cost_details)
+    priors = pickle.load(
+        open(
+            irl_path.joinpath(
+                f"cluster/data/priors/"
+                f"{inputs.cost_function}/"
+                f"{inputs.policy}{'_' if len(inputs.simulated_cost_function) > 0 else ''}"
+                f"{inputs.simulated_cost_function}_applied.pkl"
+            ),
+            "rb",
+        ),
+    )
+    best_parameter_values = extract_mles_and_maps(data, cost_details, priors)
+    
     # create cost subfolder if not already there
     irl_path.joinpath(
         f"data/processed/{inputs.policy}/{inputs.experiment_setting}/"
@@ -141,3 +176,16 @@ if __name__ == "__main__":
         "wb",
     ) as f:
         pickle.dump(best_parameter_values, f)
+
+    #temps = ["1.00", "2.50", "7.50", "100.0", "0.50"]
+    #curr_temp_index = [float(t) for t in temps].index(inputs.simulated_temperature)
+    #next_temp_index = curr_temp_index+1
+    #if next_temp_index < len(temps):
+    #    command = (
+    #        f"condor_submit_bid {inputs.bid} "
+    #        f"{irl_path}/cluster/submission_scripts/"
+    #        f"MPI-IS/M_01_Get_MAP_Simulated_by_Temp_broken_cluster.sub "
+    #        f"temp={temps[next_temp_index]} "
+    #        f"reward_line={inputs.cost_parameter_values}"
+    #    )
+    #    os.system(command)
