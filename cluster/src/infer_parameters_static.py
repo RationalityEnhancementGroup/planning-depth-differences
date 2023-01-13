@@ -103,9 +103,9 @@ if __name__ == "__main__":
     path = Path(__file__).resolve().parents[2]
 
     try:
-        registry(inputs.experiment_setting)
+        registry(args["experiment_setting"])
     except:  # noqa: E722
-        create_test_env(inputs.experiment_setting)
+        create_test_env(args["experiment_setting"])
 
     args = {
         **args,
@@ -205,7 +205,9 @@ if __name__ == "__main__":
         "_".join(
             [
                 filename_part
-                for filename_part in matching_file.stem.split("_")
+                for filename_part in matching_file.stem.replace(
+                    f"_{args['experiment_setting']}", ""
+                ).split("_")
                 if "." in filename_part
             ]
         )
