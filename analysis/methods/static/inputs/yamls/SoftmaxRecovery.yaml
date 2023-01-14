@@ -3,7 +3,7 @@ sessions:
 cost_functions:
         - dist_depth_eff_forw
 simulated: True
-number_trials : 30
+number_trials : 20
 group: False
 prior: 'expon'
 include_null: True
