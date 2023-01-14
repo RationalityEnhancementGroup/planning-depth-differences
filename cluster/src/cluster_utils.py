@@ -105,6 +105,51 @@ def create_test_env(name) -> None:
                 2: Categorical([-48, -24, 24, 48]),
             },
         )
+    elif name == "high_increasing0.1":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-0.8, -0.4, 0.4, 0.8]),
+                3: Categorical([-0.48, -0.24, 0.24, 0.48]),
+            },
+        )
+    elif name == "high_increasing0.2":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-1.6, -0.8, 0.8, 1.6]),
+                3: Categorical([-1.92, -0.96, 0.96, 1.92]),
+            },
+        )
+    elif name == "high_increasing0.3":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-2.4, -1.2, 1.2, 2.4]),
+                3: Categorical([-4.32, -2.16, 2.16, 4.32]),
+            },
+        )
+    elif name == "high_increasing0.4":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-3.2, -1.6, 1.6, 3.2]),
+                3: Categorical([-7.68, -3.84, 3.84, 7.68]),
+            },
+        )
+
     elif name == "high_increasing0.5":
         register(
             name=name,
