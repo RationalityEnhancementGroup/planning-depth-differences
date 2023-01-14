@@ -105,6 +105,128 @@ def create_test_env(name) -> None:
                 2: Categorical([-48, -24, 24, 48]),
             },
         )
+    elif name == "high_increasing0.1":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-0.8, -0.4, 0.4, 0.8]),
+                3: Categorical([-0.48, -0.24, 0.24, 0.48]),
+            },
+        )
+    elif name == "high_increasing0.2":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-1.6, -0.8, 0.8, 1.6]),
+                3: Categorical([-1.92, -0.96, 0.96, 1.92]),
+            },
+        )
+    elif name == "high_increasing0.3":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-2.4, -1.2, 1.2, 2.4]),
+                3: Categorical([-4.32, -2.16, 2.16, 4.32]),
+            },
+        )
+    elif name == "high_increasing0.4":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-3.2, -1.6, 1.6, 3.2]),
+                3: Categorical([-7.68, -3.84, 3.84, 7.68]),
+            },
+        )
+
+    elif name == "high_increasing0.5":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-4.0, -2.0, 2.0, 4.0]),
+                3: Categorical([-12.0, -6.0, 6.0, 12.0]),
+            },
+        )
+    elif name == "high_increasing0.75":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-6.0, -3.0, 3.0, 6.0]),
+                3: Categorical([-27.0, -13.5, 13.5, 27.0]),
+            },
+        )
+    elif name == "high_increasing0.85":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-6.8, -3.4, 3.4, 6.8]),
+                3: Categorical([-34.68, -17.34, 17.34, 34.68]),
+            },
+        )
+    elif name == "high_increasing0.9":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-7.2, -3.6, 3.6, 7.2]),
+                3: Categorical([-38.88, -19.44, 19.44, 38.88]),
+            },
+        )
+    elif name == "high_increasing0.95":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-7.6, -3.8, 3.8, 7.6]),
+                3: Categorical([-43.32, -21.66, 21.66, 43.32]),
+            },
+        )
+    elif name == "high_increasing0.975":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-7.8, -3.9, 3.9, 7.8]),
+                3: Categorical([-45.63, -22.81, 22.81, 45.63]),
+            },
+        )
+    elif name == "high_increasing0.999":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-7.99, -4.0, 4.0, 7.99]),
+                3: Categorical([-47.9, -23.95, 23.95, 47.9]),
+            },
+        )
 
 
 def get_human_trajectories(
@@ -148,6 +270,7 @@ def get_simulated_trajectories(
     file_pattern: str,
     experiment_setting: str,
     simulated_trajectory_path: Union[str, bytes, os.PathLike] = None,
+    additional_mouselab_kwargs: dict = None,
 ) -> List[Dict[str, List]]:
     """
     Given path to simulated trajectories and a file pattern, outputs traces \
@@ -163,6 +286,7 @@ def get_simulated_trajectories(
         )
 
     if "*" in file_pattern:
+        print(simulated_trajectory_path.joinpath(file_pattern))
         files = simulated_trajectory_path.glob(file_pattern)
     else:
         files = [file_pattern]
@@ -189,7 +313,10 @@ def get_simulated_trajectories(
 
     state_info = imploded_by_episode_df.apply(
         lambda row: get_states_for_trace(
-            row["actions"], experiment_setting, ground_truth=row["ground_truth"]
+            row["actions"],
+            experiment_setting,
+            ground_truth=row["ground_truth"],
+            **additional_mouselab_kwargs,
         ),
         axis=1,
     ).to_dict()
