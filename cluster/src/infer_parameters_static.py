@@ -102,11 +102,6 @@ if __name__ == "__main__":
 
     path = Path(__file__).resolve().parents[2]
 
-    try:
-        registry(args["experiment_setting"])
-    except:  # noqa: E722
-        create_test_env(args["experiment_setting"])
-
     args = {
         **args,
         **get_args_from_yamls(
@@ -114,6 +109,11 @@ if __name__ == "__main__":
             attributes=["experiment_setting"],
         ),
     }
+
+    try:
+        registry(args["experiment_setting"])
+    except:  # noqa: E722
+        create_test_env(args["experiment_setting"])
 
     if "structure" in args:
         with open(
