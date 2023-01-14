@@ -7,9 +7,14 @@ It also will add in the prior probability for cost parameters for MAP estimates.
 from argparse import ArgumentParser
 from pathlib import Path
 
+import dill as pickle
 import pandas as pd
 import yaml
-from costometer.utils import add_cost_priors_to_temp_priors, recalculate_maps_from_mles
+from costometer.utils import (
+    add_cost_priors_to_temp_priors,
+    get_param_string,
+    recalculate_maps_from_mles,
+)
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -55,10 +60,18 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-v",
-        "--simulated-temperature",
-        dest="simulated_temperature",
+        "--subset-value",
+        dest="subset_value",
         type=float,
         default=None,
+    )
+    parser.add_argument(
+        "-b",
+        "--by_val",
+        dest="by_val",
+        help="If included, by sim parameter values.",
+        default=True,
+        action="store_false",
     )
     inputs = parser.parse_args()
 
@@ -71,6 +84,13 @@ if __name__ == "__main__":
     with open(yaml_path, "r") as stream:
         cost_details = yaml.safe_load(stream)
 
+    sim_yaml_path = irl_folder.joinpath(
+        f"data/inputs/yamls/cost_functions/{inputs.simulated_cost_function}.yaml"
+    )
+
+    with open(sim_yaml_path, "r") as stream:
+        sim_cost_details = yaml.safe_load(stream)
+
     temp_prior_details = {}
     for prior in inputs.temperature_file.split(","):
         yaml_path = irl_folder.joinpath(f"data/inputs/yamls/temperatures/{prior}.yaml")
@@ -81,21 +101,27 @@ if __name__ == "__main__":
     if inputs.policy == "RandomPolicy":
         inputs.simulated_cost_function = ""
 
+    irl_folder.joinpath(
+        f"cluster/data/logliks/{inputs.cost_function}/simulated/"
+        f"{inputs.experiment_setting}/"
+        f"{inputs.policy}_by_pid/"
+    ).mkdir(exist_ok=True, parents=True)
+
     all_dfs = []
     for applied_policy in ["RandomPolicy", "SoftmaxPolicy"]:
         file_pattern = (
             f"cluster/data/logliks/{inputs.cost_function}/simulated/"
             f"{inputs.experiment_setting}/{inputs.policy}/"
-            f"{applied_policy}_optimization_results*simulated_agents"
+            f"{applied_policy}_optimization_results*"
             f"_{inputs.simulated_cost_function}*"
         )
 
         curr_df = pd.concat([pd.read_csv(f) for f in irl_folder.glob(file_pattern)])
 
-        if inputs.simulated_temperature is not None:
-            curr_df = curr_df[
-                curr_df["sim_temp"] == inputs.simulated_temperature
-            ].reset_index()
+        if inputs.subset_value is not None and inputs.policy == "SoftmaxPolicy":
+            curr_df = curr_df[curr_df["sim_temp"] == inputs.subset_value].reset_index()
+        elif inputs.subset_value:
+            curr_df = curr_df[curr_df["trace_pid"] == inputs.subset_value].reset_index()
 
         if applied_policy == "SoftmaxPolicy":
             full_priors = add_cost_priors_to_temp_priors(
@@ -106,16 +132,60 @@ if __name__ == "__main__":
         curr_df["applied_policy"] = applied_policy
         all_dfs.append(curr_df)
 
-    # we save files by temperature, if simulated temp provided
-    if inputs.simulated_temperature is not None:
-        temp_string = f"_{inputs.simulated_temperature:.2f}"
+    # we save files by subsetted value, if provided
+    if inputs.subset_value is not None:
+        subset_value_string = f"_{inputs.subset_value:.2f}"
     else:
-        temp_string = ""
-    pd.concat(all_dfs).reset_index(drop=True).to_feather(
-        irl_folder.joinpath(
-            f"cluster/data/logliks/{inputs.cost_function}/simulated/"
-            f"{inputs.experiment_setting}/"
-            f"{inputs.policy}{'_' if len(inputs.simulated_cost_function)>0 else ''}"
-            f"{inputs.simulated_cost_function}_applied{temp_string}.feather"
+        subset_value_string = ""
+    full_df = pd.concat(all_dfs)
+
+    if not inputs.by_val:
+        for sim_cost_parameter_values in full_df["sim_cost_parameter_values"].unique():
+            param_string = get_param_string(
+                {
+                    cost_parameter_arg: arg
+                    for arg, cost_parameter_arg in zip(
+                        sim_cost_parameter_values.split(","),
+                        sim_cost_details["cost_parameter_args"],
+                    )
+                }
+            )
+            full_df[
+                full_df["sim_cost_parameter_values"] == sim_cost_parameter_values
+            ].reset_index(drop=True).to_feather(
+                irl_folder.joinpath(
+                    f"cluster/data/logliks/{inputs.cost_function}/simulated/"
+                    f"{inputs.experiment_setting}/"
+                    f"{inputs.policy}_by_pid/"
+                    f"{inputs.policy}"
+                    f"{'_' if len(inputs.simulated_cost_function) > 0 else ''}"
+                    f"{inputs.simulated_cost_function}_applied_"
+                    f"{param_string}{subset_value_string}.feather"
+                )
+            )
+    else:
+        full_df.reset_index(drop=True).to_feather(
+            irl_folder.joinpath(
+                f"cluster/data/logliks/{inputs.cost_function}/simulated/"
+                f"{inputs.experiment_setting}/"
+                f"{inputs.policy}"
+                f"{'_' if len(inputs.simulated_cost_function) > 0 else ''}"
+                f"{inputs.simulated_cost_function}_applied{subset_value_string}.feather"
+            )
         )
+
+    irl_folder.joinpath(f"cluster/data/priors/{inputs.cost_function}").mkdir(
+        parents=True, exist_ok=True
+    )
+    pickle.dump(
+        full_priors,
+        open(
+            irl_folder.joinpath(
+                f"cluster/data/priors/"
+                f"{inputs.cost_function}/{inputs.policy}"
+                f"{'_' if len(inputs.simulated_cost_function)>0 else ''}"
+                f"{inputs.simulated_cost_function}_applied.pkl"
+            ),
+            "wb",
+        ),
     )
