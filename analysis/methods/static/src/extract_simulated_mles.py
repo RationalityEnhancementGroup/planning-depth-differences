@@ -126,8 +126,22 @@ if __name__ == "__main__":
             )
         ]
         cost_string = f"_{get_param_string(cost_parameters)}"
+    else:
+        cost_string = ""
 
-    best_parameter_values = extract_mles_and_maps(data, cost_details)
+    priors = pickle.load(
+        open(
+            irl_path.joinpath(
+                f"cluster/data/priors/"
+                f"{inputs.cost_function}/"
+                f"{inputs.policy}"
+                f"{'_' if len(inputs.simulated_cost_function) > 0 else ''}"
+                f"{inputs.simulated_cost_function}_applied.pkl"
+            ),
+            "rb",
+        ),
+    )
+    best_parameter_values = extract_mles_and_maps(data, cost_details, priors)
     # create cost subfolder if not already there
     irl_path.joinpath(
         f"data/processed/{inputs.policy}/{inputs.experiment_setting}/"
