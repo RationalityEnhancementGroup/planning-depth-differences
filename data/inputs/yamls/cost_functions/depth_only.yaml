@@ -1,0 +1,8 @@
+cost_function: "lambda depth_cost_weight: lambda state, action, graph: linear_depth(depth_cost_weight=depth_cost_weight, static_cost_weight=1, start_first_level=False)(state, action, graph=graph)"
+cost_parameter_args:
+        - depth_cost_weight
+cost_parameter_names:
+        - Planning Depth Cost
+env_params: {'include_last_action': false}
+constant_values: {'depth_cost_weight': 0}
+model_name: "{(): 'Planning Depth Only (Starting at Level 2)'}"
