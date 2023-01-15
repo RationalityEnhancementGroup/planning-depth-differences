@@ -14,3 +14,6 @@ include_null : true
 preferred_cost: 'back_dist_depth_eff_forw'
 title_extras: ''
 simulated: False
+posterior_predictive_check_models:
+        - 'Distance, Effort, Depth and Forward Search Bonus'
+        - 'Distance, Depth and Forward Search Bonus'

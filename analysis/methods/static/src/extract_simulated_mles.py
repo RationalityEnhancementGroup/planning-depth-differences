@@ -155,7 +155,8 @@ if __name__ == "__main__":
             irl_path.joinpath(
                 f"cluster/data/priors/"
                 f"{inputs.cost_function}/"
-                f"{inputs.policy}{'_' if len(inputs.simulated_cost_function) > 0 else ''}"
+                f"{inputs.policy}"
+                f"{'_' if len(inputs.simulated_cost_function) > 0 else ''}"
                 f"{inputs.simulated_cost_function}_applied.pkl"
             ),
             "rb",
