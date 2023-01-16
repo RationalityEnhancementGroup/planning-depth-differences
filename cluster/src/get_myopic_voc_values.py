@@ -37,6 +37,7 @@ def get_bmps_rollouts(
     structure: Dict[Any, Any] = None,
     ground_truths: List[List[float]] = None,
     env_params: Dict[Any, Any] = None,
+    alpha: int = 1,
 ) -> Dict[Any, Any]:
     """
     Gets BMPS weights for different cost functions
@@ -48,14 +49,12 @@ def get_bmps_rollouts(
     :param structure: where nodes are
     :param ground_truths: ground truths to save
     :param env_params
+    :param alpha
     :return: info dictionary which contains q_dictionary, \
     function additionally saves this dictionary into data/q_files
     """
     # get path to save dictionary in
     path = Path(__file__).parents[1].joinpath("data/bmps")
-    path.joinpath(f"preferences/{experiment_setting}/{cost_function_name}/").mkdir(
-        parents=True, exist_ok=True
-    )
 
     W = np.asarray([1, 1, 1])
 
@@ -121,11 +120,15 @@ def get_bmps_rollouts(
     # saves res dict
     if path is not None:
         parameter_string = get_param_string(cost_parameters)
-        path.joinpath(f"preferences/{experiment_setting}/{cost_function_name}/").mkdir(
+        if alpha == 1:
+            alpha_string = ""
+        else:
+            alpha_string = f"_{alpha}"
+        path.joinpath(f"preferences/{experiment_setting}{alpha_string}/{cost_function_name}/").mkdir(
             parents=True, exist_ok=True
         )
         filename = path.joinpath(
-            f"preferences/{experiment_setting}/{cost_function_name}/"
+            f"preferences/{experiment_setting}{alpha_string}/{cost_function_name}/"
             f"BMPS_{experiment_setting}_{parameter_string}.dat"  # noqa: E501
         )
 
@@ -247,4 +250,5 @@ if __name__ == "__main__":
         cost_function_name=cost_function_name,
         env_params={**args["env_params"], "alpha" : inputs.alpha},
         ground_truths=ground_truths,
+        alpha=inputs.alpha,
     )
