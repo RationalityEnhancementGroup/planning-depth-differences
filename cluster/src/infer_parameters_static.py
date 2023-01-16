@@ -81,12 +81,12 @@ if __name__ == "__main__":
         type=str,
     )
     parser.add_argument(
-        "-g",
-        "--gamma",
-        dest="gamma",
-        help="If included, adds discount factor (gamma)",
-        default=True,
-        action="store_false",
+        "-a",
+        "--alpha",
+        dest="alpha",
+        help="alpha",
+        type=float,
+        default=1,
     )
 
     inputs = parser.parse_args()
@@ -190,8 +190,13 @@ if __name__ == "__main__":
         )
     }
 
+    if inputs.alpha == 1:
+        alpha_string = ""
+    else:
+        alpha_string = f"_{inputs.alpha}"
+
     matching_files = get_matching_q_files(
-        args["experiment_setting"],
+        f"{args['experiment_setting']}{alpha_string}",
         cost_function=eval(args["cost_function"]),
         cost_function_name=inputs.cost_function
         if callable(eval(args["cost_function"]))
@@ -287,11 +292,11 @@ if __name__ == "__main__":
 
     # make experiment folder if it doesn't already exist
     path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}"
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}{alpha_string}"
     ).mkdir(parents=True, exist_ok=True)
 
     filename = path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}{alpha_string}/"
         f"SoftmaxPolicy_optimization_results_{get_param_string(cost_parameter_dict)}"
         f"{simulation_params}.csv"
     )
@@ -322,7 +327,7 @@ if __name__ == "__main__":
 
     optimization_results = random_ray_object.get_optimization_results()
     filename = path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}{alpha_string}/"
         f"RandomPolicy_optimization_results{simulation_params}.csv"
     )
     optimization_results.to_csv(filename, index=False)
