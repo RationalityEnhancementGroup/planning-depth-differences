@@ -10,16 +10,11 @@ from pathlib import Path
 import dill as pickle
 import pandas as pd
 import yaml
-<<<<<<< HEAD
-from costometer.utils import add_cost_priors_to_temp_priors, recalculate_maps_from_mles
-import dill as pickle
-=======
 from costometer.utils import (
     add_cost_priors_to_temp_priors,
     get_param_string,
     recalculate_maps_from_mles,
 )
->>>>>>> 438e0d1110e100d5e2b1d360657cd16a42823552
 
 if __name__ == "__main__":
     parser = ArgumentParser()
