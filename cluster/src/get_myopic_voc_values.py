@@ -248,7 +248,7 @@ if __name__ == "__main__":
         structure=structure_dicts,
         cost_function=cost_function,
         cost_function_name=cost_function_name,
-        env_params={**args["env_params"], "alpha" : inputs.alpha},
+        env_params={**args["env_params"], "power_utility" : inputs.alpha},
         ground_truths=ground_truths,
         alpha=inputs.alpha,
     )
