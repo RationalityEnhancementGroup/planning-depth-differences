@@ -37,7 +37,6 @@ def get_bmps_rollouts(
     structure: Dict[Any, Any] = None,
     ground_truths: List[List[float]] = None,
     env_params: Dict[Any, Any] = None,
-    alpha: int = 1,
 ) -> Dict[Any, Any]:
     """
     Gets BMPS weights for different cost functions
@@ -49,7 +48,6 @@ def get_bmps_rollouts(
     :param structure: where nodes are
     :param ground_truths: ground truths to save
     :param env_params
-    :param alpha
     :return: info dictionary which contains q_dictionary, \
     function additionally saves this dictionary into data/q_files
     """
