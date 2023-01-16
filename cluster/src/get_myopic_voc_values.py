@@ -129,7 +129,7 @@ def get_bmps_rollouts(
         )
         filename = path.joinpath(
             f"preferences/{experiment_setting}{alpha_string}/{cost_function_name}/"
-            f"BMPS_{experiment_setting}_{parameter_string}.dat"  # noqa: E501
+            f"BMPS_{experiment_setting}{alpha_string}_{parameter_string}.dat"  # noqa: E501
         )
 
         pickled_data = pickle.dumps(info)
