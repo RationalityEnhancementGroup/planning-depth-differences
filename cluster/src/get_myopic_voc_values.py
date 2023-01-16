@@ -37,6 +37,7 @@ def get_bmps_rollouts(
     structure: Dict[Any, Any] = None,
     ground_truths: List[List[float]] = None,
     env_params: Dict[Any, Any] = None,
+    alpha: int = 1,
 ) -> Dict[Any, Any]:
     """
     Gets BMPS weights for different cost functions
@@ -47,6 +48,8 @@ def get_bmps_rollouts(
     :param cost_function_name:
     :param structure: where nodes are
     :param ground_truths: ground truths to save
+    :param env_params
+    :param alpha
     :return: info dictionary which contains q_dictionary, \
     function additionally saves this dictionary into data/q_files
     """
@@ -173,6 +176,14 @@ if __name__ == "__main__":
         help="Cost parameter values as comma separated string, e.g. '1.00,2.00'",
         type=str,
     )
+    parser.add_argument(
+        "-a",
+        "--alpha",
+        dest="alpha",
+        help="alpha",
+        type=float,
+        default=1,
+    )
 
     inputs = parser.parse_args()
     args = get_args_from_yamls(
@@ -236,6 +247,6 @@ if __name__ == "__main__":
         structure=structure_dicts,
         cost_function=cost_function,
         cost_function_name=cost_function_name,
-        env_params=args["env_params"],
+        env_params={**args["env_params"], "alpha" : inputs.alpha},
         ground_truths=ground_truths,
     )
