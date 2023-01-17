@@ -6,7 +6,6 @@ output = log/$(output_string:out_7)_$(Process).stdout
 error  = log/$(output_string:out_7)_$(Process).stderr
 log   = log/$(output_string:out_7)_$(Process).log
 request_memory = $(request_memory:24000)
-max_materialize = 1850
 request_cpus = 1
 +MaxRunningPrice = 20
 +RunningPriceExceededAction = "kill"
