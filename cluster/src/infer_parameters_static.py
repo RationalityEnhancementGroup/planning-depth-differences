@@ -154,8 +154,8 @@ if __name__ == "__main__":
         )
         experiment_folder = args["experiment"]
         # data not simulated, no simulation params
-        if inputs.participant_subset_file:
-            simulation_params = "_" + inputs.participant_subset_file
+        if inputs.pid:
+            simulation_params = "_" + inputs.pid
         else:
             simulation_params = ""
 
@@ -266,7 +266,7 @@ if __name__ == "__main__":
     filename = path.joinpath(
         f"cluster/data/logliks/{cost_function_name}/"
         f"{experiment_folder}{alpha_string}_by_pid/"
-        f"{inputs.cost_parameter_file}_{inputs.pid}.feather"
+        f"{inputs.cost_parameter_file}_{simulation_params}.feather"
     )
 
     optimization_results.reset_index(drop=True).to_feather(filename)
