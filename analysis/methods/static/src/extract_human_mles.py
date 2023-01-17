@@ -29,6 +29,14 @@ if __name__ == "__main__":
         help="Participant ID (optional)",
         default=None,
     )
+    parser.add_argument(
+        "-a",
+        "--alpha",
+        dest="alpha",
+        help="alpha",
+        type=float,
+        default=1,
+    )
 
     inputs = parser.parse_args()
     irl_path = Path(__file__).resolve().parents[4]
@@ -50,18 +58,23 @@ if __name__ == "__main__":
     with open(yaml_path, "r") as stream:
         cost_details = yaml.safe_load(stream)
 
+    if inputs.alpha == 1:
+        alpha_string = ""
+    else:
+        alpha_string = f"_{inputs.alpha}"
+
     if inputs.pid:
         data = pd.read_feather(
             irl_path.joinpath(
                 f"cluster/data/logliks/{inputs.cost_function}/"
-                f"{inputs.experiment}_by_pid/{inputs.pid}.feather"
+                f"{inputs.experiment}{alpha_string}_by_pid/{inputs.pid}.feather"
             )
         )
     else:
         data = pd.read_feather(
             irl_path.joinpath(
                 f"cluster/data/logliks/{inputs.cost_function}/"
-                f"{inputs.experiment}.feather"
+                f"{inputs.experiment}{alpha_string}.feather"
             )
         )
 
@@ -70,7 +83,7 @@ if __name__ == "__main__":
             irl_path.joinpath(
                 f"cluster/data/priors/"
                 f"{inputs.cost_function}/"
-                f"{inputs.experiment}.pkl"
+                f"{inputs.experiment}{alpha_string}.pkl"
             ),
             "rb",
         ),
@@ -80,12 +93,13 @@ if __name__ == "__main__":
 
     # create cost subfolder if not already there
     irl_path.joinpath(
-        f"data/processed/{inputs.experiment}/{inputs.cost_function}"
+        f"data/processed/{inputs.experiment}{alpha_string}/{inputs.cost_function}"
     ).mkdir(parents=True, exist_ok=True)
     if inputs.pid:
         with open(
             irl_path.joinpath(
-                f"data/processed/{inputs.experiment}/{inputs.cost_function}/"
+                f"data/processed/{inputs.experiment}"
+                f"{alpha_string}/{inputs.cost_function}/"
                 f"mle_and_map_{inputs.pid}.pickle"
             ),
             "wb",
@@ -94,7 +108,8 @@ if __name__ == "__main__":
     else:
         with open(
             irl_path.joinpath(
-                f"data/processed/{inputs.experiment}/{inputs.cost_function}/"
+                f"data/processed/{inputs.experiment}"
+                f"{alpha_string}/{inputs.cost_function}/"
                 f"mle_and_map.pickle"
             ),
             "wb",
