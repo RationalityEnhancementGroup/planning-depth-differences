@@ -8,6 +8,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 import numpy as np  # noqa, for the pickled Q value function
+import pandas as pd
 import yaml
 from cluster_utils import (
     create_test_env,
@@ -17,7 +18,7 @@ from cluster_utils import (
 )
 from costometer.agents.vanilla import SymmetricMouselabParticipant
 from costometer.inference import GridInference
-from costometer.utils import get_param_string, get_temp_prior
+from costometer.utils import get_temp_prior
 from mouselab.cost_functions import *  # noqa
 from mouselab.distributions import Categorical
 from mouselab.envs.registry import registry
@@ -70,10 +71,10 @@ if __name__ == "__main__":
         type=str,
     )
     parser.add_argument(
-        "-v",
-        "--values",
-        dest="cost_parameter_values",
-        help="Cost parameter values as comma separated string, e.g. '1.00,2.00'",
+        "-f",
+        "--cost-file",
+        dest="cost_parameter_file",
+        help="Cost parameter file located in cluster/parameters/cost",
         type=str,
     )
     parser.add_argument(
@@ -171,20 +172,12 @@ if __name__ == "__main__":
         else:
             simulation_params = ""
 
-    # add asterisks for missing param values
-    num_not_included_params = len(args["cost_parameter_args"]) - len(
-        inputs.cost_parameter_values.split(",")
+    full_parameters = pd.read_csv(
+        Path(__file__)
+        .parents[1]
+        .joinpath(f"parameters/cost/{inputs.cost_parameter_file}.txt"),
+        names=args["cost_parameter_args"],
     )
-    inputs.cost_parameter_values = ",".join(
-        inputs.cost_parameter_values.split(",") + ["*"] * num_not_included_params
-    )
-
-    cost_parameter_dict = {
-        cost_parameter_arg: arg
-        for arg, cost_parameter_arg in zip(
-            inputs.cost_parameter_values.split(","), args["cost_parameter_args"]
-        )
-    }
 
     if inputs.alpha == 1:
         alpha_string = ""
@@ -192,10 +185,12 @@ if __name__ == "__main__":
         alpha_string = f"_{inputs.alpha}"
 
     cost_parameters = {}
-    for arg, cost_parameter_arg in zip(
-        inputs.cost_parameter_values.split(","), args["cost_parameter_args"]
-    ):
-        cost_parameters[cost_parameter_arg] = Categorical([float(arg)], [1])
+    for cost_parameter_arg in args["cost_parameter_args"]:
+        possible_cost_parameters = full_parameters[cost_parameter_arg].unique()
+        cost_parameters[cost_parameter_arg] = Categorical(
+            possible_cost_parameters,
+            [1 / len(possible_cost_parameters)] * len(possible_cost_parameters),
+        )
 
     if inputs.temperature_file is not None:
         yaml_path = str(
@@ -253,7 +248,7 @@ if __name__ == "__main__":
 
     filename = path.joinpath(
         f"cluster/data/logliks/{cost_function_name}/{experiment_folder}{alpha_string}/"
-        f"SoftmaxPolicy_optimization_results_{get_param_string(cost_parameter_dict)}"
+        f"SoftmaxPolicy_optimization_results_{inputs.cost_parameter_file}"
         f"{simulation_params}.csv"
     )
     optimization_results.to_csv(filename, index=False)
