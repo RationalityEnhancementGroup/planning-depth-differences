@@ -2,40 +2,32 @@
 Script helps calculate and save Q values for Mouselab environments
 """
 import json
+import os
 from argparse import ArgumentParser
 from pathlib import Path
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict, Union
 
 import blosc
 import dill as pickle
 import numpy as np
 from cluster_utils import create_test_env, get_args_from_yamls
-from contexttimer import Timer
 from costometer.utils import get_param_string
 from mouselab.cost_functions import *  # noqa: F401, F403
-from mouselab.env_utils import (
-    add_extended_state_to_sa_pairs,
-    get_all_possible_states_for_ground_truths,
-    get_ground_truths_from_json,
-    get_sa_pairs_from_states,
-)
 from mouselab.envs.registry import registry
-from mouselab.exact import hash_tree
 from mouselab.graph_utils import get_structure_properties
 from mouselab.metacontroller.mouselab_env import MetaControllerMouselab
 from mouselab.metacontroller.vanilla_BMPS import load_feature_file
 from mouselab.mouselab import MouselabEnv
-from toolz import unique
 
 
-def get_bmps_rollouts(
+def get_state_action_values(
     experiment_setting: str,
     bmps_file: str,
     cost_parameters: Dict[str, float],
     cost_function: Callable,
     cost_function_name: str = None,
     structure: Dict[Any, Any] = None,
-    ground_truths: List[List[float]] = None,
+    path: Union[str, bytes, os.PathLike] = None,
     env_params: Dict[Any, Any] = None,
     alpha: int = 1,
 ) -> Dict[Any, Any]:
@@ -47,15 +39,12 @@ def get_bmps_rollouts(
     :param cost_function: cost function to use
     :param cost_function_name:
     :param structure: where nodes are
-    :param ground_truths: ground truths to save
+    :param path:
     :param env_params
     :param alpha
     :return: info dictionary which contains q_dictionary, \
     function additionally saves this dictionary into data/q_files
     """
-    # get path to save dictionary in
-    path = Path(__file__).parents[1].joinpath("data/bmps")
-
     W = np.asarray([1, 1, 1])
 
     if env_params is None:
@@ -88,33 +77,9 @@ def get_bmps_rollouts(
         **env_params,
     )
 
-    # duplicated from an (in)exact solve routine
-
-    verbose = (False,)
-    hash_key = hash_tree
-    dedup_by_hash = False
-
-    with Timer() as timer:
-        states = get_all_possible_states_for_ground_truths(
-            categorical_gym_env=env, ground_truths=ground_truths
-        )
-        sa_pairs = get_sa_pairs_from_states(states)
-        if env.include_last_action:
-            sa_pairs = add_extended_state_to_sa_pairs(sa_pairs)
-
-        if verbose:
-            print(f"Got (s,a) pairs, time elapsed: {timer.elapsed}")
-
-    if verbose:
-        print(f"Deduping (s,a) to save, time elapsed: {timer.elapsed}")
-    if dedup_by_hash and hash_key:
-        sa_pairs = unique(sa_pairs, key=lambda sa_pair: hash_key(env, *sa_pair))
-    else:
-        sa_pairs = unique(sa_pairs)
-
-    Q = {}
-    for state, action in sa_pairs:
-        Q[(state, action)] = np.dot(env.action_features(state=state, action=action), W)
+    Q = lambda state, action: np.dot(
+        env.action_features(state=state, action=action), W
+    )  # noqa : E731
 
     info = {"q_dictionary": Q}
     # saves res dict
@@ -124,9 +89,9 @@ def get_bmps_rollouts(
             alpha_string = ""
         else:
             alpha_string = f"_{alpha}"
-        path.joinpath(f"preferences/{experiment_setting}{alpha_string}/{cost_function_name}/").mkdir(
-            parents=True, exist_ok=True
-        )
+        path.joinpath(
+            f"preferences/{experiment_setting}{alpha_string}/{cost_function_name}/"
+        ).mkdir(parents=True, exist_ok=True)
         filename = path.joinpath(
             f"preferences/{experiment_setting}{alpha_string}/{cost_function_name}/"
             f"BMPS_{experiment_setting}{alpha_string}_{parameter_string}.dat"  # noqa: E501
@@ -138,7 +103,7 @@ def get_bmps_rollouts(
         with open(filename, "wb") as f:
             f.write(compressed_pickle)
 
-    return info
+    return Q
 
 
 if __name__ == "__main__":
@@ -171,10 +136,10 @@ if __name__ == "__main__":
         type=str,
     )
     parser.add_argument(
-        "-v",
-        "--values",
-        dest="cost_parameter_values",
-        help="Cost parameter values as comma separated string, e.g. '1.00,2.00'",
+        "-f",
+        "--cost-file",
+        dest="cost_parameter_file",
+        help="Cost parameter file located in cluster/parameters/cost",
         type=str,
     )
     parser.add_argument(
@@ -198,28 +163,6 @@ if __name__ == "__main__":
     except:  # noqa: E722
         create_test_env(experiment_setting)
 
-    if args["ground_truth_file"]:
-        ground_truths = get_ground_truths_from_json(
-            Path(__file__)
-            .resolve()
-            .parents[2]
-            .joinpath(
-                f"data/inputs/exp_inputs/rewards/{args['ground_truth_file']}.json"
-            )
-        )
-    else:
-        ground_truths = None
-
-    try:
-        cost_parameters = {
-            cost_parameter_arg: float(arg)
-            for arg, cost_parameter_arg in zip(
-                inputs.cost_parameter_values.split(","), args["cost_parameter_args"]
-            )
-        }
-    except ValueError as e:
-        raise e
-
     cost_function = eval(args["cost_function"])
 
     if "structure" in args:
@@ -241,14 +184,33 @@ if __name__ == "__main__":
     else:
         cost_function_name = None
 
-    get_bmps_rollouts(
-        experiment_setting,
-        inputs.bmps_file,
-        cost_parameters,
-        structure=structure_dicts,
-        cost_function=cost_function,
-        cost_function_name=cost_function_name,
-        env_params={**args["env_params"], "power_utility" : inputs.alpha},
-        ground_truths=ground_truths,
-        alpha=inputs.alpha,
-    )
+    with open(
+        Path(__file__)
+        .parents[1]
+        .joinpath(f"parameters/cost/{inputs.cost_parameter_file}.txt"),
+        "r",
+    ) as f:
+        full_parameters = f.read().splitlines()
+
+    for curr_parameters in full_parameters:
+        try:
+            cost_parameters = {
+                cost_parameter_arg: float(arg)
+                for arg, cost_parameter_arg in zip(
+                    curr_parameters.split(","), args["cost_parameter_args"]
+                )
+            }
+        except ValueError as e:
+            raise e
+
+        get_state_action_values(
+            experiment_setting,
+            inputs.bmps_file,
+            cost_parameters,
+            structure=structure_dicts,
+            cost_function=cost_function,
+            cost_function_name=cost_function_name,
+            env_params={**args["env_params"], "power_utility": inputs.alpha},
+            alpha=inputs.alpha,
+            path=Path(__file__).parents[1].joinpath("data/bmps"),
+        )
