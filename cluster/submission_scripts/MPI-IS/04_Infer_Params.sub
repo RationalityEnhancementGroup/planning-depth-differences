@@ -6,6 +6,7 @@ output = log/$(output_string:out_4)_$(Process).stdout
 error  = log/$(output_string:out_4)_$(Process).stderr
 log   = log/$(output_string:out_4)_$(Process).log
 request_memory = $(memory:40960)
+max_materialize = 1850
 request_cpus = 1
 
 queue reward_line from $(project_path)/cluster/parameters/cost/$(param_file:params_full_four).txt
