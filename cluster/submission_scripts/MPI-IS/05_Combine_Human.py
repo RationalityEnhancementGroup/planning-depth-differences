@@ -35,6 +35,22 @@ if __name__ == "__main__":
         type=str,
         default="expon,uniform",
     )
+    parser.add_argument(
+        "-p",
+        "--by_pid",
+        dest="by_pid",
+        help="If included, by pid.",
+        default=True,
+        action="store_false",
+    )
+    parser.add_argument(
+        "-a",
+        "--alpha",
+        dest="alpha",
+        help="alpha",
+        type=float,
+        default=1,
+    )
     inputs = parser.parse_args()
 
     # hard coded for my folder structure
@@ -44,6 +60,11 @@ if __name__ == "__main__":
     yaml_path = irl_folder.joinpath(
         f"data/inputs/yamls/cost_functions/{inputs.cost_function}.yaml"
     )
+
+    if inputs.alpha == 1:
+        alpha_string = ""
+    else:
+        alpha_string = f"_{inputs.alpha}"
 
     with open(yaml_path, "r") as stream:
         cost_details = yaml.safe_load(stream)
@@ -55,15 +76,16 @@ if __name__ == "__main__":
             prior_inputs = yaml.safe_load(stream)
         temp_prior_details[prior] = prior_inputs
 
-    Path(f"data/logliks/{inputs.cost_function}/" f"{inputs.experiment}_by_pid/").mkdir(
-        exist_ok=True, parents=True
-    )
+    cluster_folder.joinpath(
+        f"data/logliks/{inputs.cost_function}/"
+        f"{inputs.experiment}{alpha_string}_by_pid/"
+    ).mkdir(exist_ok=True, parents=True)
 
     all_dfs = []
     for applied_policy in ["RandomPolicy", "SoftmaxPolicy"]:
         file_pattern = (
             f"data/logliks/{inputs.cost_function}/"
-            f"{inputs.experiment}/{applied_policy}*.csv"
+            f"{inputs.experiment}{alpha_string}/{applied_policy}*.csv"
         )
 
         curr_df = pd.concat(
@@ -84,10 +106,20 @@ if __name__ == "__main__":
 
     full_df = pd.concat(all_dfs)
 
-    for pid in full_df["trace_pid"].unique():
-        full_df[full_df["trace_pid"] == pid].reset_index(drop=True).to_feather(
-            f"data/logliks/{inputs.cost_function}/"
-            f"{inputs.experiment}_by_pid/{pid}.feather"
+    if not inputs.by_pid:
+        for pid in full_df["trace_pid"].unique():
+            full_df[full_df["trace_pid"] == pid].reset_index(drop=True).to_feather(
+                cluster_folder.joinpath(
+                    f"data/logliks/{inputs.cost_function}/"
+                    f"{inputs.experiment}{alpha_string}/{pid}.feather"
+                )
+            )
+    else:
+        full_df.reset_index(drop=True).to_feather(
+            cluster_folder.joinpath(
+                f"data/logliks/{inputs.cost_function}/"
+                f"{inputs.experiment}{alpha_string}.feather"
+            )
         )
 
     cluster_folder.joinpath(f"data/priors/{inputs.cost_function}").mkdir(
@@ -97,7 +129,8 @@ if __name__ == "__main__":
         full_priors,
         open(
             cluster_folder.joinpath(
-                f"data/priors/{inputs.cost_function}/{inputs.experiment}.pkl"
+                f"data/priors/{inputs.cost_function}/"
+                f"{inputs.experiment}{alpha_string}.pkl"
             ),
             "wb",
         ),
