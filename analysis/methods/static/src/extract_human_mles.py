@@ -23,6 +23,14 @@ if __name__ == "__main__":
         metavar="cost_function",
     )
     parser.add_argument(
+        "-s",
+        "--simulated-cost-function",
+        dest="simulated_cost_function",
+        help="Simulated cost function YAML file",
+        default="back_dist_depth_eff_forw",
+        type=str,
+    )
+    parser.add_argument(
         "-p",
         "--pid",
         dest="pid",
@@ -52,7 +60,7 @@ if __name__ == "__main__":
 
     # read in cost function details
     yaml_path = irl_path.joinpath(
-        f"data/inputs/yamls/cost_functions/{inputs.cost_function}.yaml"
+        f"data/inputs/yamls/cost_functions/{inputs.simulated_cost_function}.yaml"
     )
 
     with open(yaml_path, "r") as stream:
