@@ -65,9 +65,10 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-p",
-        "--pid",
-        dest="pid",
-        type=int,
+        "--participant-subset-file",
+        dest="participant_subset_file",
+        default=None,
+        type=str,
     )
     parser.add_argument(
         "-f",
@@ -142,11 +143,23 @@ if __name__ == "__main__":
             "*", ""
         ).replace(".csv", "")
     else:
-        if inputs.pid:
-            pids = [inputs.pid]
+        if inputs.participant_subset_file:
+            pids = (
+                Path(__file__)
+                .resolve()
+                .parents[2]
+                .joinpath("data")
+                .joinpath(
+                    f"processed/{inputs.experiment}/"
+                    f"{inputs.participant_subset_file}.csv"
+                )
+            )
+
+            with open(pids, "r") as f:
+                pids = [int(line.replace("\n", "")) for line in f.readlines()]
+
         else:
             pids = None
-
         traces = get_human_trajectories(
             inputs.experiment,
             pids=pids,
@@ -226,7 +239,19 @@ if __name__ == "__main__":
 
     softmax_ray_object.run()
 
-    softmax_optimization_results = softmax_ray_object.get_optimization_results()
+    optimization_results = softmax_ray_object.get_optimization_results()
+
+    # make experiment folder if it doesn't already exist
+    path.joinpath(
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}{alpha_string}"
+    ).mkdir(parents=True, exist_ok=True)
+
+    filename = path.joinpath(
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}{alpha_string}/"
+        f"SoftmaxPolicy_optimization_results_{inputs.cost_parameter_file}"
+        f"{simulation_params}.csv"
+    )
+    optimization_results.to_csv(filename, index=False)
 
     random_ray_object = GridInference(
         traces=traces,
@@ -251,22 +276,9 @@ if __name__ == "__main__":
 
     random_ray_object.run()
 
-    random_optimization_results = random_ray_object.get_optimization_results()
-
-    optimization_results = pd.concat(
-        [softmax_optimization_results, random_optimization_results]
-    )
-
-    # make experiment folder if it doesn't already exist
-    path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/"
-        f"{experiment_folder}{alpha_string}_by_pid"
-    ).mkdir(parents=True, exist_ok=True)
-
+    optimization_results = random_ray_object.get_optimization_results()
     filename = path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/"
-        f"{experiment_folder}{alpha_string}_by_pid/"
-        f"{inputs.cost_parameter_file}_{inputs.pid}.feather"
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}{alpha_string}/"
+        f"RandomPolicy_optimization_results{simulation_params}.csv"
     )
-
-    optimization_results.reset_index(drop=True).to_feather(filename)
+    optimization_results.to_csv(filename, index=False)
