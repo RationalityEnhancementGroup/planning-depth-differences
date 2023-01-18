@@ -145,7 +145,7 @@ if __name__ == "__main__":
             full_df[full_df["trace_pid"] == pid].reset_index(drop=True).to_feather(
                 cluster_folder.joinpath(
                     f"data/logliks/{inputs.cost_function}/"
-                    f"{inputs.experiment}{alpha_string}/{pid}.feather"
+                    f"{inputs.experiment}{alpha_string}_by_pid/{pid}.feather"
                 )
             )
     else:
