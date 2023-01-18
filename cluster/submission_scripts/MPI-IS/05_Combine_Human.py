@@ -88,9 +88,7 @@ if __name__ == "__main__":
         temp_prior_details[prior] = prior_inputs
 
     with open(
-        Path(__file__)
-        .parents[1]
-        .joinpath(f"parameters/cost/{inputs.cost_function}.txt"),
+        irl_folder.joinpath(f"cluster/parameters/cost/{inputs.cost_function}.txt"),
         "r",
     ) as f:
         full_parameters = f.read().splitlines()
