@@ -5,7 +5,7 @@ arguments = $(filename) -e $(experiment:CogSci2020) -s $(simulated_cost_function
 output = log/$(output_string:out_5).stdout
 error  = log/$(output_string:out_5).stderr
 log   = log/$(output_string:out_5).log
-request_memory = 200000
+request_memory = 32000
 request_cpus = 1
 
 queue
