@@ -6,6 +6,7 @@ output = log/$(output_string:out_M1).stdout
 error  = log/$(output_string:out_M1).stderr
 log   = log/$(output_string:out_M1).log
 request_memory = 200000
+max_materialize = 1850
 request_cpus = 1
 
-queue
+queue pid from $(project_path)/cluster/parameters/pids/$(pid_file).txt
