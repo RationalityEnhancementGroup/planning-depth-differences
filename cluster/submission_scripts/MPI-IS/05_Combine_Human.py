@@ -117,7 +117,8 @@ if __name__ == "__main__":
         curr_file_name = (
             f"data/logliks/{inputs.simulated_cost_function}/"
             f"{inputs.experiment}{alpha_string}/"
-            f"SoftmaxPolicy_{get_param_string(cost_parameters)}.csv"
+            f"SoftmaxPolicy_optimization_results_"
+            f"{get_param_string(cost_parameters)}.csv"
         )
 
         curr_df = pd.read_csv(curr_file_name, index_col=0)
