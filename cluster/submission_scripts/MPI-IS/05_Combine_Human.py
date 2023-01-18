@@ -9,7 +9,11 @@ from pathlib import Path
 import dill as pickle
 import pandas as pd
 import yaml
-from costometer.utils import add_cost_priors_to_temp_priors, recalculate_maps_from_mles
+from costometer.utils import (
+    add_cost_priors_to_temp_priors,
+    get_param_string,
+    recalculate_maps_from_mles,
+)
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -25,6 +29,14 @@ if __name__ == "__main__":
         "--cost-function",
         dest="cost_function",
         help="Cost function YAML file",
+        type=str,
+    )
+    parser.add_argument(
+        "-s",
+        "--simulated-cost-function",
+        dest="simulated_cost_function",
+        help="Simulated cost function YAML file",
+        default="back_dist_depth_eff_forw",
         type=str,
     )
     parser.add_argument(
@@ -58,16 +70,15 @@ if __name__ == "__main__":
     cluster_folder = Path(__file__).resolve().parents[2]
 
     yaml_path = irl_folder.joinpath(
-        f"data/inputs/yamls/cost_functions/{inputs.cost_function}.yaml"
+        f"data/inputs/yamls/cost_functions/{inputs.simulated_cost_function}.yaml"
     )
+    with open(yaml_path, "r") as stream:
+        cost_details = yaml.safe_load(stream)
 
     if inputs.alpha == 1:
         alpha_string = ""
     else:
         alpha_string = f"_{inputs.alpha}"
-
-    with open(yaml_path, "r") as stream:
-        cost_details = yaml.safe_load(stream)
 
     temp_prior_details = {}
     for prior in inputs.temperature_file.split(","):
@@ -76,35 +87,59 @@ if __name__ == "__main__":
             prior_inputs = yaml.safe_load(stream)
         temp_prior_details[prior] = prior_inputs
 
+    with open(
+        Path(__file__)
+        .parents[1]
+        .joinpath(f"parameters/cost/{inputs.cost_function}.txt"),
+        "r",
+    ) as f:
+        full_parameters = f.read().splitlines()
+
     cluster_folder.joinpath(
         f"data/logliks/{inputs.cost_function}/"
         f"{inputs.experiment}{alpha_string}_by_pid/"
     ).mkdir(exist_ok=True, parents=True)
 
-    all_dfs = []
-    for applied_policy in ["RandomPolicy", "SoftmaxPolicy"]:
-        file_pattern = (
-            f"data/logliks/{inputs.cost_function}/"
-            f"{inputs.experiment}{alpha_string}/{applied_policy}*.csv"
+    # load random file
+    random_df = pd.read_csv(
+        f"data/logliks/{inputs.simulated_cost_function}/"
+        f"{inputs.experiment}{alpha_string}/RandomPolicy_optimization_results.csv",
+        index_col=0,
+    )
+    random_df["applied_policy"] = "RandomPolicy"
+
+    # load softmax files
+    softmax_dfs = []
+    for curr_parameters in full_parameters:
+        try:
+            cost_parameters = {
+                cost_parameter_arg: float(arg)
+                for arg, cost_parameter_arg in zip(
+                    curr_parameters.split(","), cost_details["cost_parameter_args"]
+                )
+            }
+        except ValueError as e:
+            raise e
+
+        curr_file_name = (
+            f"data/logliks/{inputs.simulated_cost_function}/"
+            f"{inputs.experiment}{alpha_string}/"
+            f"SoftmaxPolicy_{get_param_string(cost_parameters)}.csv"
         )
 
-        curr_df = pd.concat(
-            [
-                pd.read_csv(file, index_col=0)
-                for file in cluster_folder.glob(file_pattern)
-            ]
-        )
+        curr_df = pd.read_csv(curr_file_name, index_col=0)
 
-        if applied_policy == "SoftmaxPolicy":
-            full_priors = add_cost_priors_to_temp_priors(
-                curr_df, cost_details, temp_prior_details
-            )
-            curr_df = recalculate_maps_from_mles(curr_df, full_priors)
+        curr_df["applied_policy"] = "SoftmaxPolicy"
+        softmax_dfs.append(curr_df)
 
-        curr_df["applied_policy"] = applied_policy
-        all_dfs.append(curr_df)
+    softmax_dfs = pd.concat(softmax_dfs)
 
-    full_df = pd.concat(all_dfs)
+    full_priors = add_cost_priors_to_temp_priors(
+        softmax_dfs, cost_details, temp_prior_details
+    )
+    softmax_dfs = recalculate_maps_from_mles(softmax_dfs, full_priors)
+
+    full_df = pd.concat([softmax_dfs, random_df])
 
     if not inputs.by_pid:
         for pid in full_df["trace_pid"].unique():
