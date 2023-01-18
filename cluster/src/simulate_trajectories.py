@@ -244,7 +244,7 @@ if __name__ == "__main__":
     else:
         filename = path.joinpath(
             f"cluster/data/trajectories/{experiment_setting}"
-            f"/{inputs.cost_function}/{inputs.policy}"
+            f"/{inputs.policy}"
             f"/simulated_agents_{inputs.cost_function}_{parameter_string}"
             f"_{policy_string}.csv"
         )

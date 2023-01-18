@@ -122,6 +122,11 @@ if __name__ == "__main__":
             )
         )
 
+    full_df.reset_index(drop=True).to_feather(
+            f"data/logliks/{inputs.cost_function}/"
+            f"{inputs.experiment}.feather"
+        )
+
     cluster_folder.joinpath(f"data/priors/{inputs.cost_function}").mkdir(
         parents=True, exist_ok=True
     )
