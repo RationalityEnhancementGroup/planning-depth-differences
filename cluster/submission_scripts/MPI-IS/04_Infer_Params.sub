@@ -5,7 +5,7 @@ arguments = $(filename) -e $(experiment) -c $(cost_function:dist_depth_eff_forw)
 output = log/$(output_string:out_4)_$(Process).stdout
 error  = log/$(output_string:out_4)_$(Process).stderr
 log   = log/$(output_string:out_4)_$(Process).log
-request_memory = $(memory:16000)
+request_memory = $(memory:8000)
 max_materialize = 1850
 request_cpus = 1
 
