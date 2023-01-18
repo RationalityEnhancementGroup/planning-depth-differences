@@ -95,11 +95,6 @@ if __name__ == "__main__":
     ) as f:
         full_parameters = f.read().splitlines()
 
-    cluster_folder.joinpath(
-        f"data/logliks/{inputs.cost_function}/"
-        f"{inputs.experiment}{alpha_string}_by_pid/"
-    ).mkdir(exist_ok=True, parents=True)
-
     # load random file
     random_df = pd.read_csv(
         f"data/logliks/{inputs.simulated_cost_function}/"
@@ -142,6 +137,11 @@ if __name__ == "__main__":
     full_df = pd.concat([softmax_dfs, random_df])
 
     if not inputs.by_pid:
+        cluster_folder.joinpath(
+            f"data/logliks/{inputs.cost_function}/"
+            f"{inputs.experiment}{alpha_string}_by_pid/"
+        ).mkdir(exist_ok=True, parents=True)
+
         for pid in full_df["trace_pid"].unique():
             full_df[full_df["trace_pid"] == pid].reset_index(drop=True).to_feather(
                 cluster_folder.joinpath(
@@ -150,6 +150,10 @@ if __name__ == "__main__":
                 )
             )
     else:
+        cluster_folder.joinpath(f"data/logliks/{inputs.cost_function}/").mkdir(
+            exist_ok=True, parents=True
+        )
+
         full_df.reset_index(drop=True).to_feather(
             cluster_folder.joinpath(
                 f"data/logliks/{inputs.cost_function}/"
