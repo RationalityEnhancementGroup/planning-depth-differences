@@ -5,12 +5,12 @@ cost_functions:
 group: false
 include_null: true
 params:
-- ''
-- _0.0
-- _0.25
-- _0.5
-- _0.75
-- _0.9
+- '0.2'
+- 0.2_0.0
+- 0.2_0.25
+- 0.2_0.5
+- 0.2_0.75
+- 0.2_0.9
 preferred_cost: dist_forw_eff
 prior: expon
 sessions:
