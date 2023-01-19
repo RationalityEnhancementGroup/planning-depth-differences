@@ -238,6 +238,7 @@ if __name__ == "__main__":
             else path.joinpath("cluster/data/q_files"),
         },
         policy_parameters={"temp": priors},
+        alpha=inputs.alpha,
         cost_function=cost_function,
         cost_parameters=cost_parameters,
         cost_function_name=cost_function_name,
@@ -270,6 +271,7 @@ if __name__ == "__main__":
                 **args["env_params"],
             },
         },
+        alpha=inputs.alpha,
         cost_function=cost_function,
         cost_parameters={
             cost_parameter_arg: Categorical([cost_parameter_val], [1])
