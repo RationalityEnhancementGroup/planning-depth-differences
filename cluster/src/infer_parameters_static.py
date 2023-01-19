@@ -79,10 +79,16 @@ if __name__ == "__main__":
     parser.add_argument(
         "-a",
         "--alpha",
-        dest="alpha",
-        help="alpha",
-        type=float,
-        default=1,
+        dest="alpha_file",
+        default="full",
+        type=str,
+    )
+    parser.add_argument(
+        "-g",
+        "--gamma-file",
+        dest="gamma_file",
+        default="full",
+        type=str,
     )
 
     inputs = parser.parse_args()
@@ -187,11 +193,6 @@ if __name__ == "__main__":
         )
     }
 
-    if inputs.alpha == 1:
-        alpha_string = ""
-    else:
-        alpha_string = f"_{inputs.alpha}"
-
     cost_parameters = {}
     for arg, cost_parameter_arg in zip(
         inputs.cost_parameter_values.split(","), args["cost_parameter_args"]
@@ -206,19 +207,32 @@ if __name__ == "__main__":
         )
         with open(str(yaml_path), "r") as stream:
             prior_inputs = yaml.safe_load(stream)
-        priors = get_temp_prior(
+        temp_priors = get_temp_prior(
             rv=eval(prior_inputs["rv"]),
             possible_vals=prior_inputs["possible_temps"],
             inverse=prior_inputs["inverse"],
         )
     else:
-        priors = None
+        temp_priors = None
 
     cost_function = eval(args["cost_function"])
     if callable(eval(args["cost_function"])):
         cost_function_name = inputs.cost_function
     else:
         cost_function_name = None
+
+    with open(path.joinpath(
+                f"cluster/parameters/gammas/{inputs.gamma_file}.txt"
+            ), "r") as f:
+        gamma_values = f.read().splitlines()
+
+    with open(path.joinpath(
+                f"cluster/parameters/alphas/{inputs.alpha_file}.txt"
+            ), "r") as f:
+        alpha_values = f.read().splitlines()
+
+    alpha_priors = Categorical(alpha_values, [1/len(alpha_values)] * len(alpha_values))
+    gamma_priors = Categorical(gamma_values, [1/len(gamma_values)] * len(gamma_values))
 
     softmax_ray_object = GridInference(
         traces=traces,
@@ -237,8 +251,7 @@ if __name__ == "__main__":
             if not inputs.exact
             else path.joinpath("cluster/data/q_files"),
         },
-        policy_parameters={"temp": priors},
-        alpha=inputs.alpha,
+        policy_parameters={"temp": temp_priors, "alpha": alpha_priors, "gamma": gamma_priors},
         cost_function=cost_function,
         cost_parameters=cost_parameters,
         cost_function_name=cost_function_name,
@@ -250,11 +263,11 @@ if __name__ == "__main__":
 
     # make experiment folder if it doesn't already exist
     path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}{alpha_string}"
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}"
     ).mkdir(parents=True, exist_ok=True)
 
     filename = path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}{alpha_string}/"
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
         f"SoftmaxPolicy_optimization_results_{get_param_string(cost_parameter_dict)}"
         f"{simulation_params}.csv"
     )
@@ -271,7 +284,6 @@ if __name__ == "__main__":
                 **args["env_params"],
             },
         },
-        alpha=inputs.alpha,
         cost_function=cost_function,
         cost_parameters={
             cost_parameter_arg: Categorical([cost_parameter_val], [1])
@@ -286,7 +298,7 @@ if __name__ == "__main__":
 
     optimization_results = random_ray_object.get_optimization_results()
     filename = path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}{alpha_string}/"
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
         f"RandomPolicy_optimization_results{simulation_params}.csv"
     )
     optimization_results.to_csv(filename, index=False)
