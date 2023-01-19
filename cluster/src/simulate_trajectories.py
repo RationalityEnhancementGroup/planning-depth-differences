@@ -85,8 +85,20 @@ if __name__ == "__main__":
         "-t", "--num-trials", dest="num_trials", help="Num trials", type=int, default=30
     )
     parser.add_argument("-s", "--seed", dest="seed", help="seed", type=int, default=91)
-
+    parser.add_argument(
+        "-a",
+        "--alpha",
+        dest="alpha",
+        help="alpha",
+        type=float,
+        default=1,
+    )
     inputs = parser.parse_args()
+
+    if inputs.alpha == 1:
+        alpha_string = ""
+    else:
+        alpha_string = f"_{inputs.alpha}"
 
     if inputs.cost_function:
         args = get_args_from_yamls(
@@ -123,7 +135,7 @@ if __name__ == "__main__":
             cost_function_name = None
 
         q_dictionary = load_q_file(
-            experiment_setting,
+            experiment_setting + alpha_string,
             cost_function=cost_function,
             cost_function_name=cost_function_name,
             cost_params=cost_parameters,
@@ -149,7 +161,7 @@ if __name__ == "__main__":
 
     # make trajectory folders if they don't already exist
     path.joinpath(
-        f"cluster/data/trajectories/{experiment_setting}/{inputs.policy}/"
+        f"cluster/data/trajectories/{experiment_setting}{alpha_string}/{inputs.policy}/"
     ).mkdir(parents=True, exist_ok=True)
 
     if "structure" in args:
@@ -238,12 +250,12 @@ if __name__ == "__main__":
 
     if inputs.cost_function is None:
         filename = path.joinpath(
-            f"cluster/data/trajectories/{experiment_setting}/{inputs.policy}"
+            f"cluster/data/trajectories/{experiment_setting}{alpha_string}/{inputs.policy}"
             f"/simulated_agents_{policy_string}.csv"
         )
     else:
         filename = path.joinpath(
-            f"cluster/data/trajectories/{experiment_setting}"
+            f"cluster/data/trajectories/{experiment_setting}{alpha_string}"
             f"/{inputs.policy}"
             f"/simulated_agents_{inputs.cost_function}_{parameter_string}"
             f"_{policy_string}.csv"
