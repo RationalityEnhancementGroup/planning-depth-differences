@@ -240,7 +240,7 @@ if __name__ == "__main__":
     parameter_string = get_param_string(cost_parameters)
     policy_params = []
     for key, param in sorted(policy_kwargs.items()):
-        if isinstance(param, dict):
+        if isinstance(param, dict) or callable(param):
             pass
         elif isinstance(param, str):
             policy_params.append(param)
