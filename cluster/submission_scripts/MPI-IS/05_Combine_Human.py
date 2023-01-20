@@ -63,6 +63,14 @@ if __name__ == "__main__":
         type=float,
         default=1,
     )
+    parser.add_argument(
+        "-g",
+        "--gamma",
+        dest="gamma",
+        help="gamma",
+        type=float,
+        default=1,
+    )
     inputs = parser.parse_args()
 
     # hard coded for my folder structure
@@ -78,7 +86,12 @@ if __name__ == "__main__":
     if inputs.alpha == 1:
         alpha_string = ""
     else:
-        alpha_string = f"_{inputs.alpha}"
+        alpha_string = f"_{inputs.alpha:.2f}"
+
+    if inputs.gamma == 1:
+        gamma_string = ""
+    else:
+        gamma_string = f"{inputs.gamma:.3f}"
 
     temp_prior_details = {}
     for prior in inputs.temperature_file.split(","):
@@ -96,7 +109,7 @@ if __name__ == "__main__":
     # load random file
     random_df = pd.read_csv(
         f"data/logliks/{inputs.simulated_cost_function}/"
-        f"{inputs.experiment}{alpha_string}/RandomPolicy_optimization_results.csv",
+        f"{inputs.experiment}{gamma_string}{alpha_string}/RandomPolicy_optimization_results.csv",
         index_col=0,
     )
     random_df["applied_policy"] = "RandomPolicy"
@@ -116,7 +129,7 @@ if __name__ == "__main__":
 
         curr_file_name = (
             f"data/logliks/{inputs.simulated_cost_function}/"
-            f"{inputs.experiment}{alpha_string}/"
+            f"{inputs.experiment}{gamma_string}{alpha_string}/"
             f"SoftmaxPolicy_optimization_results_"
             f"{get_param_string(cost_parameters)}.csv"
         )
@@ -138,14 +151,14 @@ if __name__ == "__main__":
     if not inputs.by_pid:
         cluster_folder.joinpath(
             f"data/logliks/{inputs.cost_function}/"
-            f"{inputs.experiment}{alpha_string}_by_pid/"
+            f"{inputs.experiment}{gamma_string}{alpha_string}_by_pid/"
         ).mkdir(exist_ok=True, parents=True)
 
         for pid in full_df["trace_pid"].unique():
             full_df[full_df["trace_pid"] == pid].reset_index(drop=True).to_feather(
                 cluster_folder.joinpath(
                     f"data/logliks/{inputs.cost_function}/"
-                    f"{inputs.experiment}{alpha_string}_by_pid/{pid}.feather"
+                    f"{inputs.experiment}{gamma_string}{alpha_string}_by_pid/{pid}.feather"
                 )
             )
     else:
@@ -156,7 +169,7 @@ if __name__ == "__main__":
         full_df.reset_index(drop=True).to_feather(
             cluster_folder.joinpath(
                 f"data/logliks/{inputs.cost_function}/"
-                f"{inputs.experiment}{alpha_string}.feather"
+                f"{inputs.experiment}{gamma_string}{alpha_string}.feather"
             )
         )
 
@@ -169,7 +182,7 @@ if __name__ == "__main__":
         open(
             cluster_folder.joinpath(
                 f"data/priors/{inputs.cost_function}/"
-                f"{inputs.experiment}{alpha_string}.pkl"
+                f"{inputs.experiment}{gamma_string}{alpha_string}.pkl"
             ),
             "wb",
         ),
