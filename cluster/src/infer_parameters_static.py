@@ -77,20 +77,21 @@ if __name__ == "__main__":
         type=str,
     )
     parser.add_argument(
-        "-a",
-        "--alpha",
-        dest="alpha_file",
-        default="full",
-        type=str,
+        "-g",
+        "--gamma",
+        dest="gamma",
+        help="gamma",
+        type=float,
+        default=1,
     )
     parser.add_argument(
-        "-g",
-        "--gamma-file",
-        dest="gamma_file",
-        default="full",
-        type=str,
+        "-a",
+        "--alpha",
+        dest="alpha",
+        help="alpha",
+        type=float,
+        default=1,
     )
-
     inputs = parser.parse_args()
 
     if "*" in inputs.experiment or ".csv" in inputs.experiment:
@@ -221,18 +222,8 @@ if __name__ == "__main__":
     else:
         cost_function_name = None
 
-    with open(path.joinpath(
-                f"cluster/parameters/gammas/{inputs.gamma_file}.txt"
-            ), "r") as f:
-        gamma_values = f.read().splitlines()
-
-    with open(path.joinpath(
-                f"cluster/parameters/alphas/{inputs.alpha_file}.txt"
-            ), "r") as f:
-        alpha_values = f.read().splitlines()
-
-    alpha_priors = Categorical(alpha_values, [1/len(alpha_values)] * len(alpha_values))
-    gamma_priors = Categorical(gamma_values, [1/len(gamma_values)] * len(gamma_values))
+    alpha_priors = Categorical([inputs.alpha], [1])
+    gamma_priors = Categorical([inputs.gamma], [1])
 
     softmax_ray_object = GridInference(
         traces=traces,
