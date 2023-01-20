@@ -153,7 +153,7 @@ if __name__ == "__main__":
         type=str,
     )
     parser.add_argument(
-        "-a",
+        "-g",
         "--gamma",
         dest="gamma",
         help="gamma",
