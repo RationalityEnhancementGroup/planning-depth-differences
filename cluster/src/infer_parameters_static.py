@@ -222,6 +222,16 @@ if __name__ == "__main__":
     else:
         cost_function_name = None
 
+    if inputs.alpha == 1:
+        alpha_string = ""
+    else:
+        alpha_string = f"_{inputs.alpha:.2f}"
+
+    if inputs.gamma == 1:
+        gamma_string = ""
+    else:
+        gamma_string = f"{inputs.gamma:.3f}"
+
     alpha_priors = Categorical([inputs.alpha], [1])
     gamma_priors = Categorical([inputs.gamma], [1])
 
@@ -255,10 +265,12 @@ if __name__ == "__main__":
     # make experiment folder if it doesn't already exist
     path.joinpath(
         f"cluster/data/logliks/{cost_function_name}/{experiment_folder}"
+        f"{gamma_string}{alpha_string}/"
     ).mkdir(parents=True, exist_ok=True)
 
     filename = path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}"
+        f"{gamma_string}{alpha_string}/"
         f"SoftmaxPolicy_optimization_results_{get_param_string(cost_parameter_dict)}"
         f"{simulation_params}.csv"
     )
@@ -289,7 +301,8 @@ if __name__ == "__main__":
 
     optimization_results = random_ray_object.get_optimization_results()
     filename = path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}"
+        f"{gamma_string}{alpha_string}/"
         f"RandomPolicy_optimization_results{simulation_params}.csv"
     )
     optimization_results.to_csv(filename, index=False)
