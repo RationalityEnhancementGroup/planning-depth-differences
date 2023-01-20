@@ -161,7 +161,7 @@ if __name__ == "__main__":
         default=1,
     )
     parser.add_argument(
-        "-g",
+        "-a",
         "--alpha",
         dest="alpha",
         help="alpha",
