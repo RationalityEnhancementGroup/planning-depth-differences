@@ -97,7 +97,7 @@ def get_state_action_values(
         if gamma == 1:
             gamma_string = ""
         else:
-            gamma_string = f"{gamma:.2f}"
+            gamma_string = f"{gamma:.3f}"
 
         path.joinpath(
             f"preferences/{experiment_setting}{gamma_string}{alpha_string}/{cost_function_name}/"
