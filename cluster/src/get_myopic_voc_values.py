@@ -10,7 +10,7 @@ from typing import Any, Callable, Dict, Union
 import blosc
 import dill as pickle
 import numpy as np
-from cluster_utils import create_test_env, get_args_from_yamls
+from cluster_utils import create_test_env, get_args_from_yamls,adjust_ground_truth,adjust_state
 from costometer.utils import get_param_string
 from mouselab.cost_functions import *  # noqa: F401, F403
 from mouselab.envs.registry import registry
@@ -18,7 +18,6 @@ from mouselab.graph_utils import get_structure_properties
 from mouselab.metacontroller.mouselab_env import MetaControllerMouselab
 from mouselab.metacontroller.vanilla_BMPS import load_feature_file
 from mouselab.mouselab import MouselabEnv
-
 
 def get_state_action_values(
     experiment_setting: str,
@@ -29,8 +28,9 @@ def get_state_action_values(
     structure: Dict[Any, Any] = None,
     path: Union[str, bytes, os.PathLike] = None,
     env_params: Dict[Any, Any] = None,
-    alpha: int = 1,
-) -> Dict[Any, Any]:
+    alpha: float = 1,
+    gamma: float = 1,
+) -> Callable:
     """
     Gets BMPS weights for different cost functions
 
@@ -42,6 +42,7 @@ def get_state_action_values(
     :param path:
     :param env_params
     :param alpha
+    :param gamma
     :return: info dictionary which contains q_dictionary, \
     function additionally saves this dictionary into data/q_files
     """
@@ -58,10 +59,10 @@ def get_state_action_values(
     )
 
     (
-        optimization_kwargs,
+        _,
         features,
-        additional_kwargs,
-        secondary_variables,
+        _,
+        _,
     ) = load_feature_file(
         bmps_file, path=Path(__file__).parents[1].joinpath("parameters/bmps/")
     )
@@ -77,6 +78,9 @@ def get_state_action_values(
         **env_params,
     )
 
+    env.ground_truth = adjust_ground_truth(env.ground_truth, alpha, gamma, env.mdp_graph.nodes.data("depth"))
+    env._state = adjust_state(env._state, alpha, gamma, env.mdp_graph.nodes.data("depth"))
+
     Q = lambda state, action: np.dot(
         env.action_features(state=state, action=action), W
     )  # noqa : E731
@@ -88,13 +92,19 @@ def get_state_action_values(
         if alpha == 1:
             alpha_string = ""
         else:
-            alpha_string = f"_{alpha}"
+            alpha_string = f"_{alpha:.2f}"
+
+        if gamma == 1:
+            gamma_string = ""
+        else:
+            gamma_string = f"{gamma:.2f}"
+
         path.joinpath(
-            f"preferences/{experiment_setting}{alpha_string}/{cost_function_name}/"
+            f"preferences/{experiment_setting}{gamma_string}{alpha_string}/{cost_function_name}/"
         ).mkdir(parents=True, exist_ok=True)
         filename = path.joinpath(
-            f"preferences/{experiment_setting}{alpha_string}/{cost_function_name}/"
-            f"BMPS_{experiment_setting}{alpha_string}_{parameter_string}.dat"  # noqa: E501
+            f"preferences/{experiment_setting}{gamma_string}{alpha_string}/{cost_function_name}/"
+            f"BMPS_{experiment_setting}{gamma_string}{alpha_string}_{parameter_string}.dat"  # noqa: E501
         )
 
         pickled_data = pickle.dumps(info)
@@ -144,6 +154,14 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-a",
+        "--gamma",
+        dest="gamma",
+        help="gamma",
+        type=float,
+        default=1,
+    )
+    parser.add_argument(
+        "-g",
         "--alpha",
         dest="alpha",
         help="alpha",
@@ -210,7 +228,8 @@ if __name__ == "__main__":
             structure=structure_dicts,
             cost_function=cost_function,
             cost_function_name=cost_function_name,
-            env_params={**args["env_params"], "power_utility": inputs.alpha},
+            env_params=args["env_params"],
             alpha=inputs.alpha,
+            gamma=inputs.gamma,
             path=Path(__file__).parents[1].joinpath("data/bmps"),
         )
