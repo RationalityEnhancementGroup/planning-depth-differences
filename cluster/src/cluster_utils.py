@@ -270,7 +270,7 @@ def adjust_ground_truth(ground_truth, alpha, gamma, depth_view):
     [round(np.sign(ground_truth[node]) * (np.abs(ground_truth[node]) ** alpha) * gamma ** (depth - 1),3) if depth != 0 else 0 for node, depth in
     depth_view])
 
-def adjust_state(state, alpha, gamma, depth_view):
+def adjust_state(state, alpha, gamma, depth_view, include_last_action=False):
     new_state = []
     for node, depth in depth_view:
         if hasattr(state[node], 'sample'):
@@ -279,6 +279,8 @@ def adjust_state(state, alpha, gamma, depth_view):
         else:
             val = round(np.sign(state[node]) * (np.abs(state[node]) ** alpha) * gamma ** (depth - 1), 3)
             new_state.append(val)
+    if include_last_action:
+        new_state.append(state[-1])
     return tuple(new_state)
 
 def get_simulated_trajectories(
