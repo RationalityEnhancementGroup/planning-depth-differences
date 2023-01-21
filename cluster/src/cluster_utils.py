@@ -12,7 +12,6 @@ from costometer.utils import (
 from mouselab.distributions import Categorical
 from mouselab.envs.registry import register
 from mouselab.envs.reward_settings import high_increasing_reward
-import numpy as np
 
 def create_test_env(name) -> None:
     """
@@ -264,24 +263,6 @@ def get_human_trajectories(
     )
 
     return traces
-
-def adjust_ground_truth(ground_truth, alpha, gamma, depth_view):
-    return np.asarray(
-    [round(np.sign(ground_truth[node]) * (np.abs(ground_truth[node]) ** alpha) * gamma ** (depth - 1),3) if depth != 0 else 0 for node, depth in
-    depth_view])
-
-def adjust_state(state, alpha, gamma, depth_view, include_last_action=False):
-    new_state = []
-    for node, depth in depth_view:
-        if hasattr(state[node], 'sample'):
-            vals = [round(np.sign(val) * (np.abs(val) ** alpha) * gamma ** (depth - 1), 3) for val in state[node].vals]
-            new_state.append(Categorical(vals, state[node].probs))
-        else:
-            val = round(np.sign(state[node]) * (np.abs(state[node]) ** alpha) * gamma ** (depth - 1), 3)
-            new_state.append(val)
-    if include_last_action:
-        new_state.append(state[-1])
-    return tuple(new_state)
 
 def get_simulated_trajectories(
     file_pattern: str,

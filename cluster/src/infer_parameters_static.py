@@ -20,7 +20,7 @@ from cluster_utils import (
 )
 from costometer.agents.vanilla import SymmetricMouselabParticipant
 from costometer.inference import GridInference
-from costometer.utils import get_param_string, get_temp_prior
+from costometer.utils import get_param_string, get_temp_prior, adjust_state, adjust_ground_truth
 from mouselab.cost_functions import *  # noqa
 from mouselab.distributions import Categorical
 from mouselab.envs.registry import registry

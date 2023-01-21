@@ -10,8 +10,8 @@ from typing import Any, Callable, Dict, Union
 import blosc
 import dill as pickle
 import numpy as np
-from cluster_utils import create_test_env, get_args_from_yamls,adjust_ground_truth,adjust_state
-from costometer.utils import get_param_string
+from cluster_utils import create_test_env, get_args_from_yamls
+from costometer.utils import get_param_string, adjust_state, adjust_ground_truth
 from mouselab.cost_functions import *  # noqa: F401, F403
 from mouselab.envs.registry import registry
 from mouselab.graph_utils import get_structure_properties
