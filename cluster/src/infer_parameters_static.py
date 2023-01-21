@@ -7,6 +7,7 @@ import json
 from argparse import ArgumentParser
 from pathlib import Path
 
+from mouselab.mouselab import MouselabEnv
 import numpy as np  # noqa, for the pickled Q value function
 import yaml
 from cluster_utils import (
@@ -14,6 +15,8 @@ from cluster_utils import (
     get_args_from_yamls,
     get_human_trajectories,
     get_simulated_trajectories,
+    adjust_ground_truth,
+    adjust_state,
 )
 from costometer.agents.vanilla import SymmetricMouselabParticipant
 from costometer.inference import GridInference
@@ -178,6 +181,11 @@ if __name__ == "__main__":
             simulation_params = "_" + inputs.participant_subset_file
         else:
             simulation_params = ""
+
+
+    for trace in traces:
+        trace["states"] = [[adjust_state(state, inputs.alpha, inputs.gamma, MouselabEnv.new_symmetric_registered(args["experiment_setting"]).mdp_graph.nodes.data("depth"), include_last_action=args["env_params"]["include_last_action"]) for state in trial] for trial in trace["states"]]
+        trace["ground_truth"] = [adjust_ground_truth(ground_truth, inputs.alpha, inputs.gamma, MouselabEnv.new_symmetric_registered(args["experiment_setting"]).mdp_graph.nodes.data("depth")) for ground_truth in trace["ground_truth"]]
 
     # add asterisks for missing param values
     num_not_included_params = len(args["cost_parameter_args"]) - len(
