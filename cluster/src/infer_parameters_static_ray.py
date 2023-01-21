@@ -175,8 +175,9 @@ if __name__ == "__main__":
             policy_parameters=prior_inputs["policy_parameters"],
             cost_function=cost_function,
             cost_parameters=prior_inputs["cost_parameters"],
-            local_mode=False,
-            optimization_settings={"verbose":0, "num_samples": 1000, "search_alg": HyperOptSearch(), "scheduler": ASHAScheduler()},
+            local_mode=True,
+            optimization_settings={"verbose":0, "num_samples": 2, "search_alg": HyperOptSearch(), "scheduler": ASHAScheduler()},
+            num_cpus=4,
         )
 
         softmax_ray_object.run()
@@ -203,8 +204,9 @@ if __name__ == "__main__":
             policy_parameters=prior_inputs["policy_parameters"],
             cost_function=cost_function,
             cost_parameters=prior_inputs["cost_parameters"],
-            local_mode=False,
-            optimization_settings={"verbose":0, "num_samples": 1000, "search_alg": HyperOptSearch(), "scheduler": ASHAScheduler()},
+            local_mode=True,
+            optimization_settings={"verbose":0, "num_samples": 2, "search_alg": HyperOptSearch(), "scheduler": ASHAScheduler()},
+            num_cpus=4,
         )
 
         softmax_ray_object.run()
