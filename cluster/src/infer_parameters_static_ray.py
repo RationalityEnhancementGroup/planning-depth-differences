@@ -238,19 +238,16 @@ if __name__ == "__main__":
     optimization_results["Model Name"] = "Null"
     full_optimzation_df.append(optimization_results)
 
-    # print(softmax_ray_object.function_to_optimize(
-    #             softmax_ray_object.get_best_parameters(), traces=traces, optimize=False
-    #         ))
     full_optimzation_df = pd.concat(full_optimzation_df)
 
     # make experiment folder if it doesn't already exist
     path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}"
+        f"cluster/data/logliks_ray/{cost_function_name}/{experiment_folder}"
     ).mkdir(parents=True, exist_ok=True)
 
     filename = path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
+        f"cluster/data/logliks_ray/{cost_function_name}/{experiment_folder}/"
         f"SoftmaxPolicy_optimization_results"
-        f"{simulation_params}.csv"
+        f"{simulation_params}_{inputs.pid}.csv"
     )
     full_optimzation_df.to_csv(filename, index=False)
