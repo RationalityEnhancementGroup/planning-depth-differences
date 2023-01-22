@@ -193,7 +193,7 @@ if __name__ == "__main__":
             cost_function=cost_function,
             cost_parameters=prior_inputs["cost_parameters"],
             optimization_settings={"verbose": 0, "max_evals": 1000,
-                                   "early_stop_fn": no_progress_loss(iteration_stop_count=500, percent_increase=0.0)},
+                                   "early_stop_fn": no_progress_loss(iteration_stop_count=500, percent_increase=0.0)})
         softmax_opt_object.run()
         all_results[model_name] = softmax_opt_object.get_optimization_results()
 
