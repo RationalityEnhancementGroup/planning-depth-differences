@@ -1,0 +1,16 @@
+sessions:
+        - methods_main_transfer
+post_quizzes:
+        - 'mouselab-quiz-post_Q0'
+        - 'mouselab-quiz-post_Q1'
+        - 'mouselab-quiz-post_Q2'
+        - 'mouselab-quiz-post_Q3'
+cost_functions:
+        - back_dist_depth_eff_forw
+group: false
+prior : 'expon'
+block: ['test_begin', 'test_end']
+include_null : true
+preferred_cost: 'back_dist_depth_eff_forw'
+title_extras: ''
+simulated: False
