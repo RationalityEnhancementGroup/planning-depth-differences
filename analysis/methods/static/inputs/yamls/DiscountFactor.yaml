@@ -6,11 +6,11 @@ group: false
 include_null: true
 params:
 - ''
-- _0.0
+- _0.00
 - _0.25
-- _0.5
+- _0.50
 - _0.75
-- _0.9
+- _0.90
 preferred_cost: dist_forw_eff
 prior: expon
 sessions:
