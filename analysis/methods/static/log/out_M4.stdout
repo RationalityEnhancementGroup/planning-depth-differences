@@ -33,7 +33,6 @@ Forward Search Bonus Only                                     49297.32468
 Null (Given Costs)                                            49547.02319
 Backward and Forward Search Bonus                             50042.29630
 Backward Search Bonus Only                                    50297.14306
-Null                                                          55341.45901
 Name: bic, dtype: float64
 Log Bayes factor approximation, difference between top two models
 160.7310003799248
