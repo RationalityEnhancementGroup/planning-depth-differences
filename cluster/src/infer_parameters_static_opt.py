@@ -2,12 +2,13 @@
 This scripts calculates the probability of a trace coming from SoftmaxPolicy agents \
 (who are not learning!)  given some cost function, values of cost weights and \
 temperatures or a RandomPolicy agent.
-It uses Ray.
+It uses hyperopt.
 """
 import json
 from argparse import ArgumentParser
 from pathlib import Path
-import pandas as pd
+import dill as pickle
+import time
 
 from more_itertools import powerset
 import yaml
@@ -17,23 +18,16 @@ from cluster_utils import (
     get_simulated_trajectories,
 )
 from costometer.agents.vanilla import SymmetricMouselabParticipant
-from costometer.inference import CostRayInference, GridInference
+from costometer.inference import HyperoptOptimizerInference, GridInference
 from mouselab.cost_functions import *  # noqa
 from mouselab.distributions import Categorical
 from mouselab.graph_utils import get_structure_properties
 from mouselab.policies import RandomPolicy, SoftmaxPolicy
 from scipy import stats  # noqa
 from get_myopic_voc_values import get_state_action_values
-
-from ray.tune.suggest.hyperopt import HyperOptSearch
-from ray.tune.schedulers import ASHAScheduler
+from hyperopt.early_stop import no_progress_loss
 
 if __name__ == "__main__":
-    f"""# noqa
-    Examples:
-    python infer_parameters_static_ray.py -e CogSciPoster -c linear_depth -t test -v test
-    python infer_parameters_static_ray.py -e high_increasing/RandomPolicy/simulated_agents_* -c linear_depth -t test -v test
-    """
     # get arguments
     parser = ArgumentParser()
     parser.add_argument(
@@ -154,12 +148,11 @@ if __name__ == "__main__":
         alpha=a,
         gamma=g)
 
-    full_optimzation_df = []
+    all_results = {}
     for subset in powerset(args["constant_values"]):
         model_name = eval(args["model_name"])[subset]
-        import time
-        start=time.time()
-        softmax_ray_object = CostRayInference(
+
+        softmax_opt_object = HyperoptOptimizerInference(
             traces=traces,
             participant_class=SymmetricMouselabParticipant,
             participant_kwargs={
@@ -175,18 +168,13 @@ if __name__ == "__main__":
             policy_parameters=prior_inputs["policy_parameters"],
             cost_function=cost_function,
             cost_parameters=prior_inputs["cost_parameters"],
-            local_mode=True,
-            optimization_settings={"verbose":0, "num_samples": 2, "search_alg": HyperOptSearch(), "scheduler": ASHAScheduler()},
-            num_cpus=4,
+            optimization_settings={"verbose":1,"max_evals":1000,"early_stop_fn": no_progress_loss(iteration_stop_count=500, percent_increase=0.0)},
         )
 
-        softmax_ray_object.run()
-        optimization_results = softmax_ray_object.get_optimization_results()
-        optimization_results["Model Name"] = model_name + " with alpha, gmma"
-        full_optimzation_df.append(optimization_results)
-        print(time.time()-start)
-        start=time.time()
-        softmax_ray_object = CostRayInference(
+        softmax_opt_object.run()
+        all_results[model_name + " with alpha, gamma"] = softmax_opt_object.get_optimization_results()
+
+        softmax_opt_object = HyperoptOptimizerInference(
             traces=traces,
             participant_class=SymmetricMouselabParticipant,
             participant_kwargs={
@@ -204,17 +192,14 @@ if __name__ == "__main__":
             policy_parameters=prior_inputs["policy_parameters"],
             cost_function=cost_function,
             cost_parameters=prior_inputs["cost_parameters"],
-            local_mode=True,
-            optimization_settings={"verbose":0, "num_samples": 2, "search_alg": HyperOptSearch(), "scheduler": ASHAScheduler()},
-            num_cpus=4,
+            optimization_settings={"verbose": 1, "max_evals": 1000,
+                                   "early_stop_fn": no_progress_loss(iteration_stop_count=500, percent_increase=0.0)},
         )
 
-        softmax_ray_object.run()
-        optimization_results = softmax_ray_object.get_optimization_results()
-        optimization_results["Model Name"] = model_name
-        full_optimzation_df.append(optimization_results)
-        print(time.time() - start)
-    random_ray_object = GridInference(
+        softmax_opt_object.run()
+        all_results[model_name] = softmax_opt_object.get_optimization_results()
+
+    random_opt_object = GridInference(
         traces=traces,
         participant_class=SymmetricMouselabParticipant,
         participant_kwargs={
@@ -235,21 +220,19 @@ if __name__ == "__main__":
         cost_function_name=cost_function_name,
     )
 
-    random_ray_object.run()
-    optimization_results = random_ray_object.get_optimization_results()
-    optimization_results["Model Name"] = "Null"
-    full_optimzation_df.append(optimization_results)
-
-    full_optimzation_df = pd.concat(full_optimzation_df)
+    random_opt_object.run()
+    optimization_results = random_opt_object.get_output_df()
+    all_results["Null"] = optimization_results
 
     # make experiment folder if it doesn't already exist
     path.joinpath(
-        f"cluster/data/logliks_ray/{cost_function_name}/{experiment_folder}"
+        f"cluster/data/logliks_opt/{cost_function_name}/{experiment_folder}"
     ).mkdir(parents=True, exist_ok=True)
 
     filename = path.joinpath(
-        f"cluster/data/logliks_ray/{cost_function_name}/{experiment_folder}/"
+        f"cluster/data/logliks_opt/{cost_function_name}/{experiment_folder}/"
         f"SoftmaxPolicy_optimization_results"
-        f"{simulation_params}_{inputs.pid}.csv"
+        f"{simulation_params}_{inputs.pid}_{time.strftime('%Y%m%d-%H%M%S')}.csv"
     )
-    full_optimzation_df.to_csv(filename, index=False)
+    with open(filename, "wb") as f:
+        pickle.dump(all_results,f)

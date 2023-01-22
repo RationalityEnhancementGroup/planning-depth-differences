@@ -1,26 +1,26 @@
 cost_parameters:
   back_added_cost:
-    search_space: "tune.quniform(-10, 0, 1)"
+    search_space: "hp.quniform('back_added_cost', -10, 0, 1)"
     prior: "lambda val : stats.uniform.logpdf(val, -10, 10)"
   depth_cost_weight:
-    search_space: "tune.quniform(-10, 10, 1)"
+    search_space: "hp.quniform('depth_cost_weight', -10, 10, 1)"
     prior: "lambda val : stats.uniform.logpdf(val, -10, 20)"
   distance_multiplier:
-    search_space: "tune.quniform(0, 10, 1)"
+    search_space: "hp.quniform('distance_multiplier', 0, 10, 1)"
     prior: "lambda val : stats.uniform.logpdf(val, 0, 10)"
   forw_added_cost:
-    search_space: "tune.quniform(-10, 0, 1)"
+    search_space: "hp.quniform('forw_added_cost', -10, 0, 1)"
     prior: "lambda val : stats.uniform.logpdf(val, -10, 10)"
   given_cost:
-    search_space: "tune.quniform(-10, 10, 1)"
+    search_space: "hp.quniform('given_cost', -10, 10, 1)"
     prior: "lambda val : stats.uniform.logpdf(val, -10, 20)"
 policy_parameters:
   alpha:
-    search_space: "tune.quniform(0, 1, 0.05)"
+    search_space: "hp.quniform('alpha', 0, 1, 0.05)"
     prior: "lambda val : stats.uniform.logpdf(val, 0, 1)"
   gamma:
-    search_space: "tune.quniform(0, 1, 0.05)"
+    search_space: "hp.quniform('gamma', 0, 1, 0.05)"
     prior: "lambda val : stats.uniform.logpdf(val, 0, 1)"
   temp:
-    search_space: "tune.qloguniform(0.1, 100, .1)"
+    search_space: "hp.qloguniform('temp', 0.1, 100, .1)"
     prior: "lambda val : stats.expon.logpdf(val, scale=25, loc=0.1)" #TODO: Check
