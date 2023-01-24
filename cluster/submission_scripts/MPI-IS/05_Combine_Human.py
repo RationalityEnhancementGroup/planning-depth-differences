@@ -48,28 +48,27 @@ if __name__ == "__main__":
         default="expon,uniform",
     )
     parser.add_argument(
+        "-d",
+        "--participant-subset-file",
+        dest="participant_subset_file",
+        default=None,
+        type=str,
+    )
+    parser.add_argument(
+        "-k",
+        "--block",
+        dest="block",
+        default=None,
+        help="Block",
+        type=str,
+    )
+    parser.add_argument(
         "-p",
         "--by_pid",
         dest="by_pid",
         help="If included, by pid.",
         default=True,
         action="store_false",
-    )
-    parser.add_argument(
-        "-a",
-        "--alpha",
-        dest="alpha",
-        help="alpha",
-        type=float,
-        default=1,
-    )
-    parser.add_argument(
-        "-g",
-        "--gamma",
-        dest="gamma",
-        help="gamma",
-        type=float,
-        default=1,
     )
     inputs = parser.parse_args()
 
@@ -82,16 +81,6 @@ if __name__ == "__main__":
     )
     with open(yaml_path, "r") as stream:
         cost_details = yaml.safe_load(stream)
-
-    if inputs.alpha == 1:
-        alpha_string = ""
-    else:
-        alpha_string = f"_{inputs.alpha:.2f}"
-
-    if inputs.gamma == 1:
-        gamma_string = ""
-    else:
-        gamma_string = f"{inputs.gamma:.3f}"
 
     temp_prior_details = {}
     for prior in inputs.temperature_file.split(","):
@@ -106,10 +95,18 @@ if __name__ == "__main__":
     ) as f:
         full_parameters = f.read().splitlines()
 
+    if inputs.participant_subset_file:
+        simulation_params = "_" + inputs.participant_subset_file
+    else:
+        simulation_params = ""
+
+    if inputs.block != "test":
+        simulation_params = simulation_params + "_" + inputs.block
+
     # load random file
     random_df = pd.read_csv(
         f"data/logliks/{inputs.simulated_cost_function}/"
-        f"{inputs.experiment}{gamma_string}{alpha_string}/RandomPolicy_optimization_results.csv",
+        f"{inputs.experiment}/RandomPolicy_optimization_results{simulation_params}.csv",
         index_col=0,
     )
     random_df["applied_policy"] = "RandomPolicy"
@@ -129,9 +126,9 @@ if __name__ == "__main__":
 
         curr_file_name = (
             f"data/logliks/{inputs.simulated_cost_function}/"
-            f"{inputs.experiment}{gamma_string}{alpha_string}/"
+            f"{inputs.experiment}/"
             f"SoftmaxPolicy_optimization_results_"
-            f"{get_param_string(cost_parameters)}.csv"
+            f"{get_param_string(cost_parameters)}{simulation_params}.csv"
         )
 
         curr_df = pd.read_csv(curr_file_name, index_col=0)
@@ -142,7 +139,10 @@ if __name__ == "__main__":
     softmax_dfs = pd.concat(softmax_dfs)
 
     full_priors = add_cost_priors_to_temp_priors(
-        softmax_dfs, cost_details, temp_prior_details
+        softmax_dfs,
+        cost_details,
+        temp_prior_details,
+        additional_params=["alpha", "gamma"],
     )
     softmax_dfs = recalculate_maps_from_mles(softmax_dfs, full_priors)
 
@@ -151,14 +151,14 @@ if __name__ == "__main__":
     if not inputs.by_pid:
         cluster_folder.joinpath(
             f"data/logliks/{inputs.cost_function}/"
-            f"{inputs.experiment}{gamma_string}{alpha_string}_by_pid/"
+            f"{inputs.experiment}{simulation_params}_by_pid/"
         ).mkdir(exist_ok=True, parents=True)
 
         for pid in full_df["trace_pid"].unique():
             full_df[full_df["trace_pid"] == pid].reset_index(drop=True).to_feather(
                 cluster_folder.joinpath(
                     f"data/logliks/{inputs.cost_function}/"
-                    f"{inputs.experiment}{gamma_string}{alpha_string}_by_pid/{pid}.feather"
+                    f"{inputs.experiment}{simulation_params}_by_pid/{pid}.feather"
                 )
             )
     else:
@@ -169,10 +169,9 @@ if __name__ == "__main__":
         full_df.reset_index(drop=True).to_feather(
             cluster_folder.joinpath(
                 f"data/logliks/{inputs.cost_function}/"
-                f"{inputs.experiment}{gamma_string}{alpha_string}.feather"
+                f"{inputs.experiment}{simulation_params}.feather"
             )
         )
-
 
     cluster_folder.joinpath(f"data/priors/{inputs.cost_function}").mkdir(
         parents=True, exist_ok=True
@@ -182,7 +181,7 @@ if __name__ == "__main__":
         open(
             cluster_folder.joinpath(
                 f"data/priors/{inputs.cost_function}/"
-                f"{inputs.experiment}{gamma_string}{alpha_string}.pkl"
+                f"{inputs.experiment}{simulation_params}.pkl"
             ),
             "wb",
         ),
