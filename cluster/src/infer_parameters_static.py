@@ -16,6 +16,7 @@ from cluster_utils import (
     get_human_trajectories,
     get_simulated_trajectories,
 )
+from get_myopic_voc_values import get_state_action_values
 from costometer.agents.vanilla import SymmetricMouselabParticipant
 from costometer.inference import GridInference
 from costometer.utils import get_param_string, get_temp_prior, adjust_state, adjust_ground_truth
@@ -92,6 +93,14 @@ if __name__ == "__main__":
         help="gamma_file",
         type=str,
         default=1,
+    )
+    parser.add_argument(
+        "-b",
+        "--bmps-file",
+        dest="bmps_file",
+        default="Myopic_VOC",
+        help="BMPS Features and Optimization",
+        type=str,
     )
     parser.add_argument(
         "-a",
@@ -257,8 +266,16 @@ if __name__ == "__main__":
 
     gamma_priors = Categorical(gamma_values, [1 / len(gamma_values)] * len(gamma_values))
 
-    alpha_priors = Categorical([inputs.alpha], [1])
-    gamma_priors = Categorical([inputs.gamma], [1])
+
+    q_function_generator = lambda cost_parameters, a, g: get_state_action_values(
+        experiment_setting=args["experiment_setting"],
+        bmps_file=inputs.bmps_file,
+        cost_function=cost_function,
+        cost_parameters=cost_parameters,
+        structure=structure_dicts,
+        env_params=args["env_params"],
+        alpha=a,
+        gamma=g)
 
     softmax_ray_object = GridInference(
         traces=traces,
@@ -273,9 +290,7 @@ if __name__ == "__main__":
         },
         held_constant_policy_kwargs={
             "noise": 0,
-            "q_path": path.joinpath("cluster/data/bmps/preferences")
-            if not inputs.exact
-            else path.joinpath("cluster/data/q_files"),
+            "q_function_generator": q_function_generator,
         },
         policy_parameters={"temp": temp_priors, "alpha": alpha_priors, "gamma": gamma_priors},
         cost_function=cost_function,
