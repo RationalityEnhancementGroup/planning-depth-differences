@@ -13,6 +13,7 @@ from mouselab.distributions import Categorical
 from mouselab.envs.registry import register
 from mouselab.envs.reward_settings import high_increasing_reward
 
+
 def create_test_env(name) -> None:
     """
     Register a (given) test environment for unit tests
@@ -232,6 +233,7 @@ def get_human_trajectories(
     exp_name: str,
     data_path: Union[str, bytes, os.PathLike] = None,
     pids: List[int] = None,
+    blocks: List[str] = None,
     include_last_action: bool = False,
 ) -> List[Dict[str, List]]:
     """
@@ -259,10 +261,12 @@ def get_human_trajectories(
     traces = get_trajectories_from_participant_data(
         mouselab_data[mouselab_data["pid"].isin(pids)],
         experiment_setting=experiment_setting,
+        blocks=blocks,
         include_last_action=include_last_action,
     )
 
     return traces
+
 
 def get_simulated_trajectories(
     file_pattern: str,
