@@ -199,6 +199,9 @@ if __name__ == "__main__":
         else:
             simulation_params = ""
 
+        if inputs.block != "test":
+            simulation_params = simulation_params + "_" + inputs.block
+
     cost_parameter_dict = {
         cost_parameter_arg: arg
         for arg, cost_parameter_arg in zip(
