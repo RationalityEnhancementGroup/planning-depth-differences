@@ -7,7 +7,6 @@ import json
 from argparse import ArgumentParser
 from pathlib import Path
 
-from mouselab.mouselab import MouselabEnv
 import numpy as np  # noqa, for the pickled Q value function
 import yaml
 from cluster_utils import (
@@ -16,14 +15,20 @@ from cluster_utils import (
     get_human_trajectories,
     get_simulated_trajectories,
 )
-from get_myopic_voc_values import get_state_action_values
 from costometer.agents.vanilla import SymmetricMouselabParticipant
 from costometer.inference import GridInference
-from costometer.utils import get_param_string, get_temp_prior, adjust_state, adjust_ground_truth
+from costometer.utils import (
+    adjust_ground_truth,
+    adjust_state,
+    get_param_string,
+    get_temp_prior,
+)
+from get_myopic_voc_values import get_state_action_values
 from mouselab.cost_functions import *  # noqa
 from mouselab.distributions import Categorical
 from mouselab.envs.registry import registry
 from mouselab.graph_utils import get_structure_properties
+from mouselab.mouselab import MouselabEnv
 from mouselab.policies import RandomPolicy, SoftmaxPolicy
 from scipy import stats  # noqa, for the temp prior
 
@@ -198,24 +203,11 @@ if __name__ == "__main__":
         )
         experiment_folder = args["experiment"]
         # data not simulated, no simulation params
-        
+
         if inputs.participant_subset_file:
             simulation_params = "_" + inputs.participant_subset_file
         else:
             simulation_params = ""
-
-
-    for trace in traces:
-        trace["states"] = [[adjust_state(state, inputs.alpha, inputs.gamma, MouselabEnv.new_symmetric_registered(args["experiment_setting"]).mdp_graph.nodes.data("depth"), include_last_action=args["env_params"]["include_last_action"]) for state in trial] for trial in trace["states"]]
-        trace["ground_truth"] = [adjust_ground_truth(ground_truth, inputs.alpha, inputs.gamma, MouselabEnv.new_symmetric_registered(args["experiment_setting"]).mdp_graph.nodes.data("depth")) for ground_truth in trace["ground_truth"]]
-
-    # add asterisks for missing param values
-    num_not_included_params = len(args["cost_parameter_args"]) - len(
-        inputs.cost_parameter_values.split(",")
-    )
-    inputs.cost_parameter_values = ",".join(
-        inputs.cost_parameter_values.split(",") + ["*"] * num_not_included_params
-    )
 
     cost_parameter_dict = {
         cost_parameter_arg: arg
@@ -259,13 +251,14 @@ if __name__ == "__main__":
 
     alpha_priors = Categorical([inputs.alpha], [1])
 
-    with open(path.joinpath(
-            f"cluster/parameters/gammas/{inputs.gamma_file}.txt"
-    ), "r") as f:
+    with open(
+        path.joinpath(f"cluster/parameters/gammas/{inputs.gamma_file}.txt"), "r"
+    ) as f:
         gamma_values = [float(val) for val in f.read().splitlines()]
 
-    gamma_priors = Categorical(gamma_values, [1 / len(gamma_values)] * len(gamma_values))
-
+    gamma_priors = Categorical(
+        gamma_values, [1 / len(gamma_values)] * len(gamma_values)
+    )
 
     q_function_generator = lambda cost_parameters, a, g: get_state_action_values(
         experiment_setting=args["experiment_setting"],
@@ -275,7 +268,8 @@ if __name__ == "__main__":
         structure=structure_dicts,
         env_params=args["env_params"],
         alpha=a,
-        gamma=g)
+        gamma=g,
+    )
 
     softmax_ray_object = GridInference(
         traces=traces,
@@ -292,7 +286,11 @@ if __name__ == "__main__":
             "noise": 0,
             "q_function_generator": q_function_generator,
         },
-        policy_parameters={"temp": temp_priors, "alpha": alpha_priors, "gamma": gamma_priors},
+        policy_parameters={
+            "temp": temp_priors,
+            "alpha": alpha_priors,
+            "gamma": gamma_priors,
+        },
         cost_function=cost_function,
         cost_parameters=cost_parameters,
         cost_function_name=cost_function_name,
