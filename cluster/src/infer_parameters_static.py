@@ -170,16 +170,12 @@ if __name__ == "__main__":
             pids = (
                 Path(__file__)
                 .resolve()
-                .parents[2]
-                .joinpath("data")
-                .joinpath(
-                    f"processed/{inputs.experiment}/"
-                    f"{inputs.participant_subset_file}.csv"
-                )
+                .parents[1]
+                .joinpath(f"parameters/pids/" f"{inputs.participant_subset_file}.txt")
             )
 
             with open(pids, "r") as f:
-                pids = [int(line.replace("\n", "")) for line in f.readlines()]
+                pids = [int(pid) for pid in f.read().splitlines()]
 
         else:
             pids = None
