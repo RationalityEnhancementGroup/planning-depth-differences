@@ -302,7 +302,7 @@ if __name__ == "__main__":
     ).mkdir(parents=True, exist_ok=True)
 
     filename = path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}"
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
         f"SoftmaxPolicy_optimization_results_{get_param_string(cost_parameter_dict)}"
         f"{alpha_string}{simulation_params}.csv"
     )
