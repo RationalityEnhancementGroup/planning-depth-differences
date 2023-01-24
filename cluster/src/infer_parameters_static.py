@@ -71,6 +71,14 @@ if __name__ == "__main__":
         type=str,
     )
     parser.add_argument(
+        "-k",
+        "--block",
+        dest="block",
+        default=None,
+        help="Block",
+        type=str,
+    )
+    parser.add_argument(
         "-v",
         "--values",
         dest="cost_parameter_values",
@@ -167,9 +175,16 @@ if __name__ == "__main__":
 
         else:
             pids = None
+
+        if inputs.block:
+            block = [inputs.block]
+        else:
+            block = inputs.block
+
         traces = get_human_trajectories(
             inputs.experiment,
             pids=pids,
+            blocks=block,
             include_last_action=args["env_params"]["include_last_action"],
         )
         experiment_folder = args["experiment"]
