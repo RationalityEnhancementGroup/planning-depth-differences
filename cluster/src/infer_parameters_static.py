@@ -17,18 +17,12 @@ from cluster_utils import (
 )
 from costometer.agents.vanilla import SymmetricMouselabParticipant
 from costometer.inference import GridInference
-from costometer.utils import (
-    adjust_ground_truth,
-    adjust_state,
-    get_param_string,
-    get_temp_prior,
-)
+from costometer.utils import get_param_string, get_temp_prior
 from get_myopic_voc_values import get_state_action_values
 from mouselab.cost_functions import *  # noqa
 from mouselab.distributions import Categorical
 from mouselab.envs.registry import registry
 from mouselab.graph_utils import get_structure_properties
-from mouselab.mouselab import MouselabEnv
 from mouselab.policies import RandomPolicy, SoftmaxPolicy
 from scipy import stats  # noqa, for the temp prior
 
@@ -260,15 +254,17 @@ if __name__ == "__main__":
         gamma_values, [1 / len(gamma_values)] * len(gamma_values)
     )
 
-    q_function_generator = lambda cost_parameters, a, g: get_state_action_values(
-        experiment_setting=args["experiment_setting"],
-        bmps_file=inputs.bmps_file,
-        cost_function=cost_function,
-        cost_parameters=cost_parameters,
-        structure=structure_dicts,
-        env_params=args["env_params"],
-        alpha=a,
-        gamma=g,
+    q_function_generator = (
+        lambda cost_parameters, a, g: get_state_action_values(  # noqa : E731
+            experiment_setting=args["experiment_setting"],
+            bmps_file=inputs.bmps_file,
+            cost_function=cost_function,
+            cost_parameters=cost_parameters,
+            structure=structure_dicts,
+            env_params=args["env_params"],
+            alpha=a,
+            gamma=g,
+        )
     )
 
     softmax_ray_object = GridInference(
@@ -312,33 +308,33 @@ if __name__ == "__main__":
     )
     optimization_results.to_csv(filename, index=False)
 
-    random_ray_object = GridInference(
-        traces=traces,
-        participant_class=SymmetricMouselabParticipant,
-        participant_kwargs={
-            "experiment_setting": args["experiment_setting"],
-            "policy_function": RandomPolicy,
-            "additional_mouselab_kwargs": {
-                "mdp_graph_properties": structure_dicts,
-                **args["env_params"],
-            },
-        },
-        cost_function=cost_function,
-        cost_parameters={
-            cost_parameter_arg: Categorical([cost_parameter_val], [1])
-            for cost_parameter_arg, cost_parameter_val in args[
-                "constant_values"
-            ].items()
-        },
-        cost_function_name=cost_function_name,
-    )
-
-    random_ray_object.run()
-
-    optimization_results = random_ray_object.get_optimization_results()
-    filename = path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}"
-        f"{gamma_string}{alpha_string}/"
+    random_filename = path.joinpath(
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
         f"RandomPolicy_optimization_results{simulation_params}.csv"
     )
-    optimization_results.to_csv(filename, index=False)
+    if not random_filename.is_file():
+        random_ray_object = GridInference(
+            traces=traces,
+            participant_class=SymmetricMouselabParticipant,
+            participant_kwargs={
+                "experiment_setting": args["experiment_setting"],
+                "policy_function": RandomPolicy,
+                "additional_mouselab_kwargs": {
+                    "mdp_graph_properties": structure_dicts,
+                    **args["env_params"],
+                },
+            },
+            cost_function=cost_function,
+            cost_parameters={
+                cost_parameter_arg: Categorical([cost_parameter_val], [1])
+                for cost_parameter_arg, cost_parameter_val in args[
+                    "constant_values"
+                ].items()
+            },
+            cost_function_name=cost_function_name,
+        )
+
+        random_ray_object.run()
+
+        optimization_results = random_ray_object.get_optimization_results()
+        optimization_results.to_csv(random_filename, index=False)
