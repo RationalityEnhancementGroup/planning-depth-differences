@@ -15,8 +15,6 @@ from cluster_utils import (
     get_args_from_yamls,
     get_human_trajectories,
     get_simulated_trajectories,
-    adjust_ground_truth,
-    adjust_state,
 )
 from costometer.agents.vanilla import SymmetricMouselabParticipant
 from costometer.inference import GridInference
