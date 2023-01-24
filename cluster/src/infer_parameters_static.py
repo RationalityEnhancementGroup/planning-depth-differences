@@ -91,7 +91,7 @@ if __name__ == "__main__":
         dest="gamma_file",
         help="gamma_file",
         type=str,
-        default=1,
+        default="full",
     )
     parser.add_argument(
         "-b",
@@ -103,11 +103,11 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-a",
-        "--alpha",
-        dest="alpha",
-        help="alpha",
-        type=float,
-        default=1,
+        "--alpha_file",
+        dest="alpha_file",
+        help="alpha_file",
+        type=str,
+        default="full",
     )
     inputs = parser.parse_args()
 
@@ -238,12 +238,12 @@ if __name__ == "__main__":
     else:
         cost_function_name = None
 
-    if inputs.alpha == 1:
-        alpha_string = ""
-    else:
-        alpha_string = f"_{inputs.alpha:.2f}"
-
-    alpha_priors = Categorical([inputs.alpha], [1])
+    # if inputs.alpha == 1:
+    #     alpha_string = ""
+    # else:
+    #     alpha_string = f"_{inputs.alpha:.2f}"
+    #
+    # alpha_priors = Categorical([inputs.alpha], [1])
 
     with open(
         path.joinpath(f"cluster/parameters/gammas/{inputs.gamma_file}.txt"), "r"
@@ -252,6 +252,15 @@ if __name__ == "__main__":
 
     gamma_priors = Categorical(
         gamma_values, [1 / len(gamma_values)] * len(gamma_values)
+    )
+
+    with open(
+        path.joinpath(f"cluster/parameters/gammas/{inputs.alpha_file}.txt"), "r"
+    ) as f:
+        alpha_values = [float(val) for val in f.read().splitlines()]
+
+    alpha_priors = Categorical(
+        alpha_values, [1 / len(alpha_values)] * len(alpha_values)
     )
 
     q_function_generator = (
@@ -304,7 +313,7 @@ if __name__ == "__main__":
     filename = path.joinpath(
         f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
         f"SoftmaxPolicy_optimization_results_{get_param_string(cost_parameter_dict)}"
-        f"{alpha_string}{simulation_params}.csv"
+        f"{simulation_params}.csv"
     )
     optimization_results.to_csv(filename, index=False)
 
