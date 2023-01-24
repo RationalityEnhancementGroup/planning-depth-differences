@@ -87,10 +87,10 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-g",
-        "--gamma",
-        dest="gamma",
-        help="gamma",
-        type=float,
+        "--gamma_file",
+        dest="gamma_file",
+        help="gamma_file",
+        type=str,
         default=1,
     )
     parser.add_argument(
@@ -248,10 +248,14 @@ if __name__ == "__main__":
     else:
         alpha_string = f"_{inputs.alpha:.2f}"
 
-    if inputs.gamma == 1:
-        gamma_string = ""
-    else:
-        gamma_string = f"{inputs.gamma:.3f}"
+    alpha_priors = Categorical([inputs.alpha], [1])
+
+    with open(path.joinpath(
+            f"cluster/parameters/gammas/{inputs.gamma_file}.txt"
+    ), "r") as f:
+        gamma_values = [float(val) for val in f.read().splitlines()]
+
+    gamma_priors = Categorical(gamma_values, [1 / len(gamma_values)] * len(gamma_values))
 
     alpha_priors = Categorical([inputs.alpha], [1])
     gamma_priors = Categorical([inputs.gamma], [1])
@@ -285,15 +289,13 @@ if __name__ == "__main__":
 
     # make experiment folder if it doesn't already exist
     path.joinpath(
-        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}"
-        f"{gamma_string}{alpha_string}/"
+        f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
     ).mkdir(parents=True, exist_ok=True)
 
     filename = path.joinpath(
         f"cluster/data/logliks/{cost_function_name}/{experiment_folder}"
-        f"{gamma_string}{alpha_string}/"
         f"SoftmaxPolicy_optimization_results_{get_param_string(cost_parameter_dict)}"
-        f"{simulation_params}.csv"
+        f"{alpha_string}{simulation_params}.csv"
     )
     optimization_results.to_csv(filename, index=False)
 
