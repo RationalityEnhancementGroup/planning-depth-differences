@@ -329,6 +329,10 @@ if __name__ == "__main__":
                     **args["env_params"],
                 },
             },
+            held_constant_policy_kwargs={
+                "alpha": 1,
+                "gamma": 1,
+            },
             cost_function=cost_function,
             cost_parameters={
                 cost_parameter_arg: Categorical([cost_parameter_val], [1])
