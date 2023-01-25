@@ -112,7 +112,7 @@ if __name__ == "__main__":
     # create cost subfolder if not already there
     irl_path.joinpath(
         f"data/processed/{inputs.experiment}"
-        f"{simulation_params}/{inputs.cost_function}"
+        f"/{simulation_params}/{inputs.cost_function}"
     ).mkdir(parents=True, exist_ok=True)
     if inputs.pid:
         with open(
