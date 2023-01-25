@@ -118,8 +118,9 @@ if __name__ == "__main__":
         with open(
             irl_path.joinpath(
                 f"data/processed/{inputs.experiment}"
-                f"{simulation_params}/{inputs.cost_function}/"
-                f"mle_and_map_{inputs.pid}.pickle"
+                f"/{inputs.cost_function}/"
+                f"mle_and_map{'_' + inputs.block if inputs.block != 'test' else ''}"
+                f"_{inputs.pid}.pickle"
             ),
             "wb",
         ) as f:
@@ -128,8 +129,8 @@ if __name__ == "__main__":
         with open(
             irl_path.joinpath(
                 f"data/processed/{inputs.experiment}"
-                f"{simulation_params}/{inputs.cost_function}/"
-                f"mle_and_map.pickle"
+                f"/{inputs.cost_function}/"
+                f"mle_and_map{simulation_params}.pickle"
             ),
             "wb",
         ) as f:
