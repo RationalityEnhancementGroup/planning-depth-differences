@@ -31,32 +31,39 @@ if __name__ == "__main__":
         type=str,
     )
     parser.add_argument(
+        "-d",
+        "--participant-subset-file",
+        dest="participant_subset_file",
+        default=None,
+        type=str,
+    )
+    parser.add_argument(
+        "-k",
+        "--block",
+        dest="block",
+        default=None,
+        help="Block",
+        type=str,
+    )
+    parser.add_argument(
         "-p",
         "--pid",
         dest="pid",
         help="Participant ID (optional)",
         default=None,
     )
-    parser.add_argument(
-        "-a",
-        "--alpha",
-        dest="alpha",
-        help="alpha",
-        type=float,
-        default=1,
-    )
-    parser.add_argument(
-        "-g",
-        "--gamma",
-        dest="gamma",
-        help="gamma",
-        type=float,
-        default=1,
-    )
 
     inputs = parser.parse_args()
     irl_path = Path(__file__).resolve().parents[4]
     data_path = Path(__file__).resolve().parents[1]
+
+    if inputs.participant_subset_file:
+        simulation_params = "_" + inputs.participant_subset_file
+    else:
+        simulation_params = ""
+
+    if inputs.block != "test":
+        simulation_params = simulation_params + "_" + inputs.block
 
     # read in experiment file
     yaml_path = irl_path.joinpath(
@@ -74,28 +81,18 @@ if __name__ == "__main__":
     with open(yaml_path, "r") as stream:
         cost_details = yaml.safe_load(stream)
 
-    if inputs.alpha == 1:
-        alpha_string = ""
-    else:
-        alpha_string = f"_{inputs.alpha:.2f}"
-
-    if inputs.gamma == 1:
-        gamma_string = ""
-    else:
-        gamma_string = f"{inputs.gamma:.3f}"
-
     if inputs.pid:
         data = pd.read_feather(
             irl_path.joinpath(
                 f"cluster/data/logliks/{inputs.cost_function}/"
-                f"{inputs.experiment}{gamma_string}{alpha_string}_by_pid/{inputs.pid}.feather"
+                f"{inputs.experiment}{simulation_params}_by_pid/{inputs.pid}.feather"
             )
         )
     else:
         data = pd.read_feather(
             irl_path.joinpath(
                 f"cluster/data/logliks/{inputs.cost_function}/"
-                f"{inputs.experiment}{gamma_string}{alpha_string}.feather"
+                f"{inputs.experiment}{simulation_params}.feather"
             )
         )
 
@@ -104,7 +101,7 @@ if __name__ == "__main__":
             irl_path.joinpath(
                 f"cluster/data/priors/"
                 f"{inputs.cost_function}/"
-                f"{inputs.experiment}{gamma_string}{alpha_string}.pkl"
+                f"{inputs.experiment}{simulation_params}.pkl"
             ),
             "rb",
         ),
@@ -114,14 +111,14 @@ if __name__ == "__main__":
 
     # create cost subfolder if not already there
     irl_path.joinpath(
-        f"data/processed/{inputs.experiment}{gamma_string}"
-        f"{alpha_string}/{inputs.cost_function}"
+        f"data/processed/{inputs.experiment}"
+        f"{simulation_params}/{inputs.cost_function}"
     ).mkdir(parents=True, exist_ok=True)
     if inputs.pid:
         with open(
             irl_path.joinpath(
-                f"data/processed/{inputs.experiment}{gamma_string}"
-                f"{alpha_string}/{inputs.cost_function}/"
+                f"data/processed/{inputs.experiment}"
+                f"{simulation_params}/{inputs.cost_function}/"
                 f"mle_and_map_{inputs.pid}.pickle"
             ),
             "wb",
@@ -130,8 +127,8 @@ if __name__ == "__main__":
     else:
         with open(
             irl_path.joinpath(
-                f"data/processed/{inputs.experiment}{gamma_string}"
-                f"{alpha_string}/{inputs.cost_function}/"
+                f"data/processed/{inputs.experiment}"
+                f"{simulation_params}/{inputs.cost_function}/"
                 f"mle_and_map.pickle"
             ),
             "wb",
