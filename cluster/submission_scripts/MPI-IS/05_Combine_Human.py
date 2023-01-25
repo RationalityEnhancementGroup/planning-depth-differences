@@ -1,19 +1,13 @@
 """
 This script combines all the inference files (one for each considered cost weight  \
 combination) into one big (but smaller than it would be as a pickle) feather file.
-It also will add in the prior probability for cost parameters for MAP estimates.
 """
 from argparse import ArgumentParser
 from pathlib import Path
 
-import dill as pickle
 import pandas as pd
 import yaml
-from costometer.utils import (
-    add_cost_priors_to_temp_priors,
-    get_param_string,
-    recalculate_maps_from_mles,
-)
+from costometer.utils import get_param_string
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -38,14 +32,6 @@ if __name__ == "__main__":
         help="Simulated cost function YAML file",
         default="back_dist_depth_eff_forw",
         type=str,
-    )
-    parser.add_argument(
-        "-t",
-        "--temperature-file",
-        dest="temperature_file",
-        help="File with temperatures to infer over",
-        type=str,
-        default="expon,uniform",
     )
     parser.add_argument(
         "-d",
@@ -81,13 +67,6 @@ if __name__ == "__main__":
     )
     with open(yaml_path, "r") as stream:
         cost_details = yaml.safe_load(stream)
-
-    temp_prior_details = {}
-    for prior in inputs.temperature_file.split(","):
-        yaml_path = irl_folder.joinpath(f"data/inputs/yamls/temperatures/{prior}.yaml")
-        with open(yaml_path, "r") as stream:
-            prior_inputs = yaml.safe_load(stream)
-        temp_prior_details[prior] = prior_inputs
 
     with open(
         irl_folder.joinpath(f"cluster/parameters/cost/{inputs.cost_function}.txt"),
@@ -137,15 +116,6 @@ if __name__ == "__main__":
         softmax_dfs.append(curr_df)
 
     softmax_dfs = pd.concat(softmax_dfs)
-
-    full_priors = add_cost_priors_to_temp_priors(
-        softmax_dfs,
-        cost_details,
-        temp_prior_details,
-        additional_params=["alpha", "gamma"],
-    )
-    softmax_dfs = recalculate_maps_from_mles(softmax_dfs, full_priors)
-
     full_df = pd.concat([softmax_dfs, random_df])
 
     if not inputs.by_pid:
@@ -175,14 +145,4 @@ if __name__ == "__main__":
 
     cluster_folder.joinpath(f"data/priors/{inputs.cost_function}").mkdir(
         parents=True, exist_ok=True
-    )
-    pickle.dump(
-        full_priors,
-        open(
-            cluster_folder.joinpath(
-                f"data/priors/{inputs.cost_function}/"
-                f"{inputs.experiment}{simulation_params}.pkl"
-            ),
-            "wb",
-        ),
     )
