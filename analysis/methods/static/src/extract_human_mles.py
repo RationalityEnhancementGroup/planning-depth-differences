@@ -109,11 +109,12 @@ if __name__ == "__main__":
 
     best_parameter_values = extract_mles_and_maps(data, cost_details, priors)
 
-    # create cost subfolder if not already there
     irl_path.joinpath(
         f"data/processed/{inputs.experiment}"
-        f"/{simulation_params}/{inputs.cost_function}"
+        f"/{inputs.cost_function}"
     ).mkdir(parents=True, exist_ok=True)
+
+    # create cost subfolder if not already there
     if inputs.pid:
         with open(
             irl_path.joinpath(
