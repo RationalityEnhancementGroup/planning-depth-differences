@@ -8,19 +8,6 @@ This directory contains notebooks that are associated with developing the IRL me
 
 0. Before running, make a log file in the `cluster` directory as well as the `analysis/methods/static directory: `mkdir log`
 1. Create a virtual environment as outlined in the top folder `irl-project` both on your local machine and the cluster
-2. On a cluster running htcondor, calculate the Q values (2-3 days; ~3+ hours):
-   ```
-   cd <path to planning-depth-differences>/cluster
-   condor_submit_bid 2 submission_scripts/MPI-IS/03_Get_Q_Values_temp_params.sub file_number=0 cost_function=back_dist_depth_eff_forw;
-   condor_submit_bid 2 submission_scripts/MPI-IS/03_Get_Q_Values.sub param_file=params_full_three experiment_setting=high_increasing cost_function=dist_depth_eff_forw;
-   ```
-   
-   > If you are running on a slurm cluster, we have provided an old file which may need to be adapted:
-   > ```
-   > mkdir job # for storing job files
-   > chmod +x submission_scripts/Garching/03_Get _Q_Values.job
-   > ./submission_scripts/Garching/03_Get _Q_Values.job high_increasing params_full dist_depth_eff_forw
-   > ```
 3. Download and preprocess the participant data, outside the cluster and then transfer to cluster (if needed, see instructions for downloading data in the `irl-project/data` subfolder):
    ```
    cd <path to irl-project>
@@ -32,70 +19,39 @@ This directory contains notebooks that are associated with developing the IRL me
    done;
    ```
    Then, transfer by adding the subfolder in `irl-project/data/processed/<experiment>` to git or via rsync/scp.
-4. Get the computational microscope strategies (~2 hours):
+4. Get the computational microscope strategies (~2 hours, depends on number of participants):
    ```
    for experiment in methods_main irl_validation;
        do condor_submit_bid 2 submission_scripts/MPI-IS/M_00_Get_CM_Strategies.sub experiment=$experiment
    done;
    ```
    If needed, move the files to your local computer.
-5. Once the Q values are calculated On the cluster, infer parameters for a participant file (~30 minutes for dist_depth_eff_forw):
+5. Infer parameters for a participant file (~2 hours, will need to run each by itself):
    ```
    cd <path to irl-project>/cluster
-   for experiment in methods_main irl_validation;
-       do for cost_function in 'dist_depth_eff_forw'; 
-          do condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub param_file=params_full_three experiment=$experiment cost_function=$cost_function;
-       done;
-   done;
-   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub param_file=params_full_three experiment=methods_main cost_function=back_dist_depth_eff_forw
+   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=dist_depth_eff_forw experiment=methods_main participants=methods_main;
+
+   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=dist_depth_eff_forw experiment=quest_main participants=irl_validation1 output_string=irl_validation1
+   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=dist_depth_eff_forw experiment=quest_main participants=irl_validation2 output_string=irl_validation2
+   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=dist_depth_eff_forw experiment=quest_main participants=irl_validation3 output_string=irl_validation3
+   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=dist_depth_eff_forw experiment=quest_main participants=irl_validation2 output_string=irl_validation2 block=fairy
+   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=dist_depth_eff_forw experiment=quest_main participants=irl_validation3 output_string=irl_validation3 block=fairy
    ```
-6. Combine the human data (~15 minutes for dist_depth_eff_forw, 8 hours for back_dist_depth_eff_forw):
+6. Combine the human inferences (2-3 hours):
    ```
    cd <path to irl-project>/cluster
-   for experiment in methods_main irl_validation;
-      do for cost_function in 'dist_depth_eff_forw'; 
-          do condor_submit_bid 2 submission_scripts/MPI-IS/05_Combine_Human.sub experiment=$experiment cost_function=$cost_function;
-      done;
-   done;
-   condor_submit_bid 2 submission_scripts/MPI-IS/05_Combine_Human.sub experiment=methods_main cost_function=back_dist_depth_eff_forw 
-   ```
-   For back_dist_depth_eff_forw, it is better to separate the `*.feather` file for individual participants before the next step. You can do this in an interactive cluster session, in the same python virtual environment:
-   ```
-   condor_submit_bid 5 -i -a request_memory=5000
-   source ../env/bin/activate
-   python
-   import pandas as pd
-   data = pd.read_feather("data/logliks/back_dist_depth_eff_forw/methods_main.feather")
-
-   for pid in data["trace_pid"].unique():
-        data[data["trace_pid"]==pid].reset_index(drop=True).to_feather(f"data/logliks/back_dist_depth_eff_forw/methods_main_{pid}.feather") 
-   ```
+   condor_submit_bid 2 submission_scripts/MPI-IS/05_Combine_Human.sub cost_function=dist_depth_eff_forw experiment=methods_main participant_file=methods_main output_string=methods_main simulated_cost_function=back_dist_depth_eff_forw;
    
-
+   for file_idx in {1..3};
+        do condor_submit_bid 2 submission_scripts/MPI-IS/05_Combine_Human.sub cost_function=dist_depth_eff_forw experiment=irl_validation participant_file=irl_validation$file_idx output_string=irl_validation$file_idx simulated_cost_function=back_dist_depth_eff_forw
+     done;
    ```
-   condor_submit_bid 5 -i -a request_memory=5000
-   source ../env/bin/activate
-   python
-   import pandas as pd
-   data = pd.read_feather("data/logliks/dist_depth_eff_forw/irl_validation.feather")
-
-   for pid in data["trace_pid"].unique():
-        data[data["trace_pid"]==pid].reset_index(drop=True).to_feather(f"data/logliks/dist_depth_eff_forw/irl_validation_{pid}.feather") 
-   ```
-   
 7. Once the inference is done for the participants, get the best parameters by running (~30 minutes):
    ```
-   cd <path to irl-project>/cluster
-   for experiment in methods_main irl_validation;
-      do for cost_function in 'dist_depth_eff_forw'; 
-         do condor_submit_bid 2 submission_scripts/MPI-IS/M_01_Get_MAP_File.sub experiment=$experiment cost_function=$cost_function;
-      done;
-   done;
-   ls data/logliks/back_dist_depth_eff_forw/methods_main*.feather | sed -e s/[^0-9]//g | for pid in $(cat); do condor_submit_bid 2 submission_scripts/MPI-IS/M_01_Get_MAP_File_by_PID.sub experiment=methods_main cost_function=back_dist_depth_eff_forw pid=$pid; done;
+   condor_submit_bid 1 submission_scripts/MPI-IS/M_01_Get_MAP_File_by_PID.sub experiment=methods_main simulated_cost_function=back_dist_depth_eff_forw cost_function=dist_depth_eff_forw participant_file=methods_main
+   
    ```
-   
-ls data/logliks/dist_depth_eff_forw/irl_validation*.feather | sed -e s/[^0-9]//g | for pid in $(cat); do condor_submit_bid 2 submission_scripts/MPI-IS/M_01_Get_MAP_File_by_PID.sub experiment=irl_validation cost_function=dist_depth_eff_forw pid=$pid; done;
-   
+    
 8. Extract marginal and MLEs for human trajectories (~1 hour):
    ```
    condor_submit_bid 2 submission_scripts/MPI-IS/10_Extract_Marginal_and_MLEs_Human.sub experiment=ValidationExperiment
