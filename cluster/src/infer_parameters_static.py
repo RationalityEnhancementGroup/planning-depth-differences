@@ -254,7 +254,7 @@ if __name__ == "__main__":
     )
 
     with open(
-        path.joinpath(f"cluster/parameters/gammas/{inputs.alpha_file}.txt"), "r"
+        path.joinpath(f"cluster/parameters/alphas/{inputs.alpha_file}.txt"), "r"
     ) as f:
         alpha_values = [float(val) for val in f.read().splitlines()]
 
