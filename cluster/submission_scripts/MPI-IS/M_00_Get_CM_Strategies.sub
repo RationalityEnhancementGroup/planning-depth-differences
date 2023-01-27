@@ -5,6 +5,7 @@ arguments = $(filename) -e $(experiment)
 output = log/$(output_string:out_M0).stdout
 error  = log/$(output_string:out_M0).stderr
 log   = log/$(output_string:out_M0).log
+coresize        = 0
 request_memory = 8000
 request_cpus = 1
 
