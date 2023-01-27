@@ -28,7 +28,7 @@ def get_state_action_values(
     structure: Dict[Any, Any] = None,
     path: Union[str, bytes, os.PathLike] = None,
     env_params: Dict[Any, Any] = None,
-    alpha: float = 1,
+    kappa: float = 1,
     gamma: float = 1,
 ) -> Callable:
     """
@@ -41,7 +41,7 @@ def get_state_action_values(
     :param structure: where nodes are
     :param path:
     :param env_params
-    :param alpha
+    :param kappa
     :param gamma
     :return: info dictionary which contains q_dictionary, \
     function additionally saves this dictionary into data/q_files
@@ -75,11 +75,12 @@ def get_state_action_values(
         seed=91,
         cost=cost_function(**cost_parameters),
         mdp_graph_properties=structure,
+        power_utility=kappa,
         **env_params,
     )
 
-    env.ground_truth = adjust_ground_truth(env.ground_truth, alpha, gamma, env.mdp_graph.nodes.data("depth"))
-    env._state = adjust_state(env._state, alpha, gamma, env.mdp_graph.nodes.data("depth"))
+    env.ground_truth = adjust_ground_truth(env.ground_truth, gamma, env.mdp_graph.nodes.data("depth"))
+    env._state = adjust_state(env._state, gamma, env.mdp_graph.nodes.data("depth"))
 
     Q = lambda state, action: np.dot(
         env.action_features(state=state, action=action), W
@@ -89,10 +90,10 @@ def get_state_action_values(
     # saves res dict
     if path is not None:
         parameter_string = get_param_string(cost_parameters)
-        if alpha == 1:
-            alpha_string = ""
+        if kappa == 1:
+            kappa_string = ""
         else:
-            alpha_string = f"_{alpha:.2f}"
+            kappa_string = f"_{kappa:.2f}"
 
         if gamma == 1:
             gamma_string = ""
@@ -100,11 +101,11 @@ def get_state_action_values(
             gamma_string = f"{gamma:.3f}"
 
         path.joinpath(
-            f"preferences/{experiment_setting}{gamma_string}{alpha_string}/{cost_function_name}/"
+            f"preferences/{experiment_setting}{gamma_string}{kappa_string}/{cost_function_name}/"
         ).mkdir(parents=True, exist_ok=True)
         filename = path.joinpath(
-            f"preferences/{experiment_setting}{gamma_string}{alpha_string}/{cost_function_name}/"
-            f"BMPS_{experiment_setting}{gamma_string}{alpha_string}_{parameter_string}.dat"  # noqa: E501
+            f"preferences/{experiment_setting}{gamma_string}{kappa_string}/{cost_function_name}/"
+            f"BMPS_{experiment_setting}{gamma_string}{kappa_string}_{parameter_string}.dat"  # noqa: E501
         )
 
         pickled_data = pickle.dumps(info)
@@ -162,9 +163,9 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-a",
-        "--alpha",
-        dest="alpha",
-        help="alpha",
+        "--kappa",
+        dest="kappa",
+        help="kappa",
         type=float,
         default=1,
     )
@@ -229,7 +230,7 @@ if __name__ == "__main__":
             cost_function=cost_function,
             cost_function_name=cost_function_name,
             env_params=args["env_params"],
-            alpha=inputs.alpha,
+            kappa=inputs.kappa,
             gamma=inputs.gamma,
             path=Path(__file__).parents[1].joinpath("data/bmps"),
         )
