@@ -103,9 +103,9 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-a",
-        "--alpha_file",
-        dest="alpha_file",
-        help="alpha_file",
+        "--kappa_file",
+        dest="kappa_file",
+        help="kappa_file",
         type=str,
         default="full",
     )
@@ -237,13 +237,6 @@ if __name__ == "__main__":
     else:
         cost_function_name = None
 
-    # if inputs.alpha == 1:
-    #     alpha_string = ""
-    # else:
-    #     alpha_string = f"_{inputs.alpha:.2f}"
-    #
-    # alpha_priors = Categorical([inputs.alpha], [1])
-
     with open(
         path.joinpath(f"cluster/parameters/gammas/{inputs.gamma_file}.txt"), "r"
     ) as f:
@@ -254,12 +247,12 @@ if __name__ == "__main__":
     )
 
     with open(
-        path.joinpath(f"cluster/parameters/alphas/{inputs.alpha_file}.txt"), "r"
+        path.joinpath(f"cluster/parameters/kappas/{inputs.kappa_file}.txt"), "r"
     ) as f:
-        alpha_values = [float(val) for val in f.read().splitlines()]
+        kappa_values = [float(val) for val in f.read().splitlines()]
 
-    alpha_priors = Categorical(
-        alpha_values, [1 / len(alpha_values)] * len(alpha_values)
+    kappa_priors = Categorical(
+        kappa_values, [1 / len(kappa_values)] * len(kappa_values)
     )
 
     q_function_generator = (
@@ -270,7 +263,7 @@ if __name__ == "__main__":
             cost_parameters=cost_parameters,
             structure=structure_dicts,
             env_params=args["env_params"],
-            alpha=a,
+            kappa=a,
             gamma=g,
         )
     )
@@ -304,7 +297,7 @@ if __name__ == "__main__":
             },
             policy_parameters={
                 "temp": temp_priors,
-                "alpha": alpha_priors,
+                "kappa": kappa_priors,
                 "gamma": gamma_priors,
             },
             cost_function=cost_function,
@@ -335,7 +328,7 @@ if __name__ == "__main__":
                 },
             },
             held_constant_policy_kwargs={
-                "alpha": 1,
+                "kappa": 1,
                 "gamma": 1,
             },
             cost_function=cost_function,
