@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from costometer.utils import AnalysisObject, get_static_palette, set_font_sizes
+from statsmodels.tools.eval_measures import bic
 
 set_font_sizes()
 
@@ -19,7 +20,7 @@ def bic_plot(
 ):
     if palette is None:
         palette = get_static_palette(subdirectory, experiment_name)
-    plt.figure(figsize=(12, 8), dpi=80)
+    plt.figure(figsize=(120, 80), dpi=80)
     sum_bic = optimization_data.groupby(["Model Name"])[bic_field].sum()
     print(sum_bic.sort_values().round(5))
     order = sum_bic.sort_values().index
@@ -68,13 +69,18 @@ if __name__ == "__main__":
     )
 
     optimization_data = analysis_obj.query_optimization_data()
+    if "back_added_cost" not in analysis_obj.cost_details["cost_parameter_args"]:
+        optimization_data = optimization_data[~optimization_data["Model Name"].apply(lambda model_name: "back_added_cost" in model_name)]
 
-    # sum over pids
-    bic_df = (
-        optimization_data.groupby(["Model Name", "cost_function"])
-        .sum()["bic"]
-        .reset_index()
-    )
+    bic_df = optimization_data.groupby(["Model Name", "Number Parameters"]).sum().reset_index()
+
+    bic_df["bic"] = bic_df.apply(
+        lambda row: bic(
+            llf=row[f"map_{analysis_obj.prior}"],
+            nobs=row["num_clicks"],
+            df_modelwc=row["Number Parameters"],
+        ),
+        axis=1)
 
     if irl_path.joinpath("analysis/methods/" "static/data/OptimalBIC.pickle").is_file():
         with open(
@@ -105,5 +111,5 @@ if __name__ == "__main__":
     # Bayes Factor approximation
     print("Log Bayes factor approximation, difference between top two models")
     print(
-        (bic_df["bic"].sort_values().iloc[1] - bic_df["bic"].sort_values().iloc[0]) / 2
+        (sum_test["bic"].sort_values().iloc[1] - sum_test["bic"].sort_values().iloc[0]) / 2
     )

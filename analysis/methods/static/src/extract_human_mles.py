@@ -4,7 +4,7 @@ from pathlib import Path
 import dill as pickle
 import pandas as pd
 import yaml
-from costometer.utils import extract_mles_and_maps
+from costometer.utils import extract_mles_and_maps, add_cost_priors_to_temp_priors
 from scipy import stats  # noqa
 
 if __name__ == "__main__":
@@ -52,7 +52,14 @@ if __name__ == "__main__":
         help="Participant ID (optional)",
         default=None,
     )
-
+    parser.add_argument(
+        "-t",
+        "--temperature-file",
+        dest="temperature_file",
+        help="File with temperatures to infer over",
+        type=str,
+        default="expon,uniform",
+    )
     inputs = parser.parse_args()
     irl_path = Path(__file__).resolve().parents[4]
     data_path = Path(__file__).resolve().parents[1]
@@ -96,24 +103,28 @@ if __name__ == "__main__":
             )
         )
 
-    priors = pickle.load(
-        open(
-            irl_path.joinpath(
-                f"cluster/data/priors/"
-                f"{inputs.cost_function}/"
-                f"{inputs.experiment}{simulation_params}.pkl"
-            ),
-            "rb",
-        ),
+    temp_prior_details = {}
+    for prior in inputs.temperature_file.split(","):
+        yaml_path = irl_path.joinpath(f"data/inputs/yamls/temperatures/{prior}.yaml")
+        with open(yaml_path, "r") as stream:
+            prior_inputs = yaml.safe_load(stream)
+        temp_prior_details[prior] = prior_inputs
+
+    priors = add_cost_priors_to_temp_priors(
+        data,
+        cost_details,
+        temp_prior_details,
+        additional_params=["alpha", "gamma"],
     )
 
     best_parameter_values = extract_mles_and_maps(data, cost_details, priors)
 
-    # create cost subfolder if not already there
     irl_path.joinpath(
         f"data/processed/{inputs.experiment}"
-        f"{simulation_params}/{inputs.cost_function}"
+        f"/{inputs.cost_function}"
     ).mkdir(parents=True, exist_ok=True)
+
+    # create cost subfolder if not already there
     if inputs.pid:
         with open(
             irl_path.joinpath(
