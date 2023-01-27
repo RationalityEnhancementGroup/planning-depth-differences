@@ -74,13 +74,8 @@ if __name__ == "__main__":
     ) as f:
         full_parameters = f.read().splitlines()
 
-    if inputs.participant_subset_file:
-        simulation_params = "_" + inputs.participant_subset_file
-    else:
-        simulation_params = ""
-
     if inputs.block != "test":
-        simulation_params = simulation_params + "_" + inputs.block
+        simulation_params = "_" + inputs.block
 
     # load random file
     random_df = pd.read_csv(
