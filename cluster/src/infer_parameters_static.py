@@ -320,7 +320,7 @@ if __name__ == "__main__":
         f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
         f"RandomPolicy_optimization_results{simulation_params}.csv"
     )
-    if not random_filename.is_file():
+    if not random_filename.exists():
         random_ray_object = GridInference(
             traces=traces,
             participant_class=SymmetricMouselabParticipant,
