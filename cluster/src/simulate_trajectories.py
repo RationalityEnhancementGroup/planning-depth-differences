@@ -16,6 +16,8 @@ from mouselab.envs.registry import registry
 from mouselab.graph_utils import get_structure_properties
 from mouselab.policies import OptimalQ, RandomPolicy, SoftmaxPolicy  # noqa
 from scipy import stats  # noqa
+import dill as pickle
+from get_myopic_voc_values import get_state_action_values
 
 if __name__ == "__main__":
     """
@@ -33,6 +35,7 @@ if __name__ == "__main__":
         dest="policy",
         help="Policy to simulate",
         choices=["OptimalQ", "SoftmaxPolicy", "RandomPolicy"],
+        default="SoftmaxPolicy",
         type=str,
     )
     parser.add_argument(
@@ -40,15 +43,8 @@ if __name__ == "__main__":
         "--experiment-setting",
         dest="experiment_setting",
         help="Experiment setting YAML file",
+        default="high_increasing",
         type=str,
-    )
-    parser.add_argument(
-        "-x",
-        "--exact",
-        dest="exact",
-        help="Use exact Q values instead of approximate values",
-        default=False,
-        action="store_true",
     )
     parser.add_argument(
         "-c",
@@ -56,49 +52,29 @@ if __name__ == "__main__":
         dest="cost_function",
         help="Cost function YAML file",
         type=str,
-        default=None,
+        default="back_dist_depth_eff_forw",
     )
     parser.add_argument(
-        "-m",
-        "--temperature-file",
-        dest="temperature_file",
-        help="File with temperatures to infer over",
-        type=str,
-        default=None,
-    )
-    parser.add_argument(
-        "-v",
-        "--values",
-        dest="cost_parameter_values",
-        help="Cost parameter values as comma separated string, e.g. '1.00,2.00'",
+        "-b",
+        "--bmps-file",
+        dest="bmps_file",
+        default="Myopic_VOC",
+        help="BMPS Features and Optimization",
         type=str,
     )
     parser.add_argument(
-        "-n",
-        "--num-simulated",
-        dest="num_simulated",
-        help="Num simulations",
-        type=int,
-        default=200,
+        "-f",
+        "--parameter-file",
+        dest="parameter_file",
+        default="participants",
+        type=str,
     )
     parser.add_argument(
-        "-t", "--num-trials", dest="num_trials", help="Num trials", type=int, default=30
+        "-t", "--num-trials", dest="num_trials", help="Num trials", type=int, default=20
     )
     parser.add_argument("-s", "--seed", dest="seed", help="seed", type=int, default=91)
-    parser.add_argument(
-        "-a",
-        "--alpha",
-        dest="alpha",
-        help="alpha",
-        type=float,
-        default=1,
-    )
-    inputs = parser.parse_args()
 
-    if inputs.alpha == 1:
-        alpha_string = ""
-    else:
-        alpha_string = f"_{inputs.alpha}"
+    inputs = parser.parse_args()
 
     if inputs.cost_function:
         args = get_args_from_yamls(
@@ -107,8 +83,6 @@ if __name__ == "__main__":
     else:
         args = get_args_from_yamls(vars(inputs), attributes=["experiment_setting"])
     path = Path(__file__).resolve().parents[2]
-
-    policy_kwargs = {"seed": inputs.seed}
 
     experiment_setting = args["experiment_setting"]
 
@@ -119,33 +93,13 @@ if __name__ == "__main__":
 
     if inputs.cost_function:
         cost_function = eval(args["cost_function"])
-        try:
-            cost_parameters = {
-                cost_parameter_arg: float(arg)
-                for arg, cost_parameter_arg in zip(
-                    inputs.cost_parameter_values.split(","), args["cost_parameter_args"]
-                )
-            }
-        except ValueError as e:
-            raise e
-
-        if callable(eval(args["cost_function"])):
+        if callable(cost_function):
             cost_function_name = inputs.cost_function
         else:
-            cost_function_name = None
-
-        q_dictionary = load_q_file(
-            experiment_setting + alpha_string,
-            cost_function=cost_function,
-            cost_function_name=cost_function_name,
-            cost_params=cost_parameters,
-            path=path.joinpath("cluster/data/bmps/preferences")
-            if not inputs.exact
-            else path.joinpath("cluster/data/q_files"),
-        )
-        policy_kwargs["preference"] = q_dictionary
+            cost_function_name = cost_function
     else:
         cost_function = None
+        cost_function_name = None
         cost_parameters = {}
 
     with open(
@@ -161,7 +115,7 @@ if __name__ == "__main__":
 
     # make trajectory folders if they don't already exist
     path.joinpath(
-        f"cluster/data/trajectories/{experiment_setting}{alpha_string}/{inputs.policy}/"
+        f"cluster/data/trajectories/{experiment_setting}/{inputs.policy}/"
     ).mkdir(parents=True, exist_ok=True)
 
     if "structure" in args:
@@ -175,21 +129,32 @@ if __name__ == "__main__":
     else:
         structure_dicts = None
 
-    if inputs.temperature_file is not None:
-        temperatures = np.loadtxt(
-            path.joinpath(
-                f"cluster/parameters/temperatures/{inputs.temperature_file}.txt"
-            )
-        )
-        possible_parameters = [
-            {**policy_kwargs, "temp": temp, "noise": 0} for temp in temperatures
-        ]
-    else:
-        possible_parameters = [policy_kwargs]
+    with open(path.joinpath(f"cluster/parameters/simulations/{inputs.parameter_file}.pkl"), "rb") as f:
+        possible_parameters = pickle.load(f)
 
     traces = []
-    fake_pid = 0
-    for simulation in range(inputs.num_simulated):
+    for fake_pid, curr_params in enumerate(possible_parameters):
+        # separate gamma, kappa, cost, policy kwargs
+        cost_parameters = {key: val for key, val in curr_params.items() if key in args["cost_parameter_args"]}
+        policy_parameters = {key: val for key, val in curr_params.items() if key not in args["cost_parameter_args"] + ["gamma", "kappa"]}
+
+        # set seed in policy_kwargs
+        policy_parameters["seed"] = inputs.seed
+
+        # construct q_function
+        if inputs.cost_function:
+                q_function = get_state_action_values(  # noqa : E731
+                experiment_setting=args["experiment_setting"],
+                bmps_file=inputs.bmps_file,
+                cost_function=cost_function,
+                cost_parameters=cost_parameters,
+                structure=structure_dicts,
+                env_params=args["env_params"],
+                kappa=curr_params["kappa"],
+                gamma=curr_params["gamma"],
+                )
+                policy_parameters["preference"] = q_function
+
         ground_truth_subsets = np.random.choice(
             ground_truths, inputs.num_trials, replace=False
         )
@@ -202,63 +167,48 @@ if __name__ == "__main__":
         else:
             additional_mouselab_kwargs = {}
 
-        for possible_parameter in possible_parameters:
-            simulated_participant = SymmetricMouselabParticipant(
-                experiment_setting,
-                policy_function=eval(inputs.policy),
-                policy_kwargs=possible_parameter,
-                num_trials=inputs.num_trials,
-                cost_function=cost_function,
-                cost_kwargs=cost_parameters,
-                ground_truths=[trial["stateRewards"] for trial in ground_truth_subsets],
-                trial_ids=[trial["trial_id"] for trial in ground_truth_subsets],
-                additional_mouselab_kwargs=additional_mouselab_kwargs,
-            )
-            simulated_participant.simulate_trajectory()
+        simulated_participant = SymmetricMouselabParticipant(
+            experiment_setting,
+            policy_function=eval(inputs.policy),
+            policy_kwargs=policy_parameters,
+            num_trials=inputs.num_trials,
+            cost_function=cost_function,
+            cost_kwargs=cost_parameters,
+            ground_truths=[trial["stateRewards"] for trial in ground_truth_subsets],
+            trial_ids=[trial["trial_id"] for trial in ground_truth_subsets],
+            additional_mouselab_kwargs=additional_mouselab_kwargs,
+            kappa=curr_params["kappa"],
+            gamma=curr_params["gamma"],
+        )
+        simulated_participant.simulate_trajectory()
 
-            trace_df = traces_to_df([simulated_participant.trace])
+        trace_df = traces_to_df([simulated_participant.trace])
 
-            # add all information that might be useful
-            for sim_param, sim_value in vars(inputs).items():
-                trace_df[f"sim_{sim_param}"] = sim_value
+        # add all information that might be useful
+        for sim_param, sim_value in vars(inputs).items():
+            trace_df[f"sim_{sim_param}"] = sim_value
 
-            for cost_param, cost_val in cost_parameters.items():
-                trace_df[f"sim_{cost_param}"] = cost_val
+        for cost_param, cost_val in curr_params.items():
+            trace_df[f"sim_{cost_param}"] = cost_val
 
-            for policy_param, policy_val in possible_parameter.items():
-                if policy_param != "preference":
-                    trace_df[f"sim_{policy_param}"] = policy_val
+        trace_df["pid"] = fake_pid
+        del trace_df["states"]
 
-            trace_df["pid"] = fake_pid
-
-            fake_pid += 1
-
-            traces.append(trace_df)
+        traces.append(trace_df)
 
     full_df = pd.concat(traces)
 
-    parameter_string = get_param_string(cost_parameters)
-    policy_params = []
-    for key, param in sorted(policy_kwargs.items()):
-        if isinstance(param, dict) or callable(param):
-            pass
-        elif isinstance(param, str):
-            policy_params.append(param)
-        else:
-            policy_params.append(f"{param:.2f}")
-    policy_string = "_".join(policy_params)
 
     if inputs.cost_function is None:
         filename = path.joinpath(
-            f"cluster/data/trajectories/{experiment_setting}{alpha_string}/{inputs.policy}"
-            f"/simulated_agents_{policy_string}.csv"
+            f"cluster/data/trajectories/{experiment_setting}/{inputs.policy}"
+            f"/simulated_agents.csv"
         )
     else:
         filename = path.joinpath(
-            f"cluster/data/trajectories/{experiment_setting}{alpha_string}"
+            f"cluster/data/trajectories/{experiment_setting}"
             f"/{inputs.policy}"
-            f"/simulated_agents_{inputs.cost_function}_{parameter_string}"
-            f"_{policy_string}.csv"
+            f"/simulated_agents_{inputs.cost_function}_{inputs.parameter_file}.csv"
         )
 
-    full_df.to_csv(filename)
+    full_df.to_csv(filename, index=False)
