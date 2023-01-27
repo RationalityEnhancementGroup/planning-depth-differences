@@ -115,7 +115,7 @@ if __name__ == "__main__":
 
     # make trajectory folders if they don't already exist
     path.joinpath(
-        f"cluster/data/trajectories/{experiment_setting}/{inputs.policy}/"
+        f"cluster/data/trajectories/{experiment_setting}/{inputs.policy}/{inputs.parameter_file}"
     ).mkdir(parents=True, exist_ok=True)
 
     if "structure" in args:
@@ -201,14 +201,15 @@ if __name__ == "__main__":
 
     if inputs.cost_function is None:
         filename = path.joinpath(
-            f"cluster/data/trajectories/{experiment_setting}/{inputs.policy}"
+            f"cluster/data/trajectories/{experiment_setting}"
+            f"/{inputs.policy}/{inputs.parameter_file}"
             f"/simulated_agents.csv"
         )
     else:
         filename = path.joinpath(
             f"cluster/data/trajectories/{experiment_setting}"
-            f"/{inputs.policy}"
-            f"/simulated_agents_{inputs.cost_function}_{inputs.parameter_file}.csv"
+            f"/{inputs.policy}/{inputs.parameter_file}"
+            f"/simulated_agents_{inputs.cost_function}.csv"
         )
 
     full_df.to_csv(filename, index=False)
