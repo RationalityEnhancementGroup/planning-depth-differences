@@ -275,46 +275,48 @@ if __name__ == "__main__":
         )
     )
 
-    softmax_ray_object = GridInference(
-        traces=traces,
-        participant_class=SymmetricMouselabParticipant,
-        participant_kwargs={
-            "experiment_setting": args["experiment_setting"],
-            "policy_function": SoftmaxPolicy,
-            "additional_mouselab_kwargs": {
-                "mdp_graph_properties": structure_dicts,
-                **args["env_params"],
-            },
-        },
-        held_constant_policy_kwargs={
-            "noise": 0,
-            "q_function_generator": q_function_generator,
-        },
-        policy_parameters={
-            "temp": temp_priors,
-            "alpha": alpha_priors,
-            "gamma": gamma_priors,
-        },
-        cost_function=cost_function,
-        cost_parameters=cost_parameters,
-        cost_function_name=cost_function_name,
-    )
-
-    softmax_ray_object.run()
-
-    optimization_results = softmax_ray_object.get_optimization_results()
-
     # make experiment folder if it doesn't already exist
     path.joinpath(
         f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
     ).mkdir(parents=True, exist_ok=True)
 
-    filename = path.joinpath(
+    softmax_filename = path.joinpath(
         f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
         f"SoftmaxPolicy_optimization_results_{get_param_string(cost_parameter_dict)}"
         f"{simulation_params}.csv"
     )
-    optimization_results.to_csv(filename, index=False)
+
+    if not softmax_filename.exists():
+        softmax_ray_object = GridInference(
+            traces=traces,
+            participant_class=SymmetricMouselabParticipant,
+            participant_kwargs={
+                "experiment_setting": args["experiment_setting"],
+                "policy_function": SoftmaxPolicy,
+                "additional_mouselab_kwargs": {
+                    "mdp_graph_properties": structure_dicts,
+                    **args["env_params"],
+                },
+            },
+            held_constant_policy_kwargs={
+                "noise": 0,
+                "q_function_generator": q_function_generator,
+            },
+            policy_parameters={
+                "temp": temp_priors,
+                "alpha": alpha_priors,
+                "gamma": gamma_priors,
+            },
+            cost_function=cost_function,
+            cost_parameters=cost_parameters,
+            cost_function_name=cost_function_name,
+        )
+
+        softmax_ray_object.run()
+
+        optimization_results = softmax_ray_object.get_optimization_results()
+
+        optimization_results.to_csv(softmax_filename, index=False)
 
     random_filename = path.joinpath(
         f"cluster/data/logliks/{cost_function_name}/{experiment_folder}/"
