@@ -291,7 +291,7 @@ def get_simulated_trajectories(
         print(simulated_trajectory_path.joinpath(file_pattern))
         files = simulated_trajectory_path.glob(file_pattern)
     else:
-        files = [file_pattern]
+        files = [simulated_trajectory_path.joinpath(file_pattern)]
 
     mouselab_data = pd.concat(
         [pd.read_csv(sim_file, index_col=0) for sim_file in files]
