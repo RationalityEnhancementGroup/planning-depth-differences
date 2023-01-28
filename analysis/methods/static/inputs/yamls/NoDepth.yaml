@@ -1,9 +1,0 @@
-sessions:
-        - methods_main
-cost_functions: dist_depth_eff_forw
-group: false
-prior : 'expon'
-block: ['test']
-include_null : true
-title_extras: ''
-simulated: False
