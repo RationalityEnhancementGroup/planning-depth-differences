@@ -114,7 +114,7 @@ if __name__ == "__main__":
     if "*" in inputs.experiment or ".csv" in inputs.experiment:
         args = get_args_from_yamls(vars(inputs), attributes=["cost_function"])
         args["experiment"] = inputs.experiment
-        args["experiment_setting"] = inputs.experiment.split("/")[-3]
+        args["experiment_setting"] = inputs.experiment.split("/")[0]
     else:
         args = get_args_from_yamls(
             vars(inputs), attributes=["cost_function", "experiment"]
@@ -152,14 +152,14 @@ if __name__ == "__main__":
         traces = get_simulated_trajectories(
             args["experiment"],
             args["experiment_setting"],
-            simulated_trajectory_path=path.joinpath("cluster"),
+            simulated_trajectory_path=path.joinpath("cluster/data/trajectories"),
             additional_mouselab_kwargs={
                 "mdp_graph_properties": structure_dicts,
                 **args["env_params"],
             },
         )
         experiment_folder = "simulated/" + "/".join(
-            args["experiment"].split("/")[-3:-1]
+            args["experiment"].split("/")[0:-1]
         )
         # simulation params = file name, without asterisk or extension
         simulation_params = "_" + args["experiment"].split("/")[-1].replace(
