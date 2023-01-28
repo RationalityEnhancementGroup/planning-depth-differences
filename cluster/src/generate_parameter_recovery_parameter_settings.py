@@ -7,10 +7,10 @@ if __name__ == "__main__":
     irl_path = Path(__file__).parents[2]
 
     back_added_cost_values = [0]
-    forw_add_cost_values = [0, -2.5, -10]
-    distance_multiplier_values = [0, 2.5, 10]
-    depth_cost_values = [10, 5, 0, -5]
-    given_cost_values = [10, 5, 0, -5]
+    forw_add_cost_values = [0, -10]
+    distance_multiplier_values = [0, 10]
+    depth_cost_values = [10, 0, -5]
+    given_cost_values = [10, 0, -5]
 
     with open(
         irl_path.joinpath(f"cluster/parameters/gammas/partial.txt"), "r"
@@ -23,7 +23,7 @@ if __name__ == "__main__":
     ) as f:
         kappa_values = [float(val) for val in f.read().splitlines()]
 
-    temps = [1]
+    temps = [0.1, 1, 10]
     noises = [0]
 
     possible_parameters_df = []
