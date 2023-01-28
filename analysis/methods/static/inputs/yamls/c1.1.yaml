@@ -1,11 +1,9 @@
 sessions:
         - c1.1
-cost_functions:
-        - dist_depth_eff_forw
+cost_function: back_dist_depth_eff_forw
 group: false
 prior : 'expon'
 block: ['test']
 include_null : true
-preferred_cost: 'dist_depth_eff_forw'
 title_extras: ''
 simulated: False

@@ -56,7 +56,7 @@ if __name__ == "__main__":
         optimization_data["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'"
     ]
 
-    model_params = analysis_obj.cost_details[inputs.cost_function][
+    model_params = analysis_obj.cost_details[
         "cost_parameter_args"
     ] + ["temp"]
 
@@ -161,7 +161,7 @@ if __name__ == "__main__":
         )
 
     for block in hdi_ranges.keys():
-        for parameter in analysis_obj.cost_details[inputs.cost_function][
+        for parameter in analysis_obj.cost_details[
             "cost_parameter_args"
         ]:
             full_parameter_info[f"diff_{parameter}"] = full_parameter_info.apply(
@@ -218,7 +218,7 @@ if __name__ == "__main__":
         ].astype(np.float64)
 
     block = "test"
-    for parameter in analysis_obj.cost_details[inputs.cost_function][
+    for parameter in analysis_obj.cost_details[
         "cost_parameter_args"
     ]:
         given_param = model_params_given[parameter]
@@ -275,7 +275,7 @@ if __name__ == "__main__":
             print("----------")
             print(get_mann_whitney_text(comparison))
 
-    for parameter in analysis_obj.cost_details[inputs.cost_function][
+    for parameter in analysis_obj.cost_details[
         "cost_parameter_args"
     ]:
         print("----------")
@@ -350,7 +350,7 @@ if __name__ == "__main__":
         )
         print(get_correlation_text(correlation_object))
 
-    for parameter in analysis_obj.cost_details[inputs.cost_function][
+    for parameter in analysis_obj.cost_details[
         "cost_parameter_args"
     ]:
         correlation_object = pg.corr(
@@ -367,7 +367,7 @@ if __name__ == "__main__":
         print(f"Correlation between linear regression output and HDI max {parameter}")
         print(get_correlation_text(correlation_object))
 
-    for parameter in analysis_obj.cost_details[inputs.cost_function][
+    for parameter in analysis_obj.cost_details[
         "cost_parameter_args"
     ]:
 

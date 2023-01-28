@@ -1,11 +1,9 @@
 sessions:
         - SoftmaxPolicy/high_increasing
-cost_functions:
-        - dist_depth_eff_forw
+cost_functions: dist_depth_eff_forw
 simulated: True
 number_trials : 20
 group: False
 prior: 'expon'
 include_null: True
-preferred_cost: 'dist_depth_eff_forw'
 params: [""]

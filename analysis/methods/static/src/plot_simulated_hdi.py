@@ -51,7 +51,7 @@ if __name__ == "__main__":
     ]
 
     if "sim_temp" in optimization_data:
-        model_params = analysis_obj.cost_details[inputs.cost_function][
+        model_params = analysis_obj.cost_details[
             "cost_parameter_args"
         ] + ["temp"]
 
@@ -72,7 +72,7 @@ if __name__ == "__main__":
         ]
 
     else:
-        model_params = analysis_obj.cost_details[inputs.cost_function][
+        model_params = analysis_obj.cost_details[
             "cost_parameter_args"
         ]
 

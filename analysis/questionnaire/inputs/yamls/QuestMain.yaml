@@ -1,7 +1,6 @@
 sessions:
         - quest_main
-cost_functions:
-        - back_dist_depth_eff_forw
+cost_functions: back_dist_depth_eff_forw
 loadings: WiseEtAl2020_weights
 group: false
 prior : 'expon'

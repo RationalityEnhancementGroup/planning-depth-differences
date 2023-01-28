@@ -114,7 +114,7 @@ if __name__ == "__main__":
     with open(data_path.joinpath(f"data/{inputs.experiment_name}.pickle"), "wb") as f:
         pickle.dump({"all": simulated_means, "intended": intended_means}, f)
 
-    for param in analysis_obj.cost_details[inputs.cost_function][
+    for param in analysis_obj.cost_details[
         "cost_parameter_args"
     ] + ["temp"]:
         print("----------")

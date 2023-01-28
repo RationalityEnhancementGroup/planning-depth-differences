@@ -5,12 +5,10 @@ post_quizzes:
         - 'mouselab-quiz-post_Q1'
         - 'mouselab-quiz-post_Q2'
         - 'mouselab-quiz-post_Q3'
-cost_functions:
-        - dist_depth_eff_forw
+cost_functions: dist_depth_eff_forw
 group: false
 prior : 'expon'
 block: ['test', 'fairy']
 include_null : true
-preferred_cost: 'dist_depth_eff_forw'
 title_extras: ''
 simulated: False
