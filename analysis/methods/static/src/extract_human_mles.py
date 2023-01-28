@@ -74,10 +74,6 @@ if __name__ == "__main__":
             prior_inputs = yaml.safe_load(stream)
         temp_prior_details[prior] = prior_inputs
 
-    # get additinal file part
-    if inputs.block != "test":
-        simulation_params = "_" + inputs.block
-
     # read in experiment file
     yaml_path = irl_path.joinpath(
         f"data/inputs/yamls/experiments/{inputs.experiment}.yaml"
