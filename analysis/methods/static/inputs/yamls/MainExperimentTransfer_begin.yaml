@@ -1,5 +1,5 @@
 sessions:
-        - irl_validation
+        - methods_main_transfer
 post_quizzes:
         - 'mouselab-quiz-post_Q0'
         - 'mouselab-quiz-post_Q1'
@@ -8,7 +8,7 @@ post_quizzes:
 cost_functions: dist_depth_eff_forw
 group: false
 prior : 'expon'
-block: 'test'
+block : 'test_begin'
 include_null : true
 title_extras: ''
 simulated: False

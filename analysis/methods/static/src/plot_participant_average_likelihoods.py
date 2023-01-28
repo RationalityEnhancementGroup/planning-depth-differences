@@ -159,7 +159,7 @@ if __name__ == "__main__":
     )
 
     relevant_trials = analysis_obj.mouselab_trials[
-        analysis_obj.mouselab_trials["block"].isin(analysis_obj.block)
+        analysis_obj.mouselab_trials["block"].isin(analysis_obj.block.split(","))
     ]["trial_index"]
 
     plot_participant_average_likelihoods(
