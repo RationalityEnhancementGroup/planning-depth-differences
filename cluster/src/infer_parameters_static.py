@@ -146,6 +146,20 @@ if __name__ == "__main__":
     else:
         structure_dicts = None
 
+    if inputs.participant_subset_file:
+        pids = (
+            Path(__file__)
+            .resolve()
+            .parents[1]
+            .joinpath(f"parameters/pids/" f"{inputs.participant_subset_file}.txt")
+        )
+
+        with open(pids, "r") as f:
+            pids = [int(pid) for pid in f.read().splitlines()]
+
+    else:
+        pids = None
+
     # if wild card or .csv in experiment name, this is file pattern for
     # simulated trajectories
     if "*" in args["experiment"] or ".csv" in args["experiment"]:
@@ -166,20 +180,6 @@ if __name__ == "__main__":
             "*", ""
         ).replace(".csv", "")
     else:
-        if inputs.participant_subset_file:
-            pids = (
-                Path(__file__)
-                .resolve()
-                .parents[1]
-                .joinpath(f"parameters/pids/" f"{inputs.participant_subset_file}.txt")
-            )
-
-            with open(pids, "r") as f:
-                pids = [int(pid) for pid in f.read().splitlines()]
-
-        else:
-            pids = None
-
         if inputs.block:
             block = [inputs.block]
         else:
@@ -194,13 +194,14 @@ if __name__ == "__main__":
         experiment_folder = args["experiment"]
         # data not simulated, no simulation params
 
-        if inputs.participant_subset_file:
-            simulation_params = "_" + inputs.participant_subset_file
+        if inputs.block != "test":
+            simulation_params = "_" + inputs.block
         else:
             simulation_params = ""
 
-        if inputs.block != "test":
-            simulation_params = simulation_params + "_" + inputs.block
+
+    if inputs.participant_subset_file:
+        simulation_params = simulation_params +  "_" + inputs.participant_subset_file
 
     cost_parameter_dict = {
         cost_parameter_arg: arg
