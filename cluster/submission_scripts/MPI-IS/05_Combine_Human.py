@@ -76,11 +76,14 @@ if __name__ == "__main__":
 
     if inputs.block != "test":
         simulation_params = "_" + inputs.block
+    else:
+        simulation_params = ""
 
     # load random file
     random_df = pd.read_csv(
         f"data/logliks/{inputs.simulated_cost_function}/"
-        f"{inputs.experiment}/RandomPolicy_optimization_results{simulation_params}.csv",
+        f"{inputs.experiment}/RandomPolicy_optimization_results{simulation_params}"
+        f"_{inputs.participant_subset_file}.csv",
         index_col=0,
     )
     random_df["applied_policy"] = "RandomPolicy"
@@ -102,7 +105,8 @@ if __name__ == "__main__":
             f"data/logliks/{inputs.simulated_cost_function}/"
             f"{inputs.experiment}/"
             f"SoftmaxPolicy_optimization_results_"
-            f"{get_param_string(cost_parameters)}{simulation_params}.csv"
+            f"{get_param_string(cost_parameters)}{simulation_params}"
+            f"_{inputs.participant_subset_file}.csv"
         )
 
         curr_df = pd.read_csv(curr_file_name, index_col=0)
