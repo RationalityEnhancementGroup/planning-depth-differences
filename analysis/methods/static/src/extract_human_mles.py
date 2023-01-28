@@ -74,10 +74,6 @@ if __name__ == "__main__":
             prior_inputs = yaml.safe_load(stream)
         temp_prior_details[prior] = prior_inputs
 
-    # get additinal file part
-    if inputs.block != "test":
-        simulation_params = "_" + inputs.block
-
     # read in experiment file
     yaml_path = irl_path.joinpath(
         f"data/inputs/yamls/experiments/{inputs.experiment}.yaml"
@@ -98,21 +94,39 @@ if __name__ == "__main__":
         simulation_params = "_" + inputs.block
     else:
         simulation_params = ""
-    
+
     if inputs.pid:
-        data = pd.read_feather(
-            irl_path.joinpath(
-                f"cluster/data/logliks/{inputs.cost_function}/"
-                f"{inputs.experiment}{simulation_params}_by_pid/{inputs.pid}.feather"
-            )
+        data = pd.concat(
+            [
+                pd.read_feather(
+                    irl_path.joinpath(
+                        f"cluster/data/logliks/{inputs.cost_function}/"
+                        f"{inputs.experiment}"
+                        f"{'_' + block if block != 'test' else ''}"
+                        f"_by_pid/{inputs.pid}.feather"
+                    )
+                )
+                for block in inputs.block.split(",")
+            ]
         )
     else:
-        data = pd.read_feather(
-            irl_path.joinpath(
-                f"cluster/data/logliks/{inputs.cost_function}/"
-                f"{inputs.experiment}{simulation_params}.feather"
-            )
+        data = pd.concat(
+            [
+                pd.read_feather(
+                    irl_path.joinpath(
+                        f"cluster/data/logliks/{inputs.cost_function}/"
+                        f"{inputs.experiment}"
+                        f"{'_' + block if block != 'test' else ''}"
+                        f".feather"
+                    )
+                )
+                for block in inputs.block.split(",")
+            ]
         )
+
+    # sum over blocks if needed
+    if "," in inputs.block:
+        data = data.groupby(["trace_pid"] + cost_details["constant_values"]).sum()
 
     full_priors = add_cost_priors_to_temp_priors(
         data,
