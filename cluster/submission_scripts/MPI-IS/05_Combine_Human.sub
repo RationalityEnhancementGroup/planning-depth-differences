@@ -5,8 +5,9 @@ arguments = $(filename) -e $(experiment:methods_main) -d $(participant_file) -k 
 output = log/$(output_string:out_5).stdout
 error  = log/$(output_string:out_5).stderr
 log   = log/$(output_string:out_5).log
-request_memory = 64000
+request_memory = $(memory:64000)
 coresize        = 0
+max_materialize = 1
 request_cpus = 1
 
 queue
