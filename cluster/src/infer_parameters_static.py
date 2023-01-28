@@ -114,7 +114,7 @@ if __name__ == "__main__":
     if "*" in inputs.experiment or ".csv" in inputs.experiment:
         args = get_args_from_yamls(vars(inputs), attributes=["cost_function"])
         args["experiment"] = inputs.experiment
-        args["experiment_setting"] = inputs.experiment.split("/")[-3]
+        args["experiment_setting"] = inputs.experiment.split("/")[0]
     else:
         args = get_args_from_yamls(
             vars(inputs), attributes=["cost_function", "experiment"]
@@ -146,40 +146,40 @@ if __name__ == "__main__":
     else:
         structure_dicts = None
 
+    if inputs.participant_subset_file:
+        pids = (
+            Path(__file__)
+            .resolve()
+            .parents[1]
+            .joinpath(f"parameters/pids/" f"{inputs.participant_subset_file}.txt")
+        )
+
+        with open(pids, "r") as f:
+            pids = [int(pid) for pid in f.read().splitlines()]
+
+    else:
+        pids = None
+
     # if wild card or .csv in experiment name, this is file pattern for
     # simulated trajectories
     if "*" in args["experiment"] or ".csv" in args["experiment"]:
         traces = get_simulated_trajectories(
             args["experiment"],
             args["experiment_setting"],
-            simulated_trajectory_path=path.joinpath("cluster"),
+            simulated_trajectory_path=path.joinpath("cluster/data/trajectories"),
             additional_mouselab_kwargs={
                 "mdp_graph_properties": structure_dicts,
                 **args["env_params"],
             },
         )
         experiment_folder = "simulated/" + "/".join(
-            args["experiment"].split("/")[-3:-1]
+            args["experiment"].split("/")[0:-1]
         )
         # simulation params = file name, without asterisk or extension
         simulation_params = "_" + args["experiment"].split("/")[-1].replace(
             "*", ""
         ).replace(".csv", "")
     else:
-        if inputs.participant_subset_file:
-            pids = (
-                Path(__file__)
-                .resolve()
-                .parents[1]
-                .joinpath(f"parameters/pids/" f"{inputs.participant_subset_file}.txt")
-            )
-
-            with open(pids, "r") as f:
-                pids = [int(pid) for pid in f.read().splitlines()]
-
-        else:
-            pids = None
-
         if inputs.block:
             block = [inputs.block]
         else:
@@ -194,13 +194,14 @@ if __name__ == "__main__":
         experiment_folder = args["experiment"]
         # data not simulated, no simulation params
 
-        if inputs.participant_subset_file:
-            simulation_params = "_" + inputs.participant_subset_file
+        if inputs.block != "test":
+            simulation_params = "_" + inputs.block
         else:
             simulation_params = ""
 
-        if inputs.block != "test":
-            simulation_params = simulation_params + "_" + inputs.block
+
+    if inputs.participant_subset_file:
+        simulation_params = simulation_params +  "_" + inputs.participant_subset_file
 
     cost_parameter_dict = {
         cost_parameter_arg: arg

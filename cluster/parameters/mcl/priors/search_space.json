@@ -48,7 +48,7 @@
             "type": "uniform",
             "range": "[np.log(1e-10), np.log(1e-1)]"
         },
-        "alpha": {
+        "kappa": {
             "type": "uniform",
             "range": [1, 10]
         },
@@ -114,7 +114,7 @@
         },
         "noisy_memory_best_payoff":
         {
-            "alpha": {
+            "kappa": {
                 "type" : "uniform",
                 "range": [1, 10]
             },
