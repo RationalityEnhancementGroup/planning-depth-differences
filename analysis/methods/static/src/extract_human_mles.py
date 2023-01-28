@@ -118,7 +118,7 @@ if __name__ == "__main__":
         data,
         cost_details,
         temp_prior_details,
-        additional_params=["alpha", "gamma"],
+        additional_params=["kappa", "gamma"],
     )
 
     best_parameter_values = extract_mles_and_maps(data, cost_details, full_priors)
