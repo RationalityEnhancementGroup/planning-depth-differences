@@ -271,6 +271,7 @@ def get_human_trajectories(
 def get_simulated_trajectories(
     file_pattern: str,
     experiment_setting: str,
+    pids: List[int] = None,
     simulated_trajectory_path: Union[str, bytes, os.PathLike] = None,
     additional_mouselab_kwargs: dict = None,
 ) -> List[Dict[str, List]]:
@@ -279,7 +280,10 @@ def get_simulated_trajectories(
     to be used in inference
     :param file_pattern: corresponding to the type of simulated trajectory \
     we're interested in, as a glob partner
+    :param experiment_settings
+    :param pids
     :param simulated_trajectory_path: where the simulated trajectories are located
+    :param additional_mouselab_kwargs
     :return:
     """
     if simulated_trajectory_path is None:
@@ -296,6 +300,9 @@ def get_simulated_trajectories(
     mouselab_data = pd.concat(
         [pd.read_csv(sim_file, index_col=0) for sim_file in files]
     )
+
+    if pids:
+        mouselab_data = mouselab_data[mouselab_data["pid"].isin(pids)]
 
     mouselab_data = mouselab_data.fillna(value="None")
     sim_cols = [col for col in list(mouselab_data) if "sim_" in col]
