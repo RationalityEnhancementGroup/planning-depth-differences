@@ -8,7 +8,7 @@ post_quizzes:
 cost_functions: dist_depth_eff_forw
 group: false
 prior : 'expon'
-block: ['None']
+block: "training,test"
 include_null : true
 title_extras: ''
 simulated: False
