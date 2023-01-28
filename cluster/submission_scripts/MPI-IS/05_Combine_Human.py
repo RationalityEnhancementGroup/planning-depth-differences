@@ -76,6 +76,8 @@ if __name__ == "__main__":
 
     if inputs.block != "test":
         simulation_params = "_" + inputs.block
+    else:
+        simulation_params = ""
 
     # load random file
     random_df = pd.read_csv(
