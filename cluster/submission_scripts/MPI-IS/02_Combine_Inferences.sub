@@ -1,6 +1,6 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
-filename = $(project_path)/cluster/submission_scripts/MPI-IS/05_Combine_Human.py
+filename = $(project_path)/cluster/submission_scripts/MPI-IS/02_Combine_Inferences.py 
 arguments = $(filename) -e $(experiment:methods_main) -d $(participant_file) -k $(block:test) -s $(simulated_cost_function:back_dist_depth_eff_forw) -c $(cost_function:dist_depth_eff_forw) -p
 output = log/$(output_string:out_5).stdout
 error  = log/$(output_string:out_5).stderr
