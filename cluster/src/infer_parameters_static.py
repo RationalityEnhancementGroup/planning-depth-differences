@@ -265,6 +265,7 @@ if __name__ == "__main__":
             cost_parameters=cost_parameters,
             structure=structure_dicts,
             env_params=args["env_params"],
+            bmps_path=Path(__file__).parents[1].joinpath("parameters/bmps/")
             kappa=a,
             gamma=g,
         )
