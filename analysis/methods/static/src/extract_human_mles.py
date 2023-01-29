@@ -13,7 +13,6 @@ if __name__ == "__main__":
         "-e",
         "--exp",
         dest="experiment",
-        metavar="experiment_name",
     )
     parser.add_argument(
         "-c",
