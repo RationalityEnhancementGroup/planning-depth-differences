@@ -118,7 +118,7 @@ if __name__ == "__main__":
 
     # sum over blocks if needed
     if "," in inputs.block:
-        data = data.groupby(["trace_pid"] + list(cost_details["constant_values"]), as_index=False).sum()
+        data = data.groupby(["trace_pid", "applied_policy"] + list(cost_details["constant_values"]), as_index=False).sum()
 
     full_priors = add_cost_priors_to_temp_priors(
         data,
