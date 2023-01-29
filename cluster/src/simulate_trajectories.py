@@ -17,7 +17,7 @@ from mouselab.graph_utils import get_structure_properties
 from mouselab.policies import OptimalQ, RandomPolicy, SoftmaxPolicy  # noqa
 from scipy import stats  # noqa
 import dill as pickle
-from get_myopic_voc_values import get_state_action_values
+from costometer.utils import get_state_action_values
 
 if __name__ == "__main__":
     """
