@@ -83,7 +83,7 @@ if __name__ == "__main__":
         full_parameters = f.read().splitlines()
 
     if "/" in inputs.experiment:
-        simulation_params = f"simulated_agents_{inputs.simulated_cost_function}"
+        simulation_params = f"_simulated_agents_{inputs.simulated_cost_function}"
     else:
         # human data
         if inputs.block != "test":
