@@ -73,14 +73,6 @@ if __name__ == "__main__":
             prior_inputs = yaml.safe_load(stream)
         temp_prior_details[prior] = prior_inputs
 
-    # read in experiment file
-    yaml_path = irl_path.joinpath(
-        f"data/inputs/yamls/experiments/{inputs.experiment}.yaml"
-    )
-
-    with open(yaml_path, "r") as stream:
-        experiment_details = yaml.safe_load(stream)
-
     # read in cost function details
     yaml_path = irl_path.joinpath(
         f"data/inputs/yamls/cost_functions/{inputs.base_cost_function}.yaml"
