@@ -166,6 +166,7 @@ if __name__ == "__main__":
         traces = get_simulated_trajectories(
             args["experiment"],
             args["experiment_setting"],
+            pids=pids,
             simulated_trajectory_path=path.joinpath("cluster/data/trajectories"),
             additional_mouselab_kwargs={
                 "mdp_graph_properties": structure_dicts,
