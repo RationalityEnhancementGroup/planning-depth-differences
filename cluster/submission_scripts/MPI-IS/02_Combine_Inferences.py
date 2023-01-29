@@ -29,7 +29,15 @@ if __name__ == "__main__":
         "-s",
         "--simulated-cost-function",
         dest="simulated_cost_function",
-        help="Simulated cost function YAML file",
+        help="Simulated cost function",
+        default="back_dist_depth_eff_forw",
+        type=str,
+    )
+    parser.add_argument(
+        "-b",
+        "--base-cost-function",
+        dest="base_cost_function",
+        help="Base cost function YAML file",
         default="back_dist_depth_eff_forw",
         type=str,
     )
@@ -63,7 +71,7 @@ if __name__ == "__main__":
     cluster_folder = Path(__file__).resolve().parents[2]
 
     yaml_path = irl_folder.joinpath(
-        f"data/inputs/yamls/cost_functions/{inputs.simulated_cost_function}.yaml"
+        f"data/inputs/yamls/cost_functions/{inputs.base_cost_function}.yaml"
     )
     with open(yaml_path, "r") as stream:
         cost_details = yaml.safe_load(stream)
@@ -74,14 +82,18 @@ if __name__ == "__main__":
     ) as f:
         full_parameters = f.read().splitlines()
 
-    if inputs.block != "test":
-        simulation_params = "_" + inputs.block
+    if "/" in inputs.experiment:
+        simulation_params = f"simulated_agents_{inputs.simulated_cost_function}"
     else:
-        simulation_params = ""
+        # human data
+        if inputs.block != "test":
+            simulation_params = "_" + inputs.block
+        else:
+            simulation_params = ""
 
     # load random file
     random_df = pd.read_csv(
-        f"data/logliks/{inputs.simulated_cost_function}/"
+        f"data/logliks/{inputs.base_cost_function}/"
         f"{inputs.experiment}/RandomPolicy_optimization_results{simulation_params}"
         f"_{inputs.participant_subset_file}.csv",
         index_col=0,
@@ -102,7 +114,7 @@ if __name__ == "__main__":
             raise e
 
         curr_file_name = (
-            f"data/logliks/{inputs.simulated_cost_function}/"
+            f"data/logliks/{inputs.base_cost_function}/"
             f"{inputs.experiment}/"
             f"SoftmaxPolicy_optimization_results_"
             f"{get_param_string(cost_parameters)}{simulation_params}"
