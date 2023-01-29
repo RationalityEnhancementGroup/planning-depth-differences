@@ -19,13 +19,13 @@ if __name__ == "__main__":
         "-p",
         "--prior",
         dest="prior_file",
+        default="uniform",
         help="Prior",
-        metavar="prior_file",
     )
     inputs = parser.parse_args()
 
     irl_path = Path(__file__).resolve().parents[4]
-    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/data")
+    subdirectory = irl_path.joinpath(f"analysis/methods/static")
 
     yaml_file = str(
         irl_path.joinpath(f"data/inputs/yamls/temperatures/{inputs.prior_file}.yaml")

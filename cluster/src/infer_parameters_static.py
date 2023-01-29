@@ -18,7 +18,7 @@ from cluster_utils import (
 from costometer.agents.vanilla import SymmetricMouselabParticipant
 from costometer.inference import GridInference
 from costometer.utils import get_param_string, get_temp_prior
-from get_myopic_voc_values import get_state_action_values
+from costometer.utils import get_state_action_values
 from mouselab.cost_functions import *  # noqa
 from mouselab.distributions import Categorical
 from mouselab.envs.registry import registry
