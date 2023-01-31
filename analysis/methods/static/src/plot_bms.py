@@ -33,12 +33,12 @@ def run_bms(optimization_data: pd.DataFrame, path_to_spm: Path = None) -> pd.Dat
     """
     # pivot dataframe
     pivoted_df = optimization_data.pivot(
-        index="trace_pid", columns="Model Name", values="bic"
+        index="trace_pid", columns="Model Name", values="mle"
     )
 
     evidences = pivoted_df.values
 
-    evidences = matlab.double(list([list(-.5 * evidence) for evidence in evidences]))
+    evidences = matlab.double(list([list(-0.5 * evidence) for evidence in evidences]))
 
     eng = matlab.engine.start_matlab()
     eng.addpath(str(path_to_spm.joinpath("spm12")))
@@ -120,7 +120,11 @@ if __name__ == "__main__":
 
     optimization_data = analysis_obj.query_optimization_data()
     if "back_added_cost" not in analysis_obj.cost_details["cost_parameter_args"]:
-        optimization_data = optimization_data[~optimization_data["Model Name"].apply(lambda model_name: "back_added_cost" in model_name)]
+        optimization_data = optimization_data[
+            ~optimization_data["Model Name"].apply(
+                lambda model_name: "back_added_cost" in model_name
+            )
+        ]
 
     bms_df = run_bms(optimization_data, path_to_spm=irl_path)
 

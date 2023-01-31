@@ -20,24 +20,19 @@ def bic_plot(
 ):
     if palette is None:
         palette = get_static_palette(subdirectory, experiment_name)
-    plt.figure(figsize=(120, 80), dpi=80)
-    sum_bic = optimization_data.groupby(["Model Name"])[bic_field].sum()
-    print(sum_bic.sort_values().round(5))
-    order = sum_bic.sort_values().index
+    plt.figure(figsize=(12, 8), dpi=80)
+
     sns.barplot(
         y="Model Name",
         x=bic_field,
-        estimator=np.sum,
-        ci=None,
-        data=optimization_data,
-        order=order,
+        data=optimization_data.sort_values(by="bic").iloc[:16],
         palette=palette,
     )
 
     plt.xlabel(None)
     plt.ylabel(None)
 
-    plt.gca().set_xlim((0.75 * min(sum_bic), plt.gca().get_xlim()[1]))
+    plt.gca().set_xlim((0.75 * min(optimization_data["bic"]), plt.gca().get_xlim()[1]))
 
 
 if __name__ == "__main__":
@@ -69,27 +64,31 @@ if __name__ == "__main__":
     )
 
     optimization_data = analysis_obj.query_optimization_data()
-    if "back_added_cost" not in analysis_obj.cost_details["cost_parameter_args"]:
-        optimization_data = optimization_data[~optimization_data["Model Name"].apply(lambda model_name: "back_added_cost" in model_name)]
-
-    bic_df = optimization_data.groupby(["Model Name", "Number Parameters"]).sum().reset_index()
+    bic_df = (
+        optimization_data.groupby(["Model Name", "Number Parameters"])
+        .sum()
+        .reset_index()
+    )
 
     bic_df["bic"] = bic_df.apply(
         lambda row: bic(
-            llf=row[f"map_{analysis_obj.prior}"],
+            llf=row["mle"],
             nobs=row["num_clicks"],
             df_modelwc=row["Number Parameters"],
         ),
-        axis=1)
+        axis=1,
+    )
+
+    print(bic_df.sort_values(by="bic").round(5))
 
     if irl_path.joinpath("analysis/methods/" "static/data/OptimalBIC.pickle").is_file():
         with open(
             irl_path.joinpath("analysis/methods/" "static/data/OptimalBIC.pickle"), "rb"
         ) as f:
-            simulated_means    = pickle.load(f)["intended"]
+            simulated_means = pickle.load(f)["intended"]
     else:
         simulated_means = None
-    
+
     bic_plot(
         bic_df,
         subdirectory,
@@ -111,5 +110,5 @@ if __name__ == "__main__":
     # Bayes Factor approximation
     print("Log Bayes factor approximation, difference between top two models")
     print(
-        (sum_test["bic"].sort_values().iloc[1] - sum_test["bic"].sort_values().iloc[0]) / 2
+        (bic_df["bic"].sort_values().iloc[1] - bic_df["bic"].sort_values().iloc[0]) / 2
     )
