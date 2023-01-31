@@ -42,9 +42,11 @@ This directory contains notebooks that are associated with developing the IRL me
    ```
    cd <path to irl-project>/cluster
    condor_submit_bid 2 submission_scripts/MPI-IS/05_Combine_Human.sub cost_function=back_dist_depth_eff_forw experiment=methods_main participant_file=methods_main simulated_cost_function=back_dist_depth_eff_forw save_path=/fast/vfelso;
+   condor_submit_bid 2 submission_scripts/MPI-IS/05_Combine_Human.sub cost_function=dist_depth_eff_forw experiment=methods_main participant_file=methods_main simulated_cost_function=back_dist_depth_eff_forw save_path=/fast/vfelso;
    
    for file_idx in {1..3};
         do condor_submit_bid 2 submission_scripts/MPI-IS/05_Combine_Human.sub cost_function=dist_depth_eff_forw experiment=irl_validation participant_file=irl_validation$file_idx simulated_cost_function=back_dist_depth_eff_forw save_path=/fast/vfelso;
+        condor_submit_bid 2 submission_scripts/MPI-IS/05_Combine_Human.sub cost_function=dist_depth_eff_forw experiment=irl_validation participant_file=irl_validation$file_idx simulated_cost_function=back_dist_depth_eff_forw block=fairy save_path=/fast/vfelso;
    done;
    ```
 7. Once the inference is done for the participants, get the best parameters by running (~30 minutes):
