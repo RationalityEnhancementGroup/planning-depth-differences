@@ -10,6 +10,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 import dill as pickle
+import numpy as np
 import yaml
 from cluster_utils import (
     get_args_from_yamls,
@@ -66,7 +67,7 @@ if __name__ == "__main__":
         type=str,
     )
     parser.add_argument(
-        "--n",
+        "-n",
         "--num-evals",
         dest="num_evals",
         type=int,
@@ -153,9 +154,9 @@ if __name__ == "__main__":
             inverse=temp_priors["inverse"],
         )
         temp_prior_dict = dict(zip(temp_priors.vals, temp_priors.probs))
-        prior_inputs["policy_parameters"]["temp"][
-            "prior"
-        ] = lambda val: temp_prior_dict[val]
+        prior_inputs["policy_parameters"]["temp"]["prior"] = lambda val: np.log(
+            temp_prior_dict[val]
+        )
     else:
         temp_priors = None
 
