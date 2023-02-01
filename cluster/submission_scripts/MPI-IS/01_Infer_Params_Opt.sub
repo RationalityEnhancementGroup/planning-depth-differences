@@ -1,7 +1,7 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/cluster/src/infer_parameters_static_opt.py
-arguments = $(filename) -e $(experiment) -c $(cost_function:dist_depth_eff_forw) -t expon -p back_dist_depth_eff_forw -b Myopic_VOC -n $(num_evals) -d $(pid)
+arguments = $(filename) -e $(experiment) -c $(cost_function:dist_depth_eff_forw) -t expon -p $(prior_file:back_dist_depth_eff_forw) -b Myopic_VOC -n $(num_evals) -d $(pid)
 output = log/$(output_string:out_1_opt)_$(Process).stdout
 error  = log/$(output_string:out_1_opt)_$(Process).stderr
 log   = log/$(output_string:out_1_opt)_$(Process).log
