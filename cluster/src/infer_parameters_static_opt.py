@@ -78,6 +78,14 @@ if __name__ == "__main__":
         dest="pid",
         type=int,
     )
+    parser.add_argument(
+        "-k",
+        "--block",
+        dest="block",
+        default=None,
+        help="Block",
+        type=str,
+    )
 
     inputs = parser.parse_args()
 
@@ -109,14 +117,23 @@ if __name__ == "__main__":
             "*", ""
         ).replace(".csv", "")
     else:
+        if inputs.block:
+            block = [inputs.block]
+        else:
+            block = inputs.block
+
         traces = get_human_trajectories(
             args["experiment"],
             pids=[inputs.pid],
+            blocks=block,
             include_last_action=args["env_params"]["include_last_action"],
         )
         experiment_folder = args["experiment"]
-        # data not simulated, no simulation params
-        simulation_params = ""
+
+        if inputs.block != "test":
+            simulation_params = "_" + inputs.block
+        else:
+            simulation_params = ""
 
     if inputs.prior_file is not None:
         yaml_path = str(
