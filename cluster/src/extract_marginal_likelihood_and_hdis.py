@@ -171,7 +171,7 @@ if __name__ == "__main__":
         f"cluster/data/marginal_hdi/"
         f"{inputs.cost_function}/{inputs.experiment_name}/"
         f"{inputs.block}_{inputs.temperature_file}"
-        f"_hdi_{inputs.pid:.0f}_{file_end}.pickle"
+        f"_hdi_{inputs.pid:.0f}{file_end}.pickle"
     )
     if not hdi_file.is_file():
         hdi_ranges = {}
