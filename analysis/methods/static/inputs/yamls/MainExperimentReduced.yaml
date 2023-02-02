@@ -12,3 +12,7 @@ block: 'test'
 include_null : true
 title_extras: ''
 simulated: False
+trial_by_trial_models:
+        - "back_added_cost"
+        - 'back_added_cost,temp'
+        - 'back_added_cost,kappa'
