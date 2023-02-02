@@ -1,9 +1,8 @@
-sessions:
-        - OptimalQ/high_increasing
-cost_functions: dist_depth_eff_forw
+session: simulated/high_increasing/SoftmaxPolicy/participants_simulated_agents_back_dist_depth_eff_forw
+cost_function: dist_depth_eff_forw
 simulated: True
 number_trials : 20
-group: False
 prior: 'expon'
+block: 'test'
 include_null: True
-params: [""]
+excluded_parameters : ''

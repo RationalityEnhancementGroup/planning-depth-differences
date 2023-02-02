@@ -1,7 +1,6 @@
 session: irl_validation
-cost_function: back_dist_depth_eff_forw
+cost_function: dist_depth_eff_forw
 prior : 'expon'
-excluded_parameters : ''
 block: 'test'
 include_null : true
 title_extras: ''

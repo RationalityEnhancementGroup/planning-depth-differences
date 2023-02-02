@@ -1,0 +1,9 @@
+session: simulated/high_increasing/SoftmaxPolicy/kappa_only_simulated_agents_back_dist_depth_eff_forw
+cost_function: dist_depth_eff_forw
+simulated: True
+number_trials : 20
+prior: 'uniform'
+block: 'test'
+include_null: True
+params: [""]
+excluded_parameters: 'forw_added_cost,back_added_cost,given_cost,distance_multiplier,depth_cost_weight,temp,gamma'

@@ -1,15 +1,14 @@
-sessions:
-        - methods_main
+session: methods_main
 post_quizzes:
         - 'mouselab-quiz-post_Q0'
         - 'mouselab-quiz-post_Q1'
         - 'mouselab-quiz-post_Q2'
         - 'mouselab-quiz-post_Q3'
-cost_functions: dist_depth_eff_forw
-group: false
+cost_function: dist_depth_eff_forw
 prior : 'expon'
-block: 'test'
+excluded_parameters : ''
+block: "training,test"
 include_null : true
 title_extras: ''
 simulated: False
-q_path: 'cluster/data/bmps/preferences'
+palette_name: MainExperimentReduced

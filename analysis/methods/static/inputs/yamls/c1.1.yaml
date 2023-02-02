@@ -1,7 +1,6 @@
-sessions:
-        - c1.1
+session: c1.1
 cost_function: back_dist_depth_eff_forw
-group: false
+
 prior : 'expon'
 block: 'test'
 include_null : true
