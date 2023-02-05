@@ -2,9 +2,9 @@ project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/cluster/src/simulate_trajectories.py
 arguments = $(filename) -f $(param_file:reduced)
-output = log/$(output_string:out_6).stdout
-error  = log/$(output_string:out_6).stderr
-log   = log/$(output_string:out_6).log
+output = log/$(output_string:out_3).stdout
+error  = log/$(output_string:out_3).stderr
+log   = log/$(output_string:out_3).log
 request_memory = 8000
 request_cpus = 1
 
