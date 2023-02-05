@@ -58,11 +58,11 @@ This directory contains notebooks that are associated with developing the IRL me
    ```
 7. Once the inference is done for the participants, get the best parameters by running (~30 minutes):
    ```
-   condor_submit_bid 1 submission_scripts/MPI-IS/M_01_Get_MAP_File_by_PID.sub experiment=methods_main simulated_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=methods_main save_path=/fast/vfelso;
-   condor_submit_bid 1 submission_scripts/MPI-IS/M_01_Get_MAP_File_by_PID.sub experiment=irl_validation simulated_cost_function=back_dist_depth_eff_forw cost_function=dist_depth_eff_forw participant_file=irl_validation save_path=/fast/vfelso;
-   ```
-    
-8. Extract marginal and MLEs for human trajectories (~1 hour):
+   condor_submit_bid 1 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=methods_main simulated_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=methods_main save_path=/fast/vfelso;
+   condor_submit_bid 1 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=methods_main simulated_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=methods_main block=training,test save_path=/fast/vfelso;
+   
+   condor_submit_bid 1 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=irl_validation simulated_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=irl_validation save_path=/fast/vfelso;
+   condor_submit_bid 1 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=irl_validation simulated_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=irl_validation block=fairy save_path=/fast/vfelso;
    ```
    condor_submit_bid 2 submission_scripts/MPI-IS/10_Extract_Marginal_and_MLEs_Human.sub experiment=ValidationExperiment
    condor_submit_bid 2 submission_scripts/MPI-IS/10_Extract_Marginal_and_MLEs_Human.sub experiment=MainExperiment
