@@ -1,7 +1,7 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/cluster/src/infer_parameters_static.py
-arguments = $(filename) -e $(experiment) -p $(participants) -c $(cost_function:dist_depth_eff_forw) -t $(temperature_file:expon) -v=$(reward_line) -a=$(kappa:full) -g=$(gamma:full) -k=$(block:test)
+arguments = $(filename) -e $(experiment) -p $(participants) -c $(cost_function:dist_depth_eff_forw) -t $(temperature_file:uniform) -v=$(reward_line) -a=$(kappa:full) -g=$(gamma:full) -k=$(block:test)
 output = log/$(output_string:out_1)_$(Process).stdout
 error  = log/$(output_string:out_1)_$(Process).stderr
 log   = log/$(output_string:out_1)_$(Process).log
