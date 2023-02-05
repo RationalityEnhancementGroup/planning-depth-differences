@@ -50,6 +50,12 @@ This directory contains notebooks that are associated with developing the IRL me
         condor_submit_bid 2 submission_scripts/MPI-IS/05_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=irl_validation participant_file=irl_validation$file_idx simulated_cost_function=back_dist_depth_eff_forw block=fairy save_path=/fast/vfelso;
    done;
    ```
+6. Extract marginal and HDIs for human trajectories (~1 hour):
+   ```
+   condor_submit_bid 1 submission_scripts/MPI-IS/04_Extract_Marginal_and_HDIs.sub experiment=methods_main simulated_cost_function=back_dist_depth_eff_forw participant_file=methods_main save_path=/fast/vfelso;
+   condor_submit_bid 1 submission_scripts/MPI-IS/04_Extract_Marginal_and_HDIs.sub experiment=irl_validation simulated_cost_function=back_dist_depth_eff_forw participant_file=irl_validation save_path=/fast/vfelso;
+   condor_submit_bid 1 submission_scripts/MPI-IS/04_Extract_Marginal_and_HDIs.sub experiment=irl_validation simulated_cost_function=back_dist_depth_eff_forw participant_file=irl_validation block=fairy save_path=/fast/vfelso;
+   ```
 7. Once the inference is done for the participants, get the best parameters by running (~30 minutes):
    ```
    condor_submit_bid 1 submission_scripts/MPI-IS/M_01_Get_MAP_File_by_PID.sub experiment=methods_main simulated_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=methods_main save_path=/fast/vfelso;
