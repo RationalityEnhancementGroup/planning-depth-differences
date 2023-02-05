@@ -30,6 +30,7 @@ This directory contains notebooks that are associated with developing the IRL me
    ```
    cd <path to project>/cluster
    condor_submit_bid 2 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=methods_main participants=methods_main save_path=/fast/vfelso;
+   condor_submit_bid 2 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=methods_main participants=methods_main block=training save_path=/fast/vfelso;
 
    condor_submit_bid 2 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=irl_validation participants=irl_validation1 save_path=/fast/vfelso
    condor_submit_bid 2 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=irl_validation participants=irl_validation2 save_path=/fast/vfelso
