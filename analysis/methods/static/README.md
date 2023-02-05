@@ -64,12 +64,9 @@ This directory contains notebooks that are associated with developing the IRL me
    condor_submit_bid 1 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=irl_validation simulated_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=irl_validation save_path=/fast/vfelso;
    condor_submit_bid 1 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=irl_validation simulated_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=irl_validation block=fairy save_path=/fast/vfelso;
    ```
-   condor_submit_bid 2 submission_scripts/MPI-IS/10_Extract_Marginal_and_MLEs_Human.sub experiment=ValidationExperiment
-   condor_submit_bid 2 submission_scripts/MPI-IS/10_Extract_Marginal_and_MLEs_Human.sub experiment=MainExperiment
+8. Pre-calculate trial-by-trial likelihoods (~30 minutes):
    ```
-9. Pre-calculate trial-by-trial likelihoods (~30 minutes):
-   ```
-   condor_submit_bid 2 submission_scripts/MPI-IS/11_Calculate_Trial_By_Trial_Likelihood.sub experiment=TrialByTrial
+   condor_submit_bid 2 submission_scripts/MPI-IS/06_Calculate_Trial_By_Trial_Likelihood.sub experiment=MainExperiment subdirectory=methods/static
    ```
    
 ## Simulated data computations on cluster
