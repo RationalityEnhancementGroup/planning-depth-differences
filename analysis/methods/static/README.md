@@ -6,23 +6,23 @@ This directory contains notebooks that are associated with developing the IRL me
 
 ## Human data computations on cluster
 
-0. Before running, make a log file in the `cluster` directory as well as the `analysis/methods/static directory: `mkdir log`
-1. Create a virtual environment as outlined in the top folder `irl-project` both on your local machine and the cluster
-3. Download and preprocess the participant data, outside the cluster and then transfer to cluster (if needed, see instructions for downloading data in the `irl-project/data` subfolder):
+0. Before running, make a log file in the `cluster` directory as well as the `analysis/methods/static` directory: `mkdir log`
+1. Create a virtual environment as outlined in the top project folder both on your local machine and the cluster
+2. Download and preprocess the participant data, outside the cluster and then transfer to cluster (if needed, see instructions for downloading data in the `data` subfolder):
    ```
-   cd <path to irl-project>
+   cd <path to project>
    source env/bin/activate
-   cd <path to irl-project>/data
+   cd <path to project>/data
    for experiment in methods_main irl_validation;
       do python src/download_exp.py -e $experiment
       python src/preprocess_human_runs.py -e $experiment
    done;
    ```
-   Then, transfer by adding the subfolder in `irl-project/data/processed/<experiment>` to git or via rsync/scp.
-4. Get the computational microscope strategies (~2 hours, depends on number of participants):
+   Then, transfer by adding the subfolder in `data/processed/<experiment>` to git or via rsync/scp.
+3. Get the computational microscope strategies (~2 hours, depends on number of participants):
    ```
    for experiment in methods_main irl_validation;
-       do condor_submit_bid 2 submission_scripts/MPI-IS/M_00_Get_CM_Strategies.sub experiment=$experiment save_path=/fast/vfelso
+       do condor_submit_bid 1 submission_scripts/MPI-IS/M_00_Get_CM_Strategies.sub experiment=$experiment save_path=/fast/vfelso
    done;
    ```
    If needed, move the files to your local computer.
