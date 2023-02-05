@@ -26,17 +26,17 @@ This directory contains notebooks that are associated with developing the IRL me
    done;
    ```
    If needed, move the files to your local computer.
-5. Infer parameters for a participant file (~2 hours, will need to run each by itself):
+4. Infer parameters for a participant file (~2 hours per job, will need to run each by itself):
    ```
-   cd <path to irl-project>/cluster
-   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=methods_main participants=methods_main save_path=/fast/vfelso;
+   cd <path to project>/cluster
+   condor_submit_bid 2 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=methods_main participants=methods_main save_path=/fast/vfelso;
 
-   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=dist_depth_eff_forw experiment=irl_validation participants=irl_validation1 save_path=/fast/vfelso
-   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=dist_depth_eff_forw experiment=irl_validation participants=irl_validation2 save_path=/fast/vfelso
-   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=dist_depth_eff_forw experiment=irl_validation participants=irl_validation3 save_path=/fast/vfelso
-   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=dist_depth_eff_forw experiment=irl_validation participants=irl_validation1 block=fairy save_path=/fast/vfelso
-   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=dist_depth_eff_forw experiment=irl_validation participants=irl_validation2 block=fairy save_path=/fast/vfelso
-   condor_submit_bid 2 submission_scripts/MPI-IS/04_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=dist_depth_eff_forw experiment=irl_validation participants=irl_validation3 block=fairy save_path=/fast/vfelso
+   condor_submit_bid 2 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=irl_validation participants=irl_validation1 save_path=/fast/vfelso
+   condor_submit_bid 2 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=irl_validation participants=irl_validation2 save_path=/fast/vfelso
+   condor_submit_bid 2 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=irl_validation participants=irl_validation3 save_path=/fast/vfelso
+   condor_submit_bid 2 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=irl_validation participants=irl_validation1 block=fairy save_path=/fast/vfelso
+   condor_submit_bid 2 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=irl_validation participants=irl_validation2 block=fairy save_path=/fast/vfelso
+   condor_submit_bid 2 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=irl_validation participants=irl_validation3 block=fairy save_path=/fast/vfelso
    ```
 6. Combine the human inferences (2-3 hours):
    ```
