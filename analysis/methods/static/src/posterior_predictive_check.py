@@ -73,7 +73,7 @@ if __name__ == "__main__":
             irl_path.joinpath(
                 f"cluster/data/trajectories/{analysis_obj.experiment_setting}"
                 f"/SoftmaxPolicy/{analysis_obj.simulated_param_run}"
-                f"_{excluded_parameters}"
+                f"{'_' + excluded_parameters if excluded_parameters != '' else excluded_parameters}"
                 f"/simulated_agents_back_dist_depth_eff_forw.csv"
             )
         )
