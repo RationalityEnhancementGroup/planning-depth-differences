@@ -12,27 +12,26 @@ if __name__ == "__main__":
         experiment_subdirectory="methods/static",
     )
 
-    optimization_data = analysis_obj.query_optimization_data(
-        excluded_parameters=analysis_obj.excluded_parameters
-    )
-    optimization_data = optimization_data[
-        optimization_data["applied_policy"] == "SoftmaxPolicy"
-    ]
-
-    # in case not alphabetically sorted
-    model_text = ",".join(sorted(analysis_obj.excluded_parameters.split(",")))
     model_params = list(analysis_obj.cost_details["constant_values"])
 
-    deduped_parameter_values = optimization_data[
-        model_params + ["noise"]
-    ].drop_duplicates()
-    possible_parameters = deduped_parameter_values.drop_duplicates().to_dict("records")
+    for excluded_parameters in analysis_obj.trial_by_trial_models:
+        optimization_data = analysis_obj.query_optimization_data(
+            excluded_parameters=excluded_parameters
+        )
 
-    with open(
-        irl_path.joinpath(
-            f"cluster/parameters/simulations/"
-            f"participants{'_' + model_text if model_text != '' else model_text}.pkl"
-        ),
-        "wb",
-    ) as f:
-        pickle.dump(possible_parameters, f)
+        # in case not alphabetically sorted
+        model_text = ",".join(sorted(excluded_parameters.split(",")))
+
+        deduped_parameter_values = optimization_data[
+            model_params + ["noise"]
+        ].drop_duplicates()
+        possible_parameters = deduped_parameter_values.drop_duplicates().to_dict("records")
+
+        with open(
+            irl_path.joinpath(
+                f"cluster/parameters/simulations/"
+                f"participants{'_' + model_text if model_text != '' else model_text}.pkl"
+            ),
+            "wb",
+        ) as f:
+            pickle.dump(possible_parameters, f)
