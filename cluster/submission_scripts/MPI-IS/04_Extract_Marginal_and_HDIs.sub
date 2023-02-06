@@ -1,7 +1,7 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/cluster/src/extract_marginal_likelihood_and_hdis.py
-arguments = $(filename) -e $(experiment:methods_main)-c $(cost_function:dist_depth_eff_forw) -p $(pid) -t $(temperature_file:uniform) -k $(block:test)
+arguments = $(filename) -e $(experiment:methods_main) -c $(cost_function:dist_depth_eff_forw) -p $(pid) -t $(temperature_file:uniform) -k $(block:test)
 output = log/$(output_string:out_4)_$(pid).stdout
 error  = log/$(output_string:out_4)_$(pid).stderr
 log   = log/$(output_string:out_4)_$(pid).log
