@@ -164,7 +164,9 @@ if __name__ == "__main__":
         dodge=0.25,
     )
     plt.savefig(
-        subdirectory.joinpath(f"figs/{inputs.experiment_name}_participant_lik_ten.png"),
+        subdirectory.joinpath(
+            f"figs/{inputs.experiment_name}_participant_lik_twenty.png"
+        ),
         bbox_inches="tight",
     )
 
