@@ -93,7 +93,9 @@ if __name__ == "__main__":
     bic_plot(
         bic_df,
         subdirectory,
-        experiment_name=inputs.experiment_name,
+        experiment_name=analysis_obj.palette_name
+        if analysis_obj.palette_name
+        else inputs.experiment_name,
         bic_field="bic",
     )
     if simulated_means:
