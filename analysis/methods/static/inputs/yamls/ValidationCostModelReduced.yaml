@@ -1,7 +1,0 @@
-session: irl_validation
-cost_function: dist_depth_eff_forw
-prior : 'expon'
-block: 'test'
-include_null : true
-title_extras: ''
-simulated: False

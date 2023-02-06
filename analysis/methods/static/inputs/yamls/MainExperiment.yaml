@@ -6,9 +6,14 @@ post_quizzes:
         - 'mouselab-quiz-post_Q2'
         - 'mouselab-quiz-post_Q3'
 cost_function: back_dist_depth_eff_forw
-prior : 'expon'
+prior : 'uniform'
 excluded_parameters : ''
 block: 'test'
 include_null : true
 title_extras: ''
 simulated: False
+simulated_param_run: participants
+trial_by_trial_models:
+        - ''
+        - 'temp'
+        - 'back_added_cost'
