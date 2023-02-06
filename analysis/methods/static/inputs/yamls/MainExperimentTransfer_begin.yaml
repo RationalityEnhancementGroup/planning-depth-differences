@@ -1,6 +1,7 @@
-session: methods_main_transfer
-cost_function: dist_depth_eff_forw
-prior : 'expon'
+sessions:
+  - methods_main_transfer
+cost_function: back_dist_depth_eff_forw
+prior : 'uniform'
 block : 'test_begin'
 include_null : true
 title_extras: ''

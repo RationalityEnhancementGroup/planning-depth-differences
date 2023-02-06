@@ -1,8 +1,8 @@
-session: simulated/high_increasing/SoftmaxPolicy/participants_simulated_agents_back_dist_depth_eff_forw
-cost_function: dist_depth_eff_forw
+sessions:
+  - simulated/high_increasing/SoftmaxPolicy/participants/simulated_agents_back_dist_depth_eff_forw
+cost_function: back_dist_depth_eff_forw
 simulated: True
-number_trials : 20
-prior: 'expon'
+prior: 'uniform'
 block: 'test'
 include_null: True
 excluded_parameters : ''
