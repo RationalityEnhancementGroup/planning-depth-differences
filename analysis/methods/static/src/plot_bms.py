@@ -120,12 +120,15 @@ if __name__ == "__main__":
     )
 
     optimization_data = analysis_obj.query_optimization_data()
-    if "back_added_cost" not in analysis_obj.cost_details["cost_parameter_args"]:
-        optimization_data = optimization_data[
-            ~optimization_data["Model Name"].apply(
-                lambda model_name: "back_added_cost" in model_name
+    optimization_data = optimization_data[
+        optimization_data.apply(
+            lambda row: set(analysis_obj.excluded_parameters.split(",")).issubset(
+                row["model"]
             )
-        ]
+            or (row["Model Name"] == "Null"),
+            axis=1,
+        )
+    ]
 
     bms_df = run_bms(optimization_data, path_to_spm=irl_path)
 
