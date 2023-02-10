@@ -14,13 +14,6 @@ set_font_sizes()
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument(
-        "-c",
-        "--cost-function",
-        dest="cost_function",
-        default="dist_depth_eff_forw",
-        type=str,
-    )
-    parser.add_argument(
         "-e",
         "--exp",
         dest="experiment_name",
@@ -28,14 +21,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "-s",
         "--subdirectory",
+        default="methods/static",
         dest="experiment_subdirectory",
         metavar="experiment_subdirectory",
-    )
-    parser.add_argument(
-        "-n",
-        "--num-subjects",
-        default=130,
-        dest="num_subjects",
     )
     inputs = parser.parse_args()
 
@@ -51,10 +39,9 @@ if __name__ == "__main__":
     data_path.joinpath("log").mkdir(parents=True, exist_ok=True)
     data_path.joinpath("data").mkdir(parents=True, exist_ok=True)
 
-    optimization_data = analysis_obj.query_optimization_data()
-    optimization_data = optimization_data[
-        optimization_data["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'"
-    ]
+    optimization_data = analysis_obj.query_optimization_data(
+        excluded_parameters=analysis_obj.excluded_parameters
+    )
 
     sim_cols = [col for col in list(optimization_data) if "sim_" in col]
     mean_over_sim_param = optimization_data.groupby(sim_cols).mean().reset_index()
@@ -114,9 +101,7 @@ if __name__ == "__main__":
     with open(data_path.joinpath(f"data/{inputs.experiment_name}.pickle"), "wb") as f:
         pickle.dump({"all": simulated_means, "intended": intended_means}, f)
 
-    for param in analysis_obj.cost_details[
-        "cost_parameter_args"
-    ] + ["temp"]:
+    for param in analysis_obj.cost_details["constant_values"]:
         print("----------")
         print(f"Correlation between {param} and BIC")
         print("----------")

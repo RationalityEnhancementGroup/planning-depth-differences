@@ -36,7 +36,7 @@ if __name__ == "__main__":
     inputs = parser.parse_args()
 
     irl_path = Path(__file__).resolve().parents[4]
-    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/data")
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
 
     optimal_df = pd.read_csv(
         irl_path.joinpath(f"cluster/data/OptimalQ/OptimalQ_{inputs.cost_function}.csv")

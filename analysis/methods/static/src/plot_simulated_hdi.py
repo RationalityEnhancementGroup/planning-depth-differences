@@ -112,10 +112,10 @@ if __name__ == "__main__":
             )
             print("----------")
             comparison = pg.mwu(
-                optimization_data[
-                    optimization_data[f"{parameter}_in"] == True  # noqa: E712
-                ][f"diff_{parameter}"],
-                optimization_data[optimization_data[f"{parameter}_in"] == False][
+                optimization_data[optimization_data[f"{parameter}_in"]][
+                    f"diff_{parameter}"
+                ],
+                optimization_data[~optimization_data[f"{parameter}_in"]][
                     f"diff_{parameter}"
                 ],
             )

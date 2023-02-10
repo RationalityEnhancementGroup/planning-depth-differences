@@ -8,7 +8,7 @@ import seaborn as sns
 from costometer.utils import AnalysisObject, get_static_palette, set_font_sizes
 from statsmodels.tools.eval_measures import bic
 
-set_font_sizes()
+set_font_sizes(SMALL_SIZE=14)
 
 ###################################################
 # This section contains my plotting functions
@@ -25,7 +25,7 @@ def bic_plot(
     sns.barplot(
         y="Model Name",
         x=bic_field,
-        data=optimization_data.sort_values(by="bic").iloc[:16],
+        data=optimization_data.sort_values(by="bic")[:33],
         palette=palette,
     )
 
@@ -65,6 +65,16 @@ if __name__ == "__main__":
     )
 
     optimization_data = analysis_obj.query_optimization_data()
+    optimization_data = optimization_data[
+        optimization_data.apply(
+            lambda row: set(analysis_obj.excluded_parameters.split(",")).issubset(
+                row["model"]
+            )
+            or (row["Model Name"] == "Null"),
+            axis=1,
+        )
+    ]
+
     bic_df = (
         optimization_data.groupby(["Model Name", "Number Parameters"])
         .sum()
