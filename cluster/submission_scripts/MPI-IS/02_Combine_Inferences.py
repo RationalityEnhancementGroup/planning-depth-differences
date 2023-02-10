@@ -26,6 +26,13 @@ if __name__ == "__main__":
         type=str,
     )
     parser.add_argument(
+        "-f",
+        "--param-file",
+        dest="param_file",
+        default=None,
+        type=str,
+    )
+    parser.add_argument(
         "-b",
         "--base-cost-function",
         dest="base_cost_function",
@@ -62,6 +69,9 @@ if __name__ == "__main__":
     irl_folder = Path(__file__).resolve().parents[3]
     cluster_folder = Path(__file__).resolve().parents[2]
 
+    if inputs.param_file is None:
+        inputs.param_file = inputs.cost_function
+
     yaml_path = irl_folder.joinpath(
         f"data/inputs/yamls/cost_functions/{inputs.base_cost_function}.yaml"
     )
@@ -69,7 +79,7 @@ if __name__ == "__main__":
         cost_details = yaml.safe_load(stream)
 
     with open(
-        irl_folder.joinpath(f"cluster/parameters/cost/{inputs.cost_function}.txt"),
+        irl_folder.joinpath(f"cluster/parameters/cost/{inputs.param_file}.txt"),
         "r",
     ) as f:
         full_parameters = f.read().splitlines()
