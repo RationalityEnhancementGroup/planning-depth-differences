@@ -26,14 +26,6 @@ if __name__ == "__main__":
         type=str,
     )
     parser.add_argument(
-        "-s",
-        "--simulated-cost-function",
-        dest="simulated_cost_function",
-        help="Simulated cost function",
-        default="back_dist_depth_eff_forw",
-        type=str,
-    )
-    parser.add_argument(
         "-b",
         "--base-cost-function",
         dest="base_cost_function",
@@ -83,7 +75,7 @@ if __name__ == "__main__":
         full_parameters = f.read().splitlines()
 
     if "/" in inputs.experiment:
-        simulation_params = f"_simulated_agents_{inputs.simulated_cost_function}"
+        simulation_params = f"_simulated_agents_{inputs.base_cost_function}"
     else:
         # human data
         if inputs.block != "test":
