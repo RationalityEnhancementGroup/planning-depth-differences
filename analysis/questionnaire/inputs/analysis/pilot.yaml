@@ -1,6 +1,4 @@
 {
-  "data": ["quest_first","quest_second"],
-  "cost_function": "dist_depth_eff",
   "tests": {
              "regressions" : [
               # Psychiatric measures

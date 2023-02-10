@@ -2,9 +2,9 @@ project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/analysis/methods/static/src/simulated_parameter_recovery.py
 arguments = $(filename) -e $(experiment:SoftmaxRecovery) -s $(subdirectory:methods/static)
-output = $(project_path)/analysis/$(subdirectory:methods/static)/log/$(output_string:out_M9).stdout
-error  = log/$(output_string:out_M9).stderr
-log   = log/$(output_string:out_M9).log
+output = $(project_path)/analysis/$(subdirectory:methods/static)/log/parameter_recovery_$(experiment:SoftmaxRecovery).stdout
+error  = log/parameter_recovery_$(experiment:SoftmaxRecovery).stderr
+log   = log/parameter_recovery_$(experiment:SoftmaxRecovery).log
 request_memory = 10000
 request_cpus = 1
 

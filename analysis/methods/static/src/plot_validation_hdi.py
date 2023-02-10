@@ -1,7 +1,6 @@
 from argparse import ArgumentParser
 from pathlib import Path
 
-import dill as pickle
 import numpy as np
 import pandas as pd
 import pingouin as pg
@@ -19,59 +18,72 @@ from statsmodels.regression.linear_model import OLSResults
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument(
-        "-e",
-        "--exp",
-        dest="experiment_name",
+        "-e1",
+        "--exp1",
+        dest="experiment_name_fairy",
+        default="ValidationExperimentBaseline",
+        type=str,
+    )
+    parser.add_argument(
+        "-e2",
+        "--exp2",
+        dest="experiment_name_test",
         default="ValidationExperiment",
         type=str,
     )
     parser.add_argument(
         "-s",
         "--subdirectory",
+        default="methods/static",
         dest="experiment_subdirectory",
         metavar="experiment_subdirectory",
-    )
-    parser.add_argument(
-        "-c",
-        "--cost-function",
-        dest="cost_function",
-        default="dist_depth_eff_forw",
-        type=str,
     )
     inputs = parser.parse_args()
 
     irl_path = Path(__file__).resolve().parents[4]
     data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
 
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj_test = AnalysisObject(
+        inputs.experiment_name_test,
         irl_path=irl_path,
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
-    optimization_data = analysis_obj.add_individual_variables(
-        analysis_obj.query_optimization_data(),
+    optimization_data_test = analysis_obj_test.query_optimization_data(
+        excluded_parameters=analysis_obj_test.excluded_parameters
+    )
+    analysis_obj_fairy = AnalysisObject(
+        inputs.experiment_name_fairy,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
+    )
+    optimization_data_fairy = analysis_obj_fairy.query_optimization_data(
+        excluded_parameters=analysis_obj_fairy.excluded_parameters
+    )
+
+    optimization_data_test["Block"] = "test"
+    optimization_data_fairy["Block"] = "fairy"
+    optimization_data = pd.concat([optimization_data_fairy, optimization_data_test])
+
+    optimization_data = analysis_obj_test.join_optimization_df_and_processed(
+        optimization_df=optimization_data,
+        processed_df=analysis_obj_test.dfs["individual-variables"],
         variables_of_interest=["DEPTH", "COST", "FAIRY_GOD_CONDITION", "cond"],
     )
-    optimization_data = optimization_data[
-        optimization_data["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'"
-    ]
 
-    model_params = analysis_obj.cost_details[
-        "cost_parameter_args"
-    ] + ["temp"]
+    model_params = list(
+        set(analysis_obj_test.cost_details["constant_values"])
+        - set(analysis_obj_test.excluded_parameters.split(","))
+    )
 
     model_params_given = {"depth_cost_weight": "DEPTH", "given_cost": "COST"}
 
-    hdi_file = data_path.joinpath(
-        f"data/{inputs.experiment_name}/"
-        f"{inputs.experiment_name}_{inputs.cost_function}_hdi.pickle"
+    hdi_ranges = {}
+    hdi_ranges["test"] = analysis_obj_test.load_hdi_ranges(
+        excluded_parameters=analysis_obj_test.excluded_parameters
     )
-
-    with open(
-        hdi_file,
-        "rb",
-    ) as f:
-        hdi_ranges = pickle.load(f)
+    hdi_ranges["fairy"] = analysis_obj_fairy.load_hdi_ranges(
+        excluded_parameters=analysis_obj_fairy.excluded_parameters
+    )
 
     full_parameter_info = optimization_data.pivot(
         index="trace_pid",
@@ -79,26 +91,24 @@ if __name__ == "__main__":
         values=model_params + ["DEPTH", "COST", "FAIRY_GOD_CONDITION"],
     )
 
-    for parameter in model_params:
-        max_data = pd.DataFrame(
-            {
-                f"{block}_{parameter}_max": {
-                    key: val[1] for key, val in hdi_ranges[block][parameter].items()
-                }
+    min_and_max_data = {}
+    for pid in analysis_obj_test.dfs["mouselab-mdp"]["pid"].unique():
+        min_and_max_data[pid] = {
+            **{
+                f"{block}_{parameter}_max": hdi_ranges[block][pid][parameter][1]
                 for block in hdi_ranges.keys()
-            }
-        )
-        min_data = pd.DataFrame(
-            {
-                f"{block}_{parameter}_min": {
-                    key: val[0] for key, val in hdi_ranges[block][parameter].items()
-                }
+                for parameter in hdi_ranges[block][pid].keys()
+            },
+            **{
+                f"{block}_{parameter}_min": hdi_ranges[block][pid][parameter][0]
                 for block in hdi_ranges.keys()
-            }
-        )
+                for parameter in hdi_ranges[block][pid].keys()
+            },
+        }
 
-        full_parameter_info = full_parameter_info.join(max_data)
-        full_parameter_info = full_parameter_info.join(min_data)
+    full_parameter_info = full_parameter_info.join(
+        pd.DataFrame.from_dict(min_and_max_data, orient="index")
+    )
 
     full_parameter_info.columns = [
         "_".join(cols) if isinstance(cols, tuple) else cols
@@ -116,12 +126,14 @@ if __name__ == "__main__":
         inplace=True,
     )
 
+    print("----------")
     for block in hdi_ranges.keys():
         for parameter in model_params:
             full_parameter_info[f"{block}_{parameter}_spread"] = (
                 full_parameter_info[f"{block}_{parameter}_max"]
                 - full_parameter_info[f"{block}_{parameter}_min"]
             )
+        for parameter in model_params_given.keys():
             if len(parameter.split("_")) > 1:
                 full_parameter_info[
                     f"{block}_{parameter}_in"
@@ -145,8 +157,8 @@ if __name__ == "__main__":
 
     for param in model_params:
         res = pg.wilcoxon(
-            full_parameter_info[f"fairy_{param}_spread"].astype(np.float),
-            full_parameter_info[f"test_{param}_spread"].astype(np.float),
+            full_parameter_info[f"fairy_{param}_spread"].astype(np.float64),
+            full_parameter_info[f"test_{param}_spread"].astype(np.float64),
         )
 
         print("----------")
@@ -161,9 +173,7 @@ if __name__ == "__main__":
         )
 
     for block in hdi_ranges.keys():
-        for parameter in analysis_obj.cost_details[
-            "cost_parameter_args"
-        ]:
+        for parameter in model_params_given.keys():
             full_parameter_info[f"diff_{parameter}"] = full_parameter_info.apply(
                 lambda row: np.sqrt(
                     (row[f"{parameter}_{block}"] - row[model_params_given[parameter]])
@@ -177,14 +187,11 @@ if __name__ == "__main__":
             else:
 
                 comparison = pg.mwu(
-                    full_parameter_info[
-                        full_parameter_info[f"{block}_{parameter}_in"]
-                        == True  # noqa: E712, E501
-                    ][
+                    full_parameter_info[full_parameter_info[f"{block}_{parameter}_in"]][
                         f"diff_{parameter}"
                     ],  # noqa
                     full_parameter_info[
-                        full_parameter_info[f"{block}_{parameter}_in"] == False
+                        ~full_parameter_info[f"{block}_{parameter}_in"]
                     ][f"diff_{parameter}"],
                 )
                 print(get_mann_whitney_text(comparison))
@@ -218,10 +225,7 @@ if __name__ == "__main__":
         ].astype(np.float64)
 
     block = "test"
-    for parameter in analysis_obj.cost_details[
-        "cost_parameter_args"
-    ]:
-        given_param = model_params_given[parameter]
+    for parameter, given_param in model_params_given.items():
         model = OLSResults.load(
             data_path.joinpath(f"data/regressions/{given_param}_model.pkl")
         )
@@ -275,9 +279,7 @@ if __name__ == "__main__":
             print("----------")
             print(get_mann_whitney_text(comparison))
 
-    for parameter in analysis_obj.cost_details[
-        "cost_parameter_args"
-    ]:
+    for parameter, given_param in model_params_given.items():
         print("----------")
         print(
             f"Correlation between parameter spread in "
@@ -341,35 +343,36 @@ if __name__ == "__main__":
 
     print("----------")
     print(f"Number of participants: {len(full_parameter_info)}")
+    print("----------")
 
     for parameter in model_params:
+        print("----------")
         print(f"Spread in test block vs MAP for {parameter}")
+        print("----------")
         correlation_object = pg.corr(
             full_parameter_info[f"test_{parameter}_spread"],
             full_parameter_info[f"{parameter}"].astype(np.float64),
         )
         print(get_correlation_text(correlation_object))
 
-    for parameter in analysis_obj.cost_details[
-        "cost_parameter_args"
-    ]:
+    for parameter, given_param in model_params_given.items():
         correlation_object = pg.corr(
             full_parameter_info[f"predictions_{parameter}"],
             full_parameter_info[f"{block}_{parameter}_min"],
         )
+        print("----------")
         print(f"Correlation between linear regression output and HDI min {parameter}")
+        print("----------")
         print(get_correlation_text(correlation_object))
 
         correlation_object = pg.corr(
             full_parameter_info[f"predictions_{parameter}"],
             full_parameter_info[f"{block}_{parameter}_max"],
         )
+        print("----------")
         print(f"Correlation between linear regression output and HDI max {parameter}")
+        print("----------")
         print(get_correlation_text(correlation_object))
-
-    for parameter in analysis_obj.cost_details[
-        "cost_parameter_args"
-    ]:
 
         threshold = np.median(full_parameter_info[f"{model_params_given[parameter]}"])
         print("----------")
@@ -388,7 +391,7 @@ if __name__ == "__main__":
             scoring=make_scorer(balanced_accuracy_score),
             return_estimator=True,
         )
-        # print(res)
+        print("----------")
         print(f"Avg cross val score: {res['test_score'].mean():.2f}")
         print("----------")
         print(",".join([tree.export_text(est) for est in res["estimator"]]))

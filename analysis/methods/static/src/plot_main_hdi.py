@@ -1,7 +1,6 @@
 from argparse import ArgumentParser
 from pathlib import Path
 
-import dill as pickle
 import matplotlib.pyplot as plt
 import pingouin as pg
 from costometer.utils import AnalysisObject, get_correlation_text, set_font_sizes
@@ -13,8 +12,11 @@ def plot_hdi(hdi_range_dict, param):
     plotting_dict = {
         num: plotting_info
         for num, plotting_info in zip(
-            range(len(hdi_range_dict["test"][param])),
-            sorted(hdi_range_dict["test"][param].values(), key=lambda item: item),
+            range(len(hdi_range_dict)),
+            sorted(
+                [hdi_range[param] for pid, hdi_range in hdi_range_dict.items()],
+                key=lambda item: item,
+            ),
         )
     }
     plt.figure(figsize=(12, 8), dpi=80)
@@ -51,15 +53,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "-s",
         "--subdirectory",
+        default="methods/static",
         dest="experiment_subdirectory",
         metavar="experiment_subdirectory",
-    )
-    parser.add_argument(
-        "-c",
-        "--cost-function",
-        dest="cost_function",
-        type=str,
-        default="dist_depth_eff_forw",
     )
     inputs = parser.parse_args()
 
@@ -71,22 +67,12 @@ if __name__ == "__main__":
         irl_path=irl_path,
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
-    optimization_data = analysis_obj.query_optimization_data()
-    optimization_data = optimization_data[
-        optimization_data["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'"
-    ]
-
-    hdi_file = data_path.joinpath(
-        f"data/{inputs.experiment_name}/"
-        f"{inputs.experiment_name}_{inputs.cost_function}_hdi.pickle"
+    optimization_data = analysis_obj.query_optimization_data(
+        excluded_parameters=analysis_obj.excluded_parameters
     )
-    with open(
-        hdi_file,
-        "rb",
-    ) as f:
-        hdi_ranges = pickle.load(f)
+    hdi_ranges = analysis_obj.load_hdi_ranges(analysis_obj.excluded_parameters)
 
-    for parameter in hdi_ranges["test"].keys():
+    for parameter in analysis_obj.cost_details["constant_values"]:
         print("==========")
 
         plot_hdi(hdi_ranges, parameter)
@@ -96,8 +82,7 @@ if __name__ == "__main__":
         )
 
         optimization_data[f"{parameter}_spread"] = optimization_data["trace_pid"].apply(
-            lambda pid: hdi_ranges["test"][parameter][pid][1]
-            - hdi_ranges["test"][parameter][pid][0]
+            lambda pid: hdi_ranges[pid][parameter][1] - hdi_ranges[pid][parameter][0]
         )
 
         print("----------")
@@ -106,6 +91,7 @@ if __name__ == "__main__":
         correlation_object = pg.corr(
             optimization_data["bic"], optimization_data[f"{parameter}_spread"]
         )
+        print(parameter)
         print(get_correlation_text(correlation_object))
 
         print("----------")

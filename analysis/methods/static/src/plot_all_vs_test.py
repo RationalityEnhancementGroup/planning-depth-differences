@@ -8,10 +8,8 @@ import seaborn as sns
 from costometer.utils import (
     AnalysisObject,
     get_static_palette,
-    get_trajectories_from_participant_data,
     get_wilcoxon_text,
     set_font_sizes,
-    traces_to_df,
 )
 
 set_font_sizes()
@@ -115,13 +113,14 @@ def plot_trial_by_trial_logliks(
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("-e", "--exp1", dest="experiment_name1", default="TrialByTrial")
     parser.add_argument(
-        "-f", "--exp2", dest="experiment_name2", default="TrialByTrialAll"
+        "-e1", "--exp1", dest="experiment_name1", default="MainExperiment"
     )
+    parser.add_argument("-e2", "--exp2", dest="experiment_name2", default="AllTrials")
     parser.add_argument(
         "-s",
         "--subdirectory",
+        default="methods/static",
         dest="experiment_subdirectory",
         metavar="experiment_subdirectory",
     )
@@ -129,7 +128,7 @@ if __name__ == "__main__":
     inputs = parser.parse_args()
 
     irl_path = Path(__file__).resolve().parents[4]
-    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/data")
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/")
 
     analysis_obj1 = AnalysisObject(
         inputs.experiment_name1,
@@ -142,53 +141,22 @@ if __name__ == "__main__":
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
 
-    trace_df1 = traces_to_df(
-        get_trajectories_from_participant_data(analysis_obj1.mouselab_trials)
-    )
-    num_actions1 = (
-        trace_df1.groupby(["pid", "i_episode"])
-        .count()["actions"]
-        .reset_index()
-        .rename(columns={"actions": "num_actions"})
-    )
-
-    trace_df2 = traces_to_df(
-        get_trajectories_from_participant_data(analysis_obj2.mouselab_trials)
-    )
-    num_actions2 = (
-        trace_df2.groupby(["pid", "i_episode"])
-        .count()["actions"]
-        .reset_index()
-        .rename(columns={"actions": "num_actions"})
-    )
-
+    # fit on test block
     trial_by_trial_df1 = analysis_obj1.get_trial_by_trial_likelihoods()
-    trial_by_trial_df1 = trial_by_trial_df1.merge(num_actions1, on=["pid", "i_episode"])
-
+    # fit on all trials
     trial_by_trial_df2 = analysis_obj2.get_trial_by_trial_likelihoods()
-    trial_by_trial_df2 = trial_by_trial_df2.merge(num_actions2, on=["pid", "i_episode"])
 
-    trial_by_trial_df1["avg"] = trial_by_trial_df1.apply(
-        lambda row: np.exp(row["likelihood"]) / row["num_actions"], axis=1
-    )
+    mouselab_data = analysis_obj1.dfs["mouselab-mdp"]
+    relevant_trials = mouselab_data[
+        mouselab_data["block"].isin(analysis_obj1.block.split(","))
+    ]["trial_index"].unique()
 
-    relevant_trials = analysis_obj1.mouselab_trials[
-        analysis_obj1.mouselab_trials["block"].isin(analysis_obj1.block)
-    ]["trial_index"]
-
+    # only look at test trials
     trial_by_trial_df1 = trial_by_trial_df1[
         trial_by_trial_df1["i_episode"].isin(relevant_trials)
     ]
-
-    trial_by_trial_df2["avg"] = trial_by_trial_df2.apply(
-        lambda row: np.exp(row["likelihood"]) / row["num_actions"], axis=1
-    )
-
-    trial_by_trial_df1 = trial_by_trial_df1[
-        trial_by_trial_df1["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'"
-    ]
     trial_by_trial_df2 = trial_by_trial_df2[
-        trial_by_trial_df2["Model Name"] == "'Distance, Effort, Depth and Forward Search Bonus'"
+        trial_by_trial_df2["i_episode"].isin(relevant_trials)
     ]
 
     for model in trial_by_trial_df1["Model Name"].unique():
@@ -208,15 +176,15 @@ if __name__ == "__main__":
         )
 
     plot_participant_average_likelihoods(
-        trial_by_trial_df2[trial_by_trial_df2["i_episode"].isin(relevant_trials)],
+        trial_by_trial_df2,
         subdirectory,
         "avg",
-        experiment_name=inputs.experiment_name,
+        experiment_name=analysis_obj2.palette_name,
         dodge=0.25,
     )
     plt.savefig(
         subdirectory.joinpath(
-            f"figs/{inputs.experiment_name2}_participant_lik_ten.png"
+            f"figs/{inputs.experiment_name2}_participant_lik_twenty.png"
         ),
         bbox_inches="tight",
     )

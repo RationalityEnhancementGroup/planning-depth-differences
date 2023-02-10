@@ -44,7 +44,9 @@ if __name__ == "__main__":
         irl_path=irl_path,
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
-    optimization_data = analysis_obj.query_optimization_data()
+    optimization_data = analysis_obj.query_optimization_data(
+        analysis_obj.excluded_parameters
+    )
 
     analysis_file_path = irl_path.joinpath(
         f"analysis/questionnaire/inputs/analysis/{inputs.analysis_file_name}.yaml"
@@ -53,35 +55,18 @@ if __name__ == "__main__":
     with open(analysis_file_path, "rb") as f:
         analysis_yaml = yaml.safe_load(f)
 
-    # read in cost function details
-    yaml_path = irl_path.joinpath(
-        f"data/inputs/yamls/cost_functions/{analysis_yaml['cost_function']}.yaml"
-    )
-
-    with open(yaml_path, "r") as stream:
-        cost_details = yaml.safe_load(stream)
-
-    cost_parameters = cost_details["cost_parameter_args"] + ["temp"]
+    model_parameters = list(analysis_obj.cost_details["constant_values"])
 
     # load data
-    combined_scores = pd.concat(
-        [
-            pd.read_csv(
-                irl_path.joinpath(f"data/processed/{session}/combined_scores.csv")
-            )
-            for session in analysis_yaml["data"]
-        ]
-    )
-    optimization_data[
-        optimization_data["Model Name"] == "Distance, Depth and Effort Costs"
-    ]
-    combined_scores = combined_scores.merge(
-        optimization_data[cost_parameters + ["trace_pid"]],
+    combined_scores = analysis_obj.dfs["combined_scores"]
+
+    combined_scores = combined_scores.reset_index().merge(
+        optimization_data[model_parameters + ["trace_pid"]],
         left_on="pid",
         right_on="trace_pid",
     )
 
-    nonnumeric_cols = ["pid", "gender", "colorblind"]
+    nonnumeric_cols = ["pid", "gender", "colorblind", "session"]
 
     # add psychiatric factor scores
     factor_scores = pd.read_csv(
@@ -94,7 +79,7 @@ if __name__ == "__main__":
     # TODO: refactor this out, better way to average_node_cost
     combined_scores["average_node_cost"] = combined_scores.apply(
         lambda row: np.mean(
-            [row[param] for param in cost_details["cost_parameter_args"]]
+            [row[param] for param in analysis_obj.cost_details["cost_parameter_args"]]
         ),
         axis=1,
     )
@@ -116,10 +101,16 @@ if __name__ == "__main__":
 
     bonferroni_corrected_pval = 0.05 / len(analysis_yaml["tests"]["regressions"])
 
+    irl_path.joinpath("analysis/questionnaire/data/regressions/").mkdir(
+        parents=True, exist_ok=True
+    )
+
     for test in analysis_yaml["tests"]["regressions"]:
 
-        if test["dependent"] in cost_parameters:
-            curr_cost_parameters = list(set(cost_parameters) - set([test["dependent"]]))
+        if test["dependent"] in model_parameters:
+            curr_cost_parameters = list(
+                set(model_parameters) - set([test["dependent"]])
+            )
             full_regression_formula = (
                 f"{test['dependent']} ~ {test['independent']} + "
                 + " + ".join(test["covariates"] + curr_cost_parameters + ["1"])
@@ -130,10 +121,10 @@ if __name__ == "__main__":
         else:
             full_regression_formula = (
                 f"{test['dependent']} ~ {test['independent']} + "
-                + " + ".join(test["covariates"] + ["temp", "1"])
+                + " + ".join(test["covariates"] + ["1"])
             )
             base_regression_formula = f"{test['dependent']} ~ " + " + ".join(
-                test["covariates"] + ["temp", "1"]
+                test["covariates"] + ["1"]
             )
 
         full_res = smf.ols(formula=full_regression_formula, data=combined_scores).fit(
@@ -145,6 +136,8 @@ if __name__ == "__main__":
 
         if full_res.pvalues[test["independent"]] <= bonferroni_corrected_pval:
             print(full_regression_formula)
+            print(full_res.pvalues[test["independent"]])
+            x = (full_res, base_res)
             print(test["independent"])
             print(f"F-squared: {f_square(full_res.rsquared, base_res.rsquared)}")
             print(f"F-squared: {f_square(full_res.rsquared, 0)}")

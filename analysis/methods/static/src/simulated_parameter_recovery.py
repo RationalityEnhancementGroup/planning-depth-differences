@@ -18,26 +18,25 @@ from costometer.utils import (
 set_font_sizes()
 
 
-def plot_simulated_recovery(mle):
+def plot_simulated_recovery(mle, pretty_name_mapping):
     sim_cols = [col for col in list(mle) if "sim_" in col]
     plt.figure(figsize=(11.7, 8.27))
     melted_mle = pd.melt(
         mle,
         id_vars=sim_cols,
-        value_vars=["given_cost", "depth_cost_weight"],
+        value_vars=list(pretty_name_mapping.keys()),
         ignore_index=False,
     ).reset_index()
     melted_mle["inferred"] = melted_mle.value
     melted_mle["simulated"] = melted_mle.apply(
         lambda row: row["sim_" + row["variable"]], axis=1
     )
-    pretty_names = {
-        "given_cost": "Effort Cost",
-        "depth_cost_weight": "Planning Depth",
-    }
-    melted_mle["variable"] = melted_mle["variable"].apply(lambda var: pretty_names[var])
+
+    melted_mle["variable"] = melted_mle["variable"].apply(
+        lambda var: pretty_name_mapping[var]
+    )
     ax = sns.pointplot(y="inferred", x="simulated", hue="variable", data=melted_mle)
-    ax.legend(title="Cost Parameter")
+    ax.legend(title="Parameter")
     plt.xlabel("True parameter")
     plt.ylabel("Estimated parameter")
 
@@ -56,6 +55,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-s",
         "--subdirectory",
+        default="methods/static",
         dest="experiment_subdirectory",
         metavar="experiment_subdirectory",
     )
@@ -70,40 +70,83 @@ if __name__ == "__main__":
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
 
-    optimization_data = analysis_obj.query_optimization_data()
-    optimization_data = optimization_data[
-        optimization_data["Model Name"] == "Distance, Effort, Depth and Forward Search Bonus"
-    ]
+    optimization_data = analysis_obj.query_optimization_data(
+        excluded_parameters=analysis_obj.excluded_parameters
+    )
+
+    optimization_data = analysis_obj.query_optimization_data(
+        excluded_parameters=analysis_obj.excluded_parameters
+    )
+    if analysis_obj.positive:
+        optimization_data = optimization_data[
+            (optimization_data["sim_depth_cost_weight"] >= 0)
+            & (optimization_data["sim_given_cost"] >= 0)
+        ]
+
+    if analysis_obj.excluded_parameters == "":
+        model = tuple()
+    else:
+        model = tuple(sorted(analysis_obj.excluded_parameters.split(",")))
+
+    model_params = set(analysis_obj.cost_details["constant_values"]) - set(
+        analysis_obj.excluded_parameters.split(",")
+    )
 
     print("==========")
-    for subset in itertools.combinations(
-        ["given_cost", "depth_cost_weight", "distance_multiplier", "forw_added_cost",  "temp"], 2
-    ):
+    for subset in itertools.combinations(model_params, 2):
         correlation_object = pg.corr(
             optimization_data[subset[0]],
             optimization_data[subset[1]],
+            method="spearman",
         )
         print("----------")
         print(
-            f"Correlation between inferred {subset[0]} and {subset[1]} "
+            f"Correlation between inferred {subset[0]} and inferred {subset[1]} "
             f"for simulated participants"
         )
         print("----------")
         print(get_correlation_text(correlation_object))
 
-    if "level_0" in list(optimization_data):
-        del optimization_data["level_0"]
-    if "Unnamed: 0" in list(optimization_data):
-        del optimization_data["Unnamed: 0"]
-
-    if "sim_temp" in optimization_data:
-        model_params = analysis_obj.cost_details["dist_depth_eff_forw"][
-            "cost_parameter_args"
-        ] + ["temp"]
-    else:
-        model_params = analysis_obj.cost_details["dist_depth_eff_forw"][
-            "cost_parameter_args"
+    plt.figure(figsize=(11.7, 8.27))
+    latex_mapping = {
+        **{
+            f"sim_{k}": "$" + v + "$"
+            for k, v in analysis_obj.cost_details["latex_mapping"].items()
+        },
+        **{
+            k: "$\widehat{" + v + "}$"  # noqa: W605
+            for k, v in analysis_obj.cost_details["latex_mapping"].items()
+        },
+    }
+    cmap = sns.diverging_palette(230, 20, as_cmap=True)
+    sns.heatmap(
+        cmap=cmap,
+        data=optimization_data[
+            list(model_params) + [f"sim_{model_param}" for model_param in model_params]
         ]
+        .rename(columns=latex_mapping)
+        .corr("spearman"),
+        annot=True,
+        fmt=".2f",
+    )
+    plt.title(analysis_obj.model_name_mapping[model])
+    plt.tight_layout()
+    plt.show()
+
+    print("==========")
+    for model_param in model_params:
+        correlation_object = pg.corr(
+            optimization_data[model_param],
+            optimization_data[f"sim_{model_param}"],
+            method="spearman",
+        )
+        print("----------")
+        print(
+            f"Correlation between inferred and actual {model_param} "
+            f"for simulated participants"
+        )
+        print("----------")
+        print(get_correlation_text(correlation_object))
 
     print("==========")
     for param in model_params:
@@ -126,12 +169,7 @@ if __name__ == "__main__":
 
     melted_rmse_df = pd.melt(
         optimization_data.reset_index(),
-        value_vars=[
-            f"{cost_param}_rmse"
-            for cost_param in analysis_obj.cost_details["dist_depth_eff_forw"][
-                "cost_parameter_args"
-            ]
-        ],
+        value_vars=[f"{param}_rmse" for param in model_params],
         id_vars="temp",
     )
 
@@ -147,35 +185,29 @@ if __name__ == "__main__":
         plt.figure(figsize=(11.7, 8.27))
         ax = sns.pointplot(x="sim_temp", y="temp", data=optimization_data)
         plt.xlabel("Simulated Agent Temperature")
-        plt.ylabel("Recovered Temperature (Log Scale)")
-        ax.set_yscale("log")
+        plt.ylabel("Recovered Temperature")  # (Log Scale)")
+        # ax.set_yscale("log")
 
     plt.tight_layout()
     plt.show()
-    latex_names = {
-        "given_cost": "\\costweight",
-        "distance_multiplier": "\\distancemultiplier",
-        "forw_added_cost": "\\forwaddedcost",
-        "depth_cost_weight": "\\depthweight",
-        "distance_multiplier": "\\distancemultiplier",
-        "forw_added_cost": "\\forwaddedcost",
-        "Intercept": "Intercept",
-        "temp": "\\beta",
-    }
+
     for param in model_params:
         print("==========")
         print(f"Regression with {param} as dependent variable")
         print("----------")
         mod = smf.ols(
-            formula=f"sim_{param}  ~ given_cost + distance_multiplier + forw_added_cost + depth_cost_weight + temp + 1",
+            formula=f"sim_{param}  ~ {' + '.join(model_params)} + 1",
             data=optimization_data,
         )
         res = mod.fit()
+
+        print(param, res.rsquared.round(2))
 
         df_for_table = pd.DataFrame(
             {"coeff": res.params, "se": res.bse, "p": res.pvalues, "t": res.tvalues}
         )
 
+        analysis_obj.cost_details["latex_mapping"]["Intercept"] = "\\text{Intercept}"
         for row_idx, row in df_for_table.iterrows():
             if row["p"] > 0.05:
                 pval_string = ""
@@ -187,7 +219,7 @@ if __name__ == "__main__":
                 pval_string = "^{*}"
 
             print(
-                f"${latex_names[param]}$  &  $\hat{{{latex_names[row_idx]}}}$ & "  # noqa: W605, E501
+                f"${analysis_obj.cost_details['latex_mapping'][param]}$  &  $\hat{{{analysis_obj.cost_details['latex_mapping'][row_idx]}}}$ & "  # noqa: W605, E501
                 f"${row['coeff']:.3f} ({row['se']:.3f}){pval_string}$ & ${row['t']:.3f}"
                 f"$ \\\\"
             )
@@ -207,7 +239,33 @@ if __name__ == "__main__":
             f"{optimization_data[f'error_{param}'].max():.2f}]"
         )
 
-    plot_simulated_recovery(optimization_data)
+    pretty_cost_names = dict(
+        zip(
+            analysis_obj.cost_details["cost_parameter_args"],
+            analysis_obj.cost_details["cost_parameter_names"],
+        )
+    )
+    pretty_names = {
+        model_param: pretty_cost_names[model_param]
+        if model_param in pretty_cost_names
+        else model_param.title()
+        for model_param in model_params
+    }
+
+    plot_simulated_recovery(
+        optimization_data,
+        {key: val for key, val in pretty_names.items() if key in pretty_cost_names},
+    )
     plt.savefig(
-        data_path.joinpath(f"figs/{inputs.experiment_name}_parameter_recovery.png")
+        data_path.joinpath(f"figs/{inputs.experiment_name}_cost_parameter_recovery.png")
+    )
+
+    plot_simulated_recovery(
+        optimization_data,
+        {key: val for key, val in pretty_names.items() if key not in pretty_cost_names},
+    )
+    plt.savefig(
+        data_path.joinpath(
+            f"figs/{inputs.experiment_name}_additional_parameter_recovery.png"
+        )
     )

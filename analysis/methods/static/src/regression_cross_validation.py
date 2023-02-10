@@ -16,58 +16,94 @@ from costometer.utils import (
 from sklearn.model_selection import StratifiedKFold
 
 if __name__ == "__main__":
-    """
-    python src/regression_cross_validation.py -e ValidationExperiment
-    """
     parser = ArgumentParser()
     parser.add_argument(
-        "-e", "--exp", dest="experiment_name", type=str, default="ValidationExperiment"
+        "-e",
+        "--exp",
+        dest="main_experiment_name",
+        default="MainExperiment",
+        type=str,
+    )
+    parser.add_argument(
+        "-e1",
+        "--exp1",
+        dest="experiment_name_baseline",
+        default="ValidationExperimentBaseline",
+        type=str,
+    )
+    parser.add_argument(
+        "-e2",
+        "--exp2",
+        dest="experiment_name_test",
+        default="ValidationExperiment",
+        type=str,
     )
     parser.add_argument(
         "-s",
         "--subdirectory",
+        default="methods/static",
         dest="experiment_subdirectory",
         metavar="experiment_subdirectory",
-    )
-    parser.add_argument(
-        "-m",
-        "--main-exp",
-        dest="main_experiment_name",
-        type=str,
-        default="MainExperiment",
     )
     inputs = parser.parse_args()
 
     irl_path = Path(__file__).resolve().parents[4]
-    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/data")
+    data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
 
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj_test = AnalysisObject(
+        inputs.experiment_name_test,
         irl_path=irl_path,
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
-    main_analysis_obj = AnalysisObject(inputs.main_experiment_name, irl_path=irl_path)
+    optimization_data_test = analysis_obj_test.query_optimization_data(
+        excluded_parameters=analysis_obj_test.excluded_parameters
+    )
 
-    model = "'Distance, Effort, Depth and Forward Search Bonus'"
+    analysis_obj_baseline = AnalysisObject(
+        inputs.experiment_name_baseline,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
+    )
+    optimization_data_baseline = analysis_obj_baseline.query_optimization_data(
+        excluded_parameters=analysis_obj_baseline.excluded_parameters
+    )
 
-    main_optimization_data = main_analysis_obj.query_optimization_data()
-    main_optimization_data = main_optimization_data[
-        main_optimization_data["Model Name"] == model
-    ]
+    main_analysis_obj = AnalysisObject(
+        inputs.main_experiment_name,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
+    )
+    main_optimization_data = main_analysis_obj.query_optimization_data(
+        excluded_parameters=main_analysis_obj.excluded_parameters
+    )
 
-    subdirectory.joinpath("data/regressions").mkdir(parents=True, exist_ok=True)
-    data = analysis_obj.add_individual_variables(
-        analysis_obj.query_optimization_data(),
+    subdirectory = data_path.joinpath("data/regressions")
+    subdirectory.mkdir(parents=True, exist_ok=True)
+
+    fairy_subset = analysis_obj_baseline.join_optimization_df_and_processed(
+        optimization_df=optimization_data_baseline,
+        processed_df=analysis_obj_baseline.dfs["individual-variables"],
         variables_of_interest=["DEPTH", "COST", "FAIRY_GOD_CONDITION", "cond"],
     )
 
-    fairy_subset = data[(data["Model Name"] == model) & (data["Block"] == "fairy")]
-    test_subset = data[(data["Model Name"] == model) & (data["Block"] == "test")]
+    test_subset = analysis_obj_test.join_optimization_df_and_processed(
+        optimization_df=optimization_data_test,
+        processed_df=analysis_obj_test.dfs["individual-variables"],
+        variables_of_interest=["DEPTH", "COST", "FAIRY_GOD_CONDITION", "cond"],
+    )
 
-    cost_details = analysis_obj.cost_details[analysis_obj.preferred_cost]
-    for param in cost_details["cost_parameter_args"] + [
-        "temp"
-    ]:
+    model_params = list(
+        set(main_analysis_obj.cost_details["constant_values"])
+        - set(main_analysis_obj.excluded_parameters.split(","))
+    )
+    combined = test_subset.merge(
+        fairy_subset[model_params + ["trace_pid"]],
+        suffixes=("", "_fairy"),
+        how="left",
+        on="trace_pid",
+    )
+
+    for param in model_params:
         print(
             f"Descriptive statistics for main experiment "
             f"({inputs.main_experiment_name}) {param}"
@@ -78,8 +114,7 @@ if __name__ == "__main__":
         )
 
         print(
-            f"Descriptive statistics for experiment "
-            f"({inputs.experiment_name}), test block {param}"
+            f"Descriptive statistics for validation experiment " f", test block {param}"
         )
         print(
             f"$M: {test_subset[param].mean():.2f}, "
@@ -87,8 +122,8 @@ if __name__ == "__main__":
         )
 
         print(
-            f"Descriptive statistics for experiment "
-            f"({inputs.experiment_name}), baseline block {param}"
+            f"Descriptive statistics for validation experiment "
+            f", baseline block {param}"
         )
         print(
             f"$M: {fairy_subset[param].mean():.2f}, "
@@ -97,7 +132,7 @@ if __name__ == "__main__":
 
         comparison = pg.mwu(test_subset[param], main_optimization_data[param])
         print(
-            f"Comparison between experiment ({inputs.experiment_name}) "
+            f"Comparison between validation experiment's "
             f"test block and main experiment ({inputs.main_experiment_name}) "
             f"for cost parameter: {param}"
         )
@@ -105,30 +140,20 @@ if __name__ == "__main__":
 
         comparison = pg.mwu(fairy_subset[param], main_optimization_data[param])
         print(
-            f"Comparison between experiment ({inputs.experiment_name}) baseline "
+            f"Comparison between validation experiment's baseline  "
             f"block and main experiment ({inputs.main_experiment_name}) for "
             f"cost parameter: {param}"
         )
         print(get_mann_whitney_text(comparison))
 
-        # test is paired, need to verify same order of pids
-        assert np.all(test_subset.pid.values == fairy_subset.pid.values)
-        comparison = pg.wilcoxon(test_subset[param], fairy_subset[param])
+        # test is paired, need to have same order of pids, which is why
+        # we use combined df
+        comparison = pg.wilcoxon(combined[param], combined[f"{param}_fairy"])
         print(
-            f"Comparison between experiment ({inputs.experiment_name})'s test and "
+            f"Comparison between validation experiment's test and "
             f"baseline blocks for cost parameter: {param}"
         )
         print(get_wilcoxon_text(comparison))
-
-    combined = test_subset.merge(
-        fairy_subset[
-            analysis_obj.cost_details[analysis_obj.preferred_cost]
-            ["cost_parameter_args"] + ["pid"]
-        ],
-        suffixes=("", "_fairy"),
-        how="left",
-        on="pid",
-    )
 
     for cost_variable_tuple in [
         ("COST", "given_cost"),
@@ -147,10 +172,8 @@ if __name__ == "__main__":
     loo = StratifiedKFold(n_splits=10)
 
     sd_values = {
-        cost_param: main_optimization_data[cost_param].std()
-        for cost_param in cost_details[
-            "cost_parameter_args"
-        ]
+        model_param: main_optimization_data[model_param].std()
+        for model_param in model_params
     }
 
     for cost_variable_tuple in [
@@ -167,74 +190,71 @@ if __name__ == "__main__":
             test_data = combined.iloc[test_index]
 
             mod = smf.ols(
-                formula=f"{assigned_cost} ~ given_cost + "
-                f"depth_cost_weight + temp + temp:given_cost + "
-                f"temp:depth_cost_weight + "
-                f" + given_cost:depth_cost_weight +  "
-                f"C(FAIRY_GOD_CONDITION) +"
-                f"static_cost_weight_fairy + depth_cost_weight_fairy + 1",
+                formula=f"{assigned_cost} ~ "
+                f"{' + '.join(model_params)}"
+                f"+ C(FAIRY_GOD_CONDITION) +  1 + "
+                f"{' + '.join([model_param + '_fairy' for model_param in model_params])}",  # noqa: E501
                 data=train_data,
             )
             res = mod.fit()
 
-            combined.loc[combined["pid"].isin(test_data["pid"].values),
-                         "test_fold"] = num_split
-            combined.loc[combined["pid"].isin(test_data["pid"].values),
-                         f"prediction_error_{assigned_cost}"] = \
+            combined.loc[
+                combined["trace_pid"].isin(test_data["trace_pid"].values), "test_fold"
+            ] = num_split
+            combined.loc[
+                combined["trace_pid"].isin(test_data["trace_pid"].values),
+                f"prediction_error_{assigned_cost}",
+            ] = (
                 res.predict(test_data) - test_data[assigned_cost]
-
-            combined[f"prediction_error_squared_{assigned_cost}"] = (
-                combined[f"prediction_error_{assigned_cost}"] ** 2
-            )
-            combined[f"rmse_{assigned_cost}"] = combined[
-                f"prediction_error_squared_{assigned_cost}"
-            ] ** (1 / 2)
-
-            combined["dummy"] = 1
-
-            test_fold_rmses = (
-                combined.groupby(["test_fold"])
-                .sum()
-                .apply(
-                    lambda row: np.sqrt(
-                        row[f"prediction_error_squared_{assigned_cost}"] / row["dummy"]
-                    ),
-                    axis=1,
-                )
             )
 
-            print(f"RMSE for LOO for {assigned_cost}, {inferred_cost}")
-            print(
-                f"M: ${test_fold_rmses.mean():.2f}$ (SD: ${test_fold_rmses.std():.2f}$)"
-            )
+        combined[f"prediction_error_squared_{assigned_cost}"] = (
+            combined[f"prediction_error_{assigned_cost}"] ** 2
+        )
+        combined[f"rmse_{assigned_cost}"] = combined[
+            f"prediction_error_squared_{assigned_cost}"
+        ] ** (1 / 2)
 
-            # fit model to all data, save
-            mod = smf.ols(
-                formula=f"{assigned_cost} ~ given_cost + depth_cost_weight + "
-                f"temp + temp:given_cost + temp:depth_cost_weight + "
-                f"given_cost:depth_cost_weight +  "
-                f"C(FAIRY_GOD_CONDITION) +"
-                f"static_cost_weight_fairy + depth_cost_weight_fairy + 1",
-                data=combined,
-            )
-            res = mod.fit()
-            print(res.summary())
-            res.save(
-                subdirectory.joinpath(f"data/regressions/{assigned_cost}_model.pkl")
-            )
-            print(f"Regression for {assigned_cost}")
-            print(get_regression_text(res))
+        combined["dummy"] = 1
 
-            combined[f"prediction_error_{assigned_cost}"] = (
-                res.predict(combined) - combined[assigned_cost]
+        test_fold_rmses = (
+            combined.groupby(["test_fold"])
+            .sum()
+            .apply(
+                lambda row: np.sqrt(
+                    row[f"prediction_error_squared_{assigned_cost}"] / row["dummy"]
+                ),
+                axis=1,
             )
+        )
 
-            combined[f"prediction_error_squared_{assigned_cost}"] = (
-                combined[f"prediction_error_{assigned_cost}"] ** 2
-            )
-            combined[f"rmse_{assigned_cost}"] = combined[
-                f"prediction_error_squared_{assigned_cost}"
-            ] ** (1 / 2)
+        print(f"RMSE for LOO for {assigned_cost}, {inferred_cost}")
+        print(f"M: ${test_fold_rmses.mean():.2f}$ (SD: ${test_fold_rmses.std():.2f}$)")
+
+        # fit model to all data, save
+        mod = smf.ols(
+            formula=f"{assigned_cost} ~"
+            f"{' + '.join(model_params)}"
+            f" + C(FAIRY_GOD_CONDITION) + 1 + "
+            f"{' + '.join([model_param + '_fairy' for model_param in model_params])}",
+            data=combined,
+        )
+        res = mod.fit()
+        print(res.summary())
+        res.save(subdirectory.joinpath(f"{assigned_cost}_model.pkl"))
+        print(f"Regression for {assigned_cost}")
+        print(get_regression_text(res))
+
+        combined[f"prediction_error_{assigned_cost}"] = (
+            res.predict(combined) - combined[assigned_cost]
+        )
+
+        combined[f"prediction_error_squared_{assigned_cost}"] = (
+            combined[f"prediction_error_{assigned_cost}"] ** 2
+        )
+        combined[f"rmse_{assigned_cost}"] = combined[
+            f"prediction_error_squared_{assigned_cost}"
+        ] ** (1 / 2)
 
         percentage_under_sd = np.sum(
             combined[f"rmse_{assigned_cost}"] < sd_values[inferred_cost]
@@ -243,6 +263,7 @@ if __name__ == "__main__":
             f"Number of participants recovered in at least 1 SD for "
             f"{assigned_cost}: {percentage_under_sd: .2f}"
         )
+
     under_both = combined.apply(
         lambda row: np.all(
             [
@@ -292,17 +313,17 @@ if __name__ == "__main__":
             f"baseline block MAP estimates {inferred_cost}"
         )
         comparison = pg.mwu(
-            combined[combined["FAIRY_GOD_CONDITION"] == True][f"{inferred_cost}_fairy"],   # noqa: E712, E501
-            combined[combined["FAIRY_GOD_CONDITION"] == False][
-                f"{inferred_cost}_fairy"
-            ],
+            combined[combined["FAIRY_GOD_CONDITION"]][f"{inferred_cost}_fairy"],
+            combined[~combined["FAIRY_GOD_CONDITION"]][f"{inferred_cost}_fairy"],
         )
         print(get_mann_whitney_text(comparison))
 
-        print(f"Difference in block order for "
-              f"test block MAP estimates {inferred_cost}")
+        print(
+            f"Difference in block order for "
+            f"test block MAP estimates {inferred_cost}"
+        )
         comparison = pg.mwu(
-            combined[combined["FAIRY_GOD_CONDITION"] == True][inferred_cost],  # noqa: E712, E501
-            combined[combined["FAIRY_GOD_CONDITION"] == False][inferred_cost],
+            combined[combined["FAIRY_GOD_CONDITION"]][inferred_cost],
+            combined[~combined["FAIRY_GOD_CONDITION"]][inferred_cost],
         )
         print(get_mann_whitney_text(comparison))

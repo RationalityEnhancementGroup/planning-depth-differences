@@ -13,6 +13,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-s",
         "--subdirectory",
+        default="methods/static",
         dest="experiment_subdirectory",
         metavar="experiment_subdirectory",
     )

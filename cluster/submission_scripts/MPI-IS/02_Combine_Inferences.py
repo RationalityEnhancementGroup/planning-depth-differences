@@ -26,14 +26,6 @@ if __name__ == "__main__":
         type=str,
     )
     parser.add_argument(
-        "-s",
-        "--simulated-cost-function",
-        dest="simulated_cost_function",
-        help="Simulated cost function",
-        default="back_dist_depth_eff_forw",
-        type=str,
-    )
-    parser.add_argument(
         "-b",
         "--base-cost-function",
         dest="base_cost_function",
@@ -83,7 +75,7 @@ if __name__ == "__main__":
         full_parameters = f.read().splitlines()
 
     if "/" in inputs.experiment:
-        simulation_params = f"_simulated_agents_{inputs.simulated_cost_function}"
+        simulation_params = f"_simulated_agents_{inputs.base_cost_function}"
     else:
         # human data
         if inputs.block != "test":
@@ -93,9 +85,11 @@ if __name__ == "__main__":
 
     # load random file
     random_df = pd.read_csv(
-        f"data/logliks/{inputs.base_cost_function}/"
-        f"{inputs.experiment}/RandomPolicy_optimization_results{simulation_params}"
-        f"_{inputs.participant_subset_file}.csv",
+        cluster_folder.joinpath(
+            f"data/logliks/{inputs.base_cost_function}/"
+            f"{inputs.experiment}/RandomPolicy_optimization_results{simulation_params}"
+            f"_{inputs.participant_subset_file}.csv"
+        ),
         index_col=0,
     )
     random_df["applied_policy"] = "RandomPolicy"
@@ -113,7 +107,7 @@ if __name__ == "__main__":
         except ValueError as e:
             raise e
 
-        curr_file_name = (
+        curr_file_name = cluster_folder.joinpath(
             f"data/logliks/{inputs.base_cost_function}/"
             f"{inputs.experiment}/"
             f"SoftmaxPolicy_optimization_results_"
