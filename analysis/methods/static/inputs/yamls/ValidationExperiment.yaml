@@ -2,8 +2,9 @@ sessions:
   - irl_validation
 cost_function: back_dist_depth_eff_forw
 prior : 'uniform'
-excluded_parameters : ''
+excluded_parameters : 'gamma,kappa'
 block: 'test'
+positive: true
 include_null : true
 title_extras: ''
 simulated: False

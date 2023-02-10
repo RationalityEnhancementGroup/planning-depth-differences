@@ -2,7 +2,8 @@ sessions:
   - simulated/high_increasing/SoftmaxPolicy/reduced_simulated_agents_back_dist_depth_eff_forw
 cost_function: back_dist_depth_eff_forw
 simulated: True
-prior: 'uniform'
+prior: 'expon'
 excluded_parameters : ''
 block: 'test'
+positive: true
 include_null: True
