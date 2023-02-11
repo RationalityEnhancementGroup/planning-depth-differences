@@ -1,2 +1,0 @@
-Error importing rpy2: cannot import name 'ri2py' from 'rpy2.robjects.conversion' (/work/vfelso/planning-depth-differences/env/lib/python3.8/site-packages/rpy2/robjects/conversion.py)
-/lustre/work/vfelso/planning-depth-differences/data/processed/OptimalQ/high_increasing/dist_depth_eff_forw/mle_and_map*.pickle
