@@ -1,0 +1,38 @@
+                                           Model Name  ...          bic
+5   $w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w...  ...  36901.62492
+20  $w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ wi...  ...  37109.98380
+4   $w_{back.}, w_{depth}, w_{dist.}, w_{forw.}$ w...  ...  37468.25321
+19     $w_{depth}, w_{dist.}, w_{forw.}$ with $\beta$  ...  37625.76479
+12  $w_{back.}, w_{dist.}, w_{forw.}, w_{eff.}$ wi...  ...  38221.81613
+3   $w_{back.}, w_{depth}, w_{dist.}, w_{eff.}$ wi...  ...  38227.29274
+18      $w_{depth}, w_{dist.}, w_{eff.}$ with $\beta$  ...  38392.60044
+27      $w_{dist.}, w_{forw.}, w_{eff.}$ with $\beta$  ...  38440.27747
+2      $w_{back.}, w_{depth}, w_{dist.}$ with $\beta$  ...  38682.08809
+17                $w_{depth}, w_{dist.}$ with $\beta$  ...  38824.90559
+10      $w_{back.}, w_{dist.}, w_{eff.}$ with $\beta$  ...  39046.66097
+25                 $w_{dist.}, w_{eff.}$ with $\beta$  ...  39163.63061
+8   $w_{back.}, w_{depth}, w_{forw.}, w_{eff.}$ wi...  ...  39389.69929
+23      $w_{depth}, w_{forw.}, w_{eff.}$ with $\beta$  ...  39674.53275
+11     $w_{back.}, w_{dist.}, w_{forw.}$ with $\beta$  ...  40116.30057
+26                $w_{dist.}, w_{forw.}$ with $\beta$  ...  40176.42511
+6       $w_{back.}, w_{depth}, w_{eff.}$ with $\beta$  ...  40385.98299
+7      $w_{back.}, w_{depth}, w_{forw.}$ with $\beta$  ...  40512.26397
+21                 $w_{depth}, w_{eff.}$ with $\beta$  ...  40578.49202
+22                $w_{depth}, w_{forw.}$ with $\beta$  ...  40711.38698
+9                 $w_{back.}, w_{dist.}$ with $\beta$  ...  40730.59814
+24                           $w_{dist.}$ with $\beta$  ...  40796.21244
+15      $w_{back.}, w_{forw.}, w_{eff.}$ with $\beta$  ...  40833.83883
+30                 $w_{forw.}, w_{eff.}$ with $\beta$  ...  41128.81925
+1                 $w_{back.}, w_{depth}$ with $\beta$  ...  41278.52741
+16                           $w_{depth}$ with $\beta$  ...  41440.13032
+13                 $w_{back.}, w_{eff.}$ with $\beta$  ...  41492.88443
+28                            $w_{eff.}$ with $\beta$  ...  41657.42224
+14                $w_{back.}, w_{forw.}$ with $\beta$  ...  45344.06490
+29                           $w_{forw.}$ with $\beta$  ...  45379.29050
+0                            $w_{back.}$ with $\beta$  ...  45668.62111
+32                    Null (Given Costs) with $\beta$  ...  45700.58456
+31                                               Null  ...  55341.45901
+
+[33 rows x 17 columns]
+Log Bayes factor approximation, difference between top two models
+104.17943928636305
