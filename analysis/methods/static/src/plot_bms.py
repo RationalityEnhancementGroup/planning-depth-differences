@@ -161,8 +161,16 @@ if __name__ == "__main__":
     ]:
         bms_df[field] = bms_df[field].apply(lambda entry: f"{entry:.2f}")
     print(f"{' & '.join(bms_df)} \\\ \hline")  # noqa
+
+    # need as numeric rather than object for sorting
+    bms_df["Expected number of participants best explained by the model"] = bms_df[
+        "Expected number of participants best explained by the model"
+    ].astype(float)
+
     for row_idx, row in bms_df.sort_values(
         by="Expected number of participants best explained by the model",
         ascending=False,
     ).iterrows():
-        print(f"{' & '.join(row.values)} \\\\")  # noqa
+        print(
+            f"{' & '.join([val if not isinstance(val, float) else f'{val:0.2f}' for val in row.values])} \\\\"  # noqa : E501
+        )  # noqa
