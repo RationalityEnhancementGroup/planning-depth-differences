@@ -109,7 +109,7 @@ if __name__ == "__main__":
         .count()
     )
 
-    print("Into percentags for reporting")
+    print("Into percentages for reporting")
     print(
         strategy_count_df[strategy_count_df["type"] == "last"]
         .groupby(["count"])
