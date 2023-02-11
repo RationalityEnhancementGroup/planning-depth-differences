@@ -1,8 +1,9 @@
 sessions:
-  - simulated/high_increasing/SoftmaxPolicy/participants/simulated_agents_back_dist_depth_eff_forw
+  - simulated/high_increasing/OptimalQ/no_added_cost_simulated_agents_back_dist_depth_eff_forw
 cost_function: back_dist_depth_eff_forw
 simulated: True
 prior: 'uniform'
 block: 'test'
 include_null: True
-excluded_parameters : ''
+excluded_parameters : 'back_added_cost,depth_cost_weight,distance_multiplier,forw_added_cost,gamma,given_cost,kappa'
+included_parameters: ''
