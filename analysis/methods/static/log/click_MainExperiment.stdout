@@ -1,0 +1,23 @@
+==========
+Number of participants, for top three models, where that model explains them the best (via meta-level action likelihoods)
+----------
+Counter({'$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\\beta$': 74, '$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}$ with $\\beta$': 37, '$w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\\beta$': 11})
+==========
+----------
+Difference between meta-level action likelihoods for best model and $w_{back.}, w_{depth}, w_{dist.}, w_{forw.}$ with $\beta$
+----------
+$W = 1283.00, \text{RBC} = -0.61, p < 0.001$, two-sided; $M_{w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.} with \beta} =0.43$; $M_{w_{back.}, w_{depth}, w_{dist.}, w_{forw.} with \beta} = 0.41$
+----------
+Difference between meta-level action likelihoods for best model and $w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\beta$
+----------
+$W = 217.00, \text{RBC} = -0.31, p > 0.05$, two-sided; $M_{w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.} with \beta} =0.43$; $M_{w_{depth}, w_{dist.}, w_{forw.}, w_{eff.} with \beta} = 0.42$
+==========
+Meta-level action table
+----------
+$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\beta$ & 0.386 & 0.167 \\ 
+$w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\beta$ & 0.384 & 0.167 \\ 
+$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}$ with $\beta$ & 0.375 & 0.165 \\ 
+==========
+Correlation between episode and meta-level action log likelihood
+----------
+$r(20) = 0.64, p < 0.01, 95\%\ C.\ I.\: [0.27, 0.84]$
