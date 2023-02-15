@@ -119,6 +119,7 @@ if __name__ == "__main__":
         data = data.groupby(
             ["trace_pid", "applied_policy"] + list(cost_details["constant_values"]),
             as_index=False,
+            dropna=False,
         ).sum()
 
     full_priors = add_cost_priors_to_temp_priors(
