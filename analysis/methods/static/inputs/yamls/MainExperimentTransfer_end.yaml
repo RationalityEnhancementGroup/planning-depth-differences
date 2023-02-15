@@ -6,3 +6,4 @@ blocks: 'test_end'
 include_null : true
 title_extras: ''
 simulated: False
+palette_name: MainExperiment

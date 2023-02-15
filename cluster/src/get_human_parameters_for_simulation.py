@@ -1,15 +1,27 @@
+from argparse import ArgumentParser
 from pathlib import Path
 
 import dill as pickle
 from costometer.utils.analysis_utils import AnalysisObject
 
 if __name__ == "__main__":
+    parser = ArgumentParser()
+    parser.add_argument("-e", "--exp", dest="experiment_name", default="MainExperiment")
+    parser.add_argument(
+        "-s",
+        "--subdirectory",
+        default="methods/static",
+        dest="experiment_subdirectory",
+        metavar="experiment_subdirectory",
+    )
+    inputs = parser.parse_args()
+
     irl_path = Path(__file__).parents[2]
 
     analysis_obj = AnalysisObject(
-        "MainExperiment",
+        inputs.experiment_name,
         irl_path=irl_path,
-        experiment_subdirectory="methods/static",
+        experiment_subdirectory=inputs.experiment_subdirectory,
     )
 
     model_params = list(analysis_obj.cost_details["constant_values"])
@@ -25,12 +37,15 @@ if __name__ == "__main__":
         deduped_parameter_values = optimization_data[
             model_params + ["noise"]
         ].drop_duplicates()
-        possible_parameters = deduped_parameter_values.drop_duplicates().to_dict("records")
+        possible_parameters = deduped_parameter_values.drop_duplicates().to_dict(
+            "records"
+        )
 
         with open(
             irl_path.joinpath(
                 f"cluster/parameters/simulations/"
-                f"participants{'_' + model_text if model_text != '' else model_text}.pkl"
+                f"participants"
+                f"{'_' + model_text if model_text != '' else model_text}.pkl"
             ),
             "wb",
         ) as f:
