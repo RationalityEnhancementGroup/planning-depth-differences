@@ -168,7 +168,6 @@ if __name__ == "__main__":
         temp_priors = get_prior(
             rv=eval(temp_priors["rv"]),
             possible_vals=temp_priors["possible_temps"],
-            inverse=temp_priors["inverse"],
         )
         temp_prior_dict = dict(zip(temp_priors.vals, temp_priors.probs))
         prior_inputs["policy_parameters"]["temp"]["prior"] = lambda val: np.log(

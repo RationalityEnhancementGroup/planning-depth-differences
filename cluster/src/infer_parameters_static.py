@@ -224,7 +224,6 @@ if __name__ == "__main__":
         temp_priors = get_prior(
             rv=eval(prior_inputs["rv"]),
             possible_vals=prior_inputs["possible_temps"],
-            inverse=prior_inputs["inverse"],
         )
     else:
         temp_priors = None
