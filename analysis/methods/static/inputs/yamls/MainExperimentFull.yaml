@@ -8,6 +8,7 @@ post_quizzes:
 cost_function: back_dist_depth_eff_forw
 prior : 'uniform'
 excluded_parameters : ''
+included_parameters: 'temp'
 block: 'test'
 positive: true
 include_null : true
@@ -18,5 +19,3 @@ trial_by_trial_models:
         - ''
         - 'kappa'
         - 'back_added_cost'
-#        - "depth_cost_weight"
-#        - "gamma,kappa"

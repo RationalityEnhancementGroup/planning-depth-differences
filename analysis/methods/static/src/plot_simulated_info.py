@@ -11,15 +11,15 @@ import seaborn as sns
 import yaml
 from costometer.utils import AnalysisObject, set_font_sizes
 
-set_font_sizes()
+set_font_sizes(MEDIUM_SIZE=30)
 
 
 def plot_heat_map_for_simulated(sum_df, field, rew1, rew2, name1, name2):
     plt.figure(figsize=(16, 12))
     heat_map_data = sum_df.pivot(index=rew1, columns=rew2, values=field)
     sns.heatmap(data=heat_map_data, annot=True, fmt=".2f")
-    plt.ylabel(name2)
-    plt.xlabel(name1)
+    plt.ylabel(f"${name2}$")
+    plt.xlabel(f"${name1}$")
 
 
 if __name__ == "__main__":

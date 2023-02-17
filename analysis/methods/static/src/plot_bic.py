@@ -92,11 +92,11 @@ if __name__ == "__main__":
 
     print(bic_df.sort_values(by="bic").round(5))
 
-    if irl_path.joinpath("analysis/methods/" "static/data/OptimalBIC.pickle").is_file():
+    if irl_path.joinpath("analysis/methods/static/data/Simulated_BIC.pickle").is_file():
         with open(
-            irl_path.joinpath("analysis/methods/" "static/data/OptimalBIC.pickle"), "rb"
+            irl_path.joinpath("analysis/methods/static/data/Simulated_BIC.pickle"), "rb"
         ) as f:
-            simulated_means = pickle.load(f)["intended"]
+            simulated_means = pickle.load(f)["SimulatedParticipant"]
     else:
         simulated_means = None
 

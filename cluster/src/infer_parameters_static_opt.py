@@ -19,7 +19,7 @@ from cluster_utils import (
 )
 from costometer.agents.vanilla import SymmetricMouselabParticipant
 from costometer.inference import HyperoptOptimizerInference
-from costometer.utils import get_temp_prior
+from costometer.utils import get_prior
 from get_myopic_voc_values import get_state_action_values
 from mouselab.cost_functions import *  # noqa
 from mouselab.graph_utils import get_structure_properties
@@ -165,10 +165,9 @@ if __name__ == "__main__":
         )
         with open(str(yaml_path), "r") as stream:
             temp_priors = yaml.safe_load(stream)
-        temp_priors = get_temp_prior(
+        temp_priors = get_prior(
             rv=eval(temp_priors["rv"]),
             possible_vals=temp_priors["possible_temps"],
-            inverse=temp_priors["inverse"],
         )
         temp_prior_dict = dict(zip(temp_priors.vals, temp_priors.probs))
         prior_inputs["policy_parameters"]["temp"]["prior"] = lambda val: np.log(

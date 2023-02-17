@@ -17,8 +17,7 @@ from cluster_utils import (
 )
 from costometer.agents.vanilla import SymmetricMouselabParticipant
 from costometer.inference import GridInference
-from costometer.utils import get_param_string, get_temp_prior
-from costometer.utils import get_state_action_values
+from costometer.utils import get_param_string, get_prior, get_state_action_values
 from mouselab.cost_functions import *  # noqa
 from mouselab.distributions import Categorical
 from mouselab.envs.registry import registry
@@ -173,9 +172,7 @@ if __name__ == "__main__":
                 **args["env_params"],
             },
         )
-        experiment_folder = "simulated/" + "/".join(
-            args["experiment"].split("/")[0:-1]
-        )
+        experiment_folder = "simulated/" + "/".join(args["experiment"].split("/")[0:-1])
         # simulation params = file name, without asterisk or extension
         simulation_params = "_" + args["experiment"].split("/")[-1].replace(
             "*", ""
@@ -200,9 +197,8 @@ if __name__ == "__main__":
         else:
             simulation_params = ""
 
-
     if inputs.participant_subset_file:
-        simulation_params = simulation_params +  "_" + inputs.participant_subset_file
+        simulation_params = simulation_params + "_" + inputs.participant_subset_file
 
     cost_parameter_dict = {
         cost_parameter_arg: arg
@@ -225,10 +221,9 @@ if __name__ == "__main__":
         )
         with open(str(yaml_path), "r") as stream:
             prior_inputs = yaml.safe_load(stream)
-        temp_priors = get_temp_prior(
+        temp_priors = get_prior(
             rv=eval(prior_inputs["rv"]),
             possible_vals=prior_inputs["possible_temps"],
-            inverse=prior_inputs["inverse"],
         )
     else:
         temp_priors = None

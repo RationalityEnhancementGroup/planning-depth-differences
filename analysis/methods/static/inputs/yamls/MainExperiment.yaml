@@ -16,5 +16,5 @@ simulated: False
 simulated_param_run: participants
 trial_by_trial_models:
         - 'gamma,kappa'
-        - 'gamma,kappa,back_added_cost'
-        - 'gamma,kappa,given_cost'
+        - 'back_added_cost,gamma,kappa'
+        - 'gamma,given_cost,kappa'

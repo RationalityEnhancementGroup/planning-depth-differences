@@ -239,29 +239,33 @@ if __name__ == "__main__":
                 alternative="two-sided",
             )
             print(
-                f"M_{{\\text{{{model}}}}} = {np.median(participant_df[participant_df['Model Name'] == model]['avg']):.2f}\n"  # noqa: E501
-                f"M_{{\\text{{{best_model}}}}} ="
-                f"{np.median(participant_df[participant_df['Model Name'] == best_model]['avg']):.2f}"  # noqa: E501
+                f"{get_wilcoxon_text(wilcoxon_object)}; "
+                f"$M_{{{best_model.replace('$','')}}} ="
+                f"{np.median(participant_df[participant_df['Model Name'] == best_model]['avg']):.2f}$; "  # noqa: E501
+                f"$M_{{{model.replace('$','')}}} = "
+                f"{np.median(participant_df[participant_df['Model Name'] == model]['avg']):.2f}$"  # noqa: E501
             )
-            print(get_wilcoxon_text(wilcoxon_object))
-
-    effort_costs = (
-        participant_df.groupby(["Model Name"]).describe()["avg"].reset_index()
-    )
-    effort_costs["mean"] = effort_costs["mean"].apply(lambda entry: f"{entry:.3f}")
-    effort_costs["std"] = effort_costs["std"].apply(lambda entry: f"{entry:.3f}")
 
     print("==========")
     print("Meta-level action table")
     print("----------")
-    for row_idx, row in effort_costs.sort_values(by="mean", ascending=False).iterrows():
-        print(f"{row['Model Name']} & {row['mean']} & {row['std']} \\\ ")  # noqa
+    for row_idx, row in (
+        participant_df.groupby(["Model Name"])
+        .describe()["avg"]
+        .sort_values(by="mean", ascending=False)
+        .iterrows()
+    ):
+        print(f"{row_idx} & {row['mean']:.3f} & {row['std']:.3f} \\\ ")  # noqa
 
     print("==========")
     print("Correlation between episode and meta-level action log likelihood")
     print("----------")
     correlation = pg.corr(
-        trial_by_trial_df[(trial_by_trial_df["Model Name"] == best_model)]["avg"],
-        trial_by_trial_df[(trial_by_trial_df["Model Name"] == best_model)]["i_episode"],
+        trial_by_trial_df[(trial_by_trial_df["Model Name"] == best_model)]
+        .groupby("i_episode", as_index=False)
+        .mean()["avg"],
+        trial_by_trial_df[(trial_by_trial_df["Model Name"] == best_model)]
+        .groupby("i_episode", as_index=False)
+        .mean()["i_episode"],
     )
     print(get_correlation_text(correlation))
