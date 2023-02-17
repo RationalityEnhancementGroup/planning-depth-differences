@@ -1,0 +1,86 @@
+{
+  "data": ["quest_first","quest_second"],
+  "model_name": 'Effort Cost and Planning Depth',
+  "cost_function": "linear_depth",
+  "regressions": [
+               {"title": "Regressions: Planning Depth Cost",
+               "tests": [{
+                  "dependent": "depth_cost_weight",
+                  "independent": "CIT",
+                  "prettyname": "Compulsive Behavior and Intrusive Thought",
+                  "covariates": ["age", "IQ", "C(gender)"],
+                  "direction": ""
+               },
+                 {
+                   "dependent": "depth_cost_weight",
+                   "independent": "CFC",
+                   "prettyname": "Consideration of Future Consequences",
+                   "covariates": [ "age", "IQ", "C(gender)" ],
+                   "direction": "-"
+                 },
+                 {
+                   "dependent": "depth_cost_weight",
+                   "independent": "ptp",
+                   "prettyname": "Propensity to Plan",
+                   "covariates": [ "age", "IQ", "C(gender)" ],
+                   "direction": "-"
+                 },
+                 {
+                   "dependent": "depth_cost_weight",
+                   "independent": "Q(\"life-regrets\")",
+                   "prettyname": "Life Regrets",
+                   "covariates": [ "age", "IQ", "C(gender)" ],
+                   "direction": "+"
+                 },
+                 {
+                   "dependent": "depth_cost_weight",
+                   "independent": "regrets:Q(\"life-regrets\")",
+                   "prettyname": "Regrets on Life Regrets (moderator)",
+                   "covariates": [ "Q(\"life-regrets\")", "regrets", "age", "IQ", "C(gender)" ],
+                   "direction": "+"
+                 },
+                 {
+                   "dependent": "depth_cost_weight",
+                   "independent": "satisfaction",
+                   "prettyname": "Life Satisfaction",
+                   "covariates": [ "age", "IQ", "C(gender)" ],
+                   "direction": "-"
+                 },
+                 {
+                   "dependent": "depth_cost_weight",
+                   "independent": "crt",
+                   "prettyname": "Cognitive Reflection Task",
+                   "covariates": [ "age", "IQ", "C(gender)" ],
+                   "direction": "-"
+                 }]},
+               {"title": "Regressions: Total Experienced Planning Cost",
+               "tests": [{
+                 "dependent": "total_node_cost",
+                 "independent": "AD",
+                 "prettyname": "Anxious Depression",
+                 "covariates": [ "age", "IQ", "C(gender)" ],
+                 "direction": ""
+               },
+               {
+                 "dependent": "total_node_cost",
+                 "independent": "SW",
+                 "prettyname": "Social Withdrawal",
+                 "covariates": [ "age", "IQ", "C(gender)" ],
+                 "direction": "-"
+               },
+              {
+                 "dependent": "total_node_cost",
+                  "independent": "CFC",
+                  "prettyname": "Consideration of Future Consequences",
+                  "covariates": ["age", "IQ", "C(gender)"],
+                 "direction": "-"
+               },
+               {
+                 "dependent": "total_node_cost",
+                 "independent": "ptp",
+                 "prettyname": "Propensity to Plan",
+                 "covariates": [ "age", "IQ", "C(gender)" ],
+                 "direction": "-"
+               }]},
+             ]
+}

@@ -1,5 +1,5 @@
 {
-  "data": ["quest_first","quest_second"],
+  "data": ["quest_pilot"],
   "model_name": 'Effort Cost and Planning Depth',
   "cost_function": "linear_depth",
   "regressions": [
@@ -24,14 +24,14 @@
                  "prettyname": "Social Withdrawal",
                  "covariates": [ "age", "IQ", "C(gender)" ],
                  "direction": "-"
+               },
+               {
+                 "dependent": "total_node_cost",
+                 "independent": "STAI",
+                 "prettyname": "Trait anxiety (STAI)",
+                 "covariates": [ "age", "IQ", "C(gender)" ],
+                  "direction": "-"
                }]},
-#               {
-#                 "dependent": "total_node_cost",
-#                 "independent": "STAI",
-#                 "prettyname": "Trait anxiety (STAI)",
-#                 "covariates": [ "age", "IQ", "C(gender)" ],
-#                  "direction": "-"
-#               }]},
                {"title": "H2: Planning and future thinking measures",
                "tests": [{
                  "dependent": "total_node_cost",
@@ -60,19 +60,19 @@
                  "prettyname": "Propensity to Plan",
                  "covariates": [ "age", "IQ", "C(gender)" ],
                  "direction": "-"
+               },
+               {
+                 "dependent": "total_node_cost",
+                 "independent": "FOS",
+                 "covariates": [ "age", "IQ", "C(gender)" ],
+                   "direction": "-"
+               },
+               {
+                 "dependent": "depth_cost_weight",
+                 "independent": "FOS",
+                 "covariates": [ "age", "IQ", "C(gender)" ],
+                  "direction": "-"
                }]},
-#               {
-#                 "dependent": "total_node_cost",
-#                 "independent": "FOS",
-#                 "covariates": [ "age", "IQ", "C(gender)" ],
-#                   "direction": "-"
-#               },
-#               {
-#                 "dependent": "depth_cost_weight",
-#                 "independent": "FOS",
-#                 "covariates": [ "age", "IQ", "C(gender)" ],
-#                   "direction": "-"
-#               },
               # Life regret and life satisfaction measures
                {"title": "H3: Life regret and life satisfaction measures",
                "tests": [{
@@ -82,56 +82,56 @@
                  "covariates": ["age", "IQ", "C(gender)"],
                  "direction": "+"
                },
-                 {
+              {
                    "dependent": "depth_cost_weight",
                    "independent": "regrets:Q(\"life-regrets\")",
                    "prettyname": "Regrets on Life Regrets (moderator)",
                    "covariates": ["Q(\"life-regrets\")", "regrets", "age", "IQ", "C(gender)" ],
                    "direction": "+"
-                 },
+              },
                {
                  "dependent": "depth_cost_weight",
                  "independent": "satisfaction",
                  "prettyname": "Life Satisfaction",
                  "covariates": [ "age", "IQ", "C(gender)" ],
                  "direction": "-"
+               },
+               {
+                 "dependent": "depth_cost_weight",
+                 "independent": "BIT",
+                 "covariates": [ "age", "IQ", "C(gender)" ],
+                 "direction": ""
                }]},
-#               {
-#                 "dependent": "depth_cost_weight",
-#                 "independent": "BIT",
-#                 "covariates": [ "age", "IQ", "C(gender)" ],
-#                 "direction": ""
-#               },
-#                Impulsivity and risk-taking measures
-#               {"title": "H4: Impulsivity and risk-taking measures",
-#               "tests": [{
-#                 "dependent": "depth_cost_weight",
-#                 "independent": "Q(\"irrational-risk\")",
-#                 "covariates": [ "age", "IQ", "C(gender)" ],
-#                 "direction": "+"
-#               },
-#               {
-#                 "dependent": "total_node_cost",
-#                 "independent": "Q(\"pre-meditation\")",
-#                 "covariates": [ "age", "IQ", "C(gender)" ],
-#                   "direction": "+"
-#               }]},
+               # Impulsivity and risk-taking measures
+               {"title": "H4: Impulsivity and risk-taking measures",
+               "tests": [{
+                 "dependent": "depth_cost_weight",
+                 "independent": "Q(\"irrational-risk\")",
+                 "covariates": [ "age", "IQ", "C(gender)" ],
+                 "direction": "+"
+               },
+               {
+                 "dependent": "total_node_cost",
+                 "independent": "Q(\"pre-meditation\")",
+                 "covariates": [ "age", "IQ", "C(gender)" ],
+                   "direction": "+"
+               }]},
                # Intolerance of uncertainty measure
-#               {"title": "H5: Intolerance of uncertainty measure",
-#               "tests": [{
-#                 "dependent": "total_node_cost",
-#                 "independent": "IUS_12",
-#                 "covariates": [ "age", "IQ", "C(gender)" ],
-#                   "direction": ""
-#               }]},
+               {"title": "H5: Intolerance of uncertainty measure",
+               "tests": [{
+                 "dependent": "total_node_cost",
+                 "independent": "IUS_12",
+                 "covariates": [ "age", "IQ", "C(gender)" ],
+                   "direction": ""
+               }]},
               # Distress intolerance measure
-#               {"title": "H6: Distress intolerance measure",
-#               "tests": [{
-#                 "dependent": "total_node_cost",
-#                 "independent": "DTS",
-#                 "covariates": [ "age", "IQ", "C(gender)" ],
-#                   "direction": ""
-#               }]},
+               {"title": "H6: Distress intolerance measure",
+               "tests": [{
+                 "dependent": "total_node_cost",
+                 "independent": "DTS",
+                 "covariates": [ "age", "IQ", "C(gender)" ],
+                   "direction": ""
+               }]},
               # Cognitive styles (rationality)
                {"title": "H7: Cognitive styles (rationality)",
                "tests": [{
