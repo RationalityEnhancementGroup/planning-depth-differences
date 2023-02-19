@@ -1,0 +1,90 @@
+
+================================
+Correlation of metric 'early' between simulated and real data, per participant
+$r(122) = 0.89, p < 0.001, 95\%\ C.\ I.\: [0.85, 0.92]$
+Correlation of metric 'middle' between simulated and real data, per participant
+$r(122) = 0.71, p < 0.001, 95\%\ C.\ I.\: [0.61, 0.79]$
+Correlation of metric 'late' between simulated and real data, per participant
+$r(122) = 0.26, p < 0.01, 95\%\ C.\ I.\: [0.09, 0.42]$
+Correlation of metric 'clicks' between simulated and real data, per participant
+$r(122) = 0.69, p < 0.001, 95\%\ C.\ I.\: [0.58, 0.77]$
+kappa
+================================
+Correlation of metric 'early' between simulated and real data, per participant
+$r(122) = 0.89, p < 0.001, 95\%\ C.\ I.\: [0.85, 0.92]$
+Correlation of metric 'middle' between simulated and real data, per participant
+$r(122) = 0.70, p < 0.001, 95\%\ C.\ I.\: [0.60, 0.78]$
+Correlation of metric 'late' between simulated and real data, per participant
+$r(122) = 0.14, p > 0.05, 95\%\ C.\ I.\: [-0.04, 0.31]$
+Correlation of metric 'clicks' between simulated and real data, per participant
+$r(122) = 0.67, p < 0.001, 95\%\ C.\ I.\: [0.56, 0.76]$
+back_added_cost
+================================
+Correlation of metric 'early' between simulated and real data, per participant
+$r(122) = 0.88, p < 0.001, 95\%\ C.\ I.\: [0.83, 0.91]$
+Correlation of metric 'middle' between simulated and real data, per participant
+$r(122) = 0.65, p < 0.001, 95\%\ C.\ I.\: [0.53, 0.74]$
+Correlation of metric 'late' between simulated and real data, per participant
+$r(122) = 0.28, p < 0.01, 95\%\ C.\ I.\: [0.11, 0.43]$
+Correlation of metric 'clicks' between simulated and real data, per participant
+$r(122) = 0.67, p < 0.001, 95\%\ C.\ I.\: [0.56, 0.76]$
+Full Friedman early
+$\chi^2(2) = 8.540, p = 0.01$
+Full Friedman middle
+$\chi^2(2) = 0.500, p > 0.05$
+Full Friedman late
+$\chi^2(2) = 0.790, p > 0.05$
+Full Friedman clicks
+$\chi^2(2) = 8.591, p = 0.01$
+Pair-wise table for early
+$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & $w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \beta$ & 3.247 \
+$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & $w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & 7.000^{**} \
+$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \beta$ & $w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & 3.882^{*} \
+$\chi^2(1) = 3.247, p > 0.05$
+$\chi^2(1) = 7.000, p < 0.01$
+$\chi^2(1) = 3.882, p = 0.05$
+Pair-wise table for middle
+$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & $w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \beta$ & 0.012 \
+$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & $w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & 0.383 \
+$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \beta$ & $w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & 0.269 \
+$\chi^2(1) = 0.012, p > 0.05$
+$\chi^2(1) = 0.383, p > 0.05$
+$\chi^2(1) = 0.269, p > 0.05$
+Pair-wise table for late
+$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & $w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \beta$ & 0.653 \
+$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & $w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & 0.041 \
+$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \beta$ & $w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & 0.367 \
+$\chi^2(1) = 0.653, p > 0.05$
+$\chi^2(1) = 0.041, p > 0.05$
+$\chi^2(1) = 0.367, p > 0.05$
+Pair-wise table for clicks
+$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & $w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \beta$ & 6.451^{*} \
+$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & $w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & 1.750 \
+$w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \beta$ & $w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ with $\gamma, \kappa, \beta$ & 3.509 \
+$\chi^2(1) = 6.451, p = 0.01$
+$\chi^2(1) = 1.750, p > 0.05$
+$\chi^2(1) = 3.509, p > 0.05$
+Descriptive , early difference
+M=0.336, SD=0.335
+Descriptive kappa, early difference
+M=0.340, SD=0.332
+Descriptive back_added_cost, early difference
+M=0.367, SD=0.346
+Descriptive , middle difference
+M=0.368, SD=0.507
+Descriptive kappa, middle difference
+M=0.381, SD=0.485
+Descriptive back_added_cost, middle difference
+M=0.382, SD=0.522
+Descriptive , late difference
+M=1.101, SD=1.313
+Descriptive kappa, late difference
+M=1.312, SD=1.462
+Descriptive back_added_cost, late difference
+M=1.123, SD=1.294
+Descriptive , clicks difference
+M=1.785, SD=1.240
+Descriptive kappa, clicks difference
+M=1.775, SD=1.319
+Descriptive back_added_cost, clicks difference
+M=1.743, SD=1.254

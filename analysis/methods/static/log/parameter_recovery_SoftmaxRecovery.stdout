@@ -1,0 +1,201 @@
+==========
+----------
+Correlation between inferred distance_multiplier and inferred temp for simulated participants
+----------
+Spearman's $\rho(729) = -0.19, p < 0.001, 95\%\ C.\ I.\: [-0.26, -0.12]$
+----------
+Correlation between inferred distance_multiplier and inferred back_added_cost for simulated participants
+----------
+Spearman's $\rho(729) = -0.27, p < 0.001, 95\%\ C.\ I.\: [-0.34, -0.20]$
+----------
+Correlation between inferred distance_multiplier and inferred forw_added_cost for simulated participants
+----------
+Spearman's $\rho(729) = -0.37, p < 0.001, 95\%\ C.\ I.\: [-0.43, -0.30]$
+----------
+Correlation between inferred distance_multiplier and inferred given_cost for simulated participants
+----------
+Spearman's $\rho(729) = 0.26, p < 0.001, 95\%\ C.\ I.\: [0.19, 0.33]$
+----------
+Correlation between inferred distance_multiplier and inferred depth_cost_weight for simulated participants
+----------
+Spearman's $\rho(729) = -0.03, p > 0.05, 95\%\ C.\ I.\: [-0.11, 0.04]$
+----------
+Correlation between inferred temp and inferred back_added_cost for simulated participants
+----------
+Spearman's $\rho(729) = 0.53, p < 0.001, 95\%\ C.\ I.\: [0.48, 0.58]$
+----------
+Correlation between inferred temp and inferred forw_added_cost for simulated participants
+----------
+Spearman's $\rho(729) = 0.47, p < 0.001, 95\%\ C.\ I.\: [0.41, 0.52]$
+----------
+Correlation between inferred temp and inferred given_cost for simulated participants
+----------
+Spearman's $\rho(729) = -0.44, p < 0.001, 95\%\ C.\ I.\: [-0.50, -0.38]$
+----------
+Correlation between inferred temp and inferred depth_cost_weight for simulated participants
+----------
+Spearman's $\rho(729) = 0.41, p < 0.001, 95\%\ C.\ I.\: [0.35, 0.47]$
+----------
+Correlation between inferred back_added_cost and inferred forw_added_cost for simulated participants
+----------
+Spearman's $\rho(729) = 0.43, p < 0.001, 95\%\ C.\ I.\: [0.37, 0.49]$
+----------
+Correlation between inferred back_added_cost and inferred given_cost for simulated participants
+----------
+Spearman's $\rho(729) = -0.39, p < 0.001, 95\%\ C.\ I.\: [-0.45, -0.32]$
+----------
+Correlation between inferred back_added_cost and inferred depth_cost_weight for simulated participants
+----------
+Spearman's $\rho(729) = 0.25, p < 0.001, 95\%\ C.\ I.\: [0.18, 0.32]$
+----------
+Correlation between inferred forw_added_cost and inferred given_cost for simulated participants
+----------
+Spearman's $\rho(729) = -0.24, p < 0.001, 95\%\ C.\ I.\: [-0.30, -0.17]$
+----------
+Correlation between inferred forw_added_cost and inferred depth_cost_weight for simulated participants
+----------
+Spearman's $\rho(729) = 0.17, p < 0.001, 95\%\ C.\ I.\: [0.10, 0.24]$
+----------
+Correlation between inferred given_cost and inferred depth_cost_weight for simulated participants
+----------
+Spearman's $\rho(729) = 0.03, p > 0.05, 95\%\ C.\ I.\: [-0.04, 0.10]$
+==========
+----------
+Correlation between inferred and actual distance_multiplier for simulated participants
+----------
+Spearman's $\rho(729) = 0.84, p < 0.001, 95\%\ C.\ I.\: [0.82, 0.86]$
+----------
+Correlation between inferred and actual temp for simulated participants
+----------
+Spearman's $\rho(729) = 0.90, p < 0.001, 95\%\ C.\ I.\: [0.88, 0.91]$
+----------
+Correlation between inferred and actual back_added_cost for simulated participants
+----------
+Spearman's $\rho(729) = 0.35, p < 0.001, 95\%\ C.\ I.\: [0.28, 0.41]$
+----------
+Correlation between inferred and actual forw_added_cost for simulated participants
+----------
+Spearman's $\rho(729) = 0.43, p < 0.001, 95\%\ C.\ I.\: [0.37, 0.49]$
+----------
+Correlation between inferred and actual given_cost for simulated participants
+----------
+Spearman's $\rho(729) = 0.41, p < 0.001, 95\%\ C.\ I.\: [0.35, 0.47]$
+----------
+Correlation between inferred and actual depth_cost_weight for simulated participants
+----------
+Spearman's $\rho(729) = 0.71, p < 0.001, 95\%\ C.\ I.\: [0.68, 0.75]$
+==========
+----------
+RMSE for parameter distance_multiplier
+----------
+2.2066584610641513
+----------
+RMSE for parameter temp
+----------
+0.380058475033046
+----------
+RMSE for parameter back_added_cost
+----------
+4.963964796617479
+----------
+RMSE for parameter forw_added_cost
+----------
+4.573474244670748
+----------
+RMSE for parameter given_cost
+----------
+4.506358866445964
+----------
+RMSE for parameter depth_cost_weight
+----------
+3.5761364228280836
+==========
+Regression with distance_multiplier as dependent variable
+----------
+distance_multiplier 0.75
+$w_{dist.}$  &  $\hat{\text{Intercept}}$ & $0.196 (0.253)$ & $0.776$ \\
+$w_{dist.}$  &  $\hat{w_{dist.}}$ & $0.859 (0.020)^{***}$ & $42.596$ \\
+$w_{dist.}$  &  $\hat{\beta}$ & $0.059 (0.021)^{**}$ & $2.862$ \\
+$w_{dist.}$  &  $\hat{w_{back.}}$ & $0.011 (0.022)$ & $0.514$ \\
+$w_{dist.}$  &  $\hat{w_{forw.}}$ & $0.018 (0.022)$ & $0.802$ \\
+$w_{dist.}$  &  $\hat{w_{eff.}}$ & $0.025 (0.022)$ & $1.149$ \\
+$w_{dist.}$  &  $\hat{w_{depth}}$ & $-0.002 (0.027)$ & $-0.075$ \\
+----------
+adj. $R^2=0.74, F(6, 722) = 351.90, p < 0.001$
+==========
+Regression with temp as dependent variable
+----------
+temp 1.0
+$\beta$  &  $\hat{\text{Intercept}}$ & $-0.085 (0.037)^{*}$ & $-2.269$ \\
+$\beta$  &  $\hat{w_{dist.}}$ & $0.008 (0.003)^{**}$ & $2.681$ \\
+$\beta$  &  $\hat{\beta}$ & $0.988 (0.003)^{***}$ & $325.010$ \\
+$\beta$  &  $\hat{w_{back.}}$ & $-0.013 (0.003)^{***}$ & $-4.083$ \\
+$\beta$  &  $\hat{w_{forw.}}$ & $-0.012 (0.003)^{***}$ & $-3.641$ \\
+$\beta$  &  $\hat{w_{eff.}}$ & $0.013 (0.003)^{***}$ & $4.075$ \\
+$\beta$  &  $\hat{w_{depth}}$ & $-0.004 (0.004)$ & $-1.052$ \\
+----------
+adj. $R^2=1.00, F(6, 722) = 25785.93, p < 0.001$
+==========
+Regression with back_added_cost as dependent variable
+----------
+back_added_cost 0.22
+$w_{back.}$  &  $\hat{\text{Intercept}}$ & $-3.541 (0.442)^{***}$ & $-8.013$ \\
+$w_{back.}$  &  $\hat{w_{dist.}}$ & $0.007 (0.035)$ & $0.208$ \\
+$w_{back.}$  &  $\hat{\beta}$ & $0.011 (0.036)$ & $0.320$ \\
+$w_{back.}$  &  $\hat{w_{back.}}$ & $0.543 (0.038)^{***}$ & $14.200$ \\
+$w_{back.}$  &  $\hat{w_{forw.}}$ & $-0.197 (0.039)^{***}$ & $-5.072$ \\
+$w_{back.}$  &  $\hat{w_{eff.}}$ & $0.209 (0.038)^{***}$ & $5.546$ \\
+$w_{back.}$  &  $\hat{w_{depth}}$ & $-0.182 (0.048)^{***}$ & $-3.808$ \\
+----------
+adj. $R^2=0.22, F(6, 722) = 34.54, p < 0.001$
+==========
+Regression with forw_added_cost as dependent variable
+----------
+forw_added_cost 0.34
+$w_{forw.}$  &  $\hat{\text{Intercept}}$ & $-3.112 (0.408)^{***}$ & $-7.633$ \\
+$w_{forw.}$  &  $\hat{w_{dist.}}$ & $0.063 (0.033)$ & $1.925$ \\
+$w_{forw.}$  &  $\hat{\beta}$ & $-0.018 (0.033)$ & $-0.556$ \\
+$w_{forw.}$  &  $\hat{w_{back.}}$ & $-0.163 (0.035)^{***}$ & $-4.610$ \\
+$w_{forw.}$  &  $\hat{w_{forw.}}$ & $0.629 (0.036)^{***}$ & $17.551$ \\
+$w_{forw.}$  &  $\hat{w_{eff.}}$ & $0.229 (0.035)^{***}$ & $6.589$ \\
+$w_{forw.}$  &  $\hat{w_{depth}}$ & $-0.149 (0.044)^{***}$ & $-3.382$ \\
+----------
+adj. $R^2=0.33, F(6, 722) = 61.59, p < 0.001$
+==========
+Regression with given_cost as dependent variable
+----------
+given_cost 0.23
+$w_{eff.}$  &  $\hat{\text{Intercept}}$ & $2.175 (0.441)^{***}$ & $4.938$ \\
+$w_{eff.}$  &  $\hat{w_{dist.}}$ & $0.017 (0.035)$ & $0.490$ \\
+$w_{eff.}$  &  $\hat{\beta}$ & $0.120 (0.036)^{***}$ & $3.352$ \\
+$w_{eff.}$  &  $\hat{w_{back.}}$ & $0.064 (0.038)$ & $1.671$ \\
+$w_{eff.}$  &  $\hat{w_{forw.}}$ & $0.078 (0.039)^{*}$ & $2.005$ \\
+$w_{eff.}$  &  $\hat{w_{eff.}}$ & $0.526 (0.038)^{***}$ & $13.976$ \\
+$w_{eff.}$  &  $\hat{w_{depth}}$ & $-0.034 (0.048)$ & $-0.717$ \\
+----------
+adj. $R^2=0.22, F(6, 722) = 35.50, p < 0.001$
+==========
+Regression with depth_cost_weight as dependent variable
+----------
+depth_cost_weight 0.7
+$w_{depth}$  &  $\hat{\text{Intercept}}$ & $-1.639 (0.276)^{***}$ & $-5.934$ \\
+$w_{depth}$  &  $\hat{w_{dist.}}$ & $0.142 (0.022)^{***}$ & $6.454$ \\
+$w_{depth}$  &  $\hat{\beta}$ & $-0.183 (0.022)^{***}$ & $-8.174$ \\
+$w_{depth}$  &  $\hat{w_{back.}}$ & $-0.102 (0.024)^{***}$ & $-4.256$ \\
+$w_{depth}$  &  $\hat{w_{forw.}}$ & $-0.098 (0.024)^{***}$ & $-4.027$ \\
+$w_{depth}$  &  $\hat{w_{eff.}}$ & $0.272 (0.024)^{***}$ & $11.524$ \\
+$w_{depth}$  &  $\hat{w_{depth}}$ & $1.057 (0.030)^{***}$ & $35.302$ \\
+----------
+adj. $R^2=0.69, F(6, 722) = 276.03, p < 0.001$
+Absolute error for distance_multiplier
+Median: 0.00, Range: [-5.00, 10.00]
+Absolute error for temp
+Median: 0.00, Range: [-0.90, 0.90]
+Absolute error for back_added_cost
+Median: 0.00, Range: [-10.00, 10.00]
+Absolute error for forw_added_cost
+Median: 0.00, Range: [-10.00, 10.00]
+Absolute error for given_cost
+Median: 0.00, Range: [-10.00, 10.00]
+Absolute error for depth_cost_weight
+Median: 0.00, Range: [-7.50, 5.00]

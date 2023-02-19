@@ -1,0 +1,167 @@
+----------
+Statistics for spread of parameter: distance_multiplier
+----------
+$M: 4.71, SD: 3.55$
+----------
+Statistics for spread of parameter: temp
+----------
+$M: 0.41, SD: 0.45$
+----------
+Statistics for spread of parameter: back_added_cost
+----------
+$M: 7.76, SD: 3.44$
+----------
+Statistics for spread of parameter: forw_added_cost
+----------
+$M: 7.28, SD: 3.55$
+----------
+Statistics for spread of parameter: given_cost
+----------
+$M: 8.19, SD: 3.13$
+----------
+Statistics for spread of parameter: depth_cost_weight
+----------
+$M: 4.34, SD: 2.55$
+----------
+Correlation between spread of distance_multiplier and temperature
+----------
+$r(729) = -0.21, p < 0.001, 95\%\ C.\ I.\: [-0.28, -0.14]$
+----------
+Correlation between spread of temp and temperature
+----------
+$r(729) = -0.67, p < 0.001, 95\%\ C.\ I.\: [-0.70, -0.62]$
+----------
+Correlation between spread of back_added_cost and temperature
+----------
+$r(729) = -0.02, p > 0.05, 95\%\ C.\ I.\: [-0.09, 0.05]$
+----------
+Correlation between spread of forw_added_cost and temperature
+----------
+$r(729) = -0.21, p < 0.001, 95\%\ C.\ I.\: [-0.28, -0.14]$
+----------
+Correlation between spread of given_cost and temperature
+----------
+$r(729) = 0.08, p = 0.04, 95\%\ C.\ I.\: [0.00, 0.15]$
+----------
+Correlation between spread of depth_cost_weight and temperature
+----------
+$r(729) = -0.14, p < 0.001, 95\%\ C.\ I.\: [-0.21, -0.07]$
+----------
+Amount of time true distance_multiplier is in the outputted interval
+----------
+0.98
+----------
+Amount of time true temp is in the outputted interval
+----------
+1.00
+----------
+Amount of time true back_added_cost is in the outputted interval
+----------
+0.99
+----------
+Amount of time true forw_added_cost is in the outputted interval
+----------
+1.00
+----------
+Amount of time true given_cost is in the outputted interval
+----------
+0.99
+----------
+Amount of time true depth_cost_weight is in the outputted interval
+----------
+1.00
+----------
+Difference between error when true distance_multiplier parameter value is in outputted interval vs not.
+----------
+Mann-Whitney $U=460.00, p < 0.001$, two-sided
+----------
+Correlation between error in MAP estimate and spread for distance_multiplier
+----------
+$r(729) = 0.48, p < 0.001, 95\%\ C.\ I.\: [0.42, 0.53]$
+----------
+Correlation between MAP estimate and spread for distance_multiplier
+----------
+$r(729) = 0.68, p < 0.001, 95\%\ C.\ I.\: [0.64, 0.72]$
+----------
+Correlation between true value and spread for distance_multiplier
+----------
+$r(729) = 0.59, p < 0.001, 95\%\ C.\ I.\: [0.54, 0.63]$
+----------
+True temp value is always in or outside of outputted interval:
+[ True]
+----------
+Correlation between error in MAP estimate and spread for temp
+----------
+$r(729) = 0.51, p < 0.001, 95\%\ C.\ I.\: [0.45, 0.56]$
+----------
+Correlation between MAP estimate and spread for temp
+----------
+$r(729) = -0.69, p < 0.001, 95\%\ C.\ I.\: [-0.72, -0.65]$
+----------
+Correlation between true value and spread for temp
+----------
+$r(729) = -0.67, p < 0.001, 95\%\ C.\ I.\: [-0.70, -0.62]$
+----------
+Difference between error when true back_added_cost parameter value is in outputted interval vs not.
+----------
+Mann-Whitney $U=1435.50, p = 0.04$, two-sided
+----------
+Correlation between error in MAP estimate and spread for back_added_cost
+----------
+$r(729) = 0.46, p < 0.001, 95\%\ C.\ I.\: [0.41, 0.52]$
+----------
+Correlation between MAP estimate and spread for back_added_cost
+----------
+$r(729) = -0.18, p < 0.001, 95\%\ C.\ I.\: [-0.25, -0.11]$
+----------
+Correlation between true value and spread for back_added_cost
+----------
+$r(729) = 0.09, p = 0.02, 95\%\ C.\ I.\: [0.01, 0.16]$
+----------
+Difference between error when true forw_added_cost parameter value is in outputted interval vs not.
+----------
+Mann-Whitney $U=381.00, p > 0.05$, two-sided
+----------
+Correlation between error in MAP estimate and spread for forw_added_cost
+----------
+$r(729) = 0.51, p < 0.001, 95\%\ C.\ I.\: [0.45, 0.56]$
+----------
+Correlation between MAP estimate and spread for forw_added_cost
+----------
+$r(729) = -0.23, p < 0.001, 95\%\ C.\ I.\: [-0.29, -0.16]$
+----------
+Correlation between true value and spread for forw_added_cost
+----------
+$r(729) = 0.10, p < 0.01, 95\%\ C.\ I.\: [0.03, 0.18]$
+----------
+Difference between error when true given_cost parameter value is in outputted interval vs not.
+----------
+Mann-Whitney $U=719.50, p < 0.01$, two-sided
+----------
+Correlation between error in MAP estimate and spread for given_cost
+----------
+$r(729) = 0.41, p < 0.001, 95\%\ C.\ I.\: [0.35, 0.47]$
+----------
+Correlation between MAP estimate and spread for given_cost
+----------
+$r(729) = 0.56, p < 0.001, 95\%\ C.\ I.\: [0.51, 0.61]$
+----------
+Correlation between true value and spread for given_cost
+----------
+$r(729) = 0.33, p < 0.001, 95\%\ C.\ I.\: [0.27, 0.40]$
+----------
+Difference between error when true depth_cost_weight parameter value is in outputted interval vs not.
+----------
+Mann-Whitney $U=400.50, p > 0.05$, two-sided
+----------
+Correlation between error in MAP estimate and spread for depth_cost_weight
+----------
+$r(729) = 0.39, p < 0.001, 95\%\ C.\ I.\: [0.33, 0.45]$
+----------
+Correlation between MAP estimate and spread for depth_cost_weight
+----------
+$r(729) = -0.06, p > 0.05, 95\%\ C.\ I.\: [-0.14, 0.01]$
+----------
+Correlation between true value and spread for depth_cost_weight
+----------
+$r(729) = 0.19, p < 0.001, 95\%\ C.\ I.\: [0.12, 0.26]$

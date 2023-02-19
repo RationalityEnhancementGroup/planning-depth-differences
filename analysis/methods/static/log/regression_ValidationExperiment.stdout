@@ -1,0 +1,175 @@
+Descriptive statistics for main experiment (MainExperiment) given_cost
+$M: 2.31, SD: 2.47$
+Descriptive statistics for validation experiment , test block given_cost
+$M: 4.07, SD: 3.49$
+Descriptive statistics for validation experiment , baseline block given_cost
+$M: 2.43, SD: 2.81$
+Comparison between validation experiment's test block and main experiment (MainExperiment) for cost parameter: given_cost
+Mann-Whitney $U=26452.00, p < 0.001$, two-sided
+Comparison between validation experiment's baseline  block and main experiment (MainExperiment) for cost parameter: given_cost
+Mann-Whitney $U=20333.50, p > 0.05$, two-sided
+Comparison between validation experiment's test and baseline blocks for cost parameter: given_cost
+$W = 7539.50, \text{RBC} = 0.53, p < 0.001$, two-sided
+Descriptive statistics for main experiment (MainExperiment) distance_multiplier
+$M: 1.99, SD: 2.76$
+Descriptive statistics for validation experiment , test block distance_multiplier
+$M: 3.26, SD: 4.16$
+Descriptive statistics for validation experiment , baseline block distance_multiplier
+$M: 2.46, SD: 3.08$
+Comparison between validation experiment's test block and main experiment (MainExperiment) for cost parameter: distance_multiplier
+Mann-Whitney $U=21601.00, p > 0.05$, two-sided
+Comparison between validation experiment's baseline  block and main experiment (MainExperiment) for cost parameter: distance_multiplier
+Mann-Whitney $U=22981.50, p = 0.03$, two-sided
+Comparison between validation experiment's test and baseline blocks for cost parameter: distance_multiplier
+$W = 7558.00, \text{RBC} = 0.26, p < 0.01$, two-sided
+Descriptive statistics for main experiment (MainExperiment) forw_added_cost
+$M: -2.50, SD: 4.09$
+Descriptive statistics for validation experiment , test block forw_added_cost
+$M: -1.31, SD: 3.23$
+Descriptive statistics for validation experiment , baseline block forw_added_cost
+$M: -2.09, SD: 3.81$
+Comparison between validation experiment's test block and main experiment (MainExperiment) for cost parameter: forw_added_cost
+Mann-Whitney $U=24545.00, p < 0.001$, two-sided
+Comparison between validation experiment's baseline  block and main experiment (MainExperiment) for cost parameter: forw_added_cost
+Mann-Whitney $U=21405.50, p > 0.05$, two-sided
+Comparison between validation experiment's test and baseline blocks for cost parameter: forw_added_cost
+$W = 1258.50, \text{RBC} = 0.49, p < 0.001$, two-sided
+Descriptive statistics for main experiment (MainExperiment) temp
+$M: 4.86, SD: 12.98$
+Descriptive statistics for validation experiment , test block temp
+$M: 1.88, SD: 6.09$
+Descriptive statistics for validation experiment , baseline block temp
+$M: 3.50, SD: 8.44$
+Comparison between validation experiment's test block and main experiment (MainExperiment) for cost parameter: temp
+Mann-Whitney $U=14039.00, p < 0.001$, two-sided
+Comparison between validation experiment's baseline  block and main experiment (MainExperiment) for cost parameter: temp
+Mann-Whitney $U=19138.00, p > 0.05$, two-sided
+Comparison between validation experiment's test and baseline blocks for cost parameter: temp
+$W = 3353.00, \text{RBC} = -0.54, p < 0.001$, two-sided
+Descriptive statistics for main experiment (MainExperiment) depth_cost_weight
+$M: 1.41, SD: 2.86$
+Descriptive statistics for validation experiment , test block depth_cost_weight
+$M: 1.87, SD: 3.01$
+Descriptive statistics for validation experiment , baseline block depth_cost_weight
+$M: 1.10, SD: 2.63$
+Comparison between validation experiment's test block and main experiment (MainExperiment) for cost parameter: depth_cost_weight
+Mann-Whitney $U=22501.00, p > 0.05$, two-sided
+Comparison between validation experiment's baseline  block and main experiment (MainExperiment) for cost parameter: depth_cost_weight
+Mann-Whitney $U=19137.00, p > 0.05$, two-sided
+Comparison between validation experiment's test and baseline blocks for cost parameter: depth_cost_weight
+$W = 2497.50, \text{RBC} = 0.49, p < 0.001$, two-sided
+Descriptive statistics for main experiment (MainExperiment) back_added_cost
+$M: -0.67, SD: 2.02$
+Descriptive statistics for validation experiment , test block back_added_cost
+$M: -0.12, SD: 0.76$
+Descriptive statistics for validation experiment , baseline block back_added_cost
+$M: -0.84, SD: 2.45$
+Comparison between validation experiment's test block and main experiment (MainExperiment) for cost parameter: back_added_cost
+Mann-Whitney $U=23393.00, p < 0.001$, two-sided
+Comparison between validation experiment's baseline  block and main experiment (MainExperiment) for cost parameter: back_added_cost
+Mann-Whitney $U=20585.50, p > 0.05$, two-sided
+Comparison between validation experiment's test and baseline blocks for cost parameter: back_added_cost
+$W = 327.00, \text{RBC} = 0.71, p < 0.001$, two-sided
+RMSE for given_cost
+4.882423547941385
+RMSE for depth_cost_weight
+5.113853003099858
+RMSE for LOO for COST, given_cost
+M: $3.57$ (SD: $0.63$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   COST   R-squared:                       0.022
+Model:                            OLS   Adj. R-squared:                 -0.017
+Method:                 Least Squares   F-statistic:                    0.5633
+Date:                Sun, 19 Feb 2023   Prob (F-statistic):              0.882
+Time:                        12:55:50   Log-Likelihood:                -871.39
+No. Observations:                 335   AIC:                             1771.
+Df Residuals:                     321   BIC:                             1824.
+Df Model:                          13                                         
+Covariance Type:            nonrobust                                         
+==================================================================================================
+                                     coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------
+Intercept                          5.2076      0.489     10.652      0.000       4.246       6.169
+C(FAIRY_GOD_CONDITION)[T.True]     0.0606      0.373      0.162      0.871      -0.673       0.794
+given_cost                         0.0910      0.062      1.476      0.141      -0.030       0.212
+distance_multiplier                0.0233      0.063      0.371      0.711      -0.101       0.147
+forw_added_cost                   -0.0162      0.080     -0.203      0.839      -0.173       0.141
+temp                              -0.0314      0.045     -0.693      0.489      -0.120       0.058
+depth_cost_weight                  0.0399      0.090      0.444      0.658      -0.137       0.217
+back_added_cost                    0.3137      0.247      1.270      0.205      -0.172       0.800
+given_cost_fairy                  -0.0100      0.074     -0.135      0.893      -0.155       0.135
+distance_multiplier_fairy         -0.0513      0.085     -0.605      0.546      -0.218       0.116
+forw_added_cost_fairy             -0.0431      0.089     -0.483      0.629      -0.219       0.132
+temp_fairy                         0.0334      0.033      1.004      0.316      -0.032       0.099
+depth_cost_weight_fairy           -0.1011      0.110     -0.918      0.359      -0.318       0.116
+back_added_cost_fairy             -0.0592      0.099     -0.596      0.552      -0.255       0.136
+==============================================================================
+Omnibus:                     6026.981   Durbin-Watson:                   0.311
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               34.470
+Skew:                           0.296   Prob(JB):                     3.27e-08
+Kurtosis:                       1.545   Cond. No.                         33.8
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for COST
+adj. $R^2=-0.02, F(13, 321) = 0.56, p > 0.05$
+Number of participants recovered in at least 1 SD for COST:  0.34
+RMSE for LOO for DEPTH, depth_cost_weight
+M: $3.63$ (SD: $0.91$)
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  DEPTH   R-squared:                       0.244
+Model:                            OLS   Adj. R-squared:                  0.213
+Method:                 Least Squares   F-statistic:                     7.951
+Date:                Sun, 19 Feb 2023   Prob (F-statistic):           8.59e-14
+Time:                        12:55:50   Log-Likelihood:                -874.18
+No. Observations:                 335   AIC:                             1776.
+Df Residuals:                     321   BIC:                             1830.
+Df Model:                          13                                         
+Covariance Type:            nonrobust                                         
+==================================================================================================
+                                     coef    std err          t      P>|t|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------
+Intercept                          1.4177      0.493      2.876      0.004       0.448       2.388
+C(FAIRY_GOD_CONDITION)[T.True]     0.3230      0.376      0.859      0.391      -0.417       1.063
+given_cost                         0.3451      0.062      5.547      0.000       0.223       0.468
+distance_multiplier                0.5147      0.064      8.102      0.000       0.390       0.640
+forw_added_cost                    0.2405      0.080      2.991      0.003       0.082       0.399
+temp                              -0.1605      0.046     -3.513      0.001      -0.250      -0.071
+depth_cost_weight                  0.5955      0.091      6.573      0.000       0.417       0.774
+back_added_cost                    0.0646      0.249      0.259      0.796      -0.425       0.554
+given_cost_fairy                  -0.1289      0.074     -1.735      0.084      -0.275       0.017
+distance_multiplier_fairy         -0.1863      0.086     -2.178      0.030      -0.355      -0.018
+forw_added_cost_fairy             -0.0904      0.090     -1.005      0.316      -0.267       0.087
+temp_fairy                         0.0665      0.034      1.982      0.048       0.000       0.132
+depth_cost_weight_fairy           -0.3761      0.111     -3.386      0.001      -0.595      -0.158
+back_added_cost_fairy              0.0849      0.100      0.848      0.397      -0.112       0.282
+==============================================================================
+Omnibus:                       10.327   Durbin-Watson:                   0.562
+Prob(Omnibus):                  0.006   Jarque-Bera (JB):                6.856
+Skew:                           0.209   Prob(JB):                       0.0325
+Kurtosis:                       2.438   Cond. No.                         33.8
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Regression for DEPTH
+adj. $R^2=0.21, F(13, 321) = 7.95, p < 0.001$
+Number of participants recovered in at least 1 SD for DEPTH:  0.57
+Number of participants recovered in at least 1 SD of Experiment 1 value for both:  0.19
+Test subject difference vs variance COST
+$t(334) = -0.64, p > 0.05$
+10.63845023589145 10.913718830994727
+Test subject difference vs variance DEPTH
+$t(334) = -4.97, p < 0.001$
+10.81670924248995 14.342693717043526
+Difference in block order for baseline block MAP estimates given_cost
+Mann-Whitney $U=13552.50, p > 0.05$, two-sided
+Difference in block order for test block MAP estimates given_cost
+Mann-Whitney $U=15102.00, p > 0.05$, two-sided
+Difference in block order for baseline block MAP estimates depth_cost_weight
+Mann-Whitney $U=15297.50, p = 0.04$, two-sided
+Difference in block order for test block MAP estimates depth_cost_weight
+Mann-Whitney $U=14492.50, p > 0.05$, two-sided

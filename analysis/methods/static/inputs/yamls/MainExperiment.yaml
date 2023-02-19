@@ -14,6 +14,7 @@ include_null : true
 title_extras: ''
 simulated: False
 simulated_param_run: participants
+simulated_bic: true
 trial_by_trial_models:
         - 'gamma,kappa'
         - 'back_added_cost,gamma,kappa'

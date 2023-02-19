@@ -1,0 +1,16 @@
+                                            Model Name  ...          bic
+22   $w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w...  ...  31944.00198
+21   $w_{back.}, w_{depth}, w_{dist.}, w_{forw.}, w...  ...  32071.66522
+82   $w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ wi...  ...  32092.18540
+81   $w_{depth}, w_{dist.}, w_{forw.}, w_{eff.}$ wi...  ...  32225.61874
+50   $w_{back.}, w_{dist.}, w_{forw.}, w_{eff.}$ wi...  ...  32374.30867
+..                                                 ...  ...          ...
+56                 $w_{back.}, w_{forw.}$ with $\beta$  ...  43623.86154
+116                           $w_{forw.}$ with $\beta$  ...  43685.18723
+0                             $w_{back.}$ with $\beta$  ...  44310.27792
+125                    Null (Given Costs) with $\beta$  ...  44350.25521
+124                                               Null  ...  55341.45901
+
+[129 rows x 18 columns]
+Log Bayes factor approximation, difference between top two models
+63.8316230176988
