@@ -283,7 +283,7 @@ if __name__ == "__main__":
 
     plt.figure(figsize=(11.7, 8.27))
     sns.violinplot(x="variable", y="value", data=all_rmses)
-    plt.show()
+    plt.savefig(data_path.joinpath("figs/ValidationExperiment_RMSE_violin.png"))
 
     for cost_variable_tuple in [
         ("COST", "given_cost"),

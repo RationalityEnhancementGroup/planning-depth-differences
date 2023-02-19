@@ -131,7 +131,11 @@ if __name__ == "__main__":
     )
     plt.title(analysis_obj.model_name_mapping[model])
     plt.tight_layout()
-    plt.show()
+    plt.savefig(
+        data_path.joinpath(
+            f"figs/{inputs.experiment_name}_parameter_recovery_correlation.png"
+        )
+    )
 
     print("==========")
     for model_param in model_params:
@@ -179,17 +183,18 @@ if __name__ == "__main__":
     plt.xlabel("Simulated Agent Temperature")
     plt.ylabel("Simulated Agent RMSE")
     plt.tight_layout()
-    plt.show()
+    plt.savefig(data_path.joinpath(f"figs/{inputs.experiment_name}_temp_vs_rmse.png"))
 
     if "sim_temp" in optimization_data:
         plt.figure(figsize=(11.7, 8.27))
         ax = sns.pointplot(x="sim_temp", y="temp", data=optimization_data)
         plt.xlabel("Simulated Agent Temperature")
-        plt.ylabel("Recovered Temperature")  # (Log Scale)")
-        # ax.set_yscale("log")
-
-    plt.tight_layout()
-    plt.show()
+        plt.ylabel("Recovered Temperature (Log Scale)")
+        ax.set_yscale("log")
+        plt.tight_layout()
+        plt.savefig(
+            data_path.joinpath(f"figs/{inputs.experiment_name}_recovered_temp.png")
+        )
 
     for param in model_params:
         print("==========")
