@@ -65,11 +65,15 @@ if __name__ == "__main__":
     )
 
     optimization_data = analysis_obj.query_optimization_data()
+
+    if analysis_obj.excluded_parameters == "":
+        excluded_set = set()
+    else:
+        excluded_set = set(analysis_obj.excluded_parameters.split(","))
+
     optimization_data = optimization_data[
         optimization_data.apply(
-            lambda row: set(analysis_obj.excluded_parameters.split(",")).issubset(
-                row["model"]
-            )
+            lambda row: excluded_set.issubset(row["model"])
             or (row["Model Name"] == "Null"),
             axis=1,
         )
@@ -92,7 +96,12 @@ if __name__ == "__main__":
 
     print(bic_df.sort_values(by="bic").round(5))
 
-    if irl_path.joinpath("analysis/methods/static/data/Simulated_BIC.pickle").is_file():
+    if (
+        hasattr(analysis_obj, "simulated_bic")
+        and irl_path.joinpath(
+            "analysis/methods/static/data/Simulated_BIC.pickle"
+        ).is_file()
+    ):
         with open(
             irl_path.joinpath("analysis/methods/static/data/Simulated_BIC.pickle"), "rb"
         ) as f:
