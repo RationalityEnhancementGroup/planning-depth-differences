@@ -2,12 +2,68 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 import dill as pickle
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
 import statsmodels.formula.api as smf
 import yaml
 from costometer.utils import AnalysisObject
 from sklearn.preprocessing import StandardScaler
+
+
+def plot_regression_results(
+    single_regressions, title, pretty_dependent_var, dependent_var, fig_path=None
+):
+    if not fig_path:
+        fig_path = Path(__file__).resolve()
+
+    plt.figure(figsize=(8, 6))
+
+    ax = sns.barplot(
+        x="Beta",
+        y="Survey",
+        data=single_regressions,
+        linewidth=0,
+        facecolor=(1, 1, 1, 0),
+        errcolor=".2",
+        edgecolor=".2",
+    )
+
+    plt.xticks(rotation=90)
+    plt.title(f"{title}: {pretty_dependent_var}")
+    ax.errorbar(
+        single_regressions["Beta"].values,
+        single_regressions.index,
+        xerr=single_regressions["Standard error"].values,
+        marker="o",
+        mfc="black",
+        mec="white",
+        ms=10,
+        mew=2,
+        linewidth=0,
+        elinewidth=1,
+        ecolor=[
+            "purple" if rsquared else "olive"
+            for rsquared in single_regressions["Rsquared"]
+        ],
+    )
+
+    twin_ax = ax.twinx()
+    twin_ax.set_yticks(
+        single_regressions.index,
+        [f"(n={int(nobs)})" for nobs in single_regressions["Nobs"].values],
+        style="italic",
+    )
+    twin_ax.set_ylim(ax.get_ylim())
+    twin_ax.tick_params(axis="both", which="both", length=0)
+
+    plt.savefig(
+        fig_path.joinpath(
+            f"figs/{title.replace(' ', '_').replace(':','')}_{dependent_var}.png"
+        ),
+        bbox_inches="tight",
+    )
 
 
 def f_square(r_squared_full, r_squared_base):
@@ -45,7 +101,7 @@ if __name__ == "__main__":
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
     optimization_data = analysis_obj.query_optimization_data(
-        analysis_obj.excluded_parameters
+        excluded_parameters=analysis_obj.excluded_parameters
     )
 
     analysis_file_path = irl_path.joinpath(
@@ -54,11 +110,10 @@ if __name__ == "__main__":
 
     with open(analysis_file_path, "rb") as f:
         analysis_yaml = yaml.safe_load(f)
-
     model_parameters = list(analysis_obj.cost_details["constant_values"])
 
     # load data
-    combined_scores = analysis_obj.dfs["combined_scores"]
+    combined_scores = analysis_obj.dfs["combined_scores"].copy(deep=True)
 
     combined_scores = combined_scores.reset_index().merge(
         optimization_data[model_parameters + ["trace_pid"]],
@@ -71,7 +126,8 @@ if __name__ == "__main__":
     # add psychiatric factor scores
     factor_scores = pd.read_csv(
         irl_path.joinpath(
-            f"analysis/questionnaire/data/{inputs.experiment_name}/scores.csv"
+            f"analysis/questionnaire/data/{inputs.experiment_name}/"
+            f"{analysis_obj.loadings}_scores.csv"
         )
     )
     combined_scores = combined_scores.merge(factor_scores)
