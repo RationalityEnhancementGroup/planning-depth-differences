@@ -11,6 +11,7 @@ import statsmodels.formula.api as smf
 from costometer.utils import (
     AnalysisObject,
     get_correlation_text,
+    get_pval_string,
     get_regression_text,
     set_font_sizes,
 )
@@ -214,14 +215,7 @@ if __name__ == "__main__":
 
         analysis_obj.cost_details["latex_mapping"]["Intercept"] = "\\text{Intercept}"
         for row_idx, row in df_for_table.iterrows():
-            if row["p"] > 0.05:
-                pval_string = ""
-            elif row["p"] < 0.001:
-                pval_string = "^{***}"
-            elif row["p"] < 0.01:
-                pval_string = "^{**}"
-            else:
-                pval_string = "^{*}"
+            pval_string = get_pval_string(row["p"])
 
             print(
                 f"${analysis_obj.cost_details['latex_mapping'][param]}$  &  $\hat{{{analysis_obj.cost_details['latex_mapping'][row_idx]}}}$ & "  # noqa: W605, E501
