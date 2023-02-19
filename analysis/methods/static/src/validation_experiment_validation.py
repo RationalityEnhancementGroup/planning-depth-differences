@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
         print(f"Difference in block order for clicks in {block} block")
         comparison = pg.mwu(
-            curr_result_df[curr_result_df["FAIRY_GOD_CONDITION"]]["num_clicks"],
-            curr_result_df[~curr_result_df["FAIRY_GOD_CONDITION"]]["num_clicks"],
+            curr_result_df[curr_result_df["FAIRY_GOD_CONDITION"] == 1]["num_clicks"],
+            curr_result_df[curr_result_df["FAIRY_GOD_CONDITION"] == 0]["num_clicks"],
         )
         print(get_mann_whitney_text(comparison))
