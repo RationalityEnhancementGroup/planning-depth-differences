@@ -60,10 +60,10 @@ if __name__ == "__main__":
             values="BIC",
         )
 
+        plt.figure(figsize=(12, 8), dpi=80)
         sns.heatmap(pivoted_mean_ll)
-        plt.xlabel(sim_latex_mapping[subset[1]])
-        plt.ylabel(sim_latex_mapping[subset[0]])
-
+        plt.xlabel(f"${sim_latex_mapping[subset[1]]}$")
+        plt.ylabel(f"${sim_latex_mapping[subset[0]]}$")
         plt.savefig(
             data_path.joinpath(
                 f"figs/{inputs.experiment_name}_{'_'.join(sorted(subset))}xBIC.png"
