@@ -1,0 +1,11 @@
+project_path = $(save_path:/work/vfelso)/planning-depth-differences
+executable = $(project_path)/env/bin/python
+filename = $(project_path)/analysis/methods/static/src/get_optimal_bic.py
+arguments = $(filename)
+output = $(project_path)/analysis/$(subdirectory:methods/static)/log/Simulated_BIC.stdout
+error  = log/Simulated_BIC.stderr
+log   = log/Simulated_BIC.log
+request_memory = 10000
+request_cpus = 1
+
+queue

@@ -2,9 +2,9 @@ project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/analysis/methods/static/src/plot_simulated_hdi.py
 arguments = $(filename) -e $(experiment:SoftmaxRecovery) -s $(subdirectory:methods/static)
-output = $(project_path)/analysis/$(subdirectory:methods/static)/log/HDI_$(experiment:SoftmaxRecovery)_HDI.stdout
-error  = log/HDI_$(experiment:SoftmaxRecovery)_HDI.stderr
-log   = log/HDI_$(experiment:SoftmaxRecovery)_HDI.log
+output = $(project_path)/analysis/$(subdirectory:methods/static)/log/HDI_$(experiment:SoftmaxRecovery).stdout
+error  = log/HDI_$(experiment:SoftmaxRecovery).stderr
+log   = log/HDI_$(experiment:SoftmaxRecovery).log
 request_memory = 200000
 request_cpus = 1
 

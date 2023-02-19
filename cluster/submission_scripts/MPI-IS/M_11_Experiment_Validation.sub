@@ -1,10 +1,10 @@
 project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/analysis/methods/static/src/validation_experiment_validation.py
-arguments = $(filename) -e $(experiment:ValidationCostModel) -s $(subdirectory:methods/static)
-output = $(project_path)/analysis/$(subdirectory:methods/static)/log/$(output_string:out_M11).stdout
-error  = log/$(output_string:out_M11).stderr
-log   = log/$(output_string:out_M11).log
+arguments = $(filename) -e $(experiment:ValidationExperiment) -s $(subdirectory:methods/static)
+output = $(project_path)/analysis/$(subdirectory:methods/static)/log/$(experiment:ValidationExperiment).stdout
+error  = log/$(experiment:ValidationExperiment).stderr
+log   = log/$(experiment:ValidationExperiment).log
 request_memory = 10000
 request_cpus = 1
 
