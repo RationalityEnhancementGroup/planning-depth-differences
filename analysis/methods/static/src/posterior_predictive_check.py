@@ -163,8 +163,8 @@ if __name__ == "__main__":
             )
 
             print(
-                f"{analysis_obj.model_name_mapping[tuple(model_pair[0].split(','))]} & "
-                f"{analysis_obj.model_name_mapping[tuple(model_pair[1].split(','))]} & "
+                f"{analysis_obj.model_name_mapping[() if model_pair[0] == '' else tuple(model_pair[0].split(','))]} & "  # noqa : E501
+                f"{analysis_obj.model_name_mapping[() if model_pair[1] == '' else tuple(model_pair[1].split(','))]} & "  # noqa : E501
                 f"{friedman_object.Q[0]:.3f}"
                 f"{get_pval_string(friedman_object['p-unc'][0])} \\"
             )
