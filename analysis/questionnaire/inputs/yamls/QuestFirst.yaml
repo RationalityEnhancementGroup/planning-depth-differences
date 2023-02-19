@@ -1,6 +1,5 @@
 sessions:
         - quest_first
-        - quest_second
 cost_function: back_dist_depth_eff_forw
 loadings: Modified_WiseEtAl2020_weights
 group: false
