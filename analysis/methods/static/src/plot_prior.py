@@ -6,7 +6,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import yaml
-from costometer.utils import get_temp_prior, set_font_sizes
+from costometer.utils import get_prior, set_font_sizes
 from scipy import stats  # noqa needed for eval of rv string
 
 if __name__ == "__main__":
@@ -25,7 +25,7 @@ if __name__ == "__main__":
     inputs = parser.parse_args()
 
     irl_path = Path(__file__).resolve().parents[4]
-    subdirectory = irl_path.joinpath(f"analysis/methods/static")
+    subdirectory = irl_path.joinpath("analysis/methods/static")
 
     yaml_file = str(
         irl_path.joinpath(f"data/inputs/yamls/temperatures/{inputs.prior_file}.yaml")
@@ -34,10 +34,9 @@ if __name__ == "__main__":
     with open(str(yaml_path), "r") as stream:
         prior_inputs = yaml.safe_load(stream)
 
-    temp_prior = get_temp_prior(
+    temp_prior = get_prior(
         rv=eval(prior_inputs["rv"]),
         possible_vals=prior_inputs["possible_temps"],
-        inverse=prior_inputs["inverse"],
     )
     temp_prior_dict = dict(zip(temp_prior.vals, temp_prior.probs))
 
@@ -62,7 +61,7 @@ if __name__ == "__main__":
     ax.set_xscale("log")
     plt.xlabel("Possible temperatures (log scale)")
     plt.ylabel("Prior probability")
-    print(subdirectory.joinpath(f"figs/prior_temp_{inputs.prior_file}.png"))
+
     plt.savefig(
         subdirectory.joinpath(f"figs/prior_temp_{inputs.prior_file}.png"),
         bbox_inches="tight",
