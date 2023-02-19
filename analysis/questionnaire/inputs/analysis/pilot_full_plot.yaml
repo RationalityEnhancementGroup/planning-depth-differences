@@ -1,86 +1,101 @@
 {
-  "data": ["quest_first","quest_second"],
-  "model_name": 'Effort Cost and Planning Depth',
-  "cost_function": "linear_depth",
   "regressions": [
-               {"title": "Regressions: Planning Depth Cost",
-               "tests": [{
-                  "dependent": "depth_cost_weight",
-                  "independent": "CIT",
+               {"title": "H1: Psychiatric measures",
+                "tests": [{
+                  "dependent": "CIT",
                   "prettyname": "Compulsive Behavior and Intrusive Thought",
                   "covariates": ["age", "IQ", "C(gender)"],
                   "direction": ""
                },
-                 {
-                   "dependent": "depth_cost_weight",
-                   "independent": "CFC",
-                   "prettyname": "Consideration of Future Consequences",
-                   "covariates": [ "age", "IQ", "C(gender)" ],
-                   "direction": "-"
-                 },
-                 {
-                   "dependent": "depth_cost_weight",
-                   "independent": "ptp",
-                   "prettyname": "Propensity to Plan",
-                   "covariates": [ "age", "IQ", "C(gender)" ],
-                   "direction": "-"
-                 },
-                 {
-                   "dependent": "depth_cost_weight",
-                   "independent": "Q(\"life-regrets\")",
-                   "prettyname": "Life Regrets",
-                   "covariates": [ "age", "IQ", "C(gender)" ],
-                   "direction": "+"
-                 },
-                 {
-                   "dependent": "depth_cost_weight",
-                   "independent": "regrets:Q(\"life-regrets\")",
-                   "prettyname": "Regrets on Life Regrets (moderator)",
-                   "covariates": [ "Q(\"life-regrets\")", "regrets", "age", "IQ", "C(gender)" ],
-                   "direction": "+"
-                 },
-                 {
-                   "dependent": "depth_cost_weight",
-                   "independent": "satisfaction",
-                   "prettyname": "Life Satisfaction",
-                   "covariates": [ "age", "IQ", "C(gender)" ],
-                   "direction": "-"
-                 },
-                 {
-                   "dependent": "depth_cost_weight",
-                   "independent": "crt",
-                   "prettyname": "Cognitive Reflection Task",
-                   "covariates": [ "age", "IQ", "C(gender)" ],
-                   "direction": "-"
-                 }]},
-               {"title": "Regressions: Total Experienced Planning Cost",
-               "tests": [{
-                 "dependent": "total_node_cost",
-                 "independent": "AD",
+               {
+                 "dependent": "AD",
                  "prettyname": "Anxious Depression",
                  "covariates": [ "age", "IQ", "C(gender)" ],
                  "direction": ""
                },
-               {
-                 "dependent": "total_node_cost",
-                 "independent": "SW",
+                {
+                 "dependent": "SW",
                  "prettyname": "Social Withdrawal",
-                 "covariates": [ "age", "IQ", "C(gender)" ],
-                 "direction": "-"
-               },
-              {
-                 "dependent": "total_node_cost",
-                  "independent": "CFC",
-                  "prettyname": "Consideration of Future Consequences",
-                  "covariates": ["age", "IQ", "C(gender)"],
-                 "direction": "-"
+                  "covariates": [ "age", "IQ", "C(gender)" ],
+                  "direction": ""
+                }]},
+               {"title": "H2: Planning and future thinking measures",
+               "tests": [{
+                 "dependent": "CFC",
+                 "prettyname": "Consideration of Future Consequences",
+                 "covariates": ["age", "IQ", "C(gender)"],
+                 "direction": ""
                },
                {
-                 "dependent": "total_node_cost",
-                 "independent": "ptp",
+                 "dependent": "ptp",
                  "prettyname": "Propensity to Plan",
                  "covariates": [ "age", "IQ", "C(gender)" ],
-                 "direction": "-"
+                 "direction": ""
+                 }]},
+#               {
+#                 "dependent": "FOS",
+#                 "covariates": [ "age", "IQ", "C(gender)" ],
+#                   "direction": ""
+#               },
+              # Life regret and life satisfaction measures
+               {"title": "H3: Life regret and life satisfaction measures",
+               "tests": [{
+                 "dependent": "Q(\"life-regrets\")",
+                 "prettyname": "Life Regrets",
+                 "covariates": ["age", "IQ", "C(gender)"],
+                 "direction": ""
+               },
+                 {
+                   "dependent": "regrets",
+                   "prettyname": "Propensity Regrets",
+                   "covariates": ["regrets", "age", "IQ", "C(gender)" ],
+                   "direction": ""
+                 },
+               {
+                 "dependent": "satisfaction",
+                 "prettyname": "Life Satisfaction",
+                 "covariates": [ "age", "IQ", "C(gender)" ],
+                 "direction": ""
                }]},
+#               {
+#                 "dependent": "BIT",
+#                 "covariates": [ "age", "IQ", "C(gender)" ],
+#                 "direction": ""
+#               },
+#                Impulsivity and risk-taking measures
+#               {"title": "H4: Impulsivity and risk-taking measures",
+#               "tests": [{
+#                 "dependent": "Q(\"irrational-risk\")",
+#                 "covariates": [ "age", "IQ", "C(gender)" ],
+#                 "direction": ""
+#               },
+#               {
+#                 "dependent": "Q(\"pre-meditation\")",
+#                 "covariates": [ "age", "IQ", "C(gender)" ],
+#                   "direction": ""
+#               }]},
+               # Intolerance of uncertainty measure
+#               {"title": "H5: Intolerance of uncertainty measure",
+#               "tests": [{
+#                 "dependent": "IUS_12",
+#                 "covariates": [ "age", "IQ", "C(gender)" ],
+#                   "direction": ""
+#               }]},
+              # Distress intolerance measure
+#               {"title": "H6: Distress intolerance measure",
+#               "tests": [{
+#                 "dependent": "DTS",
+#                 "covariates": [ "age", "IQ", "C(gender)" ],
+#                   "direction": ""
+#               }]},
+              # Cognitive styles (rationality)
+               {"title": "H7: Cognitive styles (rationality)",
+               "tests": [
+                 {
+                   "dependent": "crt",
+                   "prettyname": "Cognitive Reflection Task",
+                   "covariates": [ "age", "IQ", "C(gender)" ],
+                   "direction": ""
+                 }]},
              ]
 }
