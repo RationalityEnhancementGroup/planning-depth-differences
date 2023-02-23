@@ -1,10 +1,11 @@
 sessions:
         - quest_main
-cost_functions: back_dist_depth_eff_forw
+cost_function: back_dist_depth_eff_forw
 loadings: WiseEtAl2020_weights
-group: false
-prior : 'expon'
-block: ['test']
+prior : 'uniform'
+excluded_parameters : 'gamma,kappa'
+included_parameters: 'temp'
+block: 'test'
 include_null : true
 title_extras: ''
 simulated: False
