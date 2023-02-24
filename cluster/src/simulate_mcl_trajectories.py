@@ -85,6 +85,23 @@ if __name__ == "__main__":
         default=200,
     )
     parser.add_argument(
+        "-g",
+        "--gamma_file",
+        dest="gamma_file",
+        help="gamma_file",
+        type=str,
+        default="full",
+    )
+    parser.add_argument(
+        "-a",
+        "--kappa_file",
+        dest="kappa_file",
+        help="kappa_file",
+        type=str,
+        default="full",
+    )
+
+    parser.add_argument(
         "-t", "--num-trials", dest="num_trials", help="Num trials", type=int, default=30
     )
 
@@ -183,62 +200,81 @@ if __name__ == "__main__":
 
     traces = []
 
-    for simulation in range(inputs.num_simulated):
 
-        if inputs.num_trials < len(ground_truths):
-            ground_truth_subsets = np.random.choice(
-                ground_truths, inputs.num_trials, replace=False
+    # Todo: load gamma and kappa files
+    with open(
+        path.joinpath(f"cluster/parameters/gammas/{inputs.gamma_file}.txt"), "r"
+    ) as f:
+        gamma_values = [float(val) for val in f.read().splitlines()]
+
+    with open(
+        path.joinpath(f"cluster/parameters/kappas/{inputs.kappa_file}.txt"), "r"
+    ) as f:
+        kappa_values = [float(val) for val in f.read().splitlines()]
+
+
+    # Todo: loop over gamma and kappa
+    for kappa in gamma_values:
+        for gamma in kappa_values:
+
+            for simulation in range(inputs.num_simulated):
+
+                if inputs.num_trials < len(ground_truths):
+                    ground_truth_subsets = np.random.choice(
+                        ground_truths, inputs.num_trials, replace=False
+                    )
+                else:
+                    print(
+                        "Less ground truths than number of trials requested, allowing replacement in sampling"  # noqa: E501
+                    )
+                    ground_truth_subsets = np.random.choice(
+                        ground_truths, inputs.num_trials, replace=True
+                    )
+
+                cost_function = eval(args["cost_function"])
+
+                simulated_participant = SymmetricMCLParticipant(
+                    **deepcopy(participant_kwargs),
+                    num_trials=inputs.num_trials,
+                    cost_function=cost_function,
+                    cost_kwargs=cost_parameters,
+                    ground_truths=[trial["stateRewards"] for trial in ground_truth_subsets],
+                    trial_ids=[trial["trial_id"] for trial in ground_truth_subsets],
+                    params=held_constant,
+                    gamma=gamma,
+                    kappa=kappa
+                )
+                simulated_participant.simulate_trajectory()
+
+                trace_df = pd.DataFrame.from_dict(simulated_participant.trace)
+                trace_df["full_actions"] = trace_df["actions"]
+                trace_df = trace_df.explode("actions")
+
+                # add all information that might be useful
+                for sim_param, sim_value in vars(inputs).items():
+                    trace_df[f"sim_{sim_param}"] = sim_value
+
+                for cost_param, cost_val in cost_parameters.items():
+                    trace_df[cost_param] = cost_val
+
+                trace_df["pid"] = simulation
+
+                traces.append(trace_df)
+
+            full_traces_df = pd.concat(traces)
+
+            parameter_string = get_param_string(cost_parameters)
+
+            path.joinpath(
+                f"cluster/data/trajectories/{inputs.experiment_setting}/MCL/"
+                f"{inputs.cost_function}/{inputs.prior_json}/"
+            ).mkdir(parents=True, exist_ok=True)
+
+            full_traces_df.to_csv(
+                path.joinpath(
+                    f"cluster/data/trajectories/{inputs.experiment_setting}/MCL/"
+                    f"{inputs.cost_function}/{inputs.prior_json}/"
+                    f"{inputs.model_yaml}_{inputs.feature_yaml}_{inputs.constant_yaml}"
+                    f"_{parameter_string}_{gamma}_{kappa}.csv"
+                )
             )
-        else:
-            print(
-                "Less ground truths than number of trials requested, allowing replacement in sampling"  # noqa: E501
-            )
-            ground_truth_subsets = np.random.choice(
-                ground_truths, inputs.num_trials, replace=True
-            )
-
-        cost_function = eval(args["cost_function"])
-
-        simulated_participant = SymmetricMCLParticipant(
-            **deepcopy(participant_kwargs),
-            num_trials=inputs.num_trials,
-            cost_function=cost_function,
-            cost_kwargs=cost_parameters,
-            ground_truths=[trial["stateRewards"] for trial in ground_truth_subsets],
-            trial_ids=[trial["trial_id"] for trial in ground_truth_subsets],
-            params=held_constant,
-        )
-        simulated_participant.simulate_trajectory()
-
-        trace_df = pd.DataFrame.from_dict(simulated_participant.trace)
-        trace_df["full_actions"] = trace_df["actions"]
-        trace_df = trace_df.explode("actions")
-
-        # add all information that might be useful
-        for sim_param, sim_value in vars(inputs).items():
-            trace_df[f"sim_{sim_param}"] = sim_value
-
-        for cost_param, cost_val in cost_parameters.items():
-            trace_df[cost_param] = cost_val
-
-        trace_df["pid"] = simulation
-
-        traces.append(trace_df)
-
-    full_traces_df = pd.concat(traces)
-
-    parameter_string = get_param_string(cost_parameters)
-
-    path.joinpath(
-        f"cluster/data/trajectories/{inputs.experiment_setting}/MCL/"
-        f"{inputs.cost_function}/{inputs.prior_json}/"
-    ).mkdir(parents=True, exist_ok=True)
-
-    full_traces_df.to_csv(
-        path.joinpath(
-            f"cluster/data/trajectories/{inputs.experiment_setting}/MCL/"
-            f"{inputs.cost_function}/{inputs.prior_json}/"
-            f"{inputs.model_yaml}_{inputs.feature_yaml}_{inputs.constant_yaml}"
-            f"_{parameter_string}.csv"
-        )
-    )
