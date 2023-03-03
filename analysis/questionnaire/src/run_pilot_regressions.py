@@ -5,15 +5,190 @@ import dill as pickle
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
 import statsmodels.formula.api as smf
 import yaml
-from costometer.utils import AnalysisObject, set_font_sizes
-from quest_utils.factor_utils import col_dict, load_weights
-from run_regressions import plot_regression_results
+from costometer.utils import (
+    AnalysisObject,
+    get_parameter_coefficient,
+    get_pval_string,
+    get_regression_text,
+)
+from quest_utils.subscale_utils import uppsp_dict
 from sklearn.preprocessing import StandardScaler
-from statsmodels.stats.multitest import multipletests
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+from statsmodels.tools.tools import add_constant
 
-set_font_sizes()
+
+def calculate_vif(exogenous_df):
+    exogenous_df = add_constant(exogenous_df)
+    exogenous_df = exogenous_df.dropna()
+
+    if "gender" in exogenous_df:
+        exogenous_df = pd.concat(
+            [exogenous_df, pd.get_dummies(exogenous_df["gender"])], axis=1
+        )
+        del exogenous_df["gender"]
+        del exogenous_df["male"]
+
+    return dict(
+        zip(
+            exogenous_df.columns,
+            [
+                variance_inflation_factor(exogenous_df.values, col_idx)
+                for col_idx in range(len(exogenous_df.columns))
+            ],
+        )
+    )
+
+
+def plot_regression_results(regression_df, title, pretty_dependent_var_dict):
+
+    f, ax = plt.subplots(2, 3, figsize=(50, 20), dpi=100, facecolor="white")
+
+    for dependent_var_idx, dependent_var in enumerate(
+        regression_df["Dependent"].unique()
+    ):
+        curr_subset = (
+            regression_df[regression_df["Dependent"] == dependent_var]
+            .sort_values(by="Coefficient")
+            .reset_index(drop=True)
+        )
+        curr_ax = ax[np.unravel_index(dependent_var_idx, (2, 3))]
+        sns.barplot(
+            x="Coefficient",
+            y="Survey / Task",
+            data=curr_subset,
+            linewidth=0,
+            facecolor=(1, 1, 1, 0),
+            errcolor=".2",
+            edgecolor=".2",
+            ax=curr_ax,
+        )
+
+        curr_ax.tick_params(axis="x", rotation=90)
+        curr_ax.title.set_text(f"{title}: ${pretty_dependent_var_dict[dependent_var]}$")
+        curr_ax.errorbar(
+            curr_subset["Coefficient"].values,
+            curr_subset.index,
+            xerr=curr_subset["Standard error"].values,
+            marker="o",
+            mfc="black",
+            mec="white",
+            ms=10,
+            mew=2,
+            linewidth=0,
+            elinewidth=1,
+            ecolor=[
+                "purple" if rsquared else "olive"
+                for rsquared in curr_subset["Rsquared"]
+            ],
+        )
+
+        twin_ax = curr_ax.twinx()
+        twin_ax.set_yticks(
+            curr_subset.index,
+            [f"(n={int(nobs)})" for nobs in curr_subset["Nobs"].values],
+            style="italic",
+        )
+        twin_ax.set_ylim(curr_ax.get_ylim())
+        twin_ax.tick_params(axis="both", which="both", length=0)
+
+    return f
+
+
+def get_regression_df(
+    tests, combined_scores, model_parameters, pval_cutoff=0.05, regression_path=None
+):
+    # add all results to this
+    full_df = []
+
+    for test in tests:
+        full_regression_formula = f"{test['dependent']} ~ " + " + ".join(
+            [
+                model_parameter
+                for model_parameter in model_parameters
+                if len(combined_scores[model_parameter].unique()) > 1
+            ]
+            + test["covariates"]
+            + ["1"]
+        )
+
+        for covariate in test["covariates"]:
+            if ":" in covariate:
+                combined_scores[covariate] = combined_scores.apply(
+                    lambda row: np.prod([row[col] for col in covariate.split(":")]),
+                    axis=1,
+                )
+        vif_dict = calculate_vif(
+            exogenous_df=combined_scores[
+                [
+                    model_parameter
+                    for model_parameter in model_parameters
+                    if len(combined_scores[model_parameter].unique()) > 1
+                ]
+                + [
+                    covariate.replace("C(", "").replace(")", "")
+                    for covariate in test["covariates"]
+                ]
+            ]
+        )
+        print({key: val for key, val in vif_dict.items() if val >= 5})
+
+        full_res = smf.ols(formula=full_regression_formula, data=combined_scores).fit(
+            missing="drop"
+        )
+
+        print(test["dependent"])
+        print("\t - " + get_regression_text(full_res))
+
+        if full_res.f_pvalue < 0.05:
+            for param in list(full_res.pvalues[(full_res.pvalues < pval_cutoff)].index):
+                print(f"\t\t - {param}, {get_parameter_coefficient(full_res, param)}")
+
+        for model_parameter in model_parameters:
+
+            # all undirected tests
+            full_df.append(
+                [
+                    full_res.bse[model_parameter],
+                    full_res.params[model_parameter],
+                    test["prettyname"],
+                    full_res.pvalues[model_parameter],
+                    model_parameter,
+                    full_res.nobs,
+                    True if full_res.f_pvalue < pval_cutoff else False,
+                ]
+            )
+
+        if regression_path:
+            regression_path.mkdir(parents=True, exist_ok=True)
+            with open(
+                regression_path.joinpath(f"{full_regression_formula}.p"),
+                "wb",
+            ) as f:
+                pickle.dump(full_res, f)
+
+    full_df = pd.DataFrame(
+        full_df,
+        columns=[
+            "Standard error",
+            "Coefficient",
+            "Survey / Task",
+            "Pval",
+            "Dependent",
+            "Nobs",
+            "Rsquared",
+        ],
+    )
+
+    full_df["Survey / Task"] = full_df.apply(
+        lambda row: f"{row['Survey / Task']}"
+        f"{'$'+get_pval_string(row['Pval'])+'$' if get_pval_string(row['Pval']) != '' else ''}",  # noqa : E501
+        axis=1,
+    )
+    return full_df
+
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -56,7 +231,11 @@ if __name__ == "__main__":
 
     with open(analysis_file_path, "rb") as f:
         analysis_yaml = yaml.safe_load(f)
-    model_parameters = list(analysis_obj.cost_details["constant_values"])
+
+    model_parameters = list(
+        set(analysis_obj.cost_details["constant_values"])
+        - set(analysis_obj.excluded_parameters.split(","))
+    )
 
     # load data
     combined_scores = analysis_obj.dfs["combined_scores"].copy(deep=True)
@@ -86,19 +265,15 @@ if __name__ == "__main__":
         axis=1,
     )
 
-    # STAI and OCIR have high enough R^2
-    for curr_scale in ["anxiety", "ocir"]:
-        weights = load_weights(
-            data_path.joinpath(f"inputs/loadings/{analysis_obj.loadings}.csv"),
-            wise_weights=True if "Wise" in analysis_obj.loadings else False,
-        )
-        reduced_items = [
-            item.replace(f"{col_dict[curr_scale]}_", f"{curr_scale}_").replace("_", ".")
-            for item in weights.index.values
-            if f"{col_dict[curr_scale]}_" in item
-        ]
-        combined_scores[col_dict[curr_scale]] = combined_scores["pid"].apply(
-            lambda pid: individual_items[reduced_items].sum(axis=1)[pid]
+    for upps_subscale in set(uppsp_dict.values()):
+        combined_scores[upps_subscale] = combined_scores["pid"].apply(
+            lambda pid: sum(
+                [
+                    individual_items.loc[pid][key]
+                    for key, val in uppsp_dict.items()
+                    if val == upps_subscale
+                ]
+            )
         )
 
     # standardize
@@ -110,120 +285,19 @@ if __name__ == "__main__":
         combined_scores[combined_scores.columns.difference(nonnumeric_cols)]
     )
 
-    bonferroni_corrected_pval = 0.05
-
-    # add all results to this
-    full_df = []
-
-    for dependent_variable in [
-        "STAI",
-        "OCIR",
-        "Q('UPPS-P')",
-        "DOSPERT",
-        "FTP",
-        "crt",
-        "SW",
-        "CIT",
-        "AD",
-        "Q('life-regrets')",
-        "ppmlr",
-        "ppmsr",
-        "pptlr",
-        "pptsr",
-        "ptp",
-        "regrets",
-        "satisfaction",
-    ]:
-        test = {
-            "dependent": dependent_variable,
-            "covariates": ["age", "IQ", "C(gender)"],
-        }
-
-        full_regression_formula = f"{dependent_variable} ~ " + " + ".join(
-            [
-                model_parameter
-                for model_parameter in model_parameters
-                if len(combined_scores[model_parameter].unique()) > 1
-            ]
-            + test["covariates"]
-            + ["temp", "1"]
-        )
-
-        try:
-            full_res = smf.ols(
-                formula=full_regression_formula, data=combined_scores
-            ).fit(missing="drop")
-
-            print(full_res.summary())
-            category_data = []
-            for independent_variable in model_parameters:
-
-                # all undirected tests
-                category_data.append(
-                    [
-                        full_res.bse[independent_variable],
-                        full_res.params[independent_variable],
-                        dependent_variable,
-                        full_res.pvalues[independent_variable],
-                        independent_variable,
-                        full_res.nobs,
-                        True
-                        if full_res.rsquared > 0.1 and full_res.f_pvalue < 0.05
-                        else False,
-                    ]
-                )
-
-            irl_path.joinpath(
-                f"analysis/questionnaire/data/regressions/{inputs.analysis_file_name}"
-            ).mkdir(parents=True, exist_ok=True)
-            with open(
-                irl_path.joinpath(
-                    f"analysis/questionnaire/data/regressions/"
-                    f"{inputs.analysis_file_name}/{full_regression_formula}.p"
-                ),
-                "wb",
-            ) as f:
-                pickle.dump(full_res, f)
-        except:  # noqa : E722
-            print(dependent_variable, independent_variable)
-
-        category_df = pd.DataFrame(
-            category_data,
-            columns=[
-                "Standard error",
-                "Beta",
-                "Survey",
-                "Pval",
-                "Dependent",
-                "Nobs",
-                "Rsquared",
-            ],
-        )
-        category_df["Category title"] = dependent_variable.title()
-        full_df.append(category_df)
-
-    full_df = pd.concat(full_df)
-    reject, pvals_corrected, _, _ = multipletests(
-        full_df["Pval"].values, method="fdr_bh", alpha=0.05
+    full_df = get_regression_df(
+        analysis_yaml["regressions"][0]["tests"],
+        combined_scores,
+        model_parameters,
+        pval_cutoff=0.005,
+        regression_path=irl_path.joinpath(
+            f"analysis/questionnaire/data/regressions/{inputs.analysis_file_name}"
+        ),
     )
-    full_df["reject"] = reject
-    full_df["Survey"] = full_df.apply(
-        lambda row: f"{row['Survey']}{' *' if row['reject'] else ''}", axis=1
+    plot_regression_results(
+        full_df,
+        analysis_yaml["regressions"][0]["title"],
+        analysis_obj.cost_details["latex_mapping"],
     )
-
-    for dependent_var in full_df["Dependent"].unique():
-        plot_df = (
-            full_df[full_df["Dependent"] == dependent_var]
-            .sort_values(by=["Beta"])
-            .reset_index(drop=True)
-        )
-        plt.figure()
-        plot_regression_results(
-            plot_df,
-            "Pilot Regressions",
-            analysis_obj.cost_details["latex_mapping"][dependent_var],
-            dependent_var,
-            fig_path=irl_path.joinpath("analysis/questionnaire"),
-        )
-        plt.tight_layout()
-        plt.show()
+    plt.tight_layout()
+    plt.show()
