@@ -1,0 +1,110 @@
+{
+  "regressions": [
+    { "title": "Hypotheses regarding all model parameters:",
+      "tests": [ {
+        "dependent": "CIT",
+        "prettyname": "Compulsive Behavior and Intrusive Thought",
+        "covariates": [ "age", "IQ", "C(gender)" ],
+        "direction": "",
+        "followup": "depth_cost_weight"
+      },
+        {
+          "dependent": "AD",
+          "prettyname": "Anxious Depression",
+          "covariates": [ "age", "IQ", "C(gender)" ],
+          "direction": "",
+          "followup": ""
+        },
+        {
+          "dependent": "SW",
+          "prettyname": "Social Withdrawal",
+          "covariates": [ "age", "IQ", "C(gender)" ],
+          "direction": "",
+          "followup": ""
+        },
+        {
+          "dependent": "anxiety",
+          "prettyname": "Trait anxiety (STAI; shortened)",
+          "covariates": [ "age", "IQ", "C(gender)" ],
+          "direction": "",
+          "followup": ""
+        },
+        {
+          "dependent": "cfc",
+          "prettyname": "Consideration of Future Consequences",
+          "covariates": [ "age", "IQ", "C(gender)" ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        },
+        {
+          "dependent": "ptp",
+          "prettyname": "Propensity to Plan",
+          "covariates": [ "age", "IQ", "C(gender)" ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        },
+        {
+          "dependent": "fos",
+          "prettyname": "Future Orientation Scale",
+          "covariates": [ "age", "IQ", "C(gender)" ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        },
+        {
+          "dependent": "lifreg",
+          "prettyname": "Life Regrets",
+          "covariates": [ "age", "IQ", "C(gender)" ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        },
+        {
+          "dependent": "satis",
+          "prettyname": "Life Satisfaction",
+          "covariates": [ "age", "IQ", "C(gender)" ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        },
+        {
+          "dependent": "bit",
+          "prettyname": "Brief Inventory of Thriving",
+          "covariates": [ "age", "IQ", "C(gender)" ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        },
+        {
+          "dependent": "dospert-rational",
+          "prettyname": "Risk-taking",
+          "covariates": [ "age", "IQ", "C(gender)" ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        },
+        {
+          "dependent": "lack_premed",
+          "prettyname": "Lack of Premeditation (UPPS-P)",
+          "covariates": [ "age", "IQ", "C(gender)" ],
+          "direction": "",
+          "followup": ""
+        },
+        {
+          "dependent": "ius",
+          "prettyname": "Intolerance of Uncertainty",
+          "covariates": [ "age", "IQ", "C(gender)" ],
+          "direction": "",
+          "followup": ""
+        },
+        {
+          "dependent": "dts",
+          "prettyname": "Distress Tolerance Scale",
+          "covariates": [ "age", "IQ", "C(gender)" ],
+          "direction": "",
+          "followup": ""
+        },
+        {
+          "dependent": "crt",
+          "prettyname": "Cognitive Reflection Task",
+          "covariates": [ "age", "IQ", "C(gender)" ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        } ] },
+  ]
+}

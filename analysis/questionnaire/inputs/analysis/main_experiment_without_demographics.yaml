@@ -1,0 +1,110 @@
+{
+  "regressions": [
+    { "title": "Hypotheses regarding all model parameters:",
+      "tests": [ {
+        "dependent": "CIT",
+        "prettyname": "Compulsive Behavior and Intrusive Thought",
+        "covariates": [ ],
+        "direction": "",
+        "followup": "depth_cost_weight"
+      },
+        {
+          "dependent": "AD",
+          "prettyname": "Anxious Depression",
+          "covariates": [ ],
+          "direction": "",
+          "followup": ""
+        },
+        {
+          "dependent": "SW",
+          "prettyname": "Social Withdrawal",
+          "covariates": [ ],
+          "direction": "",
+          "followup": ""
+        },
+        {
+          "dependent": "anxiety",
+          "prettyname": "Trait anxiety (STAI; shortened)",
+          "covariates": [ ],
+          "direction": "",
+          "followup": ""
+        },
+        {
+          "dependent": "cfc",
+          "prettyname": "Consideration of Future Consequences",
+          "covariates": [ ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        },
+        {
+          "dependent": "ptp",
+          "prettyname": "Propensity to Plan",
+          "covariates": [ ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        },
+        {
+          "dependent": "fos",
+          "prettyname": "Future Orientation Scale",
+          "covariates": [ ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        },
+        {
+          "dependent": "lifreg",
+          "prettyname": "Life Regrets",
+          "covariates": [ ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        },
+        {
+          "dependent": "satis",
+          "prettyname": "Life Satisfaction",
+          "covariates": [ ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        },
+        {
+          "dependent": "bit",
+          "prettyname": "Brief Inventory of Thriving",
+          "covariates": [ ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        },
+        {
+          "dependent": "dospert-rational",
+          "prettyname": "Risk-taking",
+          "covariates": [ ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        },
+        {
+          "dependent": "lack_premed",
+          "prettyname": "Lack of Premeditation (UPPS-P)",
+          "covariates": [ ],
+          "direction": "",
+          "followup": ""
+        },
+        {
+          "dependent": "ius",
+          "prettyname": "Intolerance of Uncertainty",
+          "covariates": [ ],
+          "direction": "",
+          "followup": ""
+        },
+        {
+          "dependent": "dts",
+          "prettyname": "Distress Tolerance Scale",
+          "covariates": [ ],
+          "direction": "",
+          "followup": ""
+        },
+        {
+          "dependent": "crt",
+          "prettyname": "Cognitive Reflection Task",
+          "covariates": [ ],
+          "direction": "",
+          "followup": "depth_cost_weight"
+        } ] },
+  ]
+}
