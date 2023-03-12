@@ -40,12 +40,12 @@ This directory contains notebooks that are associated with developing the IRL me
 - [x] Combine the human inferences (can take 2-3 hours):
    ```
    cd <path to project>/cluster
-   condor_submit_bid 1 submission_scripts/MPI-IS/05_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=methods_main participant_file=methods_main simulated_cost_function=back_dist_depth_eff_forw memory=256000 save_path=/fast/vfelso;
-   condor_submit_bid 1 submission_scripts/MPI-IS/05_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=methods_main participant_file=methods_main simulated_cost_function=back_dist_depth_eff_forw block=training memory=256000 save_path=/fast/vfelso;
+   condor_submit_bid 1 submission_scripts/MPI-IS/02_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=methods_main participant_file=methods_main base_cost_function=back_dist_depth_eff_forw save_path=/fast/vfelso;
+   condor_submit_bid 1 submission_scripts/MPI-IS/02_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=methods_main participant_file=methods_main base_cost_function=back_dist_depth_eff_forw block=training save_path=/fast/vfelso;
    
    for file_idx in {1..3};
-        do condor_submit_bid 1 submission_scripts/MPI-IS/05_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=irl_validation participant_file=irl_validation$file_idx simulated_cost_function=back_dist_depth_eff_forw memory=256000 save_path=/fast/vfelso;
-        condor_submit_bid 1 submission_scripts/MPI-IS/05_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=irl_validation participant_file=irl_validation$file_idx simulated_cost_function=back_dist_depth_eff_forw block=fairy memory=256000 save_path=/fast/vfelso;
+        do condor_submit_bid 1 submission_scripts/MPI-IS/02_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=irl_validation participant_file=irl_validation$file_idx base_cost_function=back_dist_depth_eff_forw save_path=/fast/vfelso;
+        condor_submit_bid 1 submission_scripts/MPI-IS/02_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=irl_validation participant_file=irl_validation$file_idx base_cost_function=back_dist_depth_eff_forw block=fairy save_path=/fast/vfelso;
    done;
    ```
 - [x] Extract marginal and HDIs for human trajectories (~15 minutes):
@@ -122,10 +122,10 @@ This directory contains notebooks that are associated with developing the IRL me
    ```
    cd <path to project>/cluster
    for file_idx in {1..9};
-      do condor_submit_bid 1 submission_scripts/MPI-IS/02_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=simulated/high_increasing/SoftmaxPolicy/reduced participant_file=reduced$file_idx base_cost_function=back_dist_depth_eff_forw save_path=/fast/vfelso memory=256000;
+      do condor_submit_bid 1 submission_scripts/MPI-IS/02_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=simulated/high_increasing/SoftmaxPolicy/reduced participant_file=reduced$file_idx base_cost_function=back_dist_depth_eff_forw save_path=/fast/vfelso;
    done;
   
-   condor_submit_bid 1 submission_scripts/MPI-IS/02_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=simulated/high_increasing/SoftmaxPolicy/participants_gamma,kappa participant_file=participants base_cost_function=back_dist_depth_eff_forw save_path=/fast/vfelso memory=256000;
+   condor_submit_bid 1 submission_scripts/MPI-IS/02_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=simulated/high_increasing/SoftmaxPolicy/participants_gamma,kappa participant_file=participants base_cost_function=back_dist_depth_eff_forw save_path=/fast/vfelso;
    condor_submit_bid 1 submission_scripts/MPI-IS/02_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=simulated/high_increasing/OptimalQ/no_added_cost participant_file=no_added_cost base_cost_function=back_dist_depth_eff_forw param_file=null save_path=/fast/vfelso
    ```
 - [ ] Next, get the best parameters:
@@ -144,7 +144,7 @@ This directory contains notebooks that are associated with developing the IRL me
    ```
 - [ ] Extract marginal and HDIs for simulated data:
    ```
-   condor_submit_bid 1 submission_scripts/MPI-IS/04_Extract_Marginal_and_HDIs.sub experiment=simulated/high_increasing/SoftmaxPolicy/reduced_simulated_agents_back_dist_depth_eff_forw  cost_function=back_dist_depth_eff_forw participant_file=reduced save_path=/fast/vfelso
+   condor_submit_bid 1 submission_scripts/MPI-IS/04_Extract_Marginal_and_HDIs.sub experiment=simulated/high_increasing/SoftmaxPolicy/reduced_simulated_agents_back_dist_depth_eff_forw  cost_function=back_dist_depth_eff_forw participant_file=reduced save_path=/fast/vfelso max_materialize=100
    condor_submit_bid 1 submission_scripts/MPI-IS/04_Extract_Marginal_and_HDIs.sub experiment=simulated/high_increasing/SoftmaxPolicy/participants_gamma,kappa_simulated_agents_back_dist_depth_eff_forw  cost_function=back_dist_depth_eff_forw participant_file=participants save_path=/fast/vfelso
    ```
 
@@ -221,3 +221,13 @@ This directory contains notebooks that are associated with developing the IRL me
 >  > ```ls -ltha```
 >  > These directories can be large (many GBs) so check that you have enough space on your local computer or do more of the analysis steps on the cluster.
 >  > So if you aren't sure if you have room on your machine check how large the directory/file is on the cluster first!
+
+condor_submit_bid 1 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=c1.1 participants=c1.1 save_path=/fast/vfelso;
+condor_submit_bid 1 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=c2.1 participants=c2.1 save_path=/fast/vfelso;
+
+condor_submit_bid 1 submission_scripts/MPI-IS/02_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=c1.1 participant_file=c1.1 base_cost_function=back_dist_depth_eff_forw save_path=/fast/vfelso;
+condor_submit_bid 1 submission_scripts/MPI-IS/02_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=c2.1 participant_file=c2.1 base_cost_function=back_dist_depth_eff_forw save_path=/fast/vfelso;
+   
+condor_submit_bid 1 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=c1.1 base_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=c1.1 save_path=/fast/vfelso;
+condor_submit_bid 1 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=c2.1 base_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=c2.1 save_path=/fast/vfelso;
+   
