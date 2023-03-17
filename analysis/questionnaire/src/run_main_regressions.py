@@ -76,7 +76,7 @@ def run_main_regressions(
             print(test["prettyname"])
             print("\t - " + get_regression_text(full_res))
 
-            params_to_correct_for = set(model_parameters) - set([test["followup"]])
+            params_to_correct_for = list(set(model_parameters) - set([test["followup"]]))
             coeff_reject_null, coeff_corrected_pval, _, _ = multipletests(full_res.pvalues[model_parameters], alpha=pval_cutoff, method="fdr_bh")
 
             # if followup, correct
