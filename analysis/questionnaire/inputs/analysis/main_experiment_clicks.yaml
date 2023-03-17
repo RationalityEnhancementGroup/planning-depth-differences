@@ -2,109 +2,124 @@
   "regressions": [
     { "title": "Hypotheses regarding all model parameters:",
       "tests": [ {
+        # H1.1
         "dependent": "CIT",
         "prettyname": "Compulsive Behavior and Intrusive Thought",
-        "covariates": [ ],
+        "covariates": [ "age", "IQ", "C(gender)" ],
         "direction": "",
-        "followup": "depth_cost_weight"
+        "followup": ""
       },
         {
+        # H1.2
           "dependent": "AD",
           "prettyname": "Anxious Depression",
-          "covariates": [ ],
+          "covariates": [ "age", "IQ", "C(gender)" ],
           "direction": "",
           "followup": ""
         },
         {
+          # H1.3
           "dependent": "SW",
           "prettyname": "Social Withdrawal",
-          "covariates": [ ],
+          "covariates": [ "age", "IQ", "C(gender)" ],
           "direction": "",
           "followup": ""
         },
         {
+          # H1.4
           "dependent": "anxiety",
-          "prettyname": "Trait anxiety (STAI; shortened)",
-          "covariates": [ ],
+          "prettyname": "Trait anxiety (STAI)",
+          "covariates": [ "age", "IQ", "C(gender)" ],
           "direction": "",
           "followup": ""
         },
         {
+          # H2.1
           "dependent": "cfc",
           "prettyname": "Consideration of Future Consequences",
-          "covariates": [ ],
+          "covariates": [ "age", "IQ", "C(gender)" ],
           "direction": "",
-          "followup": "depth_cost_weight"
+          "followup": ""
         },
         {
+          # H2.2
           "dependent": "ptp",
           "prettyname": "Propensity to Plan",
-          "covariates": [ ],
+          "covariates": [ "age", "IQ", "C(gender)" ],
           "direction": "",
-          "followup": "depth_cost_weight"
+          "followup": ""
         },
         {
+          # H2.3
           "dependent": "fos",
           "prettyname": "Future Orientation Scale",
-          "covariates": [ ],
+          "covariates": [ "age", "IQ", "C(gender)" ],
           "direction": "",
-          "followup": "depth_cost_weight"
+          "followup": ""
         },
         {
+          # H3.1
           "dependent": "lifreg",
           "prettyname": "Life Regrets",
-          "covariates": [ ],
+          "covariates": [ "age", "IQ", "C(gender)" ],
           "direction": "",
-          "followup": "depth_cost_weight"
+          "followup": ""
         },
         {
+          # H3.2
           "dependent": "satis",
           "prettyname": "Life Satisfaction",
-          "covariates": [ ],
+          "covariates": [ "age", "IQ", "C(gender)" ],
           "direction": "",
-          "followup": "depth_cost_weight"
+          "followup": ""
         },
         {
+          # H3.3
           "dependent": "bit",
           "prettyname": "Brief Inventory of Thriving",
-          "covariates": [ ],
+          "covariates": [ "age", "IQ", "C(gender)" ],
           "direction": "",
-          "followup": "depth_cost_weight"
+          "followup": ""
         },
         {
+          # H4.1
           "dependent": "dospert-rational",
           "prettyname": "Risk-taking",
-          "covariates": [ ],
+          "covariates": [ "age", "IQ", "C(gender)" ],
           "direction": "",
-          "followup": "depth_cost_weight"
+          "followup": ""
         },
         {
+          # H4.2
           "dependent": "lack_premed",
           "prettyname": "Lack of Premeditation (UPPS-P)",
-          "covariates": [ ],
+          "covariates": [ "age", "IQ", "C(gender)" ],
           "direction": "",
           "followup": ""
         },
         {
+          # H5.1
           "dependent": "ius",
           "prettyname": "Intolerance of Uncertainty",
-          "covariates": [ ],
+          "covariates": [ "age", "IQ", "C(gender)" ],
           "direction": "",
           "followup": ""
         },
         {
+          # H6.1
           "dependent": "dts",
           "prettyname": "Distress Tolerance Scale",
-          "covariates": [ ],
+          "covariates": [ "age", "IQ", "C(gender)" ],
           "direction": "",
           "followup": ""
         },
         {
+          # H7.1
           "dependent": "crt",
           "prettyname": "Cognitive Reflection Task",
-          "covariates": [ ],
+          "covariates": [ "age", "IQ", "C(gender)" ],
           "direction": "",
-          "followup": "depth_cost_weight"
+          "followup": ""
         } ] },
   ]
 }

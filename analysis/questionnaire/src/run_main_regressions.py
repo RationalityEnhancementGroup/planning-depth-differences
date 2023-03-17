@@ -40,7 +40,7 @@ def run_regression(test, data, params):
     return full_res
 
 def run_main_regressions(
-    tests, combined_scores, model_parameters, pval_cutoff=0.05, regression_path=None
+    tests, combined_scores, model_parameters, pval_cutoff=0.05
 ):
     # add all results to this
     pvals = []
@@ -159,6 +159,11 @@ if __name__ == "__main__":
     combined_scores = combined_scores.merge(factor_scores)
     combined_scores = combined_scores.merge(analysis_obj.dfs["quiz-and-demo"][["pid", "age", "gender"]])
 
+    combined_scores = combined_scores.merge(
+        analysis_obj.dfs["mouselab-mdp"].groupby(["pid"], as_index=False).mean()[["pid", "num_early", "num_middle", "num_late", "num_clicks"]],
+        on="pid",
+    )
+
     for upps_subscale in set(uppsp_dict.values()):
         combined_scores[upps_subscale] = combined_scores["pid"].apply(
             lambda pid: sum(
@@ -179,12 +184,17 @@ if __name__ == "__main__":
         combined_scores[combined_scores.columns.difference(nonnumeric_cols)]
     )
 
-    full_df = run_main_regressions(
-        analysis_yaml["regressions"][0]["tests"],
-        combined_scores,
-        model_parameters,
-        pval_cutoff=0.05,
-        regression_path=irl_path.joinpath(
-            f"analysis/questionnaire/data/regressions/{inputs.analysis_file_name}"
-        ),
-    )
+    if "clicks" in inputs.analysis_file_name:
+        full_df = run_main_regressions(
+            analysis_yaml["regressions"][0]["tests"],
+            combined_scores,
+            ["num_early", "num_middle", "num_late"],
+            pval_cutoff=0.05,
+        )
+    else:
+        full_df = run_main_regressions(
+            analysis_yaml["regressions"][0]["tests"],
+            combined_scores,
+            model_parameters,
+            pval_cutoff=0.05,
+        )
