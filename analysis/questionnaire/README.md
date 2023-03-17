@@ -84,6 +84,7 @@ Questionnaire pre-registration:
    
 Questionnaire main
 
-| Section | Subsection |                                                              Heading / Description                                                              | How to replicate (locally)                                           |                                                  How to replicate (cluster)                                                   |
-|--------:|:----------:|:-----------------------------------------------------------------------------------------------------------------------------------------------:|----------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------:|
-|     ??  |    ??      |                                                             Participant strategies                                                              | `python find_stable_point_with_cm.py -e QuestMain -s questionnaires` | `condor_submit_bid 2 submission_scripts/MPI-IS/M_03_Report_CM_Strategies.sub experiment=QuestMain subdirectory=questionnaire` |
+| Section | Subsection | Heading / Description  | How to replicate (locally)                                          |                                                  How to replicate (cluster)                                                   |
+|--------:|:----------:|:----------------------:|---------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------:|
+|      ?? |     ??     | Participant strategies | `python find_stable_point_with_cm.py -e QuestMain -s questionnaires` | `condor_submit_bid 2 submission_scripts/MPI-IS/M_03_Report_CM_Strategies.sub experiment=QuestMain subdirectory=questionnaire` |
+|    Appendix     | VIF Table  |       VIF Table        | `python generate_vif_table.py`                                       |                                                                                                                               |
