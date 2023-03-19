@@ -2,17 +2,15 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 import dill as pickle
-import matplotlib.pyplot as plt
-import numpy as np
+from scipy.stats import mode
 import pandas as pd
-import seaborn as sns
 import statsmodels.formula.api as smf
 import yaml
 from costometer.utils import (
     AnalysisObject,
     get_parameter_coefficient,
     get_pval_text,
-get_pval_string,
+    get_pval_string,
     get_regression_text,
 )
 from quest_utils.subscale_utils import uppsp_dict
@@ -20,8 +18,10 @@ from sklearn.preprocessing import StandardScaler
 from statsmodels.stats.multitest import multipletests
 from statsmodels.stats.anova import anova_lm
 
+
 def f_square(r_squared_full, r_squared_base):
     return (r_squared_full - r_squared_base) / (1 - r_squared_full)
+
 
 def run_regression(test, data, params):
     full_regression_formula = f"{test['dependent']} ~ " + " + ".join(
@@ -34,14 +34,11 @@ def run_regression(test, data, params):
         + ["1"]
     )
 
-    full_res = smf.ols(formula=full_regression_formula, data=data).fit(
-        missing="drop"
-    )
+    full_res = smf.ols(formula=full_regression_formula, data=data).fit(missing="drop")
     return full_res
 
-def run_main_regressions(
-    tests, combined_scores, model_parameters, pval_cutoff=0.05
-):
+
+def run_main_regressions(tests, combined_scores, model_parameters, pval_cutoff=0.05):
     # add all results to this
     pvals = []
     results = []
@@ -51,23 +48,27 @@ def run_main_regressions(
         base_res = run_regression(test, data=combined_scores, params=[])
 
         res = anova_lm(base_res, full_res)
-        res["prettyname"] = test['prettyname']
+        res["prettyname"] = test["prettyname"]
         res["fsquare"] = f_square(full_res.rsquared, base_res.rsquared)
 
-        pvals.append(res.loc[1]['Pr(>F)'])
+        pvals.append(res.loc[1]["Pr(>F)"])
         results.append(res)
 
     # correct p values
-    reject_null, corrected_pval, _, _ = multipletests(pvals, alpha=pval_cutoff, method="fdr_bh")
+    reject_null, corrected_pval, _, _ = multipletests(
+        pvals, alpha=pval_cutoff, method="fdr_bh"
+    )
 
     for test_idx, res in enumerate(results):
-        print(f"{res['prettyname'].loc[1]} & "
-              f"${res.loc[1]['fsquare']:.3f}$ & "
-              f"$F({res.loc[1]['df_diff']:.0f}, "
-              f"{res.loc[1]['df_resid']:.0f}) = "
-              f"{res.loc[1]['F']:.2f}$ & "
-              f"{get_pval_text(corrected_pval[test_idx])}"
-              f"{get_pval_string(corrected_pval[test_idx])} \\\ ")
+        print(
+            f"{res['prettyname'].loc[1]} & "
+            f"${res.loc[1]['fsquare']:.3f}$ & "
+            f"$F({res.loc[1]['df_diff']:.0f}, "
+            f"{res.loc[1]['df_resid']:.0f}) = "
+            f"{res.loc[1]['F']:.2f}$ & "
+            f"{get_pval_text(corrected_pval[test_idx])}"
+            f"{get_pval_string(corrected_pval[test_idx])} \\\ "  # noqa : W605
+        )
 
     for test_idx, test in enumerate(tests):
         full_res = run_regression(test, data=combined_scores, params=model_parameters)
@@ -76,19 +77,35 @@ def run_main_regressions(
             print(test["prettyname"])
             print("\t - " + get_regression_text(full_res))
 
-            params_to_correct_for = list(set(model_parameters) - set([test["followup"]]))
-            coeff_reject_null, coeff_corrected_pval, _, _ = multipletests([full_res.pvalues[model_parameter] for model_parameter in params_to_correct_for], alpha=pval_cutoff, method="fdr_bh")
+            params_to_correct_for = list(
+                set(model_parameters) - set([test["followup"]])
+            )
+            coeff_reject_null, coeff_corrected_pval, _, _ = multipletests(
+                [
+                    full_res.pvalues[model_parameter]
+                    for model_parameter in params_to_correct_for
+                ],
+                alpha=pval_cutoff,
+                method="fdr_bh",
+            )
 
             # if followup, correct
-            if len(test["followup"])> 0:
+            if len(test["followup"]) > 0:
                 if full_res.pvalues[test["followup"]] < pval_cutoff:
-                    print(f"\t\t - {test['followup']}, {get_parameter_coefficient(full_res, test['followup'], pval=full_res.pvalues[test['followup']])}")
+                    print(
+                        f"\t\t - {test['followup']}, "
+                        f"{get_parameter_coefficient(full_res, test['followup'], pval=full_res.pvalues[test['followup']])}"  # noqa : E501
+                    )
 
             for param_idx, curr_param in enumerate(params_to_correct_for):
                 if coeff_reject_null[param_idx]:
-                    print(f"\t\t - {curr_param}, {get_parameter_coefficient(full_res, curr_param, pval=coeff_corrected_pval[param_idx])}")
+                    print(
+                        f"\t\t - {curr_param}"
+                        f", {get_parameter_coefficient(full_res, curr_param, pval=coeff_corrected_pval[param_idx])}"  # noqa : E501
+                    )
 
     return pvals
+
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -101,7 +118,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-a",
         "--analysis-file-name",
-        default="main_experiment",
+        default="main_experiment_cm",
         dest="analysis_file_name",
     )
     parser.add_argument(
@@ -157,10 +174,14 @@ if __name__ == "__main__":
         )
     )
     combined_scores = combined_scores.merge(factor_scores)
-    combined_scores = combined_scores.merge(analysis_obj.dfs["quiz-and-demo"][["pid", "age", "gender"]])
+    combined_scores = combined_scores.merge(
+        analysis_obj.dfs["quiz-and-demo"][["pid", "age", "gender"]]
+    )
 
     combined_scores = combined_scores.merge(
-        analysis_obj.dfs["mouselab-mdp"].groupby(["pid"], as_index=False).mean()[["pid", "num_early", "num_middle", "num_late", "num_clicks"]],
+        analysis_obj.dfs["mouselab-mdp"]
+        .groupby(["pid"], as_index=False)
+        .mean()[["pid", "num_early", "num_middle", "num_late", "num_clicks"]],
         on="pid",
     )
 
@@ -189,6 +210,27 @@ if __name__ == "__main__":
             analysis_yaml["regressions"][0]["tests"],
             combined_scores,
             ["num_early", "num_middle", "num_late"],
+            pval_cutoff=0.05,
+        )
+    elif "cm" in inputs.analysis_file_name:
+        cm = {}
+        for session in analysis_obj.sessions:
+            with open(irl_path.joinpath(f"cluster/data/cm/{session}.pkl"), "rb") as f:
+                exp = pickle.load(f)
+            for pid, strategies in exp.participant_strategies.items():
+                last_strategies = strategies[-20:]
+                cm[pid] = mode(last_strategies).mode[0]
+
+        combined_scores["mode_strategy"] = combined_scores["pid"].apply(
+            lambda pid: cm[pid]
+        )
+        dummies = pd.get_dummies(combined_scores["mode_strategy"], prefix="cm")
+        combined_scores = pd.concat([combined_scores, dummies], axis=1)
+
+        full_df = run_main_regressions(
+            analysis_yaml["regressions"][0]["tests"],
+            combined_scores,
+            list(dummies.columns.values),
             pval_cutoff=0.05,
         )
     else:
