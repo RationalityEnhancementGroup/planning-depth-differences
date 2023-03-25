@@ -1,0 +1,36 @@
+-------
+Model parameter: given_cost
+$r(697) = -0.06, p > 0.05, 95\%\ C.\ I.\: [-0.14, 0.01]$
+Model parameter: depth_cost_weight
+$r(697) = 0.14, p < 0.001, 95\%\ C.\ I.\: [0.07, 0.21]$
+Model parameter: back_added_cost
+$r(697) = -0.05, p > 0.05, 95\%\ C.\ I.\: [-0.12, 0.02]$
+Model parameter: temp
+$r(697) = -0.06, p > 0.05, 95\%\ C.\ I.\: [-0.13, 0.01]$
+Model parameter: forw_added_cost
+$r(697) = -0.14, p < 0.001, 95\%\ C.\ I.\: [-0.21, -0.06]$
+Model parameter: distance_multiplier
+$r(697) = 0.05, p > 0.05, 95\%\ C.\ I.\: [-0.02, 0.13]$
+-------
+Sanity check -- forward trials should be correlated with forward bonus
+$r(700) = -0.84, p < 0.001, 95\%\ C.\ I.\: [-0.86, -0.82]$
+Correlation between age and structure understanding
+$r(697) = -0.08, p = 0.03, 95\%\ C.\ I.\: [-0.16, -0.01]$
+Correlation between age and forward trials
+$r(697) = 0.14, p < 0.001, 95\%\ C.\ I.\: [0.07, 0.21]$
+Correlation between structure understanding and forward trials
+$r(700) = -0.08, p = 0.03, 95\%\ C.\ I.\: [-0.16, -0.01]$
+-------
+Model parameter: given_cost
+$r(657) = -0.04, p > 0.05, 95\%\ C.\ I.\: [-0.11, 0.04]$
+Model parameter: depth_cost_weight
+$r(657) = 0.10, p < 0.01, 95\%\ C.\ I.\: [0.03, 0.18]$
+Model parameter: back_added_cost
+$r(657) = -0.06, p > 0.05, 95\%\ C.\ I.\: [-0.13, 0.02]$
+Model parameter: temp
+$r(657) = -0.06, p > 0.05, 95\%\ C.\ I.\: [-0.14, 0.01]$
+Model parameter: forw_added_cost
+$r(657) = -0.08, p = 0.04, 95\%\ C.\ I.\: [-0.15, -0.00]$
+Model parameter: distance_multiplier
+$r(657) = 0.05, p > 0.05, 95\%\ C.\ I.\: [-0.02, 0.13]$
+-------
