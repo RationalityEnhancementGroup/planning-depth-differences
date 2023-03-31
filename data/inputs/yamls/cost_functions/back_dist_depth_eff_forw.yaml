@@ -6,10 +6,10 @@ cost_parameter_args:
         - forw_added_cost
         - given_cost
 cost_parameter_names:
-        - Backward Added Cost
-        - Cost of Prospection
+        - Backward Added Bonus
+        - Depth Cost
         - Distance Cost
-        - Forward Added Cost
+        - Forward Added Bonus
         - Effort Cost
 env_params: {'include_last_action': true, 'last_action_info' : 'distance'}
 constant_values: {'forw_added_cost': 0, 'back_added_cost': 0,  'given_cost': 1, 'distance_multiplier': 0, 'depth_cost_weight': 0, 'temp' : 1, 'kappa' : 1, 'gamma': 1}

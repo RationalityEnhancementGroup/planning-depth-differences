@@ -173,6 +173,9 @@ if __name__ == "__main__":
         )
 
     for block in hdi_ranges.keys():
+        print("----------")
+        print(f"Spread in {block} block vs MAP error")
+        print("----------")
         for parameter in model_params_given.keys():
             full_parameter_info[f"diff_{parameter}"] = full_parameter_info.apply(
                 lambda row: np.sqrt(
@@ -181,6 +184,17 @@ if __name__ == "__main__":
                 ),
                 axis=1,
             )
+
+            correlation_object = pg.corr(
+                full_parameter_info[f"{block}_{parameter}_spread"],
+                full_parameter_info[f"diff_{parameter}"],
+            )
+            print(
+                f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+                f" & {get_correlation_text(correlation_object)}"
+            )
+
+        for parameter in model_params_given.keys():
             print(parameter, block)
             if len(full_parameter_info[f"{block}_{parameter}_in"].unique()) == 1:
                 print(full_parameter_info[f"{block}_{parameter}_in"].unique())
@@ -195,13 +209,6 @@ if __name__ == "__main__":
                     ][f"diff_{parameter}"],
                 )
                 print(get_mann_whitney_text(comparison))
-
-            print(f"Spread in {block} block vs MAP error {parameter}")
-            correlation_object = pg.corr(
-                full_parameter_info[f"{block}_{parameter}_spread"],
-                full_parameter_info[f"diff_{parameter}"],
-            )
-            print(get_correlation_text(correlation_object))
 
     full_parameter_info.rename(
         columns={f"{parameter}_test": parameter for parameter in model_params},
@@ -279,101 +286,120 @@ if __name__ == "__main__":
             print("----------")
             print(get_mann_whitney_text(comparison))
 
+    print("----------")
+    print("Correlation between parameter spread in test block and error in recovery")
+    print("----------")
     for parameter, given_param in model_params_given.items():
-        print("----------")
-        print(
-            f"Correlation between parameter spread in "
-            f"test block and error in recovery, {parameter}"
-        )
-        print("----------")
         correlation_object = pg.corr(
             full_parameter_info[f"{block}_{parameter}_spread"],
             full_parameter_info[f"diff_{parameter}"],
         )
-        print(get_correlation_text(correlation_object))
-
-        print("----------")
         print(
-            f"Correlation between inferred temperature and "
-            f"parameter spread in {block} block, {parameter}"
+            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f" & {get_correlation_text(correlation_object, table=True)}"
         )
-        print("----------")
+
+    print("----------")
+    print(
+        f"Correlation between inferred temperature and "
+        f"parameter spread in {block} block"
+    )
+    print("----------")
+    for parameter in model_params:
         correlation_object = pg.corr(
             full_parameter_info["temp"],
             full_parameter_info[f"{block}_{parameter}_spread"],
         )
-        print(get_correlation_text(correlation_object))
-
-        print("----------")
         print(
-            f"Correlation between inferred temperature "
-            f"and error in recovery, {parameter}"
+            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f" & {get_correlation_text(correlation_object, table=True)}"
         )
-        print("----------")
+
+    print("----------")
+    print("Correlation between inferred temperature and error in recovery")
+    print("----------")
+    for parameter, given_param in model_params_given.items():
         correlation_object = pg.corr(
             full_parameter_info["temp"],
             full_parameter_info[f"diff_{parameter}"],
         )
-        print(get_correlation_text(correlation_object))
-
-        print("----------")
         print(
-            f"Correlation between regression estimate {given_param} "
-            f"and parameter spread in test block, {parameter}"
+            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f" & {get_correlation_text(correlation_object, table=True)}"
         )
-        print("----------")
+
+    print("----------")
+    print(
+        "Correlation between regression estimate " "and parameter spread in test block"
+    )
+    print("----------")
+    for parameter, given_param in model_params_given.items():
         correlation_object = pg.corr(
             full_parameter_info[f"predictions_{parameter}"],
             full_parameter_info[f"{block}_{parameter}_spread"],
         )
-        print(get_correlation_text(correlation_object))
-
-        print("----------")
         print(
-            f"Correlation between given parameter {given_param} "
-            f"and parameter spread in test block, {parameter}"
+            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f" & {get_correlation_text(correlation_object, table=True)}"
         )
-        print("----------")
+
+    print("----------")
+    print("Correlation between given parameter and parameter spread in test block")
+    print("----------")
+    for parameter, given_param in model_params_given.items():
         correlation_object = pg.corr(
             full_parameter_info[given_param].astype(np.float64),
             full_parameter_info[f"{block}_{parameter}_spread"],
         )
-
-        print(get_correlation_text(correlation_object))
+        print(
+            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f" & {get_correlation_text(correlation_object, table=True)}"
+        )
 
     print("----------")
     print(f"Number of participants: {len(full_parameter_info)}")
     print("----------")
 
+    print("----------")
+    print("Spread in test block vs MAP")
+    print("----------")
     for parameter in model_params:
-        print("----------")
-        print(f"Spread in test block vs MAP for {parameter}")
-        print("----------")
         correlation_object = pg.corr(
             full_parameter_info[f"test_{parameter}_spread"],
             full_parameter_info[f"{parameter}"].astype(np.float64),
         )
-        print(get_correlation_text(correlation_object))
+        print(
+            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f" & {get_correlation_text(correlation_object, table=True)}"
+        )
 
+    print("----------")
+    print("Correlation between linear regression output and HDI min")
+    print("----------")
     for parameter, given_param in model_params_given.items():
         correlation_object = pg.corr(
             full_parameter_info[f"predictions_{parameter}"],
             full_parameter_info[f"{block}_{parameter}_min"],
         )
-        print("----------")
-        print(f"Correlation between linear regression output and HDI min {parameter}")
-        print("----------")
-        print(get_correlation_text(correlation_object))
+        print(
+            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f" & {get_correlation_text(correlation_object, table=True)}"
+        )
 
+    print("----------")
+    print("Correlation between linear regression output and HDI max")
+    print("----------")
+    for parameter, given_param in model_params_given.items():
         correlation_object = pg.corr(
             full_parameter_info[f"predictions_{parameter}"],
             full_parameter_info[f"{block}_{parameter}_max"],
         )
-        print("----------")
-        print(f"Correlation between linear regression output and HDI max {parameter}")
-        print("----------")
-        print(get_correlation_text(correlation_object))
+        print(
+            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f" & {get_correlation_text(correlation_object, table=True)}"
+        )
 
+    for parameter, given_param in model_params_given.items():
         threshold = np.median(full_parameter_info[f"{model_params_given[parameter]}"])
         print("----------")
         print(f"{parameter}, {threshold}")

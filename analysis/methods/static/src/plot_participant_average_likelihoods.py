@@ -241,9 +241,9 @@ if __name__ == "__main__":
             print(
                 f"{get_wilcoxon_text(wilcoxon_object)}; "
                 f"$M_{{{best_model.replace('$','')}}} ="
-                f"{np.median(participant_df[participant_df['Model Name'] == best_model]['avg']):.2f}$; "  # noqa: E501
+                f"{np.median(participant_df[participant_df['Model Name'] == best_model]['avg']):.3f}$; "  # noqa: E501
                 f"$M_{{{model.replace('$','')}}} = "
-                f"{np.median(participant_df[participant_df['Model Name'] == model]['avg']):.2f}$"  # noqa: E501
+                f"{np.median(participant_df[participant_df['Model Name'] == model]['avg']):.3f}$"  # noqa: E501
             )
 
     print("==========")

@@ -1,343 +1,344 @@
+Thu Mar 30 19:32:49 CEST 2023
 Number of participants with full score: 107
 ==========
 Comparisons for avg
 ----------
 Omnibus test
-Kruskal-Wallis $H(3) = 2.11, p > 0.05$
+Kruskal-Wallis $H(3) = 0.36$, $p = 0.948$
 ----------
 Pair-wise comparisons: avg
 ----------
 ----------
 Pair-wise comparison: avg 4.0, 1.0
 ----------
-Mann-Whitney $U=75.00, p > 0.05$, two-sided
-$M_{\text{4}}=0.38$ vs $M_{\text{1}}=0.46$
+Mann-Whitney $U=79.00$, $p = 0.557$, two-sided
+$M_{\text{4}}=0.38$ vs $M_{\text{1}}=0.44$
 ----------
 Pair-wise comparison: avg 4.0, 3.0
 ----------
-Mann-Whitney $U=675.50, p > 0.05$, two-sided
-$M_{\text{4}}=0.38$ vs $M_{\text{3}}=0.37$
+Mann-Whitney $U=584.50$, $p = 0.974$, two-sided
+$M_{\text{4}}=0.38$ vs $M_{\text{3}}=0.40$
 ----------
 Pair-wise comparison: avg 4.0, 2.0
 ----------
-Mann-Whitney $U=64.00, p > 0.05$, two-sided
-$M_{\text{4}}=0.38$ vs $M_{\text{2}}=0.49$
+Mann-Whitney $U=100.00$, $p = 0.884$, two-sided
+$M_{\text{4}}=0.38$ vs $M_{\text{2}}=0.41$
 ----------
 Pair-wise comparison: avg 1.0, 3.0
 ----------
-Mann-Whitney $U=15.00, p > 0.05$, two-sided
-$M_{\text{1}}=0.46$ vs $M_{\text{3}}=0.37$
+Mann-Whitney $U=12.00$, $p = 0.923$, two-sided
+$M_{\text{1}}=0.44$ vs $M_{\text{3}}=0.40$
 ----------
 Pair-wise comparison: avg 1.0, 2.0
 ----------
-Mann-Whitney $U=2.00, p > 0.05$, two-sided
-$M_{\text{1}}=0.46$ vs $M_{\text{2}}=0.49$
+Mann-Whitney $U=2.00$, $p = 1.000$, two-sided
+$M_{\text{1}}=0.44$ vs $M_{\text{2}}=0.41$
 ----------
 Pair-wise comparison: avg 3.0, 2.0
 ----------
-Mann-Whitney $U=6.00, p > 0.05$, two-sided
-$M_{\text{3}}=0.37$ vs $M_{\text{2}}=0.49$
+Mann-Whitney $U=12.00$, $p = 0.923$, two-sided
+$M_{\text{3}}=0.40$ vs $M_{\text{2}}=0.41$
 ==========
 Comparisons for forw_added_cost
 ----------
 Omnibus test
-Kruskal-Wallis $H(3) = 2.35, p > 0.05$
+Kruskal-Wallis $H(3) = 2.35$, $p = 0.503$
 ----------
 Pair-wise comparisons: forw_added_cost
 ----------
 ----------
 Pair-wise comparison: forw_added_cost 4.0, 1.0
 ----------
-Mann-Whitney $U=65.00, p > 0.05$, two-sided
+Mann-Whitney $U=65.00$, $p = 0.282$, two-sided
 $M_{\text{4}}=-2.50$ vs $M_{\text{1}}=0.00$
 ----------
 Pair-wise comparison: forw_added_cost 4.0, 3.0
 ----------
-Mann-Whitney $U=597.50, p > 0.05$, two-sided
+Mann-Whitney $U=597.50$, $p = 0.928$, two-sided
 $M_{\text{4}}=-2.50$ vs $M_{\text{3}}=-3.41$
 ----------
 Pair-wise comparison: forw_added_cost 4.0, 2.0
 ----------
-Mann-Whitney $U=65.00, p > 0.05$, two-sided
+Mann-Whitney $U=65.00$, $p = 0.282$, two-sided
 $M_{\text{4}}=-2.50$ vs $M_{\text{2}}=0.00$
 ----------
 Pair-wise comparison: forw_added_cost 1.0, 3.0
 ----------
-Mann-Whitney $U=15.00, p > 0.05$, two-sided
+Mann-Whitney $U=15.00$, $p = 0.395$, two-sided
 $M_{\text{1}}=0.00$ vs $M_{\text{3}}=-3.41$
 ----------
 Pair-wise comparison: forw_added_cost 1.0, 2.0
 ----------
-Mann-Whitney $U=2.00, p > 0.05$, two-sided
+Mann-Whitney $U=2.00$, $p = 1.000$, two-sided
 $M_{\text{1}}=0.00$ vs $M_{\text{2}}=0.00$
 ----------
 Pair-wise comparison: forw_added_cost 3.0, 2.0
 ----------
-Mann-Whitney $U=7.00, p > 0.05$, two-sided
+Mann-Whitney $U=7.00$, $p = 0.395$, two-sided
 $M_{\text{3}}=-3.41$ vs $M_{\text{2}}=0.00$
 ==========
 Comparisons for back_added_cost
 ----------
 Omnibus test
-Kruskal-Wallis $H(3) = 1.97, p > 0.05$
+Kruskal-Wallis $H(3) = 1.97$, $p = 0.579$
 ----------
 Pair-wise comparisons: back_added_cost
 ----------
 ----------
 Pair-wise comparison: back_added_cost 4.0, 1.0
 ----------
-Mann-Whitney $U=133.00, p > 0.05$, two-sided
+Mann-Whitney $U=133.00$, $p = 0.419$, two-sided
 $M_{\text{4}}=-0.71$ vs $M_{\text{1}}=-0.50$
 ----------
 Pair-wise comparison: back_added_cost 4.0, 3.0
 ----------
-Mann-Whitney $U=526.50, p > 0.05$, two-sided
+Mann-Whitney $U=526.50$, $p = 0.410$, two-sided
 $M_{\text{4}}=-0.71$ vs $M_{\text{3}}=-0.45$
 ----------
 Pair-wise comparison: back_added_cost 4.0, 2.0
 ----------
-Mann-Whitney $U=85.00, p > 0.05$, two-sided
+Mann-Whitney $U=85.00$, $p = 0.488$, two-sided
 $M_{\text{4}}=-0.71$ vs $M_{\text{2}}=0.00$
 ----------
 Pair-wise comparison: back_added_cost 1.0, 3.0
 ----------
-Mann-Whitney $U=7.00, p > 0.05$, two-sided
+Mann-Whitney $U=7.00$, $p = 0.272$, two-sided
 $M_{\text{1}}=-0.50$ vs $M_{\text{3}}=-0.45$
 ----------
 Pair-wise comparison: back_added_cost 1.0, 2.0
 ----------
-Mann-Whitney $U=1.00, p > 0.05$, two-sided
+Mann-Whitney $U=1.00$, $p = 0.617$, two-sided
 $M_{\text{1}}=-0.50$ vs $M_{\text{2}}=0.00$
 ----------
 Pair-wise comparison: back_added_cost 3.0, 2.0
 ----------
-Mann-Whitney $U=10.00, p > 0.05$, two-sided
+Mann-Whitney $U=10.00$, $p = 0.831$, two-sided
 $M_{\text{3}}=-0.45$ vs $M_{\text{2}}=0.00$
 ==========
 Comparisons for given_cost
 ----------
 Omnibus test
-Kruskal-Wallis $H(3) = 1.95, p > 0.05$
+Kruskal-Wallis $H(3) = 1.95$, $p = 0.583$
 ----------
 Pair-wise comparisons: given_cost
 ----------
 ----------
 Pair-wise comparison: given_cost 4.0, 1.0
 ----------
-Mann-Whitney $U=56.50, p > 0.05$, two-sided
+Mann-Whitney $U=56.50$, $p = 0.245$, two-sided
 $M_{\text{4}}=2.34$ vs $M_{\text{1}}=3.75$
 ----------
 Pair-wise comparison: given_cost 4.0, 3.0
 ----------
-Mann-Whitney $U=638.50, p > 0.05$, two-sided
+Mann-Whitney $U=638.50$, $p = 0.637$, two-sided
 $M_{\text{4}}=2.34$ vs $M_{\text{3}}=2.00$
 ----------
 Pair-wise comparison: given_cost 4.0, 2.0
 ----------
-Mann-Whitney $U=129.00, p > 0.05$, two-sided
+Mann-Whitney $U=129.00$, $p = 0.617$, two-sided
 $M_{\text{4}}=2.34$ vs $M_{\text{2}}=1.00$
 ----------
 Pair-wise comparison: given_cost 1.0, 3.0
 ----------
-Mann-Whitney $U=17.00, p > 0.05$, two-sided
+Mann-Whitney $U=17.00$, $p = 0.263$, two-sided
 $M_{\text{1}}=3.75$ vs $M_{\text{3}}=2.00$
 ----------
 Pair-wise comparison: given_cost 1.0, 2.0
 ----------
-Mann-Whitney $U=4.00, p > 0.05$, two-sided
+Mann-Whitney $U=4.00$, $p = 0.221$, two-sided
 $M_{\text{1}}=3.75$ vs $M_{\text{2}}=1.00$
 ----------
 Pair-wise comparison: given_cost 3.0, 2.0
 ----------
-Mann-Whitney $U=12.00, p > 0.05$, two-sided
+Mann-Whitney $U=12.00$, $p = 0.919$, two-sided
 $M_{\text{3}}=2.00$ vs $M_{\text{2}}=1.00$
 ==========
 Comparisons for distance_multiplier
 ----------
 Omnibus test
-Kruskal-Wallis $H(3) = 4.00, p > 0.05$
+Kruskal-Wallis $H(3) = 4.00$, $p = 0.262$
 ----------
 Pair-wise comparisons: distance_multiplier
 ----------
 ----------
 Pair-wise comparison: distance_multiplier 4.0, 1.0
 ----------
-Mann-Whitney $U=136.50, p > 0.05$, two-sided
+Mann-Whitney $U=136.50$, $p = 0.487$, two-sided
 $M_{\text{4}}=1.88$ vs $M_{\text{1}}=0.50$
 ----------
 Pair-wise comparison: distance_multiplier 4.0, 3.0
 ----------
-Mann-Whitney $U=403.00, p > 0.05$, two-sided
+Mann-Whitney $U=403.00$, $p = 0.071$, two-sided
 $M_{\text{4}}=1.88$ vs $M_{\text{3}}=3.45$
 ----------
 Pair-wise comparison: distance_multiplier 4.0, 2.0
 ----------
-Mann-Whitney $U=96.00, p > 0.05$, two-sided
+Mann-Whitney $U=96.00$, $p = 0.801$, two-sided
 $M_{\text{4}}=1.88$ vs $M_{\text{2}}=1.00$
 ----------
 Pair-wise comparison: distance_multiplier 1.0, 3.0
 ----------
-Mann-Whitney $U=4.50, p > 0.05$, two-sided
+Mann-Whitney $U=4.50$, $p = 0.224$, two-sided
 $M_{\text{1}}=0.50$ vs $M_{\text{3}}=3.45$
 ----------
 Pair-wise comparison: distance_multiplier 1.0, 2.0
 ----------
-Mann-Whitney $U=1.00, p > 0.05$, two-sided
+Mann-Whitney $U=1.00$, $p = 0.617$, two-sided
 $M_{\text{1}}=0.50$ vs $M_{\text{2}}=1.00$
 ----------
 Pair-wise comparison: distance_multiplier 3.0, 2.0
 ----------
-Mann-Whitney $U=15.00, p > 0.05$, two-sided
+Mann-Whitney $U=15.00$, $p = 0.474$, two-sided
 $M_{\text{3}}=3.45$ vs $M_{\text{2}}=1.00$
 ==========
 Comparisons for depth_cost_weight
 ----------
 Omnibus test
-Kruskal-Wallis $H(3) = 2.10, p > 0.05$
+Kruskal-Wallis $H(3) = 2.10$, $p = 0.551$
 ----------
 Pair-wise comparisons: depth_cost_weight
 ----------
 ----------
 Pair-wise comparison: depth_cost_weight 4.0, 1.0
 ----------
-Mann-Whitney $U=136.00, p > 0.05$, two-sided
+Mann-Whitney $U=136.00$, $p = 0.408$, two-sided
 $M_{\text{4}}=1.37$ vs $M_{\text{1}}=0.00$
 ----------
 Pair-wise comparison: depth_cost_weight 4.0, 3.0
 ----------
-Mann-Whitney $U=521.00, p > 0.05$, two-sided
+Mann-Whitney $U=521.00$, $p = 0.433$, two-sided
 $M_{\text{4}}=1.37$ vs $M_{\text{3}}=2.27$
 ----------
 Pair-wise comparison: depth_cost_weight 4.0, 2.0
 ----------
-Mann-Whitney $U=136.00, p > 0.05$, two-sided
+Mann-Whitney $U=136.00$, $p = 0.408$, two-sided
 $M_{\text{4}}=1.37$ vs $M_{\text{2}}=0.00$
 ----------
 Pair-wise comparison: depth_cost_weight 1.0, 3.0
 ----------
-Mann-Whitney $U=7.00, p > 0.05$, two-sided
+Mann-Whitney $U=7.00$, $p = 0.397$, two-sided
 $M_{\text{1}}=0.00$ vs $M_{\text{3}}=2.27$
 ----------
 Pair-wise comparison: depth_cost_weight 1.0, 2.0
 ----------
-Mann-Whitney $U=2.00, p > 0.05$, two-sided
+Mann-Whitney $U=2.00$, $p = 1.000$, two-sided
 $M_{\text{1}}=0.00$ vs $M_{\text{2}}=0.00$
 ----------
 Pair-wise comparison: depth_cost_weight 3.0, 2.0
 ----------
-Mann-Whitney $U=15.00, p > 0.05$, two-sided
+Mann-Whitney $U=15.00$, $p = 0.397$, two-sided
 $M_{\text{3}}=2.27$ vs $M_{\text{2}}=0.00$
 ==========
 Comparisons for temp
 ----------
 Omnibus test
-Kruskal-Wallis $H(3) = 0.85, p > 0.05$
+Kruskal-Wallis $H(3) = 0.85$, $p = 0.838$
 ----------
 Pair-wise comparisons: temp
 ----------
 ----------
 Pair-wise comparison: temp 4.0, 1.0
 ----------
-Mann-Whitney $U=121.00, p > 0.05$, two-sided
+Mann-Whitney $U=121.00$, $p = 0.728$, two-sided
 $M_{\text{4}}=5.00$ vs $M_{\text{1}}=1.00$
 ----------
 Pair-wise comparison: temp 4.0, 3.0
 ----------
-Mann-Whitney $U=518.50, p > 0.05$, two-sided
+Mann-Whitney $U=518.50$, $p = 0.470$, two-sided
 $M_{\text{4}}=5.00$ vs $M_{\text{3}}=4.93$
 ----------
 Pair-wise comparison: temp 4.0, 2.0
 ----------
-Mann-Whitney $U=121.00, p > 0.05$, two-sided
+Mann-Whitney $U=121.00$, $p = 0.728$, two-sided
 $M_{\text{4}}=5.00$ vs $M_{\text{2}}=1.00$
 ----------
 Pair-wise comparison: temp 1.0, 3.0
 ----------
-Mann-Whitney $U=8.00, p > 0.05$, two-sided
+Mann-Whitney $U=8.00$, $p = 0.592$, two-sided
 $M_{\text{1}}=1.00$ vs $M_{\text{3}}=4.93$
 ----------
 Pair-wise comparison: temp 1.0, 2.0
 ----------
-Mann-Whitney $U=2.00, p > 0.05$, two-sided
+Mann-Whitney $U=2.00$, $p = 1.000$, two-sided
 $M_{\text{1}}=1.00$ vs $M_{\text{2}}=1.00$
 ----------
 Pair-wise comparison: temp 3.0, 2.0
 ----------
-Mann-Whitney $U=14.00, p > 0.05$, two-sided
+Mann-Whitney $U=14.00$, $p = 0.592$, two-sided
 $M_{\text{3}}=4.93$ vs $M_{\text{2}}=1.00$
 ==========
 Comparisons for kappa
 ----------
 Omnibus test
-Kruskal-Wallis $H(3) = nan, p = nan$
+Kruskal-Wallis $H(3) = nan$, $p = nan$
 ----------
 Pair-wise comparisons: kappa
 ----------
 ----------
 Pair-wise comparison: kappa 4.0, 1.0
 ----------
-Mann-Whitney $U=107.00, p > 0.05$, two-sided
+Mann-Whitney $U=107.00$, $p = 1.000$, two-sided
 $M_{\text{4}}=1.00$ vs $M_{\text{1}}=1.00$
 ----------
 Pair-wise comparison: kappa 4.0, 3.0
 ----------
-Mann-Whitney $U=588.50, p > 0.05$, two-sided
+Mann-Whitney $U=588.50$, $p = 1.000$, two-sided
 $M_{\text{4}}=1.00$ vs $M_{\text{3}}=1.00$
 ----------
 Pair-wise comparison: kappa 4.0, 2.0
 ----------
-Mann-Whitney $U=107.00, p > 0.05$, two-sided
+Mann-Whitney $U=107.00$, $p = 1.000$, two-sided
 $M_{\text{4}}=1.00$ vs $M_{\text{2}}=1.00$
 ----------
 Pair-wise comparison: kappa 1.0, 3.0
 ----------
-Mann-Whitney $U=11.00, p > 0.05$, two-sided
+Mann-Whitney $U=11.00$, $p = 1.000$, two-sided
 $M_{\text{1}}=1.00$ vs $M_{\text{3}}=1.00$
 ----------
 Pair-wise comparison: kappa 1.0, 2.0
 ----------
-Mann-Whitney $U=2.00, p > 0.05$, two-sided
+Mann-Whitney $U=2.00$, $p = 1.000$, two-sided
 $M_{\text{1}}=1.00$ vs $M_{\text{2}}=1.00$
 ----------
 Pair-wise comparison: kappa 3.0, 2.0
 ----------
-Mann-Whitney $U=11.00, p > 0.05$, two-sided
+Mann-Whitney $U=11.00$, $p = 1.000$, two-sided
 $M_{\text{3}}=1.00$ vs $M_{\text{2}}=1.00$
 ==========
 Comparisons for gamma
 ----------
 Omnibus test
-Kruskal-Wallis $H(3) = nan, p = nan$
+Kruskal-Wallis $H(3) = nan$, $p = nan$
 ----------
 Pair-wise comparisons: gamma
 ----------
 ----------
 Pair-wise comparison: gamma 4.0, 1.0
 ----------
-Mann-Whitney $U=107.00, p > 0.05$, two-sided
+Mann-Whitney $U=107.00$, $p = 1.000$, two-sided
 $M_{\text{4}}=1.00$ vs $M_{\text{1}}=1.00$
 ----------
 Pair-wise comparison: gamma 4.0, 3.0
 ----------
-Mann-Whitney $U=588.50, p > 0.05$, two-sided
+Mann-Whitney $U=588.50$, $p = 1.000$, two-sided
 $M_{\text{4}}=1.00$ vs $M_{\text{3}}=1.00$
 ----------
 Pair-wise comparison: gamma 4.0, 2.0
 ----------
-Mann-Whitney $U=107.00, p > 0.05$, two-sided
+Mann-Whitney $U=107.00$, $p = 1.000$, two-sided
 $M_{\text{4}}=1.00$ vs $M_{\text{2}}=1.00$
 ----------
 Pair-wise comparison: gamma 1.0, 3.0
 ----------
-Mann-Whitney $U=11.00, p > 0.05$, two-sided
+Mann-Whitney $U=11.00$, $p = 1.000$, two-sided
 $M_{\text{1}}=1.00$ vs $M_{\text{3}}=1.00$
 ----------
 Pair-wise comparison: gamma 1.0, 2.0
 ----------
-Mann-Whitney $U=2.00, p > 0.05$, two-sided
+Mann-Whitney $U=2.00$, $p = 1.000$, two-sided
 $M_{\text{1}}=1.00$ vs $M_{\text{2}}=1.00$
 ----------
 Pair-wise comparison: gamma 3.0, 2.0
 ----------
-Mann-Whitney $U=11.00, p > 0.05$, two-sided
+Mann-Whitney $U=11.00$, $p = 1.000$, two-sided
 $M_{\text{3}}=1.00$ vs $M_{\text{2}}=1.00$

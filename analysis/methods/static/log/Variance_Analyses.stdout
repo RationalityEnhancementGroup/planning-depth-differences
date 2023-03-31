@@ -1,0 +1,82 @@
+Thu Mar 30 22:38:55 CEST 2023
+MainExperiment, c1.1
+--------------
+given_cost
+M_{MainExperiment} = 2.307, M_{c1.1} = 3.991
+Mann-Whitney $U=2937.50$, $p = 0.060$, two-sided
+distance_multiplier
+M_{MainExperiment} = 1.988, M_{c1.1} = 1.474
+Mann-Whitney $U=4107.50$, $p = 0.066$, two-sided
+depth_cost_weight
+M_{MainExperiment} = 1.410, M_{c1.1} = 0.862
+Mann-Whitney $U=3302.00$, $p = 0.379$, two-sided
+back_added_cost
+M_{MainExperiment} = -0.672, M_{c1.1} = -1.181
+Mann-Whitney $U=3453.50$, $p = 0.703$, two-sided
+temp
+M_{MainExperiment} = 4.858, M_{c1.1} = 3.343
+Mann-Whitney $U=3603.00$, $p = 0.824$, two-sided
+forw_added_cost
+M_{MainExperiment} = -2.496, M_{c1.1} = -2.991
+Mann-Whitney $U=3819.50$, $p = 0.330$, two-sided
+MainExperiment, c2.1
+--------------
+given_cost
+M_{MainExperiment} = 2.307, M_{c2.1} = 2.802
+Mann-Whitney $U=3751.00$, $p = 0.503$, two-sided
+distance_multiplier
+M_{MainExperiment} = 1.988, M_{c2.1} = 2.647
+Mann-Whitney $U=3409.50$, $p = 0.680$, two-sided
+depth_cost_weight
+M_{MainExperiment} = 1.410, M_{c2.1} = 1.931
+Mann-Whitney $U=2977.50$, $p = 0.040$, two-sided
+back_added_cost
+M_{MainExperiment} = -0.672, M_{c2.1} = -1.207
+Mann-Whitney $U=3339.00$, $p = 0.355$, two-sided
+temp
+M_{MainExperiment} = 4.858, M_{c2.1} = 3.653
+Mann-Whitney $U=3998.00$, $p = 0.103$, two-sided
+forw_added_cost
+M_{MainExperiment} = -2.496, M_{c2.1} = -3.940
+Mann-Whitney $U=4212.00$, $p = 0.021$, two-sided
+c1.1, c2.1
+--------------
+given_cost
+M_{c1.1} = 3.991, M_{c2.1} = 2.802
+Mann-Whitney $U=2005.50$, $p = 0.066$, two-sided
+distance_multiplier
+M_{c1.1} = 1.474, M_{c2.1} = 2.647
+Mann-Whitney $U=1367.50$, $p = 0.067$, two-sided
+depth_cost_weight
+M_{c1.1} = 0.862, M_{c2.1} = 1.931
+Mann-Whitney $U=1462.00$, $p = 0.175$, two-sided
+back_added_cost
+M_{c1.1} = -1.181, M_{c2.1} = -1.207
+Mann-Whitney $U=1641.50$, $p = 0.712$, two-sided
+temp
+M_{c1.1} = 3.343, M_{c2.1} = 3.653
+Mann-Whitney $U=1870.00$, $p = 0.225$, two-sided
+forw_added_cost
+M_{c1.1} = -2.991, M_{c2.1} = -3.940
+Mann-Whitney $U=1882.50$, $p = 0.233$, two-sided
+MainExperiment
+w_{eff.} & 2.307 (2.456) \\ 
+w_{dist.} & 1.988 (2.752) \\ 
+w_{depth} & 1.410 (2.848) \\ 
+w_{back.} & -0.672 (2.013) \\ 
+\beta & 4.858 (12.928) \\ 
+w_{forw.} & -2.496 (4.070) \\ 
+c1.1
+w_{eff.} & 3.991 (4.039) \\ 
+w_{dist.} & 1.474 (2.388) \\ 
+w_{depth} & 0.862 (1.783) \\ 
+w_{back.} & -1.181 (2.976) \\ 
+\beta & 3.343 (4.121) \\ 
+w_{forw.} & -2.991 (4.059) \\ 
+c2.1
+w_{eff.} & 2.802 (3.722) \\ 
+w_{dist.} & 2.647 (3.616) \\ 
+w_{depth} & 1.931 (3.053) \\ 
+w_{back.} & -1.207 (3.258) \\ 
+\beta & 3.653 (13.109) \\ 
+w_{forw.} & -3.940 (4.548) \\ 

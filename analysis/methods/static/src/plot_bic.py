@@ -134,3 +134,8 @@ if __name__ == "__main__":
     print(
         (bic_df["bic"].sort_values().iloc[1] - bic_df["bic"].sort_values().iloc[0]) / 2
     )
+
+    print("Log Bayes factor approximation, difference between top and third models")
+    print(
+        (bic_df["bic"].sort_values().iloc[2] - bic_df["bic"].sort_values().iloc[0]) / 2
+    )

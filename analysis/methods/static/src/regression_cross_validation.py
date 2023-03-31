@@ -319,6 +319,16 @@ if __name__ == "__main__":
         print(get_mann_whitney_text(comparison))
 
         print(
+            f"Baseline interrupts: "
+            f"{np.mean(combined[combined['FAIRY_GOD_CONDITION']][f'{inferred_cost}_fairy']):.3f}"  # noqa: E501
+            f"{np.std(combined[combined['FAIRY_GOD_CONDITION']][f'{inferred_cost}_fairy']):.3f}"  # noqa: E501
+        )
+        print(
+            f"{np.mean(combined[~combined['FAIRY_GOD_CONDITION']][f'{inferred_cost}_fairy']):.3f}"  # noqa: E501
+            f" {np.std(combined[~combined['FAIRY_GOD_CONDITION']][f'{inferred_cost}_fairy']):.3f}"  # noqa: E501
+        )
+
+        print(
             f"Difference in block order for "
             f"test block MAP estimates {inferred_cost}"
         )
@@ -327,3 +337,10 @@ if __name__ == "__main__":
             combined[~combined["FAIRY_GOD_CONDITION"]][inferred_cost],
         )
         print(get_mann_whitney_text(comparison))
+
+        print(
+            f"Baseline interrupts: {np.mean(combined[combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f} {np.std(combined[combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f}"  # noqa: E501
+        )
+        print(
+            f"{np.mean(combined[~combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f} {np.std(combined[~combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f}"  # noqa: E501
+        )

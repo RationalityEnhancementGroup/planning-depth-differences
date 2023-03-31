@@ -67,13 +67,12 @@ if __name__ == "__main__":
             lambda row: row[f"max_{parameter}"] - row[f"min_{parameter}"], axis=1
         )
 
+    print("Statistics for spread of parameters")
     for parameter in model_params:
-        print("----------")
-        print(f"Statistics for spread of parameter: {parameter}")
-        print("----------")
         print(
-            f"$M: {optimization_data[f'{parameter}_spread'].mean():.2f}, "
-            f"SD: {optimization_data[f'{parameter}_spread'].std():.2f}$"
+            f"{analysis_obj.cost_details['latex_mapping'][parameter]}"
+            f" & ${optimization_data[f'{parameter}_spread'].mean():.2f}$"
+            f" (${optimization_data[f'{parameter}_spread'].std():.2f}$)"
         )
 
     # for cases where we don't vary temperature
@@ -121,27 +120,41 @@ if __name__ == "__main__":
             )
             print(get_mann_whitney_text(comparison))
 
-        print("----------")
-        print(f"Correlation between error in MAP estimate and spread for {parameter}")
-        print("----------")
+    print("----------")
+    print("Correlation between error in MAP estimate and spread")
+    print("----------")
+    for parameter in model_params:
         correlation_object = pg.corr(
             optimization_data[f"{parameter}_spread"],
             optimization_data[f"diff_{parameter}"],
         )
-        print(get_correlation_text(correlation_object))
-        print("----------")
-        print(f"Correlation between MAP estimate and spread for {parameter}")
-        print("----------")
+        print(
+            f"{analysis_obj.cost_details['latex_mapping'][parameter]}"
+            f" & {get_correlation_text(correlation_object, table=True)}"
+        )
+
+    print("----------")
+    print("Correlation between MAP estimate and spread")
+    print("----------")
+    for parameter in model_params:
         correlation_object = pg.corr(
             optimization_data[parameter],
             optimization_data[f"{parameter}_spread"],
         )
-        print(get_correlation_text(correlation_object))
-        print("----------")
-        print(f"Correlation between true value and spread for {parameter}")
-        print("----------")
+        print(
+            f"{analysis_obj.cost_details['latex_mapping'][parameter]}"
+            f" & {get_correlation_text(correlation_object, table=True)}"
+        )
+
+    print("----------")
+    print("Correlation between true value and spread")
+    print("----------")
+    for parameter in model_params:
         correlation_object = pg.corr(
             optimization_data[f"sim_{parameter}"],
             optimization_data[f"{parameter}_spread"],
         )
-        print(get_correlation_text(correlation_object))
+        print(
+            f"{analysis_obj.cost_details['latex_mapping'][parameter]}"
+            f" & {get_correlation_text(correlation_object, table=True)}"
+        )

@@ -144,11 +144,12 @@ if __name__ == "__main__":
         print(f"Full Friedman {classification}")
         friedman_object = pg.friedman(
             dv=f"difference_{classification}",
-            within="excluded",
+            within="excluded",  # TODO: why
             subject="pid",
             data=all_cost_model_df,
         )
         print(get_friedman_test_text(friedman_object))
+        print(friedman_object)
 
     for classification, nodes in analysis_obj.experiment_details[
         "node_classification"
