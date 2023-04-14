@@ -15,3 +15,6 @@ pingouin
 colorcet
 pre-commit
 rsa
+scipy
+statsmodels
+scikit-learn
