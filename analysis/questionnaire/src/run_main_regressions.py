@@ -10,7 +10,6 @@ from costometer.utils import (
     AnalysisObject,
     get_parameter_coefficient,
     get_pval_text,
-    get_pval_string,
     get_regression_text,
 )
 from quest_utils.subscale_utils import uppsp_dict
@@ -23,8 +22,30 @@ def f_square(r_squared_full, r_squared_base):
     return (r_squared_full - r_squared_base) / (1 - r_squared_full)
 
 
+def get_data_subset(test, data, params):
+    """
+    drop any columns with nans for full model
+    (statsmodels defaults to wrong degrees of freedom numerator
+    with nans only in full model in some cases)
+    """
+    cols = (
+        [
+            model_parameter
+            for model_parameter in params
+            if len(data[model_parameter].unique()) > 1
+        ]
+        + [
+            covariate.replace("C(", "").replace(")", "")
+            for covariate in test["covariates"]
+        ]
+        + [test["dependent"]]
+    )
+
+    return data[cols].copy(deep=True).dropna(axis=0)
+
+
 def run_regression(test, data, params):
-    full_regression_formula = f"{test['dependent']} ~ " + " + ".join(
+    independent_variables = (
         [
             model_parameter
             for model_parameter in params
@@ -34,7 +55,16 @@ def run_regression(test, data, params):
         + ["1"]
     )
 
-    full_res = smf.ols(formula=full_regression_formula, data=data).fit(missing="drop")
+    if len(independent_variables) > 1:
+        full_regression_formula = f"Q('{test['dependent']}') ~ " + " + ".join(
+            independent_variables
+        )
+    else:
+        full_regression_formula = (
+            f"Q('{test['dependent']}') ~ {independent_variables[0]}"
+        )
+
+    full_res = smf.ols(formula=full_regression_formula, data=data).fit()
     return full_res
 
 
@@ -44,8 +74,10 @@ def run_main_regressions(tests, combined_scores, model_parameters, pval_cutoff=0
     results = []
 
     for test in tests:
-        full_res = run_regression(test, data=combined_scores, params=model_parameters)
-        base_res = run_regression(test, data=combined_scores, params=[])
+        curr_data = get_data_subset(test, data=combined_scores, params=model_parameters)
+
+        full_res = run_regression(test, data=curr_data, params=model_parameters)
+        base_res = run_regression(test, data=curr_data, params=[])
 
         res = anova_lm(base_res, full_res)
         res["prettyname"] = test["prettyname"]
@@ -66,20 +98,24 @@ def run_main_regressions(tests, combined_scores, model_parameters, pval_cutoff=0
             f"$F({res.loc[1]['df_diff']:.0f}, "
             f"{res.loc[1]['df_resid']:.0f}) = "
             f"{res.loc[1]['F']:.2f}$ & "
-            f"{get_pval_text(corrected_pval[test_idx])}"
-            f"{get_pval_string(corrected_pval[test_idx])} \\\ "  # noqa : W605
+            f"{get_pval_text(corrected_pval[test_idx])}\\\ "  # noqa : W605
         )
 
     for test_idx, test in enumerate(tests):
-        full_res = run_regression(test, data=combined_scores, params=model_parameters)
+        curr_data = get_data_subset(test, data=combined_scores, params=model_parameters)
+
+        full_res = run_regression(test, data=curr_data, params=model_parameters)
 
         if reject_null[test_idx]:
             print(test["prettyname"])
             print("\t - " + get_regression_text(full_res))
 
-            params_to_correct_for = list(
-                set(model_parameters) - set([test["followup"]])
-            )
+            params_to_correct_for = [
+                model_parameter
+                for model_parameter in list(set(model_parameters) - {test["followup"]})
+                if model_parameter in full_res.pvalues
+            ]  # if no one classified as this strategy, won't be in model
+
             coeff_reject_null, coeff_corrected_pval, _, _ = multipletests(
                 [
                     full_res.pvalues[model_parameter]
@@ -187,9 +223,9 @@ if __name__ == "__main__":
 
     for upps_subscale in set(uppsp_dict.values()):
         combined_scores[upps_subscale] = combined_scores["pid"].apply(
-            lambda pid: sum(
+            lambda curr_pid: sum(
                 [
-                    individual_items.loc[pid][key]
+                    individual_items.loc[curr_pid][key]
                     for key, val in uppsp_dict.items()
                     if val == upps_subscale
                 ]
@@ -231,6 +267,16 @@ if __name__ == "__main__":
             analysis_yaml["regressions"][0]["tests"],
             combined_scores,
             list(dummies.columns.values),
+            pval_cutoff=0.05,
+        )
+    elif "demo" in inputs.analysis_file_name:
+        dummies = pd.get_dummies(combined_scores["gender"], prefix="gender")
+        combined_scores = pd.concat([combined_scores, dummies], axis=1)
+
+        full_df = run_main_regressions(
+            analysis_yaml["regressions"][0]["tests"],
+            combined_scores,
+            ["age", "IQ"] + list(dummies.columns.values),
             pval_cutoff=0.05,
         )
     else:

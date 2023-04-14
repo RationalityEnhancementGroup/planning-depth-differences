@@ -1,0 +1,24 @@
+Fri Apr 14 14:59:07 CEST 2023
+Error importing rpy2: r_home is None. Try python -m rpy2.situation
+Compulsive Behavior and Intrusive Thought & $0.103$ & $F(42, 647) = 1.59$ & p = 0.060\\ 
+Anxious Depression & $0.068$ & $F(42, 647) = 1.05$ & p = 0.582\\ 
+Social Withdrawal & $0.070$ & $F(42, 647) = 1.08$ & p = 0.582\\ 
+Trait anxiety (STAI) & $0.073$ & $F(42, 647) = 1.12$ & p = 0.582\\ 
+Consideration of Future Consequences & $0.118$ & $F(42, 647) = 1.82$ & p = 0.022\\ 
+Propensity to Plan & $0.062$ & $F(42, 647) = 0.96$ & p = 0.593\\ 
+Future Orientation Scale & $0.088$ & $F(42, 647) = 1.36$ & p = 0.256\\ 
+Life Regrets & $0.067$ & $F(42, 647) = 1.04$ & p = 0.582\\ 
+Life Satisfaction & $0.065$ & $F(42, 647) = 1.00$ & p = 0.582\\ 
+Brief Inventory of Thriving & $0.064$ & $F(42, 647) = 0.99$ & p = 0.582\\ 
+Risk-taking & $0.065$ & $F(42, 647) = 1.00$ & p = 0.582\\ 
+Lack of Premeditation (UPPS-P) & $0.080$ & $F(42, 647) = 1.23$ & p = 0.461\\ 
+Intolerance of Uncertainty & $0.064$ & $F(42, 647) = 0.98$ & p = 0.582\\ 
+Distress Tolerance Scale & $0.053$ & $F(42, 647) = 0.82$ & p = 0.792\\ 
+Cognitive Reflection Task & $0.108$ & $F(42, 647) = 1.67$ & p = 0.044\\ 
+Consideration of Future Consequences
+	 - adj. $R^2=0.06$, $F(46, 647) = 1.98$, $p < 0.001$
+		 - cm_44, $t(647) = -3.06$, $p = 0.049$,$\beta = -2.93$
+		 - cm_76, $t(647) = 3.78$, $p = 0.007$,$\beta = 1.03$
+Cognitive Reflection Task
+	 - adj. $R^2=0.36$, $F(46, 647) = 9.52$, $p < 0.001$
+		 - cm_30, $t(647) = -3.48$, $p = 0.023$,$\beta = -0.54$
