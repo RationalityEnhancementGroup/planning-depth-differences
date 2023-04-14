@@ -9,7 +9,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-e",
         "--exp",
-        default="QuestPilot",
+        default="QuestMain",
         dest="experiment_name",
     )
     parser.add_argument(
