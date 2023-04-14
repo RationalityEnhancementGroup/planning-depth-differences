@@ -131,6 +131,33 @@ if __name__ == "__main__":
 
     print("-------")
 
+    print("Forward strategy cluster")
+    combined_scores["forward_strategy"] = combined_scores.apply(
+        lambda row: sum(
+            [
+                row[f"cm_{strategy}"]
+                for strategy in [3, 10, 82, 5, 36, 37, 54, 79]
+                if f"cm_{strategy}" in row
+            ]
+        ),
+        axis=1,
+    )
+
+    mwu_obj = pg.mwu(
+        combined_scores[combined_scores["forward_strategy"].astype(bool)]["age"].values,
+        combined_scores[~combined_scores["forward_strategy"].astype(bool)][
+            "age"
+        ].values,
+        alternative="greater",
+    )
+    print(get_mann_whitney_text(mwu_obj))
+    print(
+        f"M (strategy): "
+        f"{combined_scores[combined_scores['forward_strategy'].astype(bool)]['age'].mean():.03f}"  # noqa : E501
+        f", M (not strategy): "
+        f"{combined_scores[~combined_scores['forward_strategy'].astype(bool)]['age'].mean():.03f}"  # noqa : E501
+    )
+    print("-------")
     # calculate forward search trials
     traces = get_human_trajectories(
         "quest_main",
