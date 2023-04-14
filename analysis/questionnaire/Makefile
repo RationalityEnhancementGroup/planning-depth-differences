@@ -10,7 +10,7 @@ default:
 	echo `date` > log/click_analyses.stdout
 	python src/run_main_regressions.py -a main_experiment_clicks >> log/click_analyses.stdout
 	echo `date` > log/cm_analyses.stdout
-	python src/run_main_regressions.py -a main_experiment_cm >> log/cm_analyses.stdout
+	python src/investigate_cm_relation.py >> log/cm_analyses.stdout
 	echo `date` > log/age_vs_planning.stdout
 	python src/age_vs_planning.py >> log/age_vs_planning.stdout
 	echo `date` > log/CM_QuestMain.stdout

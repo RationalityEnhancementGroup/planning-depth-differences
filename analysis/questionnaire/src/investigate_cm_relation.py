@@ -11,6 +11,7 @@ import seaborn as sns
 import yaml
 from costometer.utils import set_font_sizes
 from scipy.stats import mode
+from costometer.utils import AnalysisObject, get_mann_whitney_text
 
 set_font_sizes()
 
@@ -32,11 +33,25 @@ if __name__ == "__main__":
         "-e",
         "--exp",
         dest="experiment_name",
+        default="QuestMain",
+    )
+    parser.add_argument(
+        "-s",
+        "--subdirectory",
+        default="questionnaire",
+        dest="experiment_subdirectory",
+        metavar="experiment_subdirectory",
     )
     inputs = parser.parse_args()
 
     data_path = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[3]
+
+    analysis_obj = AnalysisObject(
+        inputs.experiment_name,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
+    )
 
     with open(
         data_path.joinpath(f"inputs/yamls/{inputs.experiment_name}.yaml"), "r"
@@ -56,7 +71,10 @@ if __name__ == "__main__":
     ]
 
     psych_scores = pd.read_csv(
-        data_path.joinpath(f"data/{inputs.experiment_name}/scores.csv")
+        irl_path.joinpath(
+            f"analysis/questionnaire/data/{inputs.experiment_name}/"
+            f"{analysis_obj.loadings}_scores.csv"
+        )
     )
     numeric_combined_scores = numeric_combined_scores.merge(psych_scores, on="pid")
 
@@ -123,7 +141,12 @@ if __name__ == "__main__":
                 )
                 if mwu_obj["p-val"][0] < 0.05:
                     print(strategy, col)
-                    print(mwu_obj)
+                    print(get_mann_whitney_text(mwu_obj))
+
+                    print(
+                        f"{numeric_combined_scores[numeric_combined_scores['strategy'] == strategy][col].mean():0.3f}",  # noqa : E501
+                        f"{numeric_combined_scores[numeric_combined_scores['strategy'] != strategy][col].mean():0.3f}",  # noqa : E501
+                    )
 
                     plot_cm_relation(numeric_combined_scores, strategy, col)
                     plt.savefig(
