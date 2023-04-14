@@ -4,6 +4,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from scipy.stats import mode
 import dill as pickle
 from costometer.utils import AnalysisObject
 import pingouin as pg
@@ -15,8 +16,10 @@ from mouselab.mouselab import MouselabEnv
 
 from costometer.utils import get_correlation_text
 
-# TODO: hack to finish things faster, would be better to move the whole
-# calculation of forward search trials out
+"""
+TODO: hack to finish things quicker, would be better to move the whole
+calculation of forward search trials out
+"""
 sys.path.append(str(Path(__file__).parents[3].joinpath("cluster")))
 from src.cluster_utils import get_human_trajectories  # noqa: E402
 
@@ -95,6 +98,29 @@ if __name__ == "__main__":
         )
     print("-------")
 
+    # now we check which CM are correlated with age
+    cm = {}
+    for session in analysis_obj.sessions:
+        with open(irl_path.joinpath(f"cluster/data/cm/{session}.pkl"), "rb") as f:
+            exp = pickle.load(f)
+        for pid, strategies in exp.participant_strategies.items():
+            last_strategies = strategies[-20:]
+            cm[pid] = mode(last_strategies).mode[0]
+
+    combined_scores["mode_strategy"] = combined_scores["pid"].apply(
+        lambda curr_pid: cm[curr_pid]
+    )
+    dummies = pd.get_dummies(combined_scores["mode_strategy"], prefix="cm")
+    combined_scores = pd.concat([combined_scores, dummies], axis=1)
+
+    for strategy in dummies.columns.values:
+        corr_obj = pg.corr(combined_scores["age"], combined_scores[strategy])
+        if corr_obj["p-val"][0] < 0.05:
+            print(strategy)
+            print(get_correlation_text(corr_obj))
+
+    print("-------")
+
     # calculate forward search trials
     traces = get_human_trajectories(
         "quest_main",
@@ -129,7 +155,7 @@ if __name__ == "__main__":
                 )
 
     combined_scores["forward_trials"] = combined_scores["pid"].apply(
-        lambda pid: forward_planning_trial[pid]
+        lambda curr_pid: forward_planning_trial[curr_pid]
     )
 
     print("Sanity check -- forward trials should be correlated with forward bonus")

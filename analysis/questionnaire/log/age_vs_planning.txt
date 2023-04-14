@@ -1,36 +1,52 @@
 -------
-Model parameter: given_cost
-$r(697) = -0.06, p > 0.05, 95\%\ C.\ I.\: [-0.14, 0.01]$
-Model parameter: depth_cost_weight
-$r(697) = 0.14, p < 0.001, 95\%\ C.\ I.\: [0.07, 0.21]$
 Model parameter: back_added_cost
-$r(697) = -0.05, p > 0.05, 95\%\ C.\ I.\: [-0.12, 0.02]$
+$r(697) = -0.05$, $p = 0.187$, 95\%\ C.\ I.\: $[-0.12, 0.02]$
 Model parameter: temp
-$r(697) = -0.06, p > 0.05, 95\%\ C.\ I.\: [-0.13, 0.01]$
+$r(697) = -0.06$, $p = 0.110$, 95\%\ C.\ I.\: $[-0.13, 0.01]$
+Model parameter: given_cost
+$r(697) = -0.06$, $p = 0.090$, 95\%\ C.\ I.\: $[-0.14, 0.01]$
 Model parameter: forw_added_cost
-$r(697) = -0.14, p < 0.001, 95\%\ C.\ I.\: [-0.21, -0.06]$
+$r(697) = -0.14$, $p < 0.001$, 95\%\ C.\ I.\: $[-0.21, -0.06]$
 Model parameter: distance_multiplier
-$r(697) = 0.05, p > 0.05, 95\%\ C.\ I.\: [-0.02, 0.13]$
+$r(697) = 0.05$, $p = 0.162$, 95\%\ C.\ I.\: $[-0.02, 0.13]$
+Model parameter: depth_cost_weight
+$r(697) = 0.14$, $p < 0.001$, 95\%\ C.\ I.\: $[0.07, 0.21]$
+-------
+Error importing rpy2: r_home is None. Try python -m rpy2.situation
+cm_11
+$r(697) = 0.12$, $p = 0.002$, 95\%\ C.\ I.\: $[0.04, 0.19]$
+cm_21
+$r(697) = -0.13$, $p < 0.001$, 95\%\ C.\ I.\: $[-0.20, -0.06]$
+cm_23
+$r(697) = 0.09$, $p = 0.020$, 95\%\ C.\ I.\: $[0.01, 0.16]$
+cm_26
+$r(697) = 0.17$, $p < 0.001$, 95\%\ C.\ I.\: $[0.09, 0.24]$
+cm_30
+$r(697) = 0.08$, $p = 0.045$, 95\%\ C.\ I.\: $[0.00, 0.15]$
+cm_37
+$r(697) = 0.09$, $p = 0.014$, 95\%\ C.\ I.\: $[0.02, 0.17]$
+cm_59
+$r(697) = 0.10$, $p = 0.011$, 95\%\ C.\ I.\: $[0.02, 0.17]$
 -------
 Sanity check -- forward trials should be correlated with forward bonus
-$r(700) = -0.84, p < 0.001, 95\%\ C.\ I.\: [-0.86, -0.82]$
+$r(700) = -0.84$, $p < 0.001$, 95\%\ C.\ I.\: $[-0.86, -0.82]$
 Correlation between age and structure understanding
-$r(697) = -0.08, p = 0.03, 95\%\ C.\ I.\: [-0.16, -0.01]$
+$r(697) = -0.08$, $p = 0.027$, 95\%\ C.\ I.\: $[-0.16, -0.01]$
 Correlation between age and forward trials
-$r(697) = 0.14, p < 0.001, 95\%\ C.\ I.\: [0.07, 0.21]$
+$r(697) = 0.14$, $p < 0.001$, 95\%\ C.\ I.\: $[0.07, 0.21]$
 Correlation between structure understanding and forward trials
-$r(700) = -0.08, p = 0.03, 95\%\ C.\ I.\: [-0.16, -0.01]$
+$r(700) = -0.08$, $p = 0.029$, 95\%\ C.\ I.\: $[-0.16, -0.01]$
 -------
-Model parameter: given_cost
-$r(657) = -0.04, p > 0.05, 95\%\ C.\ I.\: [-0.11, 0.04]$
-Model parameter: depth_cost_weight
-$r(657) = 0.10, p < 0.01, 95\%\ C.\ I.\: [0.03, 0.18]$
 Model parameter: back_added_cost
-$r(657) = -0.06, p > 0.05, 95\%\ C.\ I.\: [-0.13, 0.02]$
+$r(657) = -0.06$, $p = 0.133$, 95\%\ C.\ I.\: $[-0.13, 0.02]$
 Model parameter: temp
-$r(657) = -0.06, p > 0.05, 95\%\ C.\ I.\: [-0.14, 0.01]$
+$r(657) = -0.06$, $p = 0.104$, 95\%\ C.\ I.\: $[-0.14, 0.01]$
+Model parameter: given_cost
+$r(657) = -0.04$, $p = 0.364$, 95\%\ C.\ I.\: $[-0.11, 0.04]$
 Model parameter: forw_added_cost
-$r(657) = -0.08, p = 0.04, 95\%\ C.\ I.\: [-0.15, -0.00]$
+$r(657) = -0.08$, $p = 0.044$, 95\%\ C.\ I.\: $[-0.15, -0.00]$
 Model parameter: distance_multiplier
-$r(657) = 0.05, p > 0.05, 95\%\ C.\ I.\: [-0.02, 0.13]$
+$r(657) = 0.05$, $p = 0.162$, 95\%\ C.\ I.\: $[-0.02, 0.13]$
+Model parameter: depth_cost_weight
+$r(657) = 0.10$, $p = 0.009$, 95\%\ C.\ I.\: $[0.03, 0.18]$
 -------
