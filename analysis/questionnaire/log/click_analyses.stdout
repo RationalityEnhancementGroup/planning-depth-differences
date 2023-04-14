@@ -1,0 +1,20 @@
+Fri Apr 14 14:08:24 CEST 2023
+Compulsive Behavior and Intrusive Thought & $0.001$ & $F(3, 686) = 0.33$ & p = 0.809\\ 
+Anxious Depression & $0.003$ & $F(3, 686) = 0.64$ & p = 0.718\\ 
+Social Withdrawal & $0.006$ & $F(3, 686) = 1.32$ & p = 0.655\\ 
+Trait anxiety (STAI) & $0.004$ & $F(3, 686) = 0.91$ & p = 0.684\\ 
+Consideration of Future Consequences & $0.010$ & $F(3, 686) = 2.37$ & p = 0.520\\ 
+Propensity to Plan & $0.004$ & $F(3, 686) = 0.87$ & p = 0.684\\ 
+Future Orientation Scale & $0.005$ & $F(3, 686) = 1.10$ & p = 0.655\\ 
+Life Regrets & $0.008$ & $F(3, 686) = 1.81$ & p = 0.538\\ 
+Life Satisfaction & $0.006$ & $F(3, 686) = 1.35$ & p = 0.655\\ 
+Brief Inventory of Thriving & $0.008$ & $F(3, 686) = 1.94$ & p = 0.538\\ 
+Risk-taking & $0.003$ & $F(3, 686) = 0.59$ & p = 0.718\\ 
+Lack of Premeditation (UPPS-P) & $0.001$ & $F(3, 686) = 0.32$ & p = 0.809\\ 
+Intolerance of Uncertainty & $0.005$ & $F(3, 686) = 1.14$ & p = 0.655\\ 
+Distress Tolerance Scale & $0.003$ & $F(3, 686) = 0.70$ & p = 0.718\\ 
+Cognitive Reflection Task & $0.021$ & $F(3, 686) = 4.84$ & p = 0.037\\ 
+Cognitive Reflection Task
+	 - adj. $R^2=0.35$, $F(7, 686) = 53.40$, $p < 0.001$
+		 - num_late, $t(686) = 3.10$, $p = 0.003$,$\beta = 0.11$
+		 - num_middle, $t(686) = -3.20$, $p = 0.003$,$\beta = -0.17$

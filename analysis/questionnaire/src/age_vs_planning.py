@@ -14,7 +14,7 @@ import sys
 from mouselab.cost_functions import forward_search_cost
 from mouselab.mouselab import MouselabEnv
 
-from costometer.utils import get_correlation_text
+from costometer.utils import get_correlation_text, get_mann_whitney_text
 
 """
 TODO: hack to finish things quicker, would be better to move the whole
@@ -114,10 +114,20 @@ if __name__ == "__main__":
     combined_scores = pd.concat([combined_scores, dummies], axis=1)
 
     for strategy in dummies.columns.values:
-        corr_obj = pg.corr(combined_scores["age"], combined_scores[strategy])
-        if corr_obj["p-val"][0] < 0.05:
+        mwu_obj = pg.mwu(
+            combined_scores[combined_scores[strategy].astype(bool)]["age"].values,
+            combined_scores[~combined_scores[strategy].astype(bool)]["age"].values,
+        )
+
+        if mwu_obj["p-val"][0] < 0.05:
             print(strategy)
-            print(get_correlation_text(corr_obj))
+            print(get_mann_whitney_text(mwu_obj))
+            print(
+                f"M (strategy): "
+                f"{combined_scores[combined_scores[strategy].astype(bool)]['age'].mean():.03f}"  # noqa : E501
+                f", M (not strategy): "
+                f"{combined_scores[~combined_scores[strategy].astype(bool)]['age'].mean():.03f}"  # noqa : E501
+            )
 
     print("-------")
 
@@ -162,7 +172,7 @@ if __name__ == "__main__":
     print(
         get_correlation_text(
             pg.corr(
-                combined_scores["forw_added_cost" ""], combined_scores["forward_trials"]
+                combined_scores["forw_added_cost"], combined_scores["forward_trials"]
             )
         )
     )
