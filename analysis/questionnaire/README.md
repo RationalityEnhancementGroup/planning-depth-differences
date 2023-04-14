@@ -72,19 +72,16 @@ python src/construct_questionnaires_and_key.py
    ```
    python /home/vfelso/github/planning-depth-differences/analysis/questionnaire/src/calculate_factor_scores.py -e QuestMain 
    ```
-
-
-Questionnaire pre-registration:
-
-| Done | Section | Subsection |      Heading / Description      | How to replicate (locally)                                                                          |
-|------|--------:|:----------:|:-------------------------------:|-----------------------------------------------------------------------------------------------------|
-|  :heavy_check_mark:    |         |            | Model Comparison for Pilot Data | python ../methods/static/src/plot_bic.py -e QuestPilot -s questionnaire > log/BIC_QuestPilot.stdout |
-|      |         |            |                                 |                                                                                                     |
-
    
 Questionnaire main
 
-| Section | Subsection | Heading / Description  | How to replicate (locally)                                          |                                                  How to replicate (cluster)                                                   |
-|--------:|:----------:|:----------------------:|---------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------:|
-|      ?? |     ??     | Participant strategies | `python find_stable_point_with_cm.py -e QuestMain -s questionnaires` | `condor_submit_bid 2 submission_scripts/MPI-IS/M_03_Report_CM_Strategies.sub experiment=QuestMain subdirectory=questionnaire` |
-|    Appendix     | VIF Table  |       VIF Table        | `python generate_vif_table.py`                                       |                                                                                                                               |
+|  Section |                  Subsection                   | Heading / Description  | How to replicate (locally)                                                    |                                                  How to replicate (cluster)                                                   |
+|---------:|:---------------------------------------------:|:----------------------:|-------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------:|
+|  Methods |               Cronbach's alpha                | Participant strategies | python src/compute_cronbachs_alpha.py -e QuestMain > log/cronbachs_alpha.txt  |                                                              NA                                                               |
+|  Methods |              Motivation, effort               |                        |                                                                               |                                                                                                                               |
+|  Results |                      BIC                      |                        |                                                                               |                                                                                                                               |
+|  Results |                 Cost analysis                 |                        |                                                                               |                                                                                                                               |
+|  Results |                Click analysis                 |                        |                                                                               |                                                                                                                               |
+|  Results |       Computational microscope analysis       |                        |                                                                               |                                                                                                                               |
+| Appendix | Computational microscope descriptive results  |                        | `python find_stable_point_with_cm.py -e QuestMain -s questionnaires`          | `condor_submit_bid 2 submission_scripts/MPI-IS/M_03_Report_CM_Strategies.sub experiment=QuestMain subdirectory=questionnaire` |
+| Appendix |        Variance inflation factor Table        |       VIF Table        | `python generate_vif_table.py`                                                |                                                                                                                               |

@@ -33,8 +33,6 @@ if __name__ == "__main__":
     individual_items = individual_items[individual_items.columns.difference(["gender"])]
     individual_items = individual_items.set_index("pid")
 
-    individual_items
-
     questionnaire_mapping = {
         "anxiety": "Anxiety",
         "bit": "Brief Inventory of Thriving",
@@ -47,12 +45,11 @@ if __name__ == "__main__":
         "reg": "Propensity to Regret",
         "satis": "Satisfaction",
         "uppsp": "UPPSP",
-        # 'alcohol':'alcohol',
         "apathy": "apathy",
         "bis": "bis",
-        "dospert": "dospert",
-        "dospert-eb": "dospert-eb",
-        "dospert-rp": "dospert-rp",
+        "dospert.": "dospert.",
+        "dospert-eb.": "dospert-eb.",
+        "dospert-rp.": "dospert-rp.",
         "eat": "eat",
         "leb": "leb",
         "ocir": "ocir",
@@ -63,25 +60,7 @@ if __name__ == "__main__":
         matching_columns = [
             col for col in individual_items.columns if col.startswith(question_id)
         ]
-        print(
-            question_id,
-            len(matching_columns),
-            pg.cronbach_alpha(
-                individual_items[matching_columns], nan_policy="listwise"
-            ),
+        res, ci = pg.cronbach_alpha(
+            individual_items[matching_columns], nan_policy="listwise"
         )
-
-# def cronbach_to_words(alpha):
-#     if alpha > .9:
-#         return "excellent"
-#     elif alpha < .7:
-#         return "poor"
-#     else:
-#         return "acceptable"
-#
-# def print_cronbachs_alpha(res, question_name, num_questions):
-#     alpha, range = res
-#     print(f"The overall reliability of the overall {question_name} scale was
-#     {cronbach_to_words(alpha)} (${}$ items; $alpha={alpha:.2f}$, 95% C.I.: [${range[0]:.2f}$,${range[1]:.2f}$]).")
-#     print(f"The {} subscale had {cronbach_to_words()} reliability (${}$ items;
-#     $alpha={alpha:.2f}$, 95% C.I.: [${range[0]:.2f}$,${range[1]:.2f}$]).")
+        print(question_id, len(matching_columns), f"{res:0.3f}", ci)
