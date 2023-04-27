@@ -1,4 +1,4 @@
-project_path = $(save_path:/work/vfelso)/planning-depth-differences
+5project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/cluster/src/extract_best_parameters.py
 arguments = $(filename) -e $(experiment:methods_main) -s $(base_cost_function:back_dist_depth_eff_forw) -c $(cost_function:dist_depth_forw) -p $(pid) -d $(participant_file) -k $(block:test)

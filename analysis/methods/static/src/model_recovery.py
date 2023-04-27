@@ -5,40 +5,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from costometer.utils import AnalysisObject, get_static_palette, set_font_sizes
+from costometer.utils import AnalysisObject, set_font_sizes
 from statsmodels.tools.eval_measures import bic
 
 set_font_sizes(SMALL_SIZE=14)
 
-###################################################
-# This section contains my plotting functions
-###################################################
-
-
-def bic_plot(
-    optimization_data, subdirectory, experiment_name, bic_field="bic", palette=None
-):
-    if palette is None:
-        palette = get_static_palette(subdirectory, experiment_name)
-    plt.figure(figsize=(12, 8), dpi=80)
-
-    sns.barplot(
-        y="Model Name",
-        x=bic_field,
-        data=optimization_data.sort_values(by="bic")[:33],
-        palette=palette,
-    )
-
-    plt.xlabel(None)
-    plt.ylabel(None)
-
-    plt.gca().set_xlim((0.75 * min(optimization_data["bic"]), plt.gca().get_xlim()[1]))
-
-
 if __name__ == "__main__":
     """
     Example usage:
-    python src/plot_bic.py -e MainExperiment
+    python src/model_recovery.py
     """
     parser = ArgumentParser()
     parser.add_argument(

@@ -28,15 +28,15 @@ python src/construct_questionnaires_and_key.py
    Pilot:
      ```
      cd <path to irl-project>/cluster
-     condor_submit_bid 1 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=quest_first participants=quest_first output_string=quest_first
-     condor_submit_bid 1 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=quest_second participants=quest_second1 output_string=quest_second1
-     condor_submit_bid 1 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=quest_second participants=quest_second2 output_string=quest_second2
+     condor_submit_bid 16 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=quest_first participants=quest_first output_string=quest_first
+     condor_submit_bid 16 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=quest_second participants=quest_second1 output_string=quest_second1
+     condor_submit_bid 16 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=quest_second participants=quest_second2 output_string=quest_second2
      ```
    Main:
     ```
      cd <path to irl-project>/cluster
      for file_idx in {1..7};
-        do condor_submit_bid 1 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=quest_main participants=quest_main$file_idx save_path=/fast/vfelso;
+        do condor_submit_bid 16 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=quest_main participants=quest_main$file_idx save_path=/fast/vfelso;
      done
      ```
 5. Combine inferences by pid:
@@ -53,19 +53,19 @@ python src/construct_questionnaires_and_key.py
      ```
      cd <path to irl-project>/cluster
      for file_idx in {1..7};
-       do condor_submit_bid 2 submission_scripts/MPI-IS/02_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=quest_main participant_file=quest_main$file_idx output_string=quest_main$file_idx base_cost_function=back_dist_depth_eff_forw save_path=/fast/vfelso;
+       do condor_submit_bid 16 submission_scripts/MPI-IS/02_Combine_Inferences.sub cost_function=back_dist_depth_eff_forw experiment=quest_main participant_file=quest_main$file_idx output_string=quest_main$file_idx base_cost_function=back_dist_depth_eff_forw save_path=/fast/vfelso;
      done;
      ```
 6. Get MAP file:
    Pilot:
    ```
-   condor_submit_bid 1 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=quest_first base_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=quest_first save_path=/fast/vfelso;
-   condor_submit_bid 1 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=quest_second base_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=quest_second save_path=/fast/vfelso;
+   condor_submit_bid 16 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=quest_first base_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=quest_first save_path=/fast/vfelso;
+   condor_submit_bid 16 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=quest_second base_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=quest_second save_path=/fast/vfelso;
    ```
    Main:
    ```
    for file_idx in {1..7};
-    do condor_submit_bid 1 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=quest_main base_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=quest_main$file_idx save_path=/fast/vfelso;
+    do condor_submit_bid 16 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=quest_main base_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=quest_main$file_idx save_path=/fast/vfelso;
    done;
    ```
 8. Calculate factor scores:

@@ -7,7 +7,7 @@ wheel
 ipykernel
 papermill
 numpy
-pandas
+pandas==1.5.3
 pyarrow
 matplotlib
 seaborn

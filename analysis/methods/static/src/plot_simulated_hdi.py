@@ -17,6 +17,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-e",
         "--exp",
+        default="SoftmaxRecovery",
         dest="experiment_name",
         metavar="experiment_name",
     )

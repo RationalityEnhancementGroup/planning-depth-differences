@@ -1,0 +1,11 @@
+sessions:
+  - simulated/high_increasing/SoftmaxPolicy/participants_new_analysis_simulated_agents_back_dist_depth_eff_forw
+cost_function: back_dist_depth_eff_forw
+simulated: True
+prior: 'uniform'
+excluded_parameters : 'gamma,kappa'
+included_parameters: 'temp'
+block: 'test'
+positive: true
+include_null: True
+palette_name: MainExperiment

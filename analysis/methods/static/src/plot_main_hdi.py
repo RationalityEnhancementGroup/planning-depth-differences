@@ -113,3 +113,5 @@ if __name__ == "__main__":
             optimization_data[f"{parameter}"],
         )
         print(get_correlation_text(correlation_object))
+
+    optimization_data

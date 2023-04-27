@@ -28,7 +28,7 @@ This directory contains notebooks that are associated with developing the IRL me
    ```
    cd <path to project>/cluster
    condor_submit_bid 16 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=methods_main participants=methods_main save_path=/fast/vfelso;
-   condor_submit_bid 20 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=methods_main participants=methods_main block=training save_path=/fast/vfelso;
+   condor_submit_bid 16 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=methods_main participants=methods_main block=training save_path=/fast/vfelso;
 
    condor_submit_bid 16 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=irl_validation participants=irl_validation1 save_path=/fast/vfelso
    condor_submit_bid 16 submission_scripts/MPI-IS/01_Infer_Params.sub cost_function=back_dist_depth_eff_forw param_file=back_dist_depth_eff_forw experiment=irl_validation participants=irl_validation2 save_path=/fast/vfelso
@@ -72,15 +72,15 @@ This directory contains notebooks that are associated with developing the IRL me
 - [x] Prepare the parameters for simulating trajectories on the cluster (~15 minutes):
    ```
    cd <path to project>/cluster
-   condor_submit_bid 5 -i -a request_memory=10000
+   condor_submit_bid 16 -i -a request_memory=10000
    source ../env/bin/activate
-   python src/get_parameters_for_simulations.py
-   python src/get_parameters_for_optimal_simulation.py
+   ../env/bin/python src/get_parameters_for_simulations.py
+   ../env/bin/python src/get_parameters_for_optimal_simulation.py
    ```
    Once methods main best parameters are found:
    ```
-   python src/get_human_parameters_for_simulation.py
-   python src/get_human_parameters_for_simulation.py -e MainExperimentFull
+   ../env/bin/python src/get_human_parameters_for_simulation.py
+   ../env/bin/python src/get_human_parameters_for_simulation.py -e MainExperimentFull
    ```
 - [x]  At the same time, you can simulate new trajectories on the cluster (~30 minutes):
    ```
@@ -211,7 +211,7 @@ This directory contains notebooks that are associated with developing the IRL me
 > > rsync -aPzr <user>@login.cluster.is.localnet:<path to planning-depth-differences on cluster>/planning-depth-differences/analysis/methods/static/data/ analysis/methods/static/data
 > rsync -aPzr <user>@login.cluster.is.localnet:<path to planning-depth-differences on cluster>/planning-depth-differences/analysis/methods/static/figs/ analysis/methods/static/figs
 > rsync -aPzr <user>@login.cluster.is.localnet:<path to planning-depth-differences on cluster>/planning-depth-differences/cluster/data/OptimalQ cluster/data/OptimalQ
-> rsync -aPzr --include "*/*mle_and_map*" --include "*/" --exclude "*" <user>@login.cluster.is.localnet:<path to planning-depth-differences on cluster>/planning-depth-differences/data/processed/ data/processed
+> rsync -aPzr --include "*/*mle_and_map*" --include "*/" --exclude "*" vfelso@login.cluster.is.localnet:/fast/vfelso/planning-depth-differences/data/processed/ data/processed
 > rsync -aPzr --include "*/*.feather" --include "*/" --exclude "*" <user>@login.cluster.is.localnet:/fast/vfelso/planning-depth-differences/cluster/data/logliks/methods_main_training_by_pid cluster/data/logliks/
 
 > ```
@@ -230,4 +230,3 @@ condor_submit_bid 16 submission_scripts/MPI-IS/02_Combine_Inferences.sub cost_fu
    
 condor_submit_bid 16 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=c1.1 base_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=c1.1 save_path=/fast/vfelso;
 condor_submit_bid 16 submission_scripts/MPI-IS/05_Get_Best_Parameters.sub experiment=c2.1 base_cost_function=back_dist_depth_eff_forw cost_function=back_dist_depth_eff_forw participant_file=c2.1 save_path=/fast/vfelso;
-   

@@ -154,7 +154,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-a",
         "--analysis-file-name",
-        default="main_experiment_cm",
+        default="main_experiment",
         dest="analysis_file_name",
     )
     parser.add_argument(

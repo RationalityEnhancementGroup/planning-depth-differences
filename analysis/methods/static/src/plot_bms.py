@@ -13,7 +13,10 @@ from argparse import ArgumentParser
 from pathlib import Path
 from typing import Any, Dict
 
-import matlab.engine
+try:
+    import matlab.engine
+except:  # noqa : E722
+    NO_MATLAB = True
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
@@ -130,7 +133,39 @@ if __name__ == "__main__":
         )
     ]
 
-    bms_df = run_bms(optimization_data, path_to_spm=irl_path)
+    irl_path.joinpath("data/bms/inputs/").mkdir(parents=True, exist_ok=True)
+    irl_path.joinpath("data/bms/outputs/").mkdir(parents=True, exist_ok=True)
+    if NO_MATLAB:
+        if not irl_path.joinpath(
+            f"data/bms/inputs/{inputs.experiment_name}.csv"
+        ).is_file():
+            pivoted_df = optimization_data.pivot(
+                index="trace_pid", columns="Model Name", values="bic"
+            )
+            pivoted_df = pivoted_df.apply(lambda evidence: -0.5 * evidence)
+            pivoted_df.to_csv(
+                irl_path.joinpath(f"data/bms/inputs/{inputs.experiment_name}.csv")
+            )
+            quit()
+        else:
+            pivoted_df = pd.read_csv(
+                irl_path.joinpath(f"data/bms/inputs/{inputs.experiment_name}.csv")
+            )
+            bms_df = pd.read_csv(
+                irl_path.joinpath(f"data/bms/outputs/{inputs.experiment_name}.csv"),
+                header=None,
+            )
+
+            import numpy as np
+
+            for row_idx, row in bms_df.iterrows():
+                print(
+                    np.max(bms_df.loc[row_idx]),
+                    pivoted_df.columns[np.argmax(bms_df.loc[row_idx])],
+                )
+
+    else:
+        bms_df = run_bms(optimization_data, path_to_spm=irl_path)
 
     plot_bms_exceedance_probs(
         bms_df, subdirectory, experiment_name=inputs.experiment_name
