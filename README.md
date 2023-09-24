@@ -19,9 +19,9 @@ python -m pip install -r requirements.txt
 
 If you will preprocess the data, add the virtual environment as an ipython kernel:
 ```
-cd <path to irl-project>
+cd <path to planning-depth-differences>
 source env/bin/activate
-python -m ipykernel install --user --name=irl-project
+python -m ipykernel install --user --name=planning-depth-differences
 ```
 
 # How to run?
@@ -33,7 +33,7 @@ Analysis scripts should all be well documented in their respective subdirectorie
 The project structure:
 
 ```
-irl-project/
+planning-depth-differences/
 ├── analysis
 │   └── methods
 │       └── static <- analysis code for paper

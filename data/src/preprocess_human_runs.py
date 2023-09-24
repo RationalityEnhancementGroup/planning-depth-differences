@@ -50,7 +50,7 @@ def preprocess_human_data(yaml_file):
     pm.execute_notebook(
         input_path=str(input_file),
         output_path=str(output_file),
-        kernel_name="irl-project",
+        kernel_name="planning-depth-differences",
         parameters=inputs,
     )
 
