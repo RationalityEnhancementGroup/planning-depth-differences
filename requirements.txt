@@ -8,7 +8,7 @@ costometer @ git+https://github.com/RationalityEnhancementGroup/costometer.git@v
 #download_tools @ git+https://github.com/RationalityEnhancementGroup/download-tools.git@v0.0.2#egg=download_tools # noqa
 ipykernel
 papermill
-numpy<1.15 # For Gpyopt
+numpy<1.22 # For Gpyopt
 pandas<2.0 # Major breaking pandas release
 pyarrow
 matplotlib
