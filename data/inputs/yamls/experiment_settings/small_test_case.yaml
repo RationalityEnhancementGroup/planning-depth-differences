@@ -1,3 +1,0 @@
-ground_truth_file: "small_test_case"
-node_classification : {"early": [1], "late": [2, 3], "clicks": [1, 2, 3]}
-structure: 'small_test_case'

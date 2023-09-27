@@ -1,3 +1,0 @@
-ground_truth_file: "reduced_middle"
-node_classification : {"early": [1, 4, 7], "late": [2, 3, 5, 6, 8, 9], "clicks": [1, 2, 3, 4, 5, 6, 7, 8, 9]}
-structure: 'reduced_middle'

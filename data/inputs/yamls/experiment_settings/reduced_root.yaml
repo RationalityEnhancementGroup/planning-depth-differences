@@ -1,3 +1,0 @@
-ground_truth_file: "reduced_root"
-node_classification :  {"early": [1, 5], "middle": [2, 6], "late": [3, 4, 7, 8], "clicks": [1, 2, 3, 4, 5, 6, 7, 8]}
-structure: 'reduced_root'

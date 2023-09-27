@@ -1,3 +1,0 @@
-ground_truth_file: "reduced_leaf"
-node_classification : {"early": [1, 4, 7], middle: [2, 5, 8], "late": [3, 6, 9], "clicks": [1, 2, 3, 4, 5, 6, 7, 8, 9]}
-structure: 'reduced_leaf'

@@ -1,159 +1,154 @@
 import json
-from copy import deepcopy
 from pathlib import Path
+from unittest import TestCase
 
-import numpy as np
 import yaml
 from mouselab.agents import Agent
 from mouselab.cost_functions import *  # noqa : F401, F403
-from mouselab.graph_utils import annotate_mdp_graph, get_structure_properties
+from mouselab.graph_utils import get_structure_properties
 from mouselab.mouselab import MouselabEnv
 from mouselab.policies import RandomPolicy
 from toolz import curry
 
 
-@curry
-def create_env_with_cost(
-    cost_dictionary,
-    static_cost_dictionary,
-    cost_function,
-    experiment_settings,
-    experiment_setting,
-    curr_cost_details,
-):
-    curr_cost_function = cost_function(**cost_dictionary, **static_cost_dictionary)
-    curr_env = MouselabEnv.new_symmetric_registered(
-        experiment_setting, cost=curr_cost_function, **curr_cost_details["env_params"]
-    )
+class TestCostFunctions(TestCase):
+    EXPECTED_COSTS = {
+        "back_added_cost": {1: -1, 2: -1, 3: 0, 11: 0, 10: 0, 9: 0},
+        "depth_cost_weight": {1: -1, 2: -2, 3: -3, 11: -3, 10: -2, 9: -1},
+        "distance_multiplier": {
+            1: -1,
+            2: -1,
+            3: -1,
+            11: -((1**2 + 3**2) ** (1 / 2)),
+            10: -1,
+            9: -1,
+        },
+        "forw_added_cost": {1: 0, 2: 0, 3: 0, 11: -1, 10: -1, 9: 0},
+        "given_cost": {1: -1, 2: -1, 3: -1, 11: -1, 10: -1, 9: -1},
+    }
 
-    curr_env.mdp_graph = annotate_mdp_graph(
-        curr_env.mdp_graph, experiment_settings[experiment_setting]["structure_dicts"]
-    )
-    return curr_env
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.data_path = Path(__file__).resolve().parents[1] / "data"
 
+        cost_file = (
+            cls.data_path
+            / "inputs"
+            / "yamls"
+            / "cost_functions"
+            / "back_dist_depth_eff_forw.yaml"
+        )
 
-if __name__ == "__main__":
-    cost_files = (
-        Path(__file__)
-        .resolve()
-        .parents[1]
-        .glob("data/inputs/yamls/cost_functions/*.yaml")
-    )
-
-    cost_details = {}
-    for cost_file in cost_files:
         with open(cost_file, "r") as f:
-            cost_details[cost_file.stem] = yaml.safe_load(f)
+            cls.cost_details = yaml.safe_load(f)
 
-    experiment_setting_files = (
-        Path(__file__)
-        .resolve()
-        .parents[1]
-        .glob("data/inputs/yamls/experiment_settings/*.yaml")
-    )
+        experiment_setting_files = (
+            cls.data_path / "inputs" / "yamls" / "experiment_settings"
+        ).glob("*.yaml")
 
-    experiment_settings = {}
-    for experiment_setting_file in experiment_setting_files:
-        with open(experiment_setting_file, "r") as f:
-            experiment_settings[experiment_setting_file.stem] = yaml.safe_load(f)
+        cls.experiment_settings = {}
+        for experiment_setting_file in experiment_setting_files:
+            with open(experiment_setting_file, "r") as f:
+                cls.experiment_settings[experiment_setting_file.stem] = yaml.safe_load(
+                    f
+                )
 
-            if "structure" in experiment_settings[experiment_setting_file.stem]:
-                with open(
-                    Path(__file__)
-                    .parents[1]
-                    .joinpath(
-                        f"data/inputs/exp_inputs/structure/"
-                        f"{experiment_settings[experiment_setting_file.stem]['structure']}.json"  # noqa : E501
-                    ),
-                    "rb",
-                ) as f:
-                    structure_data = json.load(f)
-
-                experiment_settings[experiment_setting_file.stem][
-                    "structure_dicts"
-                ] = get_structure_properties(structure_data)
-            else:
-                experiment_settings[experiment_setting_file.stem][
-                    "structure_dicts"
-                ] = None
-
-    for experiment_setting in ["high_increasing", "high_decreasing", "low_constant"]:
-        print(experiment_setting)
-        cost_envs = {}
-
-        for cost_name, curr_cost_details in cost_details.items():
-            if "cost_function" in curr_cost_details:
-                cost_function = eval(curr_cost_details["cost_function"])
-            else:
-                cost_function = eval(cost_name)
-
-            for model, model_name in eval(curr_cost_details["model_name"]).items():
-                if len(model) < 2:
-                    constant_parameter = {
-                        cost_parameter_arg: curr_cost_details["constant_values"][
-                            cost_parameter_arg
-                        ]
-                        for cost_parameter_arg in model
-                    }
-                    varied_parameters = [
-                        cost_parameter_arg
-                        for cost_parameter_arg in curr_cost_details[
-                            "cost_parameter_args"
-                        ]
-                        if cost_parameter_arg not in constant_parameter.keys()
-                    ]
-                    curr_env = create_env_with_cost(
-                        static_cost_dictionary=constant_parameter,
-                        cost_function=cost_function,
-                        experiment_settings=experiment_settings,
-                        experiment_setting=experiment_setting,
-                        curr_cost_details=curr_cost_details,
+                if "structure" in cls.experiment_settings[experiment_setting_file.stem]:
+                    structure_file = (
+                        cls.data_path
+                        / "inputs"
+                        / "exp_inputs"
+                        / "structure"
+                        / f"{cls.experiment_settings[experiment_setting_file.stem]['structure']}.json"  # noqa : E501
                     )
+                    with open(
+                        structure_file,
+                        "rb",
+                    ) as f:
+                        structure_data = json.load(f)
 
-                    if model_name not in cost_envs:
-                        cost_envs[model_name] = [
-                            (
-                                varied_parameters,
-                                deepcopy(curr_env),
-                                cost_name,
-                                cost_function,
-                            )
-                        ]
-                    else:
-                        cost_envs[model_name].append(
-                            (
-                                varied_parameters,
-                                deepcopy(curr_env),
-                                cost_name,
-                                cost_function,
-                            )
-                        )
+                    cls.experiment_settings[experiment_setting_file.stem][
+                        "structure_dicts"
+                    ] = get_structure_properties(structure_data)
+                else:
+                    cls.experiment_settings[experiment_setting_file.stem][
+                        "structure_dicts"
+                    ] = None
 
-            for model_name, envs in cost_envs.items():
-                print(model_name)
-                if len(envs) > 1:
-                    for cost_parameter_val in [2, 5, 10]:
-                        mouselab_envs = [
-                            env[1]({param: cost_parameter_val for param in env[0]})
-                            for env in envs
-                        ]
+    @staticmethod
+    @curry
+    def create_env_with_cost(
+        cost_dictionary,
+        static_cost_dictionary,
+        cost_function,
+        experiment_settings,
+        experiment_setting,
+        curr_cost_details,
+    ):
+        curr_cost_function = cost_function(**cost_dictionary, **static_cost_dictionary)
+        curr_env = MouselabEnv.new_symmetric_registered(
+            experiment_setting,
+            cost=curr_cost_function,
+            **curr_cost_details["env_params"],
+            mdp_graph_properties=experiment_settings[experiment_setting][
+                "structure_dicts"
+            ],
+        )
 
-                    agent = Agent()
-                    agent.register(mouselab_envs[0])
+        return curr_env
 
-                    agent.register(RandomPolicy())
+    def test_cost(self):
+        for cost_parameter in self.cost_details["cost_parameter_args"]:
+            env = self.create_env_with_cost(
+                {
+                    p: int(p == cost_parameter)
+                    for p in self.cost_details["cost_parameter_args"]
+                },
+                static_cost_dictionary={},
+                cost_function=eval(self.cost_details["cost_function"]),
+                experiment_settings=self.experiment_settings,
+                experiment_setting="high_increasing",
+                curr_cost_details=self.cost_details,
+            )
 
-                    trace = agent.run_many(num_episodes=10)
+            for action, result in self.EXPECTED_COSTS[cost_parameter].items():
+                self.assertEqual(env.step(action)[1], result)
 
-                    for mouselab_env in mouselab_envs[1:]:
-                        mouselab_env.ground_truth = mouselab_envs[0].ground_truth
-                        rewards = []
-                        for episode in trace["actions"]:
-                            mouselab_env.reset()
-                            curr_episode_rewards = []
-                            for action in episode:
-                                _, reward, _, _ = mouselab_env.step(action)
-                                curr_episode_rewards.append(reward)
-                            rewards.append(curr_episode_rewards)
+    def test_trajectory_rewards(self):
+        for experiment_setting in self.experiment_settings:
+            cost_function = eval(self.cost_details["cost_function"])
 
-                        assert np.all(trace["rewards"] == np.asarray(rewards))
+            curr_env = self.create_env_with_cost(
+                static_cost_dictionary={},
+                cost_function=cost_function,
+                experiment_settings=self.experiment_settings,
+                experiment_setting=experiment_setting,
+                curr_cost_details=self.cost_details,
+            )
+
+            for cost_parameter_val in [2, 5, 10]:
+                mouselab_env = curr_env(
+                    cost_dictionary={
+                        param: cost_parameter_val
+                        for param in self.cost_details["cost_parameter_args"]
+                    }
+                )
+
+                agent = Agent()
+                agent.register(mouselab_env)
+
+                agent.register(RandomPolicy())
+
+                trace = agent.run_many(num_episodes=10)
+
+                mouselab_env.ground_truth = mouselab_env.ground_truth
+                rewards = []
+                for episode in trace["actions"]:
+                    mouselab_env.reset()
+                    curr_episode_rewards = []
+                    for action in episode:
+                        _, reward, _, _ = mouselab_env.step(action)
+                        curr_episode_rewards.append(reward)
+                    rewards.append(curr_episode_rewards)
+
+                self.assertEqual(trace["rewards"], rewards)

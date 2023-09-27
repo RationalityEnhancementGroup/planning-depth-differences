@@ -1,9 +1,11 @@
+#may need: python -m pip install --upgrade setuptools==65.5.0
 dill
-wheel
+# due to gym 0.21.0
+wheel<0.40.0
 #mcl_toolbox @ git+https://github.com/RationalityEnhancementGroup/mcl_toolbox.git@main#egg=mcl_toolbox  # noqa
-#mouselab @ git+https://github.com/RationalityEnhancementGroup/mouselab-mdp-tools.git@dev#egg=mouselab  # noqa
-#costometer @ git+https://github.com/RationalityEnhancementGroup/costometer.git@dev#egg=costometer # noqa
-#download_tools @ git+https://github.com/RationalityEnhancementGroup/download-tools.git@v0.0.1#egg=download_tools # noqa
+mouselab @ git+https://github.com/RationalityEnhancementGroup/mouselab-mdp-tools.git@dev#egg=mouselab  # noqa
+costometer @ git+https://github.com/RationalityEnhancementGroup/costometer.git@v0.0.3#egg=costometer # noqa
+#download_tools @ git+https://github.com/RationalityEnhancementGroup/download-tools.git@v0.0.2#egg=download_tools # noqa
 ipykernel
 papermill
 numpy
@@ -12,6 +14,7 @@ pyarrow
 matplotlib
 seaborn
 pingouin
+pyyaml
 colorcet
 pre-commit
 rsa
