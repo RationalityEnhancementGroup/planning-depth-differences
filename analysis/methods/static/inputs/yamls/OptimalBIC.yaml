@@ -1,11 +1,9 @@
 sessions:
-        - OptimalQ/high_increasing
-cost_functions:
-        - linear_depth
+  - simulated/high_increasing/OptimalQ/no_added_cost_simulated_agents_back_dist_depth_eff_forw
+cost_function: back_dist_depth_eff_forw
 simulated: True
-number_trials : 30
-group: False
-prior: 'expon'
+prior: 'uniform'
+block: 'test'
 include_null: True
-preferred_cost: 'linear_depth'
-params: [""]
+excluded_parameters : 'back_added_cost,depth_cost_weight,distance_multiplier,forw_added_cost,gamma,given_cost,kappa'
+included_parameters: ''

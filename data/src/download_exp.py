@@ -36,16 +36,17 @@ def download_exp(experiment_name, data_path=None, save_path=None):
     # load database URIs
     load_database_uris(data_path)
 
-    example_participant_dicts = download_from_database(
-        data_path.joinpath(f"hit_ids/{experiment_name}.txt"), kwargs["database_key"]
-    )
-    save_participant_files(
-        example_participant_dicts,
-        experiment_name,
-        labeler=data_path.joinpath("mturk_id_mapping.pickle"),
-        save_path=save_path,
-        bonus_function=bonus_function,
-    )
+    for session in kwargs["sessions"]:
+        example_participant_dicts = download_from_database(
+            data_path.joinpath(f"hit_ids/{session}.txt"), kwargs["database_key"]
+        )
+        save_participant_files(
+            example_participant_dicts,
+            session,
+            labeler=data_path.joinpath("mturk_id_mapping.pickle"),
+            save_path=save_path,
+            bonus_function=bonus_function,
+        )
 
 
 if __name__ == "__main__":
@@ -61,9 +62,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     data_path = Path(__file__).resolve().parents[1]
 
-    if args.experiment_name:
-        download_exp(args.experiment_name, data_path=data_path)
-    else:
-        for hit in data_path.glob("hit_ids/*.txt"):
-            experiment_name = hit.stem
-            download_exp(experiment_name, data_path=data_path)
+    download_exp(args.experiment_name, data_path=data_path)

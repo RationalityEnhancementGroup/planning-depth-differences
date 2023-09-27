@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from collections import Counter
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -9,10 +10,8 @@ from costometer.utils import (
     AnalysisObject,
     get_correlation_text,
     get_static_palette,
-    get_trajectories_from_participant_data,
     get_wilcoxon_text,
     set_font_sizes,
-    traces_to_df,
 )
 
 set_font_sizes()
@@ -23,10 +22,15 @@ set_font_sizes()
 
 
 def plot_participant_average_likelihoods(
-    optimization_data, likelihood_field, static_directory, palette=None, dodge=False
+    optimization_data,
+    likelihood_field,
+    subdirectory,
+    experiment_name,
+    palette=None,
+    dodge=False,
 ):
     if palette is None:
-        palette = get_static_palette(static_directory)
+        palette = get_static_palette(subdirectory, experiment_name)
     plt.figure(figsize=(16, 8), dpi=80)
     ax = sns.pointplot(
         y=likelihood_field,
@@ -51,7 +55,7 @@ def plot_participant_average_likelihoods(
 
     plt.xticks([], [])
     plt.xlabel("Participant")
-    plt.ylabel("Average action likelihood (log scale, last ten trials)")
+    plt.ylabel("Average action likelihood (log scale, last twenty trials)")
     ax.legend(loc="best")
     ax.set_yscale("log")
 
@@ -70,13 +74,14 @@ def plot_participant_average_likelihoods(
 def plot_trial_by_trial_logliks(
     optimization_data,
     likelihood_field,
-    static_directory,
+    subdirectory,
+    experiment_name,
     agg_func=np.mean,
     palette=None,
     dodge=False,
 ):
     if palette is None:
-        palette = get_static_palette(static_directory)
+        palette = get_static_palette(subdirectory, experiment_name)
     plt.figure(figsize=(11.7, 8.27))
     ax = sns.pointplot(
         y=likelihood_field,
@@ -117,78 +122,77 @@ if __name__ == "__main__":
         dest="experiment_name",
         metavar="experiment_name",
     )
+    parser.add_argument(
+        "-s",
+        "--subdirectory",
+        default="methods/static",
+        dest="experiment_subdirectory",
+        metavar="experiment_subdirectory",
+    )
 
     inputs = parser.parse_args()
 
-    static_directory = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[4]
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
 
-    analysis_obj = AnalysisObject(inputs.experiment_name, irl_path=irl_path)
-
-    trace_df = traces_to_df(
-        get_trajectories_from_participant_data(analysis_obj.mouselab_trials)
-    )
-    num_actions = (
-        trace_df.groupby(["pid", "i_episode"])
-        .count()["actions"]
-        .reset_index()
-        .rename(columns={"actions": "num_actions"})
+    analysis_obj = AnalysisObject(
+        inputs.experiment_name,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
     )
 
     trial_by_trial_df = analysis_obj.get_trial_by_trial_likelihoods()
-    trial_by_trial_df = trial_by_trial_df.merge(num_actions, on=["pid", "i_episode"])
 
-    trial_by_trial_df["avg"] = trial_by_trial_df.apply(
-        lambda row: np.exp(row["likelihood"]) / row["num_actions"], axis=1
-    )
+    # look only at relevant block
+    mouselab_data = analysis_obj.dfs["mouselab-mdp"]
+    relevant_trials = mouselab_data[
+        mouselab_data["block"].isin(analysis_obj.block.split(","))
+    ]["trial_index"].unique()
+    trial_by_trial_df = trial_by_trial_df[
+        trial_by_trial_df["i_episode"].isin(relevant_trials)
+    ]
 
-    relevant_trials = analysis_obj.mouselab_trials[
-        analysis_obj.mouselab_trials["block"].isin(analysis_obj.block)
-    ]["trial_index"]
+    best_model = trial_by_trial_df[trial_by_trial_df["best_model"] == 1][
+        "Model Name"
+    ].unique()[0]
 
     plot_participant_average_likelihoods(
-        trial_by_trial_df[trial_by_trial_df["i_episode"].isin(relevant_trials)],
+        trial_by_trial_df,
         "avg",
-        static_directory,
+        subdirectory,
+        experiment_name=inputs.experiment_name,
         dodge=0.25,
     )
     plt.savefig(
-        static_directory.joinpath(
-            f"figs/{inputs.experiment_name}_participant_lik_ten.png"
+        subdirectory.joinpath(
+            f"figs/{inputs.experiment_name}_participant_lik_twenty.png"
         ),
         bbox_inches="tight",
     )
 
     plot_trial_by_trial_logliks(
-        trial_by_trial_df[trial_by_trial_df["i_episode"].isin(relevant_trials)],
+        trial_by_trial_df,
         "avg",
-        static_directory,
+        subdirectory,
+        experiment_name=inputs.experiment_name,
         agg_func=np.mean,
         dodge=0.25,
     )
-    plt.savefig(
-        static_directory.joinpath(f"figs/{inputs.experiment_name}_average_ll.png")
-    )
+    plt.savefig(subdirectory.joinpath(f"figs/{inputs.experiment_name}_average_ll.png"))
 
     plot_trial_by_trial_logliks(
-        trial_by_trial_df[trial_by_trial_df["i_episode"].isin(relevant_trials)],
+        trial_by_trial_df,
         "avg",
-        static_directory,
+        subdirectory,
+        experiment_name=inputs.experiment_name,
         agg_func=np.sum,
         dodge=0.25,
     )
-    plt.savefig(
-        static_directory.joinpath(f"figs/{inputs.experiment_name}_total_ll.png")
-    )
+    plt.savefig(subdirectory.joinpath(f"figs/{inputs.experiment_name}_total_ll.png"))
 
     participant_df = (
-        trial_by_trial_df[trial_by_trial_df["i_episode"].isin(relevant_trials)]
-        .groupby(["Model Name", "pid"])
-        .mean()
-        .reset_index()
+        trial_by_trial_df.groupby(["Model Name", "pid"]).mean().reset_index()
     )
-
-    from collections import Counter
 
     max_avg = participant_df.loc[participant_df.groupby(["pid"]).idxmax()["avg"]][
         ["pid", "Model Name", "avg"]
@@ -208,7 +212,7 @@ if __name__ == "__main__":
 
     print("==========")
     print(
-        "Number of participants, for each model, where that model explains "
+        "Number of participants, for top three models, where that model explains "
         "them the best (via meta-level action likelihoods)"
     )
     print("----------")
@@ -220,26 +224,9 @@ if __name__ == "__main__":
         )
     )
 
-    full_models = participant_df[
-        participant_df["Model Name"].isin(
-            ["Distance and Effort Costs", "Effort Cost and Planning Depth"]
-        )
-    ]
-    print("==========")
-    print(
-        "Number of participants, for top two models only, where that model explains "
-        "them the best (via meta-level action likelihoods)"
-    )
-    print("----------")
-    print(
-        Counter(
-            full_models.loc[full_models.groupby(["pid"]).idxmax()["avg"]]["Model Name"]
-        )
-    )
-
     print("==========")
     for model in participant_df["Model Name"].unique():
-        if model != "Effort Cost and Planning Depth":
+        if model != best_model:
             print("----------")
             print(
                 f"Difference between meta-level action likelihoods "
@@ -248,41 +235,37 @@ if __name__ == "__main__":
             print("----------")
             wilcoxon_object = pg.wilcoxon(
                 participant_df[participant_df["Model Name"] == model]["avg"],
-                participant_df[
-                    participant_df["Model Name"] == "Effort Cost and Planning Depth"
-                ]["avg"],
+                participant_df[participant_df["Model Name"] == best_model]["avg"],
                 alternative="two-sided",
             )
             print(
-                f"M_{{\\text{{{model}}}}} = {np.median(participant_df[participant_df['Model Name'] == model]['avg']):.2f}\n"  # noqa: E501
-                f"M_{{\\text{{Effort Cost and Planning Depth}}}} ="
-                f"{np.median(participant_df[participant_df['Model Name'] == 'Effort Cost and Planning Depth']['avg']):.2f}"  # noqa: E501
+                f"{get_wilcoxon_text(wilcoxon_object)}; "
+                f"$M_{{{best_model.replace('$','')}}} ="
+                f"{np.median(participant_df[participant_df['Model Name'] == best_model]['avg']):.3f}$; "  # noqa: E501
+                f"$M_{{{model.replace('$','')}}} = "
+                f"{np.median(participant_df[participant_df['Model Name'] == model]['avg']):.3f}$"  # noqa: E501
             )
-            print(get_wilcoxon_text(wilcoxon_object))
-
-    effort_costs = (
-        participant_df.groupby(["Model Name"]).describe()["avg"].reset_index()
-    )
-    effort_costs["mean"] = effort_costs["mean"].apply(lambda entry: f"{entry:.3f}")
-    effort_costs["std"] = effort_costs["std"].apply(lambda entry: f"{entry:.3f}")
 
     print("==========")
     print("Meta-level action table")
     print("----------")
-    for row_idx, row in effort_costs.sort_values(by="mean", ascending=False).iterrows():
-        print(f"{row['Model Name']} & {row['mean']} & {row['std']} \\\ ")  # noqa
+    for row_idx, row in (
+        participant_df.groupby(["Model Name"])
+        .describe()["avg"]
+        .sort_values(by="mean", ascending=False)
+        .iterrows()
+    ):
+        print(f"{row_idx} & {row['mean']:.3f} & {row['std']:.3f} \\\ ")  # noqa
 
     print("==========")
-    print("Correlation between episode number and meta-level action log likelihood")
+    print("Correlation between episode and meta-level action log likelihood")
     print("----------")
     correlation = pg.corr(
-        trial_by_trial_df[
-            (trial_by_trial_df["i_episode"].isin(relevant_trials))
-            & (participant_df["Model Name"] == "Effort Cost and Planning Depth")
-        ]["avg"],
-        trial_by_trial_df[
-            (trial_by_trial_df["i_episode"].isin(relevant_trials))
-            & (participant_df["Model Name"] == "Effort Cost and Planning Depth")
-        ]["i_episode"],
+        trial_by_trial_df[(trial_by_trial_df["Model Name"] == best_model)]
+        .groupby("i_episode", as_index=False)
+        .mean()["avg"],
+        trial_by_trial_df[(trial_by_trial_df["Model Name"] == best_model)]
+        .groupby("i_episode", as_index=False)
+        .mean()["i_episode"],
     )
     print(get_correlation_text(correlation))

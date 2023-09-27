@@ -29,7 +29,13 @@ def preprocess_human_data(yaml_file):
         f"Preprocessing_{inputs['analysis_run']}.ipynb"
     )
 
-    if "column_mapping" in inputs:
+    if "final_quest" in inputs and inputs["final_quest"]:
+        input_file = (
+            Path(__file__)
+            .parents[1]
+            .joinpath("templates/preprocessing_human_quest_main.ipynb")
+        )
+    elif "column_mapping" in inputs:
         input_file = (
             Path(__file__)
             .parents[1]
@@ -44,7 +50,7 @@ def preprocess_human_data(yaml_file):
     pm.execute_notebook(
         input_path=str(input_file),
         output_path=str(output_file),
-        kernel_name="irl-project",
+        kernel_name="planning-depth-differences",
         parameters=inputs,
     )
 

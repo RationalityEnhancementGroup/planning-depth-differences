@@ -1,10 +1,10 @@
-project_path = $(save_path:/home/vfelso)/irl-project
+project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/analysis/methods/static/src/investigate_structure_knowledge.py
-arguments = $(filename) -e $(experiment:TrialByTrial)
-output = $(project_path)/analysis/methods/static/log//$(output_string:out_M8).stdout
-error  = log/$(output_string:out_M8).stderr
-log   = log/$(output_string:out_M8).log
+arguments = $(filename) -e $(experiment:MainExperiment) -s $(subdirectory:methods/static)
+output = $(project_path)/analysis/$(subdirectory:methods/static)/log/post_$(experiment:MainExperiment).stdout
+error  = log/post_$(experiment:MainExperiment).stderr
+log   = log/post_$(experiment:MainExperiment).log
 request_memory = 50000
 request_cpus = 1
 

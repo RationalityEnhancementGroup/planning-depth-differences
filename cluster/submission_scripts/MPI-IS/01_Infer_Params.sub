@@ -1,0 +1,21 @@
+project_path = $(save_path:/work/vfelso)/planning-depth-differences
+executable = $(project_path)/env/bin/python
+filename = $(project_path)/cluster/src/infer_parameters_static.py
+arguments = $(filename) -e $(experiment) -p $(participants) -c $(cost_function:dist_depth_eff_forw) -t $(temperature_file:uniform) -v=$(reward_line) -a=$(kappa:full) -g=$(gamma:full) -k=$(block:test)
+output = log/$(output_string:out_1)_$(Process).stdout
+error  = log/$(output_string:out_1)_$(Process).stderr
+log   = log/$(output_string:out_1)_$(Process).log
+request_memory = $(memory:8000)
+max_materialize = 1850
+coresize        = 0
+request_cpus = 1
+MaxTime = 12600
+NumRetries = 2
+ 
+periodic_hold = (JobStatus =?= 2) && ((CurrentTime - JobCurrentStartDate) >= $(MaxTime))
+periodic_hold_reason = ifThenElse(JobRunCount <= $(NumRetries), "Job runtime exceeded", "Job runtime exceeded, no more retries left")
+periodic_hold_subcode = ifThenElse(JobRunCount <= $(NumRetries), 1, 2)
+ 
+periodic_release = ( (JobStatus =?= 5) && (HoldReasonCode =?= 3) && (HoldReasonSubCode =?= 1))
+
+queue reward_line from $(project_path)/cluster/parameters/cost/$(param_file:params_full_four).txt

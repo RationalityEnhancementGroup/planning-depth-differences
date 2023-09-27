@@ -1,0 +1,25 @@
+cost_parameters:
+  back_added_cost:
+    search_space: "hp.choice('back_added_cost', [-10.0, -7.5, -5.0, -2.5, -1.0, 0.0])"
+    prior: "lambda val : np.log(1/6)"
+  depth_cost_weight:
+    search_space: "hp.choice('depth_cost_weight', [-5.0, -2.5, -1.0, 0.0, 1.0, 2.5, 5.0, 7.5, 10.0])"
+    prior: "lambda val : np.log(1/9)"
+  distance_multiplier:
+    search_space: "hp.choice('distance_multiplier', [0.0, 1.0, 2.5, 5.0, 7.5, 10.0])"
+    prior: "lambda val :  np.log(1/6)"
+  forw_added_cost:
+    search_space: "hp.choice('forw_added_cost', [-10.0, -7.5, -5.0, -2.5, -1.0, 0.0])"
+    prior: "lambda val :  np.log(1/6)"
+  given_cost:
+    search_space: "hp.choice('given_cost', [-5.0, -2.5, -1.0, 0.0, 1.0, 2.5, 5.0, 7.5, 10.0])"
+    prior: "lambda val : np.log(1/9)"
+policy_parameters:
+  kappa:
+    search_space: "hp.choice('kappa', [0.0, 0.25, 0.5, 0.75, 0.9, 1])"
+    prior: "lambda val : np.log(1/6)"
+  gamma:
+    search_space: "hp.choice('gamma', [0.1, 0.3, 0.5, 0.75, 0.9, 1])"
+    prior: "lambda val : np.log(1/6)"
+  temp:
+    search_space: "hp.choice('temp', [0.1, 1, 10, 100])"

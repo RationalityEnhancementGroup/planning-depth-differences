@@ -1,0 +1,52 @@
+Fri Apr 14 14:13:00 CEST 2023
+Error importing rpy2: r_home is None. Try python -m rpy2.situation
+Number of strategies per participant in trial subset (1 is better)
+       type
+count      
+1       446
+2       151
+3        65
+4        44
+5        14
+6        14
+7         9
+8         3
+9         3
+10        1
+Into percentages for reporting
+           type
+count          
+1      0.594667
+2      0.201333
+3      0.086667
+4      0.058667
+5      0.018667
+6      0.018667
+7      0.012000
+8      0.004000
+9      0.004000
+10     0.001333
+Number of trials using mode strategy per participant in trial subset (20 is better)
+       type
+count      
+5         4
+6         7
+7         9
+8        17
+9        16
+10       20
+11       22
+12       25
+13       25
+14       26
+15       26
+16       22
+17       31
+18       10
+19       45
+20      445
+T-Test 1 vs number of strategies per participant
+$t(749) = 16.33$, $p < 0.001$
+$M: 1.863, SD: 1.446$
+Most common strategies (strategy number, number of participants)
+[(21, 395), (57, 43), (31, 42), (30, 38), (26, 27), (37, 26), (63, 14), (76, 14), (50, 13), (16, 11), (67, 10), (23, 9), (85, 9), (40, 8), (27, 8), (22, 7), (18, 7), (64, 7), (43, 7), (17, 6), (58, 5), (65, 5), (11, 5), (28, 4), (88, 4), (42, 4), (59, 2), (49, 2), (36, 2), (80, 2), (44, 1), (66, 1), (33, 1), (61, 1), (29, 1), (7, 1), (53, 1), (51, 1), (87, 1), (71, 1), (86, 1), (79, 1), (78, 1), (4, 1)]

@@ -1,0 +1,33 @@
+Thu Mar 30 19:40:18 CEST 2023
+----------
+Correlation between forw_added_cost and BIC
+----------
+$r(729) = -0.53$, $p < 0.001$, 95\%\ C.\ I.\: $[-0.58, -0.48]$
+----------
+Correlation between back_added_cost and BIC
+----------
+$r(729) = -0.50$, $p < 0.001$, 95\%\ C.\ I.\: $[-0.56, -0.45]$
+----------
+Correlation between given_cost and BIC
+----------
+$r(729) = -0.00$, $p = 0.935$, 95\%\ C.\ I.\: $[-0.08, 0.07]$
+----------
+Correlation between distance_multiplier and BIC
+----------
+$r(729) = -0.53$, $p < 0.001$, 95\%\ C.\ I.\: $[-0.58, -0.47]$
+----------
+Correlation between depth_cost_weight and BIC
+----------
+$r(729) = -0.26$, $p < 0.001$, 95\%\ C.\ I.\: $[-0.33, -0.19]$
+----------
+Correlation between temp and BIC
+----------
+$r(729) = 0.65$, $p < 0.001$, 95\%\ C.\ I.\: $[0.60, 0.69]$
+----------
+Correlation between kappa and BIC
+----------
+Potentially no variance of one parameter...
+----------
+Correlation between gamma and BIC
+----------
+Potentially no variance of one parameter...

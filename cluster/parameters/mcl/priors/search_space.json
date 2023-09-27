@@ -1,0 +1,155 @@
+{
+    "model_params": {
+        "standard_dev": {
+            "type": "uniform",
+            "range": "[np.log(1e-3), np.log(1e3)]"
+        },
+        "num_samples": {
+            "type": "quniform",
+            "range": [1, 10, 1]
+        },
+        "pr_weight": {
+            "type" : "uniform",
+            "range": [0.01, 5]
+        },
+        "delay_scale": {
+            "type": "uniform",
+            "range": "[np.log(1e-2), np.log(5)]"
+        },
+        "subjective_cost": {
+            "type": "uniform",
+            "range": "[np.log(1e-2), np.log(60)]"
+        },
+        "lr": {
+            "type": "uniform",
+            "range":  "[np.log(1e-9), np.log(1e-1)]"
+        },
+        "inverse_temperature": {
+            "type": "uniform",
+            "range": "[np.log(1e-3), np.log(1e3)]"
+        },
+        "gamma": {
+            "type": "uniform",
+            "range": "[np.log(0.90), np.log(1)]"
+        },
+        "bernoulli_threshold": {
+            "type": "uniform",
+            "range": [1, 50]
+        },
+        "num_strategies": {
+            "type": "quniform",
+            "range": [1, 5, 1]
+        },
+        "eps": {
+            "type": "uniform",
+            "range": [1e-3, 1]
+        },
+        "value_lr": {
+            "type": "uniform",
+            "range": "[np.log(1e-10), np.log(1e-1)]"
+        },
+        "kappa": {
+            "type": "uniform",
+            "range": [1, 10]
+        },
+        "beta": {
+            "type": "uniform",
+            "range": [1, 10]
+        },
+        "strategy_weight": {
+            "type": "normal",
+            "range": [0, 1]
+        },
+        "gaussian_prior": {
+            "type": "uniform",
+            "range": "[np.log(1e-3), np.log(1)]"
+        },
+        "bernoulli_prior": {
+            "type": "uniform",
+            "range": "[np.log(1), np.log(10)]"
+        },
+        "tau": {
+            "type": "uniform",
+            "range": "[np.log(1e-3), np.log(1e3)]"
+        },
+        "gaussian_var": {
+            "type": "uniform",
+            "range": "[np.log(1e-3), np.log(1e3)]"
+        }
+    },
+    "decision_params": {
+        "adaptive_satisficing": {
+            "a": {
+                "type": "uniform",
+                "range": "[np.log(1e-2), np.log(1e2)]"
+            },
+            "b": {
+                "type": "uniform",
+                "range": "[np.log(1e-2), np.log(1e2)]"
+            }
+        },
+        "threshold": {
+            "theta": {
+                "type": "uniform",
+                "range": [0, 1]
+            }
+        },
+        "best_path_difference": {
+            "theta": {
+                "type": "uniform",
+                "range": [-150, 150]
+            }
+        },
+        "best_payoff": {
+            "theta": {
+                "type": "uniform",
+                "range": "[np.log(0.01), np.log(1e2)]"
+            }
+        },
+        "average_payoff": {
+            "theta": {
+                "type": "uniform",
+                "range": "[np.log(0.01), np.log(1e2)]"
+            }
+        },
+        "noisy_memory_best_payoff":
+        {
+            "kappa": {
+                "type" : "uniform",
+                "range": [1, 10]
+            },
+            "beta": {
+                "type": "uniform",
+                "range": [1, 5]
+            },
+            "theta": {
+                "type": "uniform",
+                "range": "[np.log(0.01), np.log(1e2)]"
+            }
+        },
+        "confidence_bound": {
+            "threshold_mean": {
+                "type": "uniform",
+                "range": [-15, 55]
+            },
+            "threshold_var": {
+                "type": "uniform",
+                "range": [1, 100]
+            }
+        },
+        "feature": {
+            "type": "uniform",
+            "range": [0, 1]
+        }
+    },
+    "general": {
+        "pr_weight": {
+            "type": "uniform",
+            "range": "[0.01,5]"
+        },
+        "lik_sigma": {
+            "type": "uniform",
+            "range": "[np.log(1e-3), np.log(1e3)]"
+        }
+    }
+}

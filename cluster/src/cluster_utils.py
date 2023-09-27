@@ -9,36 +9,240 @@ from costometer.utils import (
     get_states_for_trace,
     get_trajectories_from_participant_data,
 )
+from mouselab.distributions import Categorical
 from mouselab.envs.registry import register
 from mouselab.envs.reward_settings import high_increasing_reward
 
 
-def create_test_env() -> None:
+def create_test_env(name) -> None:
     """
     Register a (given) test environment for unit tests
-
-    :return: None
+    :return: None, registers test env
     """
-    register(
-        name="small_increasing",
-        branching=[2, 2],
-        reward_inputs=["depth"],
-        reward_dictionary=high_increasing_reward,
-    )
+    if name == "small_test_case":
+        register(
+            name=name,
+            branching=[1, 2],
+            reward_inputs="depth",
+            reward_dictionary={1: Categorical([-500]), 2: Categorical([-60, 60])},
+        )
+    elif name == "cogsci_learning":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-8, -4, 4, 8]),  # usually ([-4, -2, 2, 4]),
+                2: Categorical([-8, -4, 4, 8]),
+                3: Categorical([-48, -24, 24, 48]),
+            },
+        )
+    elif name == "mini_variance":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-2, -1, 1, 2]),  # usually ([-4, -2, 2, 4]),
+                2: Categorical([-8, -4, 4, 8]),
+                3: Categorical([-48, -24, 24, 48]),
+            },
+        )
+    elif name == "zero_variance":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([1, 1, 1, 1]),  # usually ([-4, -2, 2, 4]),
+                2: Categorical([-8, -4, 4, 8]),
+                3: Categorical([-48, -24, 24, 48]),
+            },
+        )
+    elif name == "large_variance":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-48, -24, 24, 48]),  # usually ([-4, -2, 2, 4]),
+                2: Categorical([-8, -4, 4, 8]),
+                3: Categorical([-48, -24, 24, 48]),
+            },
+        )
+    elif name == "reduced_variance":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, 4]),
+                2: Categorical([-8, 8]),
+                3: Categorical([-48, 48]),
+            },
+        )
+    elif name == "reduced_root":
+        register(
+            name=name,
+            branching=[2, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary=high_increasing_reward,
+        )
+    elif name == "reduced_leaf":
+        register(
+            name=name,
+            branching=[3, 1, 1],
+            reward_inputs="depth",
+            reward_dictionary=high_increasing_reward,
+        )
+    elif name == "reduced_middle":
+        register(
+            name=name,
+            branching=[3, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-48, -24, 24, 48]),
+            },
+        )
+    elif name == "high_increasing0.1":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-0.8, -0.4, 0.4, 0.8]),
+                3: Categorical([-0.48, -0.24, 0.24, 0.48]),
+            },
+        )
+    elif name == "high_increasing0.2":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-1.6, -0.8, 0.8, 1.6]),
+                3: Categorical([-1.92, -0.96, 0.96, 1.92]),
+            },
+        )
+    elif name == "high_increasing0.3":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-2.4, -1.2, 1.2, 2.4]),
+                3: Categorical([-4.32, -2.16, 2.16, 4.32]),
+            },
+        )
+    elif name == "high_increasing0.4":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-3.2, -1.6, 1.6, 3.2]),
+                3: Categorical([-7.68, -3.84, 3.84, 7.68]),
+            },
+        )
+
+    elif name == "high_increasing0.5":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-4.0, -2.0, 2.0, 4.0]),
+                3: Categorical([-12.0, -6.0, 6.0, 12.0]),
+            },
+        )
+    elif name == "high_increasing0.75":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-6.0, -3.0, 3.0, 6.0]),
+                3: Categorical([-27.0, -13.5, 13.5, 27.0]),
+            },
+        )
+    elif name == "high_increasing0.85":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-6.8, -3.4, 3.4, 6.8]),
+                3: Categorical([-34.68, -17.34, 17.34, 34.68]),
+            },
+        )
+    elif name == "high_increasing0.9":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-7.2, -3.6, 3.6, 7.2]),
+                3: Categorical([-38.88, -19.44, 19.44, 38.88]),
+            },
+        )
+    elif name == "high_increasing0.95":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-7.6, -3.8, 3.8, 7.6]),
+                3: Categorical([-43.32, -21.66, 21.66, 43.32]),
+            },
+        )
+    elif name == "high_increasing0.975":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-7.8, -3.9, 3.9, 7.8]),
+                3: Categorical([-45.63, -22.81, 22.81, 45.63]),
+            },
+        )
+    elif name == "high_increasing0.999":
+        register(
+            name=name,
+            branching=[3, 1, 2],
+            reward_inputs="depth",
+            reward_dictionary={
+                1: Categorical([-4, -2, 2, 4]),
+                2: Categorical([-7.99, -4.0, 4.0, 7.99]),
+                3: Categorical([-47.9, -23.95, 23.95, 47.9]),
+            },
+        )
 
 
 def get_human_trajectories(
     exp_name: str,
     data_path: Union[str, bytes, os.PathLike] = None,
     pids: List[int] = None,
+    blocks: List[str] = None,
+    include_last_action: bool = False,
 ) -> List[Dict[str, List]]:
     """
     Get human trajectories from experiment in data folder
-
     :param exp_name: name experiment is saved under
     :param data_path: path where data is saved, including YAMLs with \
     experiment information
     :param pids:
+    :param include_last_action:
     :return: traces for all participants
     """
     if not data_path:
@@ -57,6 +261,8 @@ def get_human_trajectories(
     traces = get_trajectories_from_participant_data(
         mouselab_data[mouselab_data["pid"].isin(pids)],
         experiment_setting=experiment_setting,
+        blocks=blocks,
+        include_last_action=include_last_action,
     )
 
     return traces
@@ -65,15 +271,19 @@ def get_human_trajectories(
 def get_simulated_trajectories(
     file_pattern: str,
     experiment_setting: str,
+    pids: List[int] = None,
     simulated_trajectory_path: Union[str, bytes, os.PathLike] = None,
+    additional_mouselab_kwargs: dict = None,
 ) -> List[Dict[str, List]]:
     """
     Given path to simulated trajectories and a file pattern, outputs traces \
     to be used in inference
-
     :param file_pattern: corresponding to the type of simulated trajectory \
     we're interested in, as a glob partner
+    :param experiment_settings
+    :param pids
     :param simulated_trajectory_path: where the simulated trajectories are located
+    :param additional_mouselab_kwargs
     :return:
     """
     if simulated_trajectory_path is None:
@@ -82,13 +292,17 @@ def get_simulated_trajectories(
         )
 
     if "*" in file_pattern:
+        print(simulated_trajectory_path.joinpath(file_pattern))
         files = simulated_trajectory_path.glob(file_pattern)
     else:
-        files = [file_pattern]
+        files = [simulated_trajectory_path.joinpath(file_pattern)]
 
     mouselab_data = pd.concat(
         [pd.read_csv(sim_file, index_col=0) for sim_file in files]
     )
+
+    if pids:
+        mouselab_data = mouselab_data[mouselab_data["pid"].isin(pids)]
 
     mouselab_data = mouselab_data.fillna(value="None")
     sim_cols = [col for col in list(mouselab_data) if "sim_" in col]
@@ -108,7 +322,10 @@ def get_simulated_trajectories(
 
     state_info = imploded_by_episode_df.apply(
         lambda row: get_states_for_trace(
-            row["actions"], experiment_setting, ground_truth=row["ground_truth"]
+            row["actions"],
+            experiment_setting,
+            ground_truth=row["ground_truth"],
+            **additional_mouselab_kwargs,
         ),
         axis=1,
     ).to_dict()
@@ -137,7 +354,6 @@ def get_args_from_yamls(
 ) -> Dict[Any, Any]:
     """
     Loads and combined all information from input YAMLs into one dictionary
-
     :param input_dictionary: dictionary of input : input variable, for Namespace \
     object from ArgParse ars(obj) will give you this
     :param attributes: attributes expected to be in Namespace object

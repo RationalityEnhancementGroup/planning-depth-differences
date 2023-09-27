@@ -1,8 +1,0 @@
-cost_parameter_args:
-        - given_cost
-        - distance_multiplier
-cost_parameter_names:
-        - Effort Cost
-        - Distance Cost
-constant_values: {'given_cost': 1, 'distance_multiplier': 0}
-model_name: "{(): 'Distance and Effort Costs',('given_cost',): 'Distance Cost Only',('distance_multiplier',): 'Effort Cost Only',('given_cost', 'distance_multiplier'): 'Null (Given Costs)'}"

@@ -1,0 +1,14 @@
+cost_function: "lambda depth_cost_weight, distance_multiplier, forw_added_cost, given_cost : lambda state, action, graph: linear_depth(depth_cost_weight=depth_cost_weight, static_cost_weight=0)(state, action, graph=graph) + forward_search_cost(inspection_cost=0, added_cost=forw_added_cost, include_start=1.00)(state, action, graph=graph) + distance_graph_cost(given_cost=given_cost, distance_multiplier=distance_multiplier)(state, action, graph=graph)"
+cost_parameter_args:
+        - depth_cost_weight
+        - distance_multiplier
+        - forw_added_cost
+        - given_cost
+cost_parameter_names:
+        - Cost of Prospection
+        - Distance Cost
+        - Forward Added Cost
+        - Effort Cost
+env_params: {'include_last_action': true, 'last_action_info' : 'distance'}
+constant_values: {'forw_added_cost': 0,  'given_cost': 1, 'distance_multiplier': 0, 'depth_cost_weight': 0, 'temp' : 1, 'kappa' : 1, 'gamma': 1}
+latex_mapping : {'forw_added_cost': 'w_{forw.}',  'given_cost': 'w_{eff.}', 'distance_multiplier': 'w_{dist.}', 'depth_cost_weight': 'w_{depth}', 'temp' : '\beta', 'kappa' : '\kappa', 'gamma': '\gamma'}

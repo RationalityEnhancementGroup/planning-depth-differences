@@ -11,9 +11,7 @@ from costometer.utils import (
     get_kruskal_wallis_text,
     get_mann_whitney_text,
     get_static_palette,
-    get_trajectories_from_participant_data,
     set_font_sizes,
-    traces_to_df,
 )
 
 set_font_sizes()
@@ -24,10 +22,14 @@ set_font_sizes()
 
 
 def plot_score_average_likelihoods(
-    optimization_data_trials, likelihood_field, static_directory, palette=None
+    optimization_data_trials,
+    likelihood_field,
+    subdirectory,
+    experiment_name,
+    palette=None,
 ):
     if palette is None:
-        palette = get_static_palette(static_directory)
+        palette = get_static_palette(subdirectory, experiment_name)
     plt.figure(figsize=(12, 8), dpi=80)
     ax = sns.pointplot(
         y=likelihood_field,
@@ -69,35 +71,38 @@ if __name__ == "__main__":
         "--exp",
         dest="experiment_name",
     )
+    parser.add_argument(
+        "-s",
+        "--subdirectory",
+        default="methods/static",
+        dest="experiment_subdirectory",
+        metavar="experiment_subdirectory",
+    )
     inputs = parser.parse_args()
 
-    static_directory = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[4]
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
 
-    analysis_obj = AnalysisObject(inputs.experiment_name, irl_path=irl_path)
-
-    trace_df = traces_to_df(
-        get_trajectories_from_participant_data(analysis_obj.mouselab_trials)
+    analysis_obj = AnalysisObject(
+        inputs.experiment_name,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
     )
-    num_actions = (
-        trace_df.groupby(["pid", "i_episode"])
-        .count()["actions"]
-        .reset_index()
-        .rename(columns={"actions": "num_actions"})
-    )
-
+    optimization_data = analysis_obj.query_optimization_data()
     trial_by_trial_df = analysis_obj.get_trial_by_trial_likelihoods()
-    trial_by_trial_df = trial_by_trial_df.merge(num_actions, on=["pid", "i_episode"])
 
-    trial_by_trial_df["avg"] = trial_by_trial_df.apply(
-        lambda row: np.exp(row["likelihood"] / row["num_actions"]), axis=1
-    )
+    best_model = trial_by_trial_df[trial_by_trial_df["best_model"] == 1][
+        "Model Name"
+    ].unique()[0]
 
-    relevant_trials = analysis_obj.mouselab_trials[
-        analysis_obj.mouselab_trials["block"].isin(analysis_obj.block)
-    ]["trial_index"]
+    mouselab_data = analysis_obj.dfs["mouselab-mdp"]
+    relevant_trials = mouselab_data[
+        mouselab_data["block"].isin(analysis_obj.block.split(","))
+    ]["trial_index"].unique()
 
-    melted_df = analysis_obj.quest.melt(
+    model_params = list(analysis_obj.cost_details["constant_values"])
+
+    melted_df = analysis_obj.dfs["quiz-and-demo"].melt(
         id_vars=["pid", "run"], value_vars=analysis_obj.post_quizzes, value_name="score"
     )
     melted_df = melted_df.dropna(subset=["score"])
@@ -105,8 +110,8 @@ if __name__ == "__main__":
     full_score_pids = scores[
         scores["score"] == len(analysis_obj.post_quizzes)
     ].pid.unique()
+    print(f"Number of participants with full score: {len(full_score_pids)}")
 
-    optimization_data = analysis_obj.query_optimization_data()
     optimization_data = optimization_data.merge(
         trial_by_trial_df[trial_by_trial_df["i_episode"].isin(relevant_trials)]
         .groupby(["pid", "Model Name"])
@@ -117,18 +122,21 @@ if __name__ == "__main__":
     )
     optimization_data = optimization_data.merge(scores, on=["pid"])
 
-    plot_score_average_likelihoods(optimization_data, "avg", static_directory)
+    plot_score_average_likelihoods(
+        optimization_data,
+        "avg",
+        subdirectory,
+        experiment_name=inputs.experiment_name,
+    )
     plt.ylabel("Average planning operation likelihood")
     plt.savefig(
-        static_directory.joinpath(f"figs/{inputs.experiment_name}_score_lik.png"),
+        subdirectory.joinpath(f"figs/{inputs.experiment_name}_score_lik.png"),
         bbox_inches="tight",
     )
 
-    optimization_data = optimization_data[
-        optimization_data["Model Name"] == "Effort Cost and Planning Depth"
-    ]
+    optimization_data = optimization_data[optimization_data["Model Name"] == best_model]
 
-    for obs_var in ["avg", "static_cost_weight", "depth_cost_weight"]:
+    for obs_var in ["avg"] + model_params:
         print("==========")
         print(f"Comparisons for {obs_var}")
         omnibus = pg.kruskal(data=optimization_data, dv=obs_var, between="score")

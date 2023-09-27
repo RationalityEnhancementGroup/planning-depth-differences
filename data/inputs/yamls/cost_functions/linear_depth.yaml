@@ -1,8 +1,0 @@
-cost_parameter_args:
-        - static_cost_weight
-        - depth_cost_weight
-cost_parameter_names:
-        - Effort Cost
-        - Cost of Prospection
-constant_values: {'static_cost_weight': 1, 'depth_cost_weight': 0}
-model_name: "{(): 'Effort Cost and Planning Depth',('static_cost_weight',): 'Planning Depth Only',('depth_cost_weight',): 'Effort Cost Only',('static_cost_weight', 'depth_cost_weight'): 'Null (Given Costs)'}"

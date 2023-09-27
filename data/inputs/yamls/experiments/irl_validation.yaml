@@ -1,4 +1,5 @@
 database_key: NEW
+participants_to_remove: []
 bonus_function: 'lambda row: round(.002*([350, 600, 100, 600, 850, 350, 850, 1100, 600, 1100, 1350, 850, 350, 600, 100, 600, 850, 350, 850, 1100, 600, 1100, 1350, 850][int(row["cond"])]+row["score"]),2)'
 simulated: false
 sessions:
@@ -7,6 +8,7 @@ experiment_setting: 'high_increasing'
 COST : {'irlexp9_23': [5,10,2,5,10,2,5,10,2,5,10,2,5,10,2,5,10,2,5,10,2,5,10,2]}
 DEPTH : {'irlexp9_23':[0,0,0,2,2,2,5,5,5,10,10,10,0,0,0,2,2,2,5,5,5,10,10,10]}
 html_survey_names: {}
+num_parts: null
 old_experiment: False
 manual_age_mapping: {}
 experiment_specific_mapping: {}

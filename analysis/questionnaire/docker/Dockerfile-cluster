@@ -1,0 +1,16 @@
+# This is a combination of docker-b3 by Richard Torkar: https://github.com/torkar/docker-b3 (MIT License) with Rocker (GPL 2.0)
+
+FROM rocker/tidyverse:4.2
+
+COPY helper_scripts /helper_scripts
+
+# install rstan etc.
+RUN /helper_scripts/install_stan.sh
+
+# configure
+RUN /helper_scripts/install_env.sh
+
+# d/l any repos needed
+RUN /helper_scripts/install_repl.sh
+
+CMD ["R"]

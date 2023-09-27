@@ -1,16 +1,12 @@
 sessions:
-        - irl_validation
-post_quizzes:
-        - 'mouselab-quiz-post_Q0'
-        - 'mouselab-quiz-post_Q1'
-        - 'mouselab-quiz-post_Q2'
-        - 'mouselab-quiz-post_Q3'
-cost_functions:
-        - linear_depth
-group: false
-prior : 'expon'
-block: ['test', 'fairy']
+  - irl_validation
+cost_function: back_dist_depth_eff_forw
+prior : 'uniform'
+excluded_parameters : 'gamma,kappa'
+included_parameters: 'temp'
+block: 'test'
+positive: true
 include_null : true
-preferred_cost: 'linear_depth'
 title_extras: ''
 simulated: False
+palette_name: MainExperiment

@@ -1,10 +1,10 @@
-project_path = $(save_path:/home/vfelso)/irl-project
+project_path = $(save_path:/work/vfelso)/planning-depth-differences
 executable = $(project_path)/env/bin/python
 filename = $(project_path)/analysis/methods/static/src/plot_validation_hdi.py
-arguments = $(filename) -e $(experiment:ValidationExperiment) -c $(cost_function:linear_depth)
-output = $(project_path)/analysis/methods/static/log/$(output_string:out_M13).stdout
-error  = log/$(output_string:out_M13).stderr
-log   = log/$(output_string:out_M13).log
+arguments = $(filename)
+output = $(project_path)/analysis/$(subdirectory:methods/static)/log/HDI_$(experiment:ValidationExperiment).stdout
+error  = log/HDI_$(experiment:ValidationExperiment).stderr
+log   = log/HDI_$(experiment:ValidationExperiment).log
 request_memory = 20000
 request_cpus = 1
 

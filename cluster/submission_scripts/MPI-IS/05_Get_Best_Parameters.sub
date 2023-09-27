@@ -1,0 +1,13 @@
+project_path = $(save_path:/work/vfelso)/planning-depth-differences
+executable = $(project_path)/env/bin/python
+filename = $(project_path)/cluster/src/extract_best_parameters.py
+arguments = $(filename) -e $(experiment:methods_main) -s $(base_cost_function:back_dist_depth_eff_forw) -c $(cost_function:dist_depth_forw) -p $(pid) -d $(participant_file) -k $(block:test)
+output = log/$(output_string:out_5)_$(pid).stdout
+error  = log/$(output_string:out_5)_$(pid).stderr
+log   = log/$(output_string:out_5)_$(pid).log
+request_memory = 8000
+max_materialize = 1850
+coresize        = 0
+request_cpus = 1
+
+queue pid from $(project_path)/cluster/parameters/pids/$(participant_file).txt

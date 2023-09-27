@@ -1,0 +1,55 @@
+Fri Apr 14 19:12:12 CEST 2023
+-------
+Model parameter: forw_added_cost
+$r(697) = -0.14$, $p < 0.001$, 95\%\ C.\ I.\: $[-0.21, -0.06]$
+Model parameter: distance_multiplier
+$r(697) = 0.05$, $p = 0.162$, 95\%\ C.\ I.\: $[-0.02, 0.13]$
+Model parameter: back_added_cost
+$r(697) = -0.05$, $p = 0.187$, 95\%\ C.\ I.\: $[-0.12, 0.02]$
+Model parameter: depth_cost_weight
+$r(697) = 0.14$, $p < 0.001$, 95\%\ C.\ I.\: $[0.07, 0.21]$
+Model parameter: temp
+$r(697) = -0.06$, $p = 0.110$, 95\%\ C.\ I.\: $[-0.13, 0.01]$
+Model parameter: given_cost
+$r(697) = -0.06$, $p = 0.090$, 95\%\ C.\ I.\: $[-0.14, 0.01]$
+-------
+Error importing rpy2: r_home is None. Try python -m rpy2.situation
+cm_11
+Mann-Whitney $U=2682.50$, $p = 0.034$, two-sided
+M (strategy): 46.800, M (not strategy): 31.704
+cm_21
+Mann-Whitney $U=54686.50$, $p = 0.027$, two-sided
+M (strategy): 30.465, M (not strategy): 33.319
+cm_26
+Mann-Whitney $U=11708.00$, $p < 0.001$, two-sided
+M (strategy): 41.200, M (not strategy): 31.463
+cm_85
+Mann-Whitney $U=1621.00$, $p = 0.045$, two-sided
+M (strategy): 26.125, M (not strategy): 31.878
+-------
+Forward strategy cluster
+Mann-Whitney $U=11612.00$, $p = 0.035$, greater
+M (strategy): 36.379, M (not strategy): 31.614
+-------
+Sanity check -- forward trials should be correlated with forward bonus
+$r(700) = -0.84$, $p < 0.001$, 95\%\ C.\ I.\: $[-0.86, -0.82]$
+Correlation between age and structure understanding
+$r(697) = -0.08$, $p = 0.027$, 95\%\ C.\ I.\: $[-0.16, -0.01]$
+Correlation between age and forward trials
+$r(697) = 0.14$, $p < 0.001$, 95\%\ C.\ I.\: $[0.07, 0.21]$
+Correlation between structure understanding and forward trials
+$r(700) = -0.08$, $p = 0.029$, 95\%\ C.\ I.\: $[-0.16, -0.01]$
+-------
+Model parameter: forw_added_cost
+$r(657) = -0.08$, $p = 0.044$, 95\%\ C.\ I.\: $[-0.15, -0.00]$
+Model parameter: distance_multiplier
+$r(657) = 0.05$, $p = 0.162$, 95\%\ C.\ I.\: $[-0.02, 0.13]$
+Model parameter: back_added_cost
+$r(657) = -0.06$, $p = 0.133$, 95\%\ C.\ I.\: $[-0.13, 0.02]$
+Model parameter: depth_cost_weight
+$r(657) = 0.10$, $p = 0.009$, 95\%\ C.\ I.\: $[0.03, 0.18]$
+Model parameter: temp
+$r(657) = -0.06$, $p = 0.104$, 95\%\ C.\ I.\: $[-0.14, 0.01]$
+Model parameter: given_cost
+$r(657) = -0.04$, $p = 0.364$, 95\%\ C.\ I.\: $[-0.11, 0.04]$
+-------

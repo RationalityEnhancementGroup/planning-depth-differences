@@ -25,12 +25,23 @@ if __name__ == "__main__":
         dest="experiment_name",
         metavar="experiment_name",
     )
+    parser.add_argument(
+        "-s",
+        "--subdirectory",
+        default="methods/static",
+        dest="experiment_subdirectory",
+        metavar="experiment_subdirectory",
+    )
     inputs = parser.parse_args()
 
-    data_path = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[4]
+    data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
 
-    analysis_obj = AnalysisObject(inputs.experiment_name, irl_path=irl_path)
+    analysis_obj = AnalysisObject(
+        inputs.experiment_name,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
+    )
 
     assert (
         len(
@@ -63,7 +74,6 @@ if __name__ == "__main__":
     mode_counts = []
     strategy_counts = []
     for pid, strategies in exp.participant_strategies.items():
-
         last_strategies = strategies[-20:]
 
         mode_vals.append(["last", mode(last_strategies).mode])
@@ -98,7 +108,7 @@ if __name__ == "__main__":
         .count()
     )
 
-    print("Into percentags for reporting")
+    print("Into percentages for reporting")
     print(
         strategy_count_df[strategy_count_df["type"] == "last"]
         .groupby(["count"])

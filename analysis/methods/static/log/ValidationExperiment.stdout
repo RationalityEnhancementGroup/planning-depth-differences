@@ -1,0 +1,72 @@
+Thu Mar 30 19:37:14 CEST 2023
+----------
+Difference in behavior between test and fairy blocks: pctg_late
+----------
+           W-val alternative         p-val       RBC      CLES
+Wilcoxon  8935.0   two-sided  8.889934e-12 -0.485252  0.411611
+----------
+Difference in behavior between test and fairy blocks: num_nodes
+----------
+           W-val alternative         p-val       RBC      CLES
+Wilcoxon  2867.5   two-sided  5.473011e-42 -0.884036  0.224264
+==========
+----------
+ANOVA results for dv: pctg_late, between: DEPTH, within: block
+----------
+DEPTH: $F(3, 331) = 6.57, p < 0.001$
+block: $F(1, 331) = 95.76, p < 0.001$
+Interaction: $F(3, 331) = 21.11, p < 0.001$
+
+----------
+ANOVA results for dv: pctg_late, between: block order, within: block
+----------
+FAIRY_GOD_CONDITION: $F(1, 333) = 0.00, p = 0.978$
+block: $F(1, 333) = 83.75, p < 0.001$
+Interaction: $F(1, 333) = 11.88, p < 0.001$
+
+==========
+----------
+Correlation between pctg_late and DEPTH for block: fairy
+----------
+Spearman's $\rho(335) = -0.07$, $p = 0.230$, 95\%\ C.\ I.\: $[-0.17, 0.04]$
+----------
+Correlation between pctg_late and DEPTH for block: test
+----------
+Spearman's $\rho(335) = -0.33$, $p < 0.001$, 95\%\ C.\ I.\: $[-0.42, -0.23]$
+----------
+Correlation between pctg_late and DEPTH for block: training
+----------
+Spearman's $\rho(335) = -0.16$, $p = 0.004$, 95\%\ C.\ I.\: $[-0.26, -0.05]$
+----------
+ANOVA results for dv: num_nodes, between: COST, within: block
+----------
+COST: $F(2, 332) = 0.56, p = 0.574$
+block: $F(1, 332) = 236.01, p < 0.001$
+Interaction: $F(2, 332) = 3.42, p = 0.034$
+
+----------
+ANOVA results for dv: num_nodes, between: block order, within: block
+----------
+FAIRY_GOD_CONDITION: $F(1, 333) = 0.52, p = 0.470$
+block: $F(1, 333) = 235.61, p < 0.001$
+Interaction: $F(1, 333) = 5.27, p = 0.022$
+
+==========
+----------
+Correlation between num_nodes and COST for block: fairy
+----------
+Spearman's $\rho(335) = 0.09$, $p = 0.113$, 95\%\ C.\ I.\: $[-0.02, 0.19]$
+----------
+Correlation between num_nodes and COST for block: test
+----------
+Spearman's $\rho(335) = -0.07$, $p = 0.198$, 95\%\ C.\ I.\: $[-0.18, 0.04]$
+----------
+Correlation between num_nodes and COST for block: training
+----------
+Spearman's $\rho(335) = -0.07$, $p = 0.217$, 95\%\ C.\ I.\: $[-0.17, 0.04]$
+Difference in block order for clicks in fairy block
+Mann-Whitney $U=12711.00$, $p = 0.137$, two-sided
+Difference in block order for clicks in test block
+Mann-Whitney $U=14997.00$, $p = 0.273$, two-sided
+Difference in block order for clicks in training block
+Mann-Whitney $U=13908.00$, $p = 0.893$, two-sided

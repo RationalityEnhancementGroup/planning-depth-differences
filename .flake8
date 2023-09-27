@@ -1,5 +1,6 @@
 [flake8]
 max-line-length = 88
-extend-ignore = E203, W503
+# black ignores, ignore documentation not yet done, B023 because it usually catches false positives
+extend-ignore = E203, W503, D100, D101, D102, D103, D104, D107, B023
 per-file-ignores =
     */__init__.py: F401

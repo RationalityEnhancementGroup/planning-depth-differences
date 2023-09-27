@@ -1,0 +1,107 @@
+Fri Mar 31 10:59:03 CEST 2023
+Statistics for spread of parameters
+w_{back.} & $8.13$ ($3.22$)
+w_{dist.} & $6.53$ ($3.90$)
+\beta & $1.31$ ($8.17$)
+w_{depth} & $6.22$ ($3.82$)
+w_{eff.} & $8.36$ ($3.11$)
+w_{forw.} & $7.19$ ($3.52$)
+----------
+Correlation between spread of back_added_cost and temperature
+----------
+$r(729) = 0.01$, $p = 0.842$, 95\%\ C.\ I.\: $[-0.07, 0.08]$
+----------
+Correlation between spread of distance_multiplier and temperature
+----------
+$r(729) = -0.28$, $p < 0.001$, 95\%\ C.\ I.\: $[-0.34, -0.21]$
+----------
+Correlation between spread of temp and temperature
+----------
+$r(729) = 0.10$, $p = 0.005$, 95\%\ C.\ I.\: $[0.03, 0.18]$
+----------
+Correlation between spread of depth_cost_weight and temperature
+----------
+$r(729) = -0.39$, $p < 0.001$, 95\%\ C.\ I.\: $[-0.45, -0.33]$
+----------
+Correlation between spread of given_cost and temperature
+----------
+$r(729) = 0.11$, $p = 0.003$, 95\%\ C.\ I.\: $[0.04, 0.18]$
+----------
+Correlation between spread of forw_added_cost and temperature
+----------
+$r(729) = -0.11$, $p = 0.002$, 95\%\ C.\ I.\: $[-0.18, -0.04]$
+----------
+Amount of time true back_added_cost is in the outputted interval
+----------
+0.99
+----------
+Amount of time true distance_multiplier is in the outputted interval
+----------
+1.00
+----------
+Amount of time true temp is in the outputted interval
+----------
+1.00
+----------
+Amount of time true depth_cost_weight is in the outputted interval
+----------
+0.99
+----------
+Amount of time true given_cost is in the outputted interval
+----------
+1.00
+----------
+Amount of time true forw_added_cost is in the outputted interval
+----------
+0.99
+----------
+Difference between error when true back_added_cost parameter value is in outputted interval vs not.
+----------
+Mann-Whitney $U=454.00$, $p = 0.010$, two-sided
+----------
+Difference between error when true distance_multiplier parameter value is in outputted interval vs not.
+----------
+Mann-Whitney $U=708.50$, $p = 0.946$, two-sided
+----------
+Difference between error when true temp parameter value is in outputted interval vs not.
+----------
+Mann-Whitney $U=427.50$, $p = 0.649$, two-sided
+----------
+Difference between error when true depth_cost_weight parameter value is in outputted interval vs not.
+----------
+Mann-Whitney $U=2064.00$, $p = 0.127$, two-sided
+----------
+Difference between error when true given_cost parameter value is in outputted interval vs not.
+----------
+Mann-Whitney $U=580.50$, $p = 0.153$, two-sided
+----------
+Difference between error when true forw_added_cost parameter value is in outputted interval vs not.
+----------
+Mann-Whitney $U=1575.00$, $p = 0.211$, two-sided
+----------
+Correlation between error in MAP estimate and spread
+----------
+w_{back.} & $r(729) = 0.39$ & $p < 0.001$ & 95\%\ C.\ I.\: $[0.33, 0.45]$
+w_{dist.} & $r(729) = 0.49$ & $p < 0.001$ & 95\%\ C.\ I.\: $[0.44, 0.55]$
+\beta & $r(729) = 0.01$ & $p = 0.778$ & 95\%\ C.\ I.\: $[-0.06, 0.08]$
+w_{depth} & $r(729) = 0.44$ & $p < 0.001$ & 95\%\ C.\ I.\: $[0.37, 0.49]$
+w_{eff.} & $r(729) = 0.36$ & $p < 0.001$ & 95\%\ C.\ I.\: $[0.30, 0.43]$
+w_{forw.} & $r(729) = 0.39$ & $p < 0.001$ & 95\%\ C.\ I.\: $[0.32, 0.45]$
+----------
+Correlation between MAP estimate and spread
+----------
+w_{back.} & $r(729) = 0.44$ & $p < 0.001$ & 95\%\ C.\ I.\: $[0.38, 0.49]$
+w_{dist.} & $r(729) = 0.47$ & $p < 0.001$ & 95\%\ C.\ I.\: $[0.41, 0.52]$
+\beta & $r(729) = 0.10$ & $p = 0.006$ & 95\%\ C.\ I.\: $[0.03, 0.17]$
+w_{depth} & $r(729) = 0.28$ & $p < 0.001$ & 95\%\ C.\ I.\: $[0.21, 0.34]$
+w_{eff.} & $r(729) = 0.14$ & $p < 0.001$ & 95\%\ C.\ I.\: $[0.06, 0.21]$
+w_{forw.} & $r(729) = 0.51$ & $p < 0.001$ & 95\%\ C.\ I.\: $[0.46, 0.57]$
+----------
+Correlation between true value and spread
+----------
+w_{back.} & $r(729) = 0.07$ & $p = 0.060$ & 95\%\ C.\ I.\: $[-0.00, 0.14]$
+w_{dist.} & $r(729) = 0.44$ & $p < 0.001$ & 95\%\ C.\ I.\: $[0.38, 0.50]$
+\beta & $r(729) = 0.10$ & $p = 0.005$ & 95\%\ C.\ I.\: $[0.03, 0.18]$
+w_{depth} & $r(729) = 0.44$ & $p < 0.001$ & 95\%\ C.\ I.\: $[0.38, 0.50]$
+w_{eff.} & $r(729) = 0.32$ & $p < 0.001$ & 95\%\ C.\ I.\: $[0.26, 0.39]$
+w_{forw.} & $r(729) = 0.16$ & $p < 0.001$ & 95\%\ C.\ I.\: $[0.09, 0.23]$

@@ -1,0 +1,13 @@
+sessions:
+        - quest_first
+cost_function: back_dist_depth_eff_forw
+loadings: Modified_WiseEtAl2020_weights
+group: false
+prior : 'uniform'
+excluded_parameters : 'gamma,kappa'
+included_parameters: 'temp'
+block: 'test'
+positive: null
+include_null : true
+title_extras: ''
+simulated: False

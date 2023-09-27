@@ -1,9 +1,0 @@
-cost_parameter_args:
-        - inspection_cost
-        - added_cost
-        - include_start
-cost_parameter_names:
-        - Effort Cost
-        - Added Cost
-constant_values: {'inspection_cost': 1, 'added_cost': 0}
-model_name: "{(): 'Forward Search Bonus and Effort Cost',('inspection_cost',): 'Forward Search Bonus Only',('added_cost',): 'Effort Cost Only',('inspection_cost', 'added_cost'): 'Null (Given Costs)'}"

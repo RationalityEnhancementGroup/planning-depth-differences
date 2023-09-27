@@ -1,0 +1,3 @@
+ground_truth_file: '312_24_4_2_extended'
+node_classification : {"early": [1, 5, 9], "middle": [2, 6, 10], "late": [3, 4, 7, 8, 11, 12], "clicks": [1, 5, 9, 2, 6, 10, 3, 4, 7, 8, 11, 12]}
+structure: '312_2_4_24'

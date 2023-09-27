@@ -5,16 +5,17 @@ post_quizzes:
         - 'mouselab-quiz-post_Q1'
         - 'mouselab-quiz-post_Q2'
         - 'mouselab-quiz-post_Q3'
-cost_functions:
-        - backward_search_cost
-        - distance_graph_cost
-        - forward_search_cost
-        - linear_depth
-#        - neighbor_search_cost
-group: false
-prior : 'expon'
-block: ['test']
+cost_function: back_dist_depth_eff_forw
+prior : 'uniform'
+excluded_parameters : 'gamma,kappa'
+included_parameters: 'temp'
+block: 'test'
 include_null : true
-preferred_cost: 'linear_depth'
 title_extras: ''
 simulated: False
+simulated_param_run: participants
+simulated_bic: true
+trial_by_trial_models:
+        - 'gamma,kappa'
+        - 'back_added_cost,gamma,kappa'
+        - 'gamma,given_cost,kappa'

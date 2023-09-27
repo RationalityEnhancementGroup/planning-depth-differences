@@ -2,16 +2,12 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
 import pingouin as pg
-import yaml
 from costometer.utils import (
     AnalysisObject,
     get_anova_text,
     get_correlation_text,
     get_mann_whitney_text,
-    get_trajectories_from_participant_data,
-    traces_to_df,
 )
 
 if __name__ == "__main__":
@@ -20,95 +16,77 @@ if __name__ == "__main__":
         "-e",
         "--exp",
         dest="experiment_name",
-        default="ValidationCostModel",
+        default="ValidationExperiment",
         type=str,
     )
     parser.add_argument(
-        "-c",
-        "--cost-function",
-        dest="cost_function",
-        default="linear_depth",
-        type=str,
+        "-s",
+        "--subdirectory",
+        default="methods/static",
+        dest="experiment_subdirectory",
+        metavar="experiment_subdirectory",
     )
     inputs = parser.parse_args()
 
-    data_path = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[4]
+    data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
 
-    analysis_obj = AnalysisObject(inputs.experiment_name, irl_path=irl_path)
-
-    optimization_data = analysis_obj.add_individual_variables(
-        analysis_obj.query_optimization_data(),
-        variables_of_interest=["DEPTH", "COST", "FAIRY_GOD_CONDITION", "cond"],
-    )
-    optimization_data = optimization_data[
-        optimization_data["Model Name"] == "Effort Cost and Planning Depth"
-    ]
-
-    # read in experiment setting variables
-    yaml_path = irl_path.joinpath(
-        f"data/inputs/yamls/experiment_settings/{analysis_obj.experiment_setting}.yaml"
-    )
-    with open(yaml_path, "r") as stream:
-        experiment_details = yaml.safe_load(stream)
-
-    participant_trajectory = traces_to_df(
-        get_trajectories_from_participant_data(
-            mouselab_mdp_dataframe=analysis_obj.mouselab_trials,
-            experiment_setting=analysis_obj.experiment_setting,
-        )
+    analysis_obj = AnalysisObject(
+        inputs.experiment_name,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
     )
 
-    for classification, nodes in experiment_details["node_classification"].items():
-        participant_trajectory[classification] = participant_trajectory[
-            "actions"
-        ].apply(lambda action: action in nodes)
-
-    analysis_obj.mouselab_trials = pd.merge(
-        analysis_obj.mouselab_trials,
-        participant_trajectory.groupby(["pid", "i_episode"])
-        .sum()[experiment_details["node_classification"]]
-        .reset_index(),
-        left_on=["pid", "trial_index"],
-        right_on=["pid", "i_episode"],
+    mouselab_data = analysis_obj.dfs["mouselab-mdp"]
+    mouselab_data["pctg_late"] = mouselab_data.apply(
+        lambda row: row["num_late"] / (row["num_nodes"] + np.finfo(float).eps), axis=1
     )
 
-    node_classification_per_block = analysis_obj.mouselab_trials.groupby(
+    node_classification_per_block = mouselab_data.groupby(
         ["block", "pid"], as_index=False
     ).mean()[
-        ["block", "pid", "FAIRY_GOD_CONDITION"]
-        + list(experiment_details["node_classification"].keys())
+        [
+            "block",
+            "pid",
+            "FAIRY_GOD_CONDITION",
+            "DEPTH",
+            "COST",
+            "pctg_late",
+            "num_nodes",
+        ]
+        + [
+            f"num_{node_classification}"
+            for node_classification in analysis_obj.experiment_details[
+                "node_classification"
+            ].keys()
+        ]
     ]
 
-    results_df = node_classification_per_block.merge(
-        optimization_data[
-            ["pid", "DEPTH", "COST", "temp", "depth_cost_weight", "static_cost_weight"]
-        ]
-    )
-
-    results_df["pctg_late"] = results_df.apply(
-        lambda row: row["late"] / (row["clicks"] + np.finfo(float).eps), axis=1
-    )
-
-    for metric in ["pctg_late", "clicks"]:
+    for metric in ["pctg_late", "num_nodes"]:
         print("----------")
         print(f"Difference in behavior between test and fairy blocks: {metric}")
         print("----------")
         comparison = pg.wilcoxon(
-            results_df[results_df["block"] == "test"].sort_values(["pid"])[metric],
-            results_df[results_df["block"] == "fairy"].sort_values(["pid"])[metric],
+            node_classification_per_block[
+                node_classification_per_block["block"] == "test"
+            ].sort_values(["pid"])[metric],
+            node_classification_per_block[
+                node_classification_per_block["block"] == "fairy"
+            ].sort_values(["pid"])[metric],
         )
 
         print(comparison)
 
     print("==========")
-    for analysis_pair in [("pctg_late", "DEPTH"), ("clicks", "COST")]:
+    for analysis_pair in [("pctg_late", "DEPTH"), ("num_nodes", "COST")]:
         dv, between = analysis_pair
         print("----------")
         print(f"ANOVA results for dv: {dv}, between: {between}, within: block")
         print("----------")
         anova_object = pg.mixed_anova(
-            data=results_df[results_df["block"].isin(["test", "fairy"])],
+            data=node_classification_per_block[
+                node_classification_per_block["block"].isin(["test", "fairy"])
+            ],
             dv=dv,
             within="block",
             between=between,
@@ -120,7 +98,9 @@ if __name__ == "__main__":
         print(f"ANOVA results for dv: {dv}, between: block order, within: block")
         print("----------")
         anova_object = pg.mixed_anova(
-            data=results_df[results_df["block"].isin(["test", "fairy"])],
+            data=node_classification_per_block[
+                node_classification_per_block["block"].isin(["test", "fairy"])
+            ],
             dv=dv,
             within="block",
             between="FAIRY_GOD_CONDITION",
@@ -129,25 +109,29 @@ if __name__ == "__main__":
         print(get_anova_text(anova_object))
 
         print("==========")
-        for block in results_df["block"].unique():
+        for block in node_classification_per_block["block"].unique():
             print("----------")
             print(f"Correlation between {dv} and {between} for block: {block}")
             print("----------")
             correlation_obj = pg.corr(
-                results_df[results_df["block"] == block][dv],
-                results_df[results_df["block"] == block][between],
+                node_classification_per_block[
+                    node_classification_per_block["block"] == block
+                ][dv],
+                node_classification_per_block[
+                    node_classification_per_block["block"] == block
+                ][between],
                 method="spearman",
             )
             print(get_correlation_text(correlation_obj))
 
-    for block in results_df["block"].unique():
-        curr_result_df = results_df[results_df["block"] == block]
+    for block in node_classification_per_block["block"].unique():
+        curr_result_df = node_classification_per_block[
+            node_classification_per_block["block"] == block
+        ]
 
         print(f"Difference in block order for clicks in {block} block")
         comparison = pg.mwu(
-            curr_result_df[curr_result_df["FAIRY_GOD_CONDITION"] == True][  # noqa: E712
-                "clicks"
-            ],
-            curr_result_df[curr_result_df["FAIRY_GOD_CONDITION"] == False]["clicks"],
+            curr_result_df[curr_result_df["FAIRY_GOD_CONDITION"] == 1]["num_clicks"],
+            curr_result_df[curr_result_df["FAIRY_GOD_CONDITION"] == 0]["num_clicks"],
         )
         print(get_mann_whitney_text(comparison))

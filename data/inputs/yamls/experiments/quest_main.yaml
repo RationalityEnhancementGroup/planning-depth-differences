@@ -1,0 +1,28 @@
+database_key: null
+privatekey : '0.0.2'
+bonus_function: 'lambda row: round((row["score"] + 50) * .002, 2)'
+simulated: false
+final_quest: true
+# too few, too many mouselab trials
+participants_to_remove: [483, 90]
+sessions:
+  - 0.0.3
+  - 0.0.4
+  - 0.0.5
+experiment_setting: 'high_increasing'
+COST: null
+DEPTH: null
+html_survey_names: {}
+num_parts: null
+old_experiment: False
+manual_age_mapping: {}
+experiment_specific_mapping: {}
+trials_per_block: {'test':20, 'training':20}
+ranges_to_extract: null
+mouselab_column_identifier: name
+mouselab_mapping: {'0.0-1.*-1.*':'mouselab-quiz-pre', '0.0-3.*-3*': 'mouselab-quiz-post', '0.0-3.*-2*': 'mouselab-quiz-post'}
+name_mapping: {"0.0-3.0-5.0": "crt", "0.0-3.0-7.0": "demographics", "0.0-3.0-4.0": "survey"}
+max_attempts: {'mouselab-quiz-pre': 4, 'mouselab-quiz-post': 1}
+passing_score: {'mouselab-quiz-pre': 5, 'mouselab-quiz-post': 0}
+mouselab_quiz_solutions: {"mouselab-quiz-pre": {"Q1": "$-48 to $48", "Q2": "No, the cost is always $1.00.", "Q3": "There is no limit", "Q4": "The better I perform the higher my bonus will be.", "Q5": "No, the amount of cash at each node of the web may be different each time."}, "mouselab-quiz-post": {"Q1": "$-4 to $4", "Q2": "$-8 to $8", "Q3": "$-48 to $48", "Q4": "No, the cost is always $1.00.", "Q5": {"Very unmotivated": -2, "Slightly unmotivated": -1, "Neither motivated nor unmotivated": 0, "Slightly motivated": 1, "Very motivated": 2, "": 0}}}
+crt_quiz_solutions : {"crt1": {".10":"intuitive", "10":"intuitive","005":"correct",".05":"correct", "5":"correct", "":"no response"}, "crt2": {"100":"intuitive",  "5":"correct", "":"no response"}, "crt3": {"24":"intuitive", "47":"correct", "":"no response"}, "crt4": {"9":"intuitive", "4":"correct", "":"no response"}, "crt5": {"30":"intuitive", "29":"correct", "":"no response"},"crt6": {"10":"intuitive","20":"correct", "":"no response"},"crt7": {"is ahead of where he began":"intuitive",  "has lost money":"correct", "":"no response"}}

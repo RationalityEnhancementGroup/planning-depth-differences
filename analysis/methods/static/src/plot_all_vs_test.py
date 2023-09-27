@@ -8,10 +8,8 @@ import seaborn as sns
 from costometer.utils import (
     AnalysisObject,
     get_static_palette,
-    get_trajectories_from_participant_data,
     get_wilcoxon_text,
     set_font_sizes,
-    traces_to_df,
 )
 
 set_font_sizes()
@@ -22,10 +20,15 @@ set_font_sizes()
 
 
 def plot_participant_average_likelihoods(
-    optimization_data, static_directory, likelihood_field, palette=None, dodge=False
+    optimization_data,
+    subdirectory,
+    likelihood_field,
+    experiment_name,
+    palette=None,
+    dodge=False,
 ):
     if palette is None:
-        palette = get_static_palette(static_directory)
+        palette = get_static_palette(subdirectory, experiment_name)
     plt.figure(figsize=(16, 8), dpi=80)
     ax = sns.pointplot(
         y=likelihood_field,
@@ -69,12 +72,13 @@ def plot_participant_average_likelihoods(
 def plot_trial_by_trial_logliks(
     optimization_data,
     likelihood_field,
+    experiment_name,
     agg_func=np.mean,
     palette=None,
     dodge=False,
 ):
     if palette is None:
-        palette = get_static_palette()
+        palette = get_static_palette(subdirectory, experiment_name)
     plt.figure(figsize=(11.7, 8.27))
     ax = sns.pointplot(
         y=likelihood_field,
@@ -109,66 +113,50 @@ def plot_trial_by_trial_logliks(
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("-e", "--exp1", dest="experiment_name1", default="TrialByTrial")
     parser.add_argument(
-        "-f", "--exp2", dest="experiment_name2", default="TrialByTrialAll"
+        "-e1", "--exp1", dest="experiment_name1", default="MainExperiment"
+    )
+    parser.add_argument("-e2", "--exp2", dest="experiment_name2", default="AllTrials")
+    parser.add_argument(
+        "-s",
+        "--subdirectory",
+        default="methods/static",
+        dest="experiment_subdirectory",
+        metavar="experiment_subdirectory",
     )
 
     inputs = parser.parse_args()
 
-    static_directory = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[4]
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/")
 
-    analysis_obj1 = AnalysisObject(inputs.experiment_name1, irl_path=irl_path)
-    analysis_obj2 = AnalysisObject(inputs.experiment_name2, irl_path=irl_path)
-
-    trace_df1 = traces_to_df(
-        get_trajectories_from_participant_data(analysis_obj1.mouselab_trials)
+    analysis_obj1 = AnalysisObject(
+        inputs.experiment_name1,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
     )
-    num_actions1 = (
-        trace_df1.groupby(["pid", "i_episode"])
-        .count()["actions"]
-        .reset_index()
-        .rename(columns={"actions": "num_actions"})
-    )
-
-    trace_df2 = traces_to_df(
-        get_trajectories_from_participant_data(analysis_obj2.mouselab_trials)
-    )
-    num_actions2 = (
-        trace_df2.groupby(["pid", "i_episode"])
-        .count()["actions"]
-        .reset_index()
-        .rename(columns={"actions": "num_actions"})
+    analysis_obj2 = AnalysisObject(
+        inputs.experiment_name2,
+        irl_path=irl_path,
+        experiment_subdirectory=inputs.experiment_subdirectory,
     )
 
+    # fit on test block
     trial_by_trial_df1 = analysis_obj1.get_trial_by_trial_likelihoods()
-    trial_by_trial_df1 = trial_by_trial_df1.merge(num_actions1, on=["pid", "i_episode"])
-
+    # fit on all trials
     trial_by_trial_df2 = analysis_obj2.get_trial_by_trial_likelihoods()
-    trial_by_trial_df2 = trial_by_trial_df2.merge(num_actions2, on=["pid", "i_episode"])
 
-    trial_by_trial_df1["avg"] = trial_by_trial_df1.apply(
-        lambda row: np.exp(row["likelihood"]) / row["num_actions"], axis=1
-    )
+    mouselab_data = analysis_obj1.dfs["mouselab-mdp"]
+    relevant_trials = mouselab_data[
+        mouselab_data["block"].isin(analysis_obj1.block.split(","))
+    ]["trial_index"].unique()
 
-    relevant_trials = analysis_obj1.mouselab_trials[
-        analysis_obj1.mouselab_trials["block"].isin(analysis_obj1.block)
-    ]["trial_index"]
-
+    # only look at test trials
     trial_by_trial_df1 = trial_by_trial_df1[
         trial_by_trial_df1["i_episode"].isin(relevant_trials)
     ]
-
-    trial_by_trial_df2["avg"] = trial_by_trial_df2.apply(
-        lambda row: np.exp(row["likelihood"]) / row["num_actions"], axis=1
-    )
-
-    trial_by_trial_df1 = trial_by_trial_df1[
-        trial_by_trial_df1["Model Name"] == "Effort Cost and Planning Depth"
-    ]
     trial_by_trial_df2 = trial_by_trial_df2[
-        trial_by_trial_df2["Model Name"] == "Effort Cost and Planning Depth"
+        trial_by_trial_df2["i_episode"].isin(relevant_trials)
     ]
 
     for model in trial_by_trial_df1["Model Name"].unique():
@@ -188,14 +176,15 @@ if __name__ == "__main__":
         )
 
     plot_participant_average_likelihoods(
-        trial_by_trial_df2[trial_by_trial_df2["i_episode"].isin(relevant_trials)],
-        static_directory,
+        trial_by_trial_df2,
+        subdirectory,
         "avg",
+        experiment_name=analysis_obj2.palette_name,
         dodge=0.25,
     )
     plt.savefig(
-        static_directory.joinpath(
-            f"figs/{inputs.experiment_name2}_participant_lik_ten.png"
+        subdirectory.joinpath(
+            f"figs/{inputs.experiment_name2}_participant_lik_twenty.png"
         ),
         bbox_inches="tight",
     )
