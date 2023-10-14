@@ -1,0 +1,15 @@
+# Project
+[project]
+name = "mcl_toolbox"
+description = "Specific MCL Toolbox Files."
+dynamic = ["dependencies", "readme", "version"]
+requires-python = ">=3.7"
+
+# Setuptools
+[tool.setuptools]
+packages = ["mcl_toolbox"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+readme = { file = "README.md" }
+version = { attr = "version.__version__" }
