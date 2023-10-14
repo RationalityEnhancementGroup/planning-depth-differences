@@ -5,11 +5,11 @@ description = "Specific MCL Toolbox Files."
 dynamic = ["dependencies", "readme", "version"]
 requires-python = ">=3.7"
 
-# Setuptools
-[tool.setuptools]
-packages = ["mcl_toolbox"]
-
 [tool.setuptools.dynamic]
 dependencies = { file = ["requirements.txt"] }
 readme = { file = "README.md" }
 version = { attr = "version.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["mcl_toolbox*"]

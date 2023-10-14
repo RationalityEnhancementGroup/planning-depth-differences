@@ -13,7 +13,7 @@ from .learning_utils import (
 from .planning_strategies import strategy_dict
 from .sequence_utils import compute_trial_features
 
-strategy_space = pickle_load(Path(__file__).parents[0] / "data" / "strategy_space.pkl")
+strategy_space = pickle_load(Path(__file__).parents[1] / "data" / "strategy_space.pkl")
 
 
 def generate_data(strategy_num, pipeline, num_simulations=100, rng=None):
