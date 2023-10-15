@@ -6,8 +6,8 @@ import pandas as pd
 if __name__ == "__main__":
     irl_path = Path(__file__).parents[2]
 
-    back_added_cost_values = [0, -5, -10]
-    forw_add_cost_values = [0, -5, -10]
+    back_added_cost_values = [0, 5, 10]
+    forw_add_cost_values = [0, 5, 10]
     distance_multiplier_values = [0, 5, 10]
     depth_cost_values = [10, 5, 0]
     given_cost_values = [10, 5, 0]
