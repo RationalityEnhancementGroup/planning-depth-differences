@@ -1,5 +1,5 @@
 """
-Runs Bayesian Model Comparison from SPM (in spm_BMS.m)
+Runs Bayesian Model Comparison from SPM (in spm_BMS.m).
 
 References (from spm_BMS.m):
 % Stephan KE, Penny WD, Daunizeau J, Moran RJ, Friston KJ (2009)
@@ -15,7 +15,7 @@ from typing import Any, Dict
 
 try:
     import matlab.engine
-except:  # noqa : E722
+except ModuleNotFoundError:
     NO_MATLAB = True
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -27,7 +27,7 @@ set_font_sizes()
 
 def run_bms(optimization_data: pd.DataFrame, path_to_spm: Path = None) -> pd.DataFrame:
     """
-    Runs BMS on pandas dataframe
+    Run BMS on pandas dataframe.
 
     :param optimization_data: a dataframe containing the MLE or MAP parameter values
     for each participant (summed over trials) for all candidate models
@@ -67,7 +67,7 @@ def plot_bms_exceedance_probs(
     palette: Dict[str, Any] = None,
 ) -> None:
     """
-    Plots BMS exceedance probabilities
+    Plot BMS exceedance probabilities.
 
     :param bms_out_df: BMS results dataframe, including "Model" and \
     "Exceedance Probabilities"
@@ -158,10 +158,11 @@ if __name__ == "__main__":
 
             import numpy as np
 
-            for row_idx, row in bms_df.iterrows():
+            for row_idx, _row in bms_df.iterrows():
+                participant_row = bms_df.loc[row_idx]
                 print(
-                    np.max(bms_df.loc[row_idx]),
-                    pivoted_df.columns[np.argmax(bms_df.loc[row_idx])],
+                    np.max(participant_row),
+                    pivoted_df.columns[np.argmax(participant_row) + 1],
                 )
 
     else:
@@ -202,7 +203,7 @@ if __name__ == "__main__":
         "Expected number of participants best explained by the model"
     ].astype(float)
 
-    for row_idx, row in bms_df.sort_values(
+    for _row_idx, row in bms_df.sort_values(
         by="Expected number of participants best explained by the model",
         ascending=False,
     ).iterrows():
