@@ -26,6 +26,22 @@ if __name__ == "__main__":
 
     model_params = list(analysis_obj.cost_details["constant_values"])
 
+    # random effects
+    optimization_data = analysis_obj.get_random_effects_optimization_data()
+
+    deduped_parameter_values = optimization_data[
+        model_params + ["noise"]
+    ].drop_duplicates()
+    possible_parameters = deduped_parameter_values.drop_duplicates().to_dict("records")
+
+    with open(
+        irl_path.joinpath(
+            "cluster/parameters/simulations/participants_random_effects.pkl"
+        ),
+        "wb",
+    ) as f:
+        pickle.dump(possible_parameters, f)
+
     for excluded_parameters in analysis_obj.trial_by_trial_models:
         optimization_data = analysis_obj.query_optimization_data(
             excluded_parameters=excluded_parameters
