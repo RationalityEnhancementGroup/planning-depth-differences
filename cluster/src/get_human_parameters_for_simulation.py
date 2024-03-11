@@ -36,7 +36,8 @@ if __name__ == "__main__":
 
     with open(
         irl_path.joinpath(
-            "cluster/parameters/simulations/participants_random_effects.pkl"
+            f"cluster/parameters/simulations/"
+            f"{inputs.experiment_name}_participants_random_effects.pkl"
         ),
         "wb",
     ) as f:

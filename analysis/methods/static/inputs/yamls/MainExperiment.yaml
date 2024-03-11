@@ -10,6 +10,7 @@ prior : 'uniform'
 excluded_parameters : 'gamma,kappa'
 included_parameters: 'temp'
 block: 'test'
+positive: true
 include_null : true
 title_extras: ''
 simulated: False
