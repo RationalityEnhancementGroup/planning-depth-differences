@@ -8,7 +8,7 @@ import seaborn as sns
 from costometer.utils import AnalysisObject, set_font_sizes
 from statsmodels.tools.eval_measures import bic
 
-set_font_sizes(SMALL_SIZE=14)
+set_font_sizes(small_size=14)
 
 if __name__ == "__main__":
     """

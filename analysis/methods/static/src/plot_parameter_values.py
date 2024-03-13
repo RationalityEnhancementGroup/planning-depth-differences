@@ -6,7 +6,7 @@ import pandas as pd
 import seaborn as sns
 from costometer.utils import AnalysisObject, get_static_palette, set_font_sizes
 
-set_font_sizes(SMALL_SIZE=14)
+set_font_sizes(small_size=14)
 
 ###################################################
 # This section contains my plotting functions

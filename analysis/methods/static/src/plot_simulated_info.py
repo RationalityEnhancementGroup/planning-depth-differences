@@ -1,7 +1,4 @@
-"""
-Plots information about the number of nodes clicked by the optimal policy
-using the Q values under different cost parameters
-"""
+"""Plots information about the number of nodes clicked by the optimal policy using the Q values under different cost parameters."""  # noqa : E501
 import itertools
 from argparse import ArgumentParser
 from pathlib import Path
@@ -11,7 +8,7 @@ import seaborn as sns
 import yaml
 from costometer.utils import AnalysisObject, set_font_sizes
 
-set_font_sizes(MEDIUM_SIZE=30)
+set_font_sizes(medium_size=30)
 
 
 def plot_heat_map_for_simulated(sum_df, field, rew1, rew2, name1, name2):
