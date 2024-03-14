@@ -1,5 +1,5 @@
 sessions:
-  - simulated/high_increasing/SoftmaxPolicy/participants_new_analysis_simulated_agents_back_dist_depth_eff_forw
+  - simulated/high_increasing/SoftmaxPolicy/MainExperiment_participants_random_effects_simulated_agents_back_dist_depth_eff_forw
 cost_function: back_dist_depth_eff_forw
 simulated: True
 prior: 'uniform'
@@ -9,3 +9,4 @@ block: 'test'
 positive: true
 include_null: True
 palette_name: MainExperiment
+title_extras: ''
