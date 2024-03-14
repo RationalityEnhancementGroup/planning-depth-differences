@@ -1,26 +1,2 @@
-Fri Apr 14 15:37:54 CEST 2023
-Error importing rpy2: r_home is None. Try python -m rpy2.situation
-21 apathy
-Mann-Whitney $U=53564.00$, $p = 0.007$, two-sided
-11.073 11.604
-21 crt
-Mann-Whitney $U=68042.00$, $p = 0.003$, two-sided
-3.995 3.440
-21 reg
-Mann-Whitney $U=66463.50$, $p = 0.031$, two-sided
-22.429 21.528
-57 cfc
-Mann-Whitney $U=15549.00$, $p = 0.006$, two-sided
-44.297 41.100
-57 fos
-Mann-Whitney $U=15491.50$, $p = 0.007$, two-sided
-47.946 44.833
-57 leb
-Mann-Whitney $U=14759.00$, $p = 0.037$, two-sided
-44.838 38.588
-57 SW
-Mann-Whitney $U=14757.50$, $p = 0.037$, two-sided
-0.269 -0.015
-31 crt
-Mann-Whitney $U=10076.50$, $p = 0.041$, two-sided
-3.000 3.786
+Thu Mar 14 20:06:17 CET 2024
+Error importing rpy2: cannot import name 'ri2py' from 'rpy2.robjects.conversion' (/Users/vfelso/thesis_git/planning-depth-differences/venv/lib/python3.10/site-packages/rpy2/robjects/conversion.py)
