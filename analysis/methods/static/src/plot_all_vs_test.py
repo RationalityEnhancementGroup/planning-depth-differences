@@ -15,10 +15,6 @@ from costometer.utils import (
 
 set_font_sizes()
 
-###################################################
-# This section contains my plotting functions
-###################################################
-
 
 def plot_participant_average_likelihoods(
     optimization_data,

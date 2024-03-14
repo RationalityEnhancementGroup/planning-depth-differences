@@ -8,10 +8,6 @@ from costometer.utils import AnalysisObject, get_static_palette, set_font_sizes
 
 set_font_sizes(small_size=14)
 
-###################################################
-# This section contains my plotting functions
-###################################################
-
 
 def bic_plot(
     optimization_data, subdirectory, experiment_name, bic_field="bic", palette=None

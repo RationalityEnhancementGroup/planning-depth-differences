@@ -11,10 +11,6 @@ from statsmodels.tools.eval_measures import bic
 
 set_font_sizes(small_size=14)
 
-###################################################
-# This section contains my plotting functions
-###################################################
-
 
 def bic_plot(
     optimization_data, subdirectory, experiment_name, bic_field="bic", palette=None
