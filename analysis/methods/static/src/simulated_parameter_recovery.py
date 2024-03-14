@@ -1,4 +1,5 @@
 import itertools
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -93,20 +94,20 @@ if __name__ == "__main__":
         analysis_obj.excluded_parameters.split(",")
     )
 
-    print("==========")
+    logging.info("==========")
     for subset in itertools.combinations(model_params, 2):
         correlation_object = pg.corr(
             optimization_data[subset[0]],
             optimization_data[subset[1]],
             method="spearman",
         )
-        print("----------")
-        print(
+        logging.info("----------")
+        logging.info(
             f"Correlation between inferred {subset[0]} and inferred {subset[1]} "
             f"for simulated participants"
         )
-        print("----------")
-        print(get_correlation_text(correlation_object))
+        logging.info("----------")
+        logging.info(get_correlation_text(correlation_object))
 
     plt.figure(figsize=(11.7, 8.27))
     latex_mapping = {
@@ -138,22 +139,22 @@ if __name__ == "__main__":
         )
     )
 
-    print("==========")
+    logging.info("==========")
     for model_param in model_params:
         correlation_object = pg.corr(
             optimization_data[model_param],
             optimization_data[f"sim_{model_param}"],
             method="spearman",
         )
-        print("----------")
-        print(
+        logging.info("----------")
+        logging.info(
             f"Correlation between inferred and actual {model_param} "
             f"for simulated participants"
         )
-        print("----------")
-        print(get_correlation_text(correlation_object))
+        logging.info("----------")
+        logging.info(get_correlation_text(correlation_object))
 
-    print("==========")
+    logging.info("==========")
     for param in model_params:
         optimization_data[f"{param}_diff"] = (
             optimization_data[f"sim_{param}"] - optimization_data[param]
@@ -161,10 +162,10 @@ if __name__ == "__main__":
         optimization_data[f"{param}_sq"] = optimization_data.apply(
             lambda row: row[f"{param}_diff"] ** 2, axis=1
         )
-        print("----------")
-        print(f"RMSE for parameter {param}")
-        print("----------")
-        print(
+        logging.info("----------")
+        logging.info(f"RMSE for parameter {param}")
+        logging.info("----------")
+        logging.info(
             np.sqrt(
                 np.sum(optimization_data[f"{param}_sq"])
                 / len(optimization_data[f"{param}_sq"])
@@ -198,16 +199,16 @@ if __name__ == "__main__":
         )
 
     for param in model_params:
-        print("==========")
-        print(f"Regression with {param} as dependent variable")
-        print("----------")
+        logging.info("==========")
+        logging.info(f"Regression with {param} as dependent variable")
+        logging.info("----------")
         mod = smf.ols(
             formula=f"sim_{param}  ~ {' + '.join(model_params)} + 1",
             data=optimization_data,
         )
         res = mod.fit()
 
-        print(param, res.rsquared.round(2))
+        logging.info(param, res.rsquared.round(2))
 
         df_for_table = pd.DataFrame(
             {"coeff": res.params, "se": res.bse, "p": res.pvalues, "t": res.tvalues}
@@ -217,22 +218,22 @@ if __name__ == "__main__":
         for row_idx, row in df_for_table.iterrows():
             pval_string = get_pval_string(row["p"])
 
-            print(
+            logging.info(
                 f"${analysis_obj.cost_details['latex_mapping'][param]}$  &  $\hat{{{analysis_obj.cost_details['latex_mapping'][row_idx]}}}$ & "  # noqa: W605, E501
                 f"${row['coeff']:.3f} ({row['se']:.3f}){pval_string}$ & ${row['t']:.3f}"
                 f"$ \\\\"
             )
 
-        print("----------")
+        logging.info("----------")
 
-        print(get_regression_text(res))
+        logging.info(get_regression_text(res))
 
     for param in model_params:
         optimization_data[f"error_{param}"] = optimization_data.apply(
             lambda row: row[param] - row["sim_" + param], axis=1
         )
-        print(f"Absolute error for {param}")
-        print(
+        logging.info(f"Absolute error for {param}")
+        logging.info(
             f"Median: {optimization_data[f'error_{param}'].median():.2f}, "
             f"Range: [{optimization_data[f'error_{param}'].min():.2f}, "
             f"{optimization_data[f'error_{param}'].max():.2f}]"

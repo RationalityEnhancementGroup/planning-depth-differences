@@ -9,6 +9,7 @@ References (from spm_BMS.m):
 % Bayesian model selection for group studies—Revisited.
 % NeuroImage 84:971-85. doi: 10.1016/j.neuroimage.2013.08.065
 """
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 from typing import Any, Dict
@@ -160,7 +161,7 @@ if __name__ == "__main__":
 
             for row_idx, _row in bms_df.iterrows():
                 participant_row = bms_df.loc[row_idx]
-                print(
+                logging.info(
                     np.max(participant_row),
                     pivoted_df.columns[np.argmax(participant_row) + 1],
                 )
@@ -196,7 +197,7 @@ if __name__ == "__main__":
         "Exceedance Probabilities",
     ]:
         bms_df[field] = bms_df[field].apply(lambda entry: f"{entry:.2f}")
-    print(f"{' & '.join(bms_df)} \\\ \hline")  # noqa
+    logging.info(f"{' & '.join(bms_df)} \\\ \hline")  # noqa
 
     # need as numeric rather than object for sorting
     bms_df["Expected number of participants best explained by the model"] = bms_df[
@@ -207,6 +208,6 @@ if __name__ == "__main__":
         by="Expected number of participants best explained by the model",
         ascending=False,
     ).iterrows():
-        print(
+        logging.info(
             f"{' & '.join([val if not isinstance(val, float) else f'{val:0.2f}' for val in row.values])} \\\\"  # noqa : E501
         )  # noqa

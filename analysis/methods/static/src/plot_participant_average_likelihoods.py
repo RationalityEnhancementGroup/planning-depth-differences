@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 from collections import Counter
 from pathlib import Path
@@ -210,13 +211,13 @@ if __name__ == "__main__":
     )
     assert unique_models_per_pid.unique() == [1]
 
-    print("==========")
-    print(
+    logging.info("==========")
+    logging.info(
         "Number of participants, for top three models, where that model explains "
         "them the best (via meta-level action likelihoods)"
     )
-    print("----------")
-    print(
+    logging.info("----------")
+    logging.info(
         Counter(
             participant_df.loc[participant_df.groupby(["pid"]).idxmax()["avg"]][
                 "Model Name"
@@ -224,21 +225,21 @@ if __name__ == "__main__":
         )
     )
 
-    print("==========")
+    logging.info("==========")
     for model in participant_df["Model Name"].unique():
         if model != best_model:
-            print("----------")
-            print(
+            logging.info("----------")
+            logging.info(
                 f"Difference between meta-level action likelihoods "
                 f"for best model and {model}"
             )
-            print("----------")
+            logging.info("----------")
             wilcoxon_object = pg.wilcoxon(
                 participant_df[participant_df["Model Name"] == model]["avg"],
                 participant_df[participant_df["Model Name"] == best_model]["avg"],
                 alternative="two-sided",
             )
-            print(
+            logging.info(
                 f"{get_wilcoxon_text(wilcoxon_object)}; "
                 f"$M_{{{best_model.replace('$','')}}} ="
                 f"{np.median(participant_df[participant_df['Model Name'] == best_model]['avg']):.3f}$; "  # noqa: E501
@@ -246,20 +247,20 @@ if __name__ == "__main__":
                 f"{np.median(participant_df[participant_df['Model Name'] == model]['avg']):.3f}$"  # noqa: E501
             )
 
-    print("==========")
-    print("Meta-level action table")
-    print("----------")
+    logging.info("==========")
+    logging.info("Meta-level action table")
+    logging.info("----------")
     for row_idx, row in (
         participant_df.groupby(["Model Name"])
         .describe()["avg"]
         .sort_values(by="mean", ascending=False)
         .iterrows()
     ):
-        print(f"{row_idx} & {row['mean']:.3f} & {row['std']:.3f} \\\ ")  # noqa
+        logging.info(f"{row_idx} & {row['mean']:.3f} & {row['std']:.3f} \\\ ")  # noqa
 
-    print("==========")
-    print("Correlation between episode and meta-level action log likelihood")
-    print("----------")
+    logging.info("==========")
+    logging.info("Correlation between episode and meta-level action log likelihood")
+    logging.info("----------")
     correlation = pg.corr(
         trial_by_trial_df[(trial_by_trial_df["Model Name"] == best_model)]
         .groupby("i_episode", as_index=False)
@@ -268,4 +269,4 @@ if __name__ == "__main__":
         .groupby("i_episode", as_index=False)
         .mean()["i_episode"],
     )
-    print(get_correlation_text(correlation))
+    logging.info(get_correlation_text(correlation))

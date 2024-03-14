@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -126,7 +127,7 @@ if __name__ == "__main__":
         inplace=True,
     )
 
-    print("----------")
+    logging.info("----------")
     for block in hdi_ranges.keys():
         for parameter in model_params:
             full_parameter_info[f"{block}_{parameter}_spread"] = (
@@ -148,7 +149,7 @@ if __name__ == "__main__":
                     ),
                     axis=1,
                 )
-                print(
+                logging.info(
                     parameter,
                     block,
                     f"in hdi (predictions) "
@@ -161,11 +162,11 @@ if __name__ == "__main__":
             full_parameter_info[f"test_{param}_spread"].astype(np.float64),
         )
 
-        print("----------")
-        print(f"Test vs fairy block spreads for parameter {param}")
-        print("----------")
-        print(get_wilcoxon_text(res))
-        print(
+        logging.info("----------")
+        logging.info(f"Test vs fairy block spreads for parameter {param}")
+        logging.info("----------")
+        logging.info(get_wilcoxon_text(res))
+        logging.info(
             f"test block ($M: {full_parameter_info[f'test_{param}_spread'].mean():.2f},"
             f" SD: {full_parameter_info[f'test_{param}_spread'].std():.2f}$)\n"
             f"baseline block ($M: {full_parameter_info[f'fairy_{param}_spread'].mean():.2f},"  # noqa: E501
@@ -173,9 +174,9 @@ if __name__ == "__main__":
         )
 
     for block in hdi_ranges.keys():
-        print("----------")
-        print(f"Spread in {block} block vs MAP error")
-        print("----------")
+        logging.info("----------")
+        logging.info(f"Spread in {block} block vs MAP error")
+        logging.info("----------")
         for parameter in model_params_given.keys():
             full_parameter_info[f"diff_{parameter}"] = full_parameter_info.apply(
                 lambda row: np.sqrt(
@@ -189,15 +190,15 @@ if __name__ == "__main__":
                 full_parameter_info[f"{block}_{parameter}_spread"],
                 full_parameter_info[f"diff_{parameter}"],
             )
-            print(
+            logging.info(
                 f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
                 f" & {get_correlation_text(correlation_object)}"
             )
 
         for parameter in model_params_given.keys():
-            print(parameter, block)
+            logging.info(parameter, block)
             if len(full_parameter_info[f"{block}_{parameter}_in"].unique()) == 1:
-                print(full_parameter_info[f"{block}_{parameter}_in"].unique())
+                logging.info(full_parameter_info[f"{block}_{parameter}_in"].unique())
             else:
                 comparison = pg.mwu(
                     full_parameter_info[full_parameter_info[f"{block}_{parameter}_in"]][
@@ -207,7 +208,7 @@ if __name__ == "__main__":
                         ~full_parameter_info[f"{block}_{parameter}_in"]
                     ][f"diff_{parameter}"],
                 )
-                print(get_mann_whitney_text(comparison))
+                logging.info(get_mann_whitney_text(comparison))
 
     full_parameter_info.rename(
         columns={f"{parameter}_test": parameter for parameter in model_params},
@@ -252,7 +253,7 @@ if __name__ == "__main__":
             and (row[f"predictions_{parameter}"] >= row[f"{block}_{parameter}_min"]),
             axis=1,
         )
-        print(
+        logging.info(
             parameter,
             block,
             f"in hdi (predictions, regression) "
@@ -260,13 +261,15 @@ if __name__ == "__main__":
         )
 
         if len(full_parameter_info[f"{block}_{parameter}_in_regression"].unique()) == 1:
-            print("----------")
-            print(
+            logging.info("----------")
+            logging.info(
                 "This should almost never happen, means "
                 "true parameter is in spread 100% of time"
             )
-            print("----------")
-            print(full_parameter_info[f"{block}_{parameter}_in_regression"].unique())
+            logging.info("----------")
+            logging.info(
+                full_parameter_info[f"{block}_{parameter}_in_regression"].unique()
+            )
         else:
             comparison = pg.mwu(
                 full_parameter_info[
@@ -277,132 +280,136 @@ if __name__ == "__main__":
                     full_parameter_info[f"{block}_{parameter}_in_regression"] == False
                 ][f"diff_{parameter}"],
             )
-            print("----------")
-            print(
+            logging.info("----------")
+            logging.info(
                 f"Difference in spread when true parameter is "
                 f"contained vs not, block {block} parameter {parameter}"
             )
-            print("----------")
-            print(get_mann_whitney_text(comparison))
+            logging.info("----------")
+            logging.info(get_mann_whitney_text(comparison))
 
-    print("----------")
-    print("Correlation between parameter spread in test block and error in recovery")
-    print("----------")
+    logging.info("----------")
+    logging.info(
+        "Correlation between parameter spread in test block and error in recovery"
+    )
+    logging.info("----------")
     for parameter, given_param in model_params_given.items():
         correlation_object = pg.corr(
             full_parameter_info[f"{block}_{parameter}_spread"],
             full_parameter_info[f"diff_{parameter}"],
         )
-        print(
+        logging.info(
             f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
-    print("----------")
-    print(
+    logging.info("----------")
+    logging.info(
         f"Correlation between inferred temperature and "
         f"parameter spread in {block} block"
     )
-    print("----------")
+    logging.info("----------")
     for parameter in model_params:
         correlation_object = pg.corr(
             full_parameter_info["temp"],
             full_parameter_info[f"{block}_{parameter}_spread"],
         )
-        print(
+        logging.info(
             f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
-    print("----------")
-    print("Correlation between inferred temperature and error in recovery")
-    print("----------")
+    logging.info("----------")
+    logging.info("Correlation between inferred temperature and error in recovery")
+    logging.info("----------")
     for parameter, given_param in model_params_given.items():
         correlation_object = pg.corr(
             full_parameter_info["temp"],
             full_parameter_info[f"diff_{parameter}"],
         )
-        print(
+        logging.info(
             f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
-    print("----------")
-    print(
+    logging.info("----------")
+    logging.info(
         "Correlation between regression estimate " "and parameter spread in test block"
     )
-    print("----------")
+    logging.info("----------")
     for parameter, given_param in model_params_given.items():
         correlation_object = pg.corr(
             full_parameter_info[f"predictions_{parameter}"],
             full_parameter_info[f"{block}_{parameter}_spread"],
         )
-        print(
+        logging.info(
             f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
-    print("----------")
-    print("Correlation between given parameter and parameter spread in test block")
-    print("----------")
+    logging.info("----------")
+    logging.info(
+        "Correlation between given parameter and parameter spread in test block"
+    )
+    logging.info("----------")
     for parameter, given_param in model_params_given.items():
         correlation_object = pg.corr(
             full_parameter_info[given_param].astype(np.float64),
             full_parameter_info[f"{block}_{parameter}_spread"],
         )
-        print(
+        logging.info(
             f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
-    print("----------")
-    print(f"Number of participants: {len(full_parameter_info)}")
-    print("----------")
+    logging.info("----------")
+    logging.info(f"Number of participants: {len(full_parameter_info)}")
+    logging.info("----------")
 
-    print("----------")
-    print("Spread in test block vs MAP")
-    print("----------")
+    logging.info("----------")
+    logging.info("Spread in test block vs MAP")
+    logging.info("----------")
     for parameter in model_params:
         correlation_object = pg.corr(
             full_parameter_info[f"test_{parameter}_spread"],
             full_parameter_info[f"{parameter}"].astype(np.float64),
         )
-        print(
+        logging.info(
             f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
-    print("----------")
-    print("Correlation between linear regression output and HDI min")
-    print("----------")
+    logging.info("----------")
+    logging.info("Correlation between linear regression output and HDI min")
+    logging.info("----------")
     for parameter, given_param in model_params_given.items():
         correlation_object = pg.corr(
             full_parameter_info[f"predictions_{parameter}"],
             full_parameter_info[f"{block}_{parameter}_min"],
         )
-        print(
+        logging.info(
             f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
-    print("----------")
-    print("Correlation between linear regression output and HDI max")
-    print("----------")
+    logging.info("----------")
+    logging.info("Correlation between linear regression output and HDI max")
+    logging.info("----------")
     for parameter, given_param in model_params_given.items():
         correlation_object = pg.corr(
             full_parameter_info[f"predictions_{parameter}"],
             full_parameter_info[f"{block}_{parameter}_max"],
         )
-        print(
+        logging.info(
             f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
     for parameter, given_param in model_params_given.items():
         threshold = np.median(full_parameter_info[f"{model_params_given[parameter]}"])
-        print("----------")
-        print(f"{parameter}, {threshold}")
-        print("----------")
+        logging.info("----------")
+        logging.info(f"{parameter}, {threshold}")
+        logging.info("----------")
         y_true = (
             full_parameter_info[f"{model_params_given[parameter]}"] >= threshold
         ).values
@@ -416,7 +423,7 @@ if __name__ == "__main__":
             scoring=make_scorer(balanced_accuracy_score),
             return_estimator=True,
         )
-        print("----------")
-        print(f"Avg cross val score: {res['test_score'].mean():.2f}")
-        print("----------")
-        print(",".join([tree.export_text(est) for est in res["estimator"]]))
+        logging.info("----------")
+        logging.info(f"Avg cross val score: {res['test_score'].mean():.2f}")
+        logging.info("----------")
+        logging.info(",".join([tree.export_text(est) for est in res["estimator"]]))

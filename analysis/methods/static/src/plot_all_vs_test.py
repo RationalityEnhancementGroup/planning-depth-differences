@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -160,17 +161,17 @@ if __name__ == "__main__":
     ]
 
     for model in trial_by_trial_df1["Model Name"].unique():
-        print(f"Mean and standard deviation for {model} last 20 trials"),
+        logging.info(f"Mean and standard deviation for {model} last 20 trials"),
         model_subset = trial_by_trial_df1[(trial_by_trial_df1["Model Name"] == model)]
-        print(
+        logging.info(
             f"$M: {model_subset['avg'].mean():.2f}, "
             f"SD: {model_subset['avg'].std():.2f}$"
         )
 
     for model in trial_by_trial_df2["Model Name"].unique():
-        print(f"Mean and standard deviation for {model} all trials")
+        logging.info(f"Mean and standard deviation for {model} all trials")
         model_subset = trial_by_trial_df2[(trial_by_trial_df2["Model Name"] == model)]
-        print(
+        logging.info(
             f"$M: {model_subset['avg'].mean():.2f}, "
             f"SD: {model_subset['avg'].std():.2f}$"
         )
@@ -198,4 +199,4 @@ if __name__ == "__main__":
         .sort_values(["pid", "i_episode"])["avg"],
     )
 
-    print(get_wilcoxon_text(comparison))
+    logging.info(get_wilcoxon_text(comparison))

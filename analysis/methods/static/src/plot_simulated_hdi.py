@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -68,9 +69,9 @@ if __name__ == "__main__":
             lambda row: row[f"max_{parameter}"] - row[f"min_{parameter}"], axis=1
         )
 
-    print("Statistics for spread of parameters")
+    logging.info("Statistics for spread of parameters")
     for parameter in model_params:
-        print(
+        logging.info(
             f"{analysis_obj.cost_details['latex_mapping'][parameter]}"
             f" & ${optimization_data[f'{parameter}_spread'].mean():.2f}$"
             f" (${optimization_data[f'{parameter}_spread'].std():.2f}$)"
@@ -78,19 +79,19 @@ if __name__ == "__main__":
 
     # for cases where we don't vary temperature
     for parameter in model_params:
-        print("----------")
-        print(f"Correlation between spread of {parameter} and temperature")
-        print("----------")
+        logging.info("----------")
+        logging.info(f"Correlation between spread of {parameter} and temperature")
+        logging.info("----------")
         correlation_object = pg.corr(
             optimization_data["sim_temp"], optimization_data[f"{parameter}_spread"]
         )
-        print(get_correlation_text(correlation_object))
+        logging.info(get_correlation_text(correlation_object))
 
     for parameter in model_params:
-        print("----------")
-        print(f"Amount of time true {parameter} is in the outputted interval")
-        print("----------")
-        print(f"{optimization_data[f'{parameter}_in'].mean():.2f}")
+        logging.info("----------")
+        logging.info(f"Amount of time true {parameter} is in the outputted interval")
+        logging.info("----------")
+        logging.info(f"{optimization_data[f'{parameter}_in'].mean():.2f}")
 
     for parameter in model_params:
         optimization_data[f"diff_{parameter}"] = optimization_data.apply(
@@ -99,18 +100,18 @@ if __name__ == "__main__":
         )
 
         if len(optimization_data[f"{parameter}_in"].unique()) == 1:
-            print("----------")
-            print(
+            logging.info("----------")
+            logging.info(
                 f"True {parameter} value is always in or outside of outputted interval:"
             )
-            print(optimization_data[f"{parameter}_in"].unique())
+            logging.info(optimization_data[f"{parameter}_in"].unique())
         else:
-            print("----------")
-            print(
+            logging.info("----------")
+            logging.info(
                 f"Difference between error when true {parameter} "
                 f"parameter value is in outputted interval vs not."
             )
-            print("----------")
+            logging.info("----------")
             comparison = pg.mwu(
                 optimization_data[optimization_data[f"{parameter}_in"]][
                     f"diff_{parameter}"
@@ -119,43 +120,43 @@ if __name__ == "__main__":
                     f"diff_{parameter}"
                 ],
             )
-            print(get_mann_whitney_text(comparison))
+            logging.info(get_mann_whitney_text(comparison))
 
-    print("----------")
-    print("Correlation between error in MAP estimate and spread")
-    print("----------")
+    logging.info("----------")
+    logging.info("Correlation between error in MAP estimate and spread")
+    logging.info("----------")
     for parameter in model_params:
         correlation_object = pg.corr(
             optimization_data[f"{parameter}_spread"],
             optimization_data[f"diff_{parameter}"],
         )
-        print(
+        logging.info(
             f"{analysis_obj.cost_details['latex_mapping'][parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
-    print("----------")
-    print("Correlation between MAP estimate and spread")
-    print("----------")
+    logging.info("----------")
+    logging.info("Correlation between MAP estimate and spread")
+    logging.info("----------")
     for parameter in model_params:
         correlation_object = pg.corr(
             optimization_data[parameter],
             optimization_data[f"{parameter}_spread"],
         )
-        print(
+        logging.info(
             f"{analysis_obj.cost_details['latex_mapping'][parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
-    print("----------")
-    print("Correlation between true value and spread")
-    print("----------")
+    logging.info("----------")
+    logging.info("Correlation between true value and spread")
+    logging.info("----------")
     for parameter in model_params:
         correlation_object = pg.corr(
             optimization_data[f"sim_{parameter}"],
             optimization_data[f"{parameter}_spread"],
         )
-        print(
+        logging.info(
             f"{analysis_obj.cost_details['latex_mapping'][parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )

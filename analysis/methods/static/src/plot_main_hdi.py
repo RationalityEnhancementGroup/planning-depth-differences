@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -73,7 +74,7 @@ if __name__ == "__main__":
     hdi_ranges = analysis_obj.load_hdi_ranges(analysis_obj.excluded_parameters)
 
     for parameter in analysis_obj.cost_details["constant_values"]:
-        print("==========")
+        logging.info("==========")
 
         plot_hdi(hdi_ranges, parameter)
         plt.savefig(
@@ -85,33 +86,33 @@ if __name__ == "__main__":
             lambda pid: hdi_ranges[pid][parameter][1] - hdi_ranges[pid][parameter][0]
         )
 
-        print("----------")
-        print(f"Correlation between BIC and spread for {parameter}")
-        print("----------")
+        logging.info("----------")
+        logging.info(f"Correlation between BIC and spread for {parameter}")
+        logging.info("----------")
         correlation_object = pg.corr(
             optimization_data["bic"], optimization_data[f"{parameter}_spread"]
         )
-        print(parameter)
-        print(get_correlation_text(correlation_object))
+        logging.info(parameter)
+        logging.info(get_correlation_text(correlation_object))
 
-        print("----------")
-        print(f"Correlation between BIC and MAP parameter value for {parameter}")
-        print("----------")
+        logging.info("----------")
+        logging.info(f"Correlation between BIC and MAP parameter value for {parameter}")
+        logging.info("----------")
         correlation_object = pg.corr(
             optimization_data["bic"], optimization_data[f"{parameter}"]
         )
-        print(get_correlation_text(correlation_object))
+        logging.info(get_correlation_text(correlation_object))
 
-        print("----------")
-        print(
+        logging.info("----------")
+        logging.info(
             f"Correlation between parameter spread and "
             f"MAP parameter value for {parameter}"
         )
-        print("----------")
+        logging.info("----------")
         correlation_object = pg.corr(
             optimization_data[f"{parameter}_spread"],
             optimization_data[f"{parameter}"],
         )
-        print(get_correlation_text(correlation_object))
+        logging.info(get_correlation_text(correlation_object))
 
     optimization_data

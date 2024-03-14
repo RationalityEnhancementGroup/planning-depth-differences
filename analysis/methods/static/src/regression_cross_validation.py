@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -104,64 +105,64 @@ if __name__ == "__main__":
     )
 
     for param in model_params:
-        print(
+        logging.info(
             f"Descriptive statistics for main experiment "
             f"({inputs.main_experiment_name}) {param}"
         )
-        print(
+        logging.info(
             f"$M: {main_optimization_data[param].mean():.2f}, "
             f"SD: {main_optimization_data[param].std():.2f}$"
         )
 
-        print(
+        logging.info(
             f"Descriptive statistics for validation experiment " f", test block {param}"
         )
-        print(
+        logging.info(
             f"$M: {test_subset[param].mean():.2f}, "
             f"SD: {test_subset[param].std():.2f}$"
         )
 
-        print(
+        logging.info(
             f"Descriptive statistics for validation experiment "
             f", baseline block {param}"
         )
-        print(
+        logging.info(
             f"$M: {fairy_subset[param].mean():.2f}, "
             f"SD: {fairy_subset[param].std():.2f}$"
         )
 
         comparison = pg.mwu(test_subset[param], main_optimization_data[param])
-        print(
+        logging.info(
             f"Comparison between validation experiment's "
             f"test block and main experiment ({inputs.main_experiment_name}) "
             f"for cost parameter: {param}"
         )
-        print(get_mann_whitney_text(comparison))
+        logging.info(get_mann_whitney_text(comparison))
 
         comparison = pg.mwu(fairy_subset[param], main_optimization_data[param])
-        print(
+        logging.info(
             f"Comparison between validation experiment's baseline  "
             f"block and main experiment ({inputs.main_experiment_name}) for "
             f"cost parameter: {param}"
         )
-        print(get_mann_whitney_text(comparison))
+        logging.info(get_mann_whitney_text(comparison))
 
         # test is paired, need to have same order of pids, which is why
         # we use combined df
         comparison = pg.wilcoxon(combined[param], combined[f"{param}_fairy"])
-        print(
+        logging.info(
             f"Comparison between validation experiment's test and "
             f"baseline blocks for cost parameter: {param}"
         )
-        print(get_wilcoxon_text(comparison))
+        logging.info(get_wilcoxon_text(comparison))
 
     for cost_variable_tuple in [
         ("COST", "given_cost"),
         ("DEPTH", "depth_cost_weight"),
     ]:
         assigned_cost, inferred_cost = cost_variable_tuple
-        print(f"RMSE for {inferred_cost}")
-        print(
+        logging.info(f"RMSE for {inferred_cost}")
+        logging.info(
             (
                 np.sum((combined[assigned_cost] - combined[inferred_cost]) ** 2)
                 / len(combined)
@@ -228,8 +229,10 @@ if __name__ == "__main__":
             )
         )
 
-        print(f"RMSE for LOO for {assigned_cost}, {inferred_cost}")
-        print(f"M: ${test_fold_rmses.mean():.2f}$ (SD: ${test_fold_rmses.std():.2f}$)")
+        logging.info(f"RMSE for LOO for {assigned_cost}, {inferred_cost}")
+        logging.info(
+            f"M: ${test_fold_rmses.mean():.2f}$ (SD: ${test_fold_rmses.std():.2f}$)"
+        )
 
         # fit model to all data, save
         mod = smf.ols(
@@ -240,10 +243,10 @@ if __name__ == "__main__":
             data=combined,
         )
         res = mod.fit()
-        print(res.summary())
+        logging.info(res.summary())
         res.save(subdirectory.joinpath(f"{assigned_cost}_model.pkl"))
-        print(f"Regression for {assigned_cost}")
-        print(get_regression_text(res))
+        logging.info(f"Regression for {assigned_cost}")
+        logging.info(get_regression_text(res))
 
         combined[f"prediction_error_{assigned_cost}"] = (
             res.predict(combined) - combined[assigned_cost]
@@ -259,7 +262,7 @@ if __name__ == "__main__":
         percentage_under_sd = np.sum(
             combined[f"rmse_{assigned_cost}"] < sd_values[inferred_cost]
         ) / len(combined[f"rmse_{assigned_cost}"])
-        print(
+        logging.info(
             f"Number of participants recovered in at least 1 SD for "
             f"{assigned_cost}: {percentage_under_sd: .2f}"
         )
@@ -274,7 +277,7 @@ if __name__ == "__main__":
         axis=1,
     )
     percentage_under_sd = np.sum(under_both) / len(under_both)
-    print(
+    logging.info(
         f"Number of participants recovered in at least 1 SD of Experiment 1 value for "
         f"both: {percentage_under_sd: .2f}"
     )
@@ -290,14 +293,14 @@ if __name__ == "__main__":
         ("DEPTH", "depth_cost_weight"),
     ]:
         assigned_cost, inferred_cost = cost_variable_tuple
-        print(f"Test subject difference vs variance {assigned_cost}")
+        logging.info(f"Test subject difference vs variance {assigned_cost}")
         comparison = pg.ttest(
             combined[f"prediction_error_squared_{assigned_cost}"],
             combined[assigned_cost].var(),
             alternative="less",
         )
-        print(get_ttest_text(comparison))
-        print(
+        logging.info(get_ttest_text(comparison))
+        logging.info(
             combined[f"prediction_error_squared_{assigned_cost}"].mean(),
             combined[assigned_cost].var(),
         )
@@ -308,7 +311,7 @@ if __name__ == "__main__":
     ]:
         assigned_cost, inferred_cost = cost_variable_tuple
 
-        print(
+        logging.info(
             f"Difference in block order for "
             f"baseline block MAP estimates {inferred_cost}"
         )
@@ -316,19 +319,19 @@ if __name__ == "__main__":
             combined[combined["FAIRY_GOD_CONDITION"]][f"{inferred_cost}_fairy"],
             combined[~combined["FAIRY_GOD_CONDITION"]][f"{inferred_cost}_fairy"],
         )
-        print(get_mann_whitney_text(comparison))
+        logging.info(get_mann_whitney_text(comparison))
 
-        print(
+        logging.info(
             f"Baseline interrupts: "
             f"{np.mean(combined[combined['FAIRY_GOD_CONDITION']][f'{inferred_cost}_fairy']):.3f}"  # noqa: E501
             f"{np.std(combined[combined['FAIRY_GOD_CONDITION']][f'{inferred_cost}_fairy']):.3f}"  # noqa: E501
         )
-        print(
+        logging.info(
             f"{np.mean(combined[~combined['FAIRY_GOD_CONDITION']][f'{inferred_cost}_fairy']):.3f}"  # noqa: E501
             f" {np.std(combined[~combined['FAIRY_GOD_CONDITION']][f'{inferred_cost}_fairy']):.3f}"  # noqa: E501
         )
 
-        print(
+        logging.info(
             f"Difference in block order for "
             f"test block MAP estimates {inferred_cost}"
         )
@@ -336,11 +339,11 @@ if __name__ == "__main__":
             combined[combined["FAIRY_GOD_CONDITION"]][inferred_cost],
             combined[~combined["FAIRY_GOD_CONDITION"]][inferred_cost],
         )
-        print(get_mann_whitney_text(comparison))
+        logging.info(get_mann_whitney_text(comparison))
 
-        print(
+        logging.info(
             f"Baseline interrupts: {np.mean(combined[combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f} {np.std(combined[combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f}"  # noqa: E501
         )
-        print(
+        logging.info(
             f"{np.mean(combined[~combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f} {np.std(combined[~combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f}"  # noqa: E501
         )

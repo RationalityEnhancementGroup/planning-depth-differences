@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 from itertools import combinations
 from pathlib import Path
@@ -47,24 +48,24 @@ if __name__ == "__main__":
     )
 
     for exp1, exp2 in list(combinations(inputs.experiment_names, 2)):
-        print(f"{exp1}, {exp2}")
-        print("--------------")
+        logging.info(f"{exp1}, {exp2}")
+        logging.info("--------------")
         for model_param in model_params:
-            print(model_param)
+            logging.info(model_param)
             stat_obj = pg.mwu(
                 analysis_obs[exp1][model_param], analysis_obs[exp2][model_param]
             )
-            print(
+            logging.info(
                 f"M_{{{exp1}}} = "
                 f"{np.mean((analysis_obs[exp1][model_param])):.3f}"
                 f", M_{{{exp2}}} = "
                 f"{np.mean((analysis_obs[exp2][model_param])):.3f}"
             )
-            print(get_mann_whitney_text(stat_obj))
+            logging.info(get_mann_whitney_text(stat_obj))
 
     for exp in inputs.experiment_names:
-        print(exp)
+        logging.info(exp)
         for model_param in model_params:
-            print(
+            logging.info(
                 f"{analysis_obj.cost_details['latex_mapping'][model_param]} & {np.mean((analysis_obs[exp][model_param])):.3f} ({np.std((analysis_obs[exp][model_param])):.3f}) \\\ "  # noqa: W605, E501
             )

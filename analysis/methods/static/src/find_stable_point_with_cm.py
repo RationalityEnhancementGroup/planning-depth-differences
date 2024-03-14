@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 from collections import Counter
 from pathlib import Path
@@ -73,7 +74,7 @@ if __name__ == "__main__":
     mode_vals = []
     mode_counts = []
     strategy_counts = []
-    for pid, strategies in exp.participant_strategies.items():
+    for _pid, strategies in exp.participant_strategies.items():
         last_strategies = strategies[-20:]
 
         mode_vals.append(["last", mode(last_strategies).mode])
@@ -101,37 +102,39 @@ if __name__ == "__main__":
         bbox_inches="tight",
     )
 
-    print("Number of strategies per participant in trial subset (1 is better)")
-    print(
+    logging.info("Number of strategies per participant in trial subset (1 is better)")
+    logging.info(
         strategy_count_df[strategy_count_df["type"] == "last"]
         .groupby(["count"])
         .count()
     )
 
-    print("Into percentages for reporting")
-    print(
+    logging.info("Into percentages for reporting")
+    logging.info(
         strategy_count_df[strategy_count_df["type"] == "last"]
         .groupby(["count"])
         .count()
         / len(strategy_count_df[strategy_count_df["type"] == "last"])
     )
 
-    print(
+    logging.info(
         "Number of trials using mode strategy per participant "
         "in trial subset (20 is better)"
     )
-    print(mode_count_df[strategy_count_df["type"] == "last"].groupby(["count"]).count())
+    logging.info(
+        mode_count_df[strategy_count_df["type"] == "last"].groupby(["count"]).count()
+    )
 
-    print("T-Test 1 vs number of strategies per participant")
+    logging.info("T-Test 1 vs number of strategies per participant")
 
     ttest_obj = pg.ttest(
         x=strategy_count_df[strategy_count_df["type"] == "last"]["count"].values, y=1
     )
-    print(get_ttest_text(ttest_obj))
-    print(
+    logging.info(get_ttest_text(ttest_obj))
+    logging.info(
         f"$M: {strategy_count_df[strategy_count_df['type'] == 'last']['count'].mean():.3f}, "  # noqa: E501
         f"SD: {strategy_count_df[strategy_count_df['type'] == 'last']['count'].std():.3f}$"  # noqa: E501
     )
 
-    print("Most common strategies (strategy number, number of participants)")
-    print(Counter([val[1][0] for val in mode_vals]).most_common())
+    logging.info("Most common strategies (strategy number, number of participants)")
+    logging.info(Counter([val[1][0] for val in mode_vals]).most_common())

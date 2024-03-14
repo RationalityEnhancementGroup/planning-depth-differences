@@ -1,4 +1,5 @@
 import itertools
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -40,8 +41,8 @@ if __name__ == "__main__":
     )
     all_cost_model_df = []
     for excluded_parameters in analysis_obj.trial_by_trial_models:
-        print(excluded_parameters)
-        print("================================")
+        logging.info(excluded_parameters)
+        logging.info("================================")
 
         curr_optimization_data = analysis_obj.query_optimization_data(
             excluded_parameters=excluded_parameters
@@ -113,7 +114,7 @@ if __name__ == "__main__":
         for classification, nodes in analysis_obj.experiment_details[
             "node_classification"
         ].items():
-            print(
+            logging.info(
                 f"Correlation of metric '{classification}' between "
                 f"simulated and real data, per participant"
             )
@@ -121,7 +122,7 @@ if __name__ == "__main__":
                 sum_over_pids[f"num_{classification}"],
                 sum_over_pids[f"num_{classification}_optimal"],
             )
-            print(get_correlation_text(correlation_obj))
+            logging.info(get_correlation_text(correlation_obj))
 
             # A little hacky, for the supplementary analyses
             curr_df = sum_over_pids.copy(deep=True)
@@ -141,20 +142,20 @@ if __name__ == "__main__":
     for classification, nodes in analysis_obj.experiment_details[
         "node_classification"
     ].items():
-        print(f"Full Friedman {classification}")
+        logging.info(f"Full Friedman {classification}")
         friedman_object = pg.friedman(
             dv=f"difference_{classification}",
             within="excluded",  # TODO: why
             subject="pid",
             data=all_cost_model_df,
         )
-        print(get_friedman_test_text(friedman_object))
-        print(friedman_object)
+        logging.info(get_friedman_test_text(friedman_object))
+        logging.info(friedman_object)
 
     for classification, nodes in analysis_obj.experiment_details[
         "node_classification"
     ].items():
-        print(f"Pair-wise table for {classification}")
+        logging.info(f"Pair-wise table for {classification}")
         for model_pair in itertools.combinations(analysis_obj.trial_by_trial_models, 2):
             friedman_object = pg.friedman(
                 dv=f"difference_{classification}",
@@ -163,7 +164,7 @@ if __name__ == "__main__":
                 data=all_cost_model_df[all_cost_model_df["excluded"].isin(model_pair)],
             )
 
-            print(
+            logging.info(
                 f"{analysis_obj.model_name_mapping[() if model_pair[0] == '' else tuple(model_pair[0].split(','))]} & "  # noqa : E501
                 f"{analysis_obj.model_name_mapping[() if model_pair[1] == '' else tuple(model_pair[1].split(','))]} & "  # noqa : E501
                 f"{friedman_object.Q[0]:.3f}"
@@ -178,16 +179,16 @@ if __name__ == "__main__":
                 data=all_cost_model_df[all_cost_model_df["excluded"].isin(model_pair)],
             )
 
-            print(get_friedman_test_text(friedman_object))
+            logging.info(get_friedman_test_text(friedman_object))
 
     for classification, nodes in analysis_obj.experiment_details[
         "node_classification"
     ].items():
         for model in analysis_obj.trial_by_trial_models:
-            print(f"Descriptive {model}, {classification} difference")
+            logging.info(f"Descriptive {model}, {classification} difference")
             descriptive_stats = all_cost_model_df[
                 all_cost_model_df["excluded"] == model
             ][f"difference_{classification}"].describe()
-            print(
+            logging.info(
                 f"M={descriptive_stats['mean']:.3f}, SD={descriptive_stats['std']:.3f}"
             )

@@ -2,6 +2,7 @@
 Script for investigating choosing parameters \
 from full model vs choosing best model per participant.
 """
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 from typing import Any, Dict
@@ -123,7 +124,7 @@ if __name__ == "__main__":
 
         results = []
         for row_idx, row in bms_df.iterrows():
-            print([row_idx, np.max(row), bms_df.columns[np.argmax(row)]])
+            logging.info([row_idx, np.max(row), bms_df.columns[np.argmax(row)]])
             results.append([row_idx, np.max(row), bms_df.columns[np.argmax(row)]])
 
         new_bms_df = pd.DataFrame(results, columns=["pid", "prob_model", "model_name"])
@@ -144,9 +145,9 @@ if __name__ == "__main__":
         import pingouin as pg
 
         for param in model_params:
-            print("----------")
-            print(param)
-            print("----------")
+            logging.info("----------")
+            logging.info(param)
+            logging.info("----------")
 
             # This is the correlation between
             # fixed and random effect inferred parameters.
@@ -154,14 +155,14 @@ if __name__ == "__main__":
                 optimization_data.sort_values(by="trace_pid")[param],
                 new_bms_df.sort_values(by="pid")[param],
             )
-            print(get_correlation_text(correlation_object))
+            logging.info(get_correlation_text(correlation_object))
 
             # Non-parametric paired t-test for parameter values
             wilcoxon_object = pg.wilcoxon(
                 optimization_data.sort_values(by="trace_pid")[param],
                 new_bms_df.sort_values(by="pid")[param],
             )
-            print(get_wilcoxon_text(wilcoxon_object))
+            logging.info(get_wilcoxon_text(wilcoxon_object))
 
             plotting_data_fixed = (
                 optimization_data.sort_values(by="trace_pid")[param]

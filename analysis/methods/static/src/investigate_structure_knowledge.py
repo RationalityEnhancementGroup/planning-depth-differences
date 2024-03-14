@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 from itertools import combinations
 from pathlib import Path
@@ -110,7 +111,7 @@ if __name__ == "__main__":
     full_score_pids = scores[
         scores["score"] == len(analysis_obj.post_quizzes)
     ].pid.unique()
-    print(f"Number of participants with full score: {len(full_score_pids)}")
+    logging.info(f"Number of participants with full score: {len(full_score_pids)}")
 
     optimization_data = optimization_data.merge(
         trial_by_trial_df[trial_by_trial_df["i_episode"].isin(relevant_trials)]
@@ -137,30 +138,30 @@ if __name__ == "__main__":
     optimization_data = optimization_data[optimization_data["Model Name"] == best_model]
 
     for obs_var in ["avg"] + model_params:
-        print("==========")
-        print(f"Comparisons for {obs_var}")
+        logging.info("==========")
+        logging.info(f"Comparisons for {obs_var}")
         omnibus = pg.kruskal(data=optimization_data, dv=obs_var, between="score")
-        print("----------")
-        print("Omnibus test")
-        print(get_kruskal_wallis_text(omnibus))
+        logging.info("----------")
+        logging.info("Omnibus test")
+        logging.info(get_kruskal_wallis_text(omnibus))
 
-        print("----------")
-        print(f"Pair-wise comparisons: {obs_var}")
-        print("----------")
+        logging.info("----------")
+        logging.info(f"Pair-wise comparisons: {obs_var}")
+        logging.info("----------")
         pairs = combinations(optimization_data["score"].unique(), 2)
 
         for pair in pairs:
             score1, score2 = pair
-            print("----------")
-            print(f"Pair-wise comparison: {obs_var} {score1}, {score2}")
-            print("----------")
+            logging.info("----------")
+            logging.info(f"Pair-wise comparison: {obs_var} {score1}, {score2}")
+            logging.info("----------")
 
             pair_comparison = pg.mwu(
                 optimization_data[optimization_data["score"] == score1][obs_var],
                 optimization_data[optimization_data["score"] == score2][obs_var],
             )
 
-            print(get_mann_whitney_text(pair_comparison))
+            logging.info(get_mann_whitney_text(pair_comparison))
 
             mean1 = np.mean(
                 optimization_data[optimization_data["score"] == score1][obs_var]
@@ -168,7 +169,7 @@ if __name__ == "__main__":
             mean2 = np.mean(
                 optimization_data[optimization_data["score"] == score2][obs_var]
             )
-            print(
+            logging.info(
                 f"$M_{{\\text{{{score1:.0f}}}}}={mean1:.2f}$ "
                 f"vs $M_{{\\text{{{score2:.0f}}}}}={mean2:.2f}$"
             )

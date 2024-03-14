@@ -1,4 +1,5 @@
 import itertools
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -72,8 +73,8 @@ if __name__ == "__main__":
         )
 
     for param in analysis_obj.cost_details["constant_values"]:
-        print("----------")
-        print(f"Correlation between {param} and BIC")
-        print("----------")
+        logging.info("----------")
+        logging.info(f"Correlation between {param} and BIC")
+        logging.info("----------")
         correlation = pg.corr(optimization_data[param], optimization_data["bic"])
-        print(get_correlation_text(correlation))
+        logging.info(get_correlation_text(correlation))

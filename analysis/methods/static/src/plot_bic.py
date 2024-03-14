@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -94,7 +95,7 @@ if __name__ == "__main__":
         axis=1,
     )
 
-    print(bic_df.sort_values(by="bic").round(5))
+    logging.info(bic_df.sort_values(by="bic").round(5))
 
     if (
         hasattr(analysis_obj, "simulated_bic")
@@ -130,12 +131,14 @@ if __name__ == "__main__":
     )
 
     # Bayes Factor approximation
-    print("Log Bayes factor approximation, difference between top two models")
-    print(
+    logging.info("Log Bayes factor approximation, difference between top two models")
+    logging.info(
         (bic_df["bic"].sort_values().iloc[1] - bic_df["bic"].sort_values().iloc[0]) / 2
     )
 
-    print("Log Bayes factor approximation, difference between top and third models")
-    print(
+    logging.info(
+        "Log Bayes factor approximation, difference between top and third models"
+    )
+    logging.info(
         (bic_df["bic"].sort_values().iloc[2] - bic_df["bic"].sort_values().iloc[0]) / 2
     )

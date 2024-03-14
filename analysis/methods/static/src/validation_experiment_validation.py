@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -63,9 +64,9 @@ if __name__ == "__main__":
     ]
 
     for metric in ["pctg_late", "num_nodes"]:
-        print("----------")
-        print(f"Difference in behavior between test and fairy blocks: {metric}")
-        print("----------")
+        logging.info("----------")
+        logging.info(f"Difference in behavior between test and fairy blocks: {metric}")
+        logging.info("----------")
         comparison = pg.wilcoxon(
             node_classification_per_block[
                 node_classification_per_block["block"] == "test"
@@ -75,14 +76,14 @@ if __name__ == "__main__":
             ].sort_values(["pid"])[metric],
         )
 
-        print(comparison)
+        logging.info(comparison)
 
-    print("==========")
+    logging.info("==========")
     for analysis_pair in [("pctg_late", "DEPTH"), ("num_nodes", "COST")]:
         dv, between = analysis_pair
-        print("----------")
-        print(f"ANOVA results for dv: {dv}, between: {between}, within: block")
-        print("----------")
+        logging.info("----------")
+        logging.info(f"ANOVA results for dv: {dv}, between: {between}, within: block")
+        logging.info("----------")
         anova_object = pg.mixed_anova(
             data=node_classification_per_block[
                 node_classification_per_block["block"].isin(["test", "fairy"])
@@ -92,11 +93,11 @@ if __name__ == "__main__":
             between=between,
             subject="pid",
         )
-        print(get_anova_text(anova_object))
+        logging.info(get_anova_text(anova_object))
 
-        print("----------")
-        print(f"ANOVA results for dv: {dv}, between: block order, within: block")
-        print("----------")
+        logging.info("----------")
+        logging.info(f"ANOVA results for dv: {dv}, between: block order, within: block")
+        logging.info("----------")
         anova_object = pg.mixed_anova(
             data=node_classification_per_block[
                 node_classification_per_block["block"].isin(["test", "fairy"])
@@ -106,13 +107,13 @@ if __name__ == "__main__":
             between="FAIRY_GOD_CONDITION",
             subject="pid",
         )
-        print(get_anova_text(anova_object))
+        logging.info(get_anova_text(anova_object))
 
-        print("==========")
+        logging.info("==========")
         for block in node_classification_per_block["block"].unique():
-            print("----------")
-            print(f"Correlation between {dv} and {between} for block: {block}")
-            print("----------")
+            logging.info("----------")
+            logging.info(f"Correlation between {dv} and {between} for block: {block}")
+            logging.info("----------")
             correlation_obj = pg.corr(
                 node_classification_per_block[
                     node_classification_per_block["block"] == block
@@ -122,16 +123,16 @@ if __name__ == "__main__":
                 ][between],
                 method="spearman",
             )
-            print(get_correlation_text(correlation_obj))
+            logging.info(get_correlation_text(correlation_obj))
 
     for block in node_classification_per_block["block"].unique():
         curr_result_df = node_classification_per_block[
             node_classification_per_block["block"] == block
         ]
 
-        print(f"Difference in block order for clicks in {block} block")
+        logging.info(f"Difference in block order for clicks in {block} block")
         comparison = pg.mwu(
             curr_result_df[curr_result_df["FAIRY_GOD_CONDITION"] == 1]["num_clicks"],
             curr_result_df[curr_result_df["FAIRY_GOD_CONDITION"] == 0]["num_clicks"],
         )
-        print(get_mann_whitney_text(comparison))
+        logging.info(get_mann_whitney_text(comparison))
