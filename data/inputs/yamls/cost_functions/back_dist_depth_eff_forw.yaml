@@ -1,3 +1,4 @@
+cost_function_name: back_dist_depth_eff_forw
 cost_function: "lambda back_added_cost, depth_cost_weight, distance_multiplier, forw_added_cost, given_cost : lambda state, action, graph: linear_depth(depth_cost_weight=depth_cost_weight, static_cost_weight=0)(state, action, graph=graph) + forward_search_cost(inspection_cost=0, added_cost=forw_added_cost, include_start=1.00)(state, action, graph=graph) + backward_search_cost(inspection_cost=0, added_cost=back_added_cost, include_start=1.00, include_end=1.00)(state, action, graph=graph) + distance_graph_cost(given_cost=given_cost, distance_multiplier=distance_multiplier)(state, action, graph=graph)"
 cost_parameter_args:
         - back_added_cost
