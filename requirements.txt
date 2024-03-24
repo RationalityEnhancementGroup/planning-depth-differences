@@ -3,9 +3,9 @@ dill
 # due to gym 0.21.0
 wheel<0.40.0
 ./submodules/mcl_toolbox/
-mouselab @ git+https://github.com/RationalityEnhancementGroup/mouselab-mdp-tools.git@dev#egg=mouselab  # noqa
-costometer @ git+https://github.com/RationalityEnhancementGroup/costometer.git@v0.0.3#egg=costometer # noqa
-#download_tools @ git+https://github.com/RationalityEnhancementGroup/download-tools.git@v0.0.2#egg=download_tools # noqa
+./submodules/mouselab/
+./submodules/costometer/
+./submodules/download_tools/
 ipykernel
 papermill
 numpy<1.23 # For Gpyopt

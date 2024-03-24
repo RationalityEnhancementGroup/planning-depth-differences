@@ -1,0 +1,9 @@
+[submodule "submodules/costometer"]
+	path = submodules/costometer
+	url = git@github.com:RationalityEnhancementGroup/costometer.git
+[submodule "submodules/mouselab-mdp-tools"]
+	path = submodules/mouselab-mdp-tools
+	url = git@github.com:RationalityEnhancementGroup/mouselab-mdp-tools.git
+[submodule "submodules/download-tools"]
+	path = submodules/download-tools
+	url = git@github.com:RationalityEnhancementGroup/download-tools.git
