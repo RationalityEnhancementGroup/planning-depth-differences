@@ -10,21 +10,21 @@ References (from spm_BMS.m):
 % NeuroImage 84:971-85. doi: 10.1016/j.neuroimage.2013.08.065
 """
 import logging
-from argparse import ArgumentParser
+import sys
 from pathlib import Path
 from typing import Any, Dict
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from costometer.utils import get_static_palette
+from costometer.utils.scripting_utils import standard_parse_args
 
 NO_MATLAB = False
 try:
     import matlab.engine
 except ModuleNotFoundError:
     NO_MATLAB = True
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
-from costometer.utils import AnalysisObject, get_static_palette, set_font_sizes
-
-set_font_sizes()
 
 
 def run_bms(optimization_data: pd.DataFrame, path_to_spm: Path = None) -> pd.DataFrame:
@@ -100,28 +100,11 @@ if __name__ == "__main__":
     Example usage:
     python src/plot_bms.py -e MainExperiment
     """
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        dest="experiment_name",
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="methods/static",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-    inputs = parser.parse_args()
-
     irl_path = Path(__file__).resolve().parents[4]
-    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
     )
 
     optimization_data = analysis_obj.query_optimization_data()
@@ -198,7 +181,7 @@ if __name__ == "__main__":
         "Exceedance Probabilities",
     ]:
         bms_df[field] = bms_df[field].apply(lambda entry: f"{entry:.2f}")
-    logging.info(f"{' & '.join(bms_df)} \\\ \hline")  # noqa
+    logging.info(f"{' & '.join(bms_df)} \\\ \hline")  # noqa : W605
 
     # need as numeric rather than object for sorting
     bms_df["Expected number of participants best explained by the model"] = bms_df[
@@ -211,4 +194,4 @@ if __name__ == "__main__":
     ).iterrows():
         logging.info(
             f"{' & '.join([val if not isinstance(val, float) else f'{val:0.2f}' for val in row.values])} \\\\"  # noqa : E501
-        )  # noqa
+        )

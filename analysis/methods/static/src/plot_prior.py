@@ -1,12 +1,10 @@
-"""
-Tiny script to plot what a discrete prior looks like
-"""
+"""Tiny script to plot what a discrete prior looks like."""
 from argparse import ArgumentParser
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import yaml
-from costometer.utils import get_prior, set_font_sizes
+from costometer.utils import get_prior
 from scipy import stats  # noqa needed for eval of rv string
 
 if __name__ == "__main__":
@@ -40,7 +38,6 @@ if __name__ == "__main__":
     )
     temp_prior_dict = dict(zip(temp_prior.vals, temp_prior.probs))
 
-    set_font_sizes()
     # adapted from:
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.rv_discrete.html
     fig, ax = plt.subplots(1, 1)

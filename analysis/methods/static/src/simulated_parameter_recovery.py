@@ -1,6 +1,6 @@
 import itertools
 import logging
-from argparse import ArgumentParser
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -9,15 +9,8 @@ import pandas as pd
 import pingouin as pg
 import seaborn as sns
 import statsmodels.formula.api as smf
-from costometer.utils import (
-    AnalysisObject,
-    get_correlation_text,
-    get_pval_string,
-    get_regression_text,
-    set_font_sizes,
-)
-
-set_font_sizes()
+from costometer.utils import get_correlation_text, get_pval_string, get_regression_text
+from costometer.utils.scripting_utils import standard_parse_args
 
 
 def plot_simulated_recovery(mle, pretty_name_mapping):
@@ -48,39 +41,11 @@ if __name__ == "__main__":
     Example usage:
     python src/simulated_parameter_recovery.py -e SoftmaxRecovery
     """
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        dest="experiment_name",
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="methods/static",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-    inputs = parser.parse_args()
-
     irl_path = Path(__file__).resolve().parents[4]
-    data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
-    logging.basicConfig(
-        level=logging.INFO,
-        handlers=[
-            logging.FileHandler(
-                data_path
-                / "log"
-                / f"{inputs.experiment_name}_{Path(__file__).stem}.log"
-            ),
-            logging.StreamHandler(),
-        ],
-    )
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
     )
 
     optimization_data = analysis_obj.query_optimization_data(
@@ -137,7 +102,7 @@ if __name__ == "__main__":
     plt.title(analysis_obj.model_name_mapping[model])
     plt.tight_layout()
     plt.savefig(
-        data_path.joinpath(
+        subdirectory.joinpath(
             f"figs/{inputs.experiment_name}_parameter_recovery_correlation.png"
         )
     )
@@ -188,7 +153,9 @@ if __name__ == "__main__":
     plt.xlabel("Simulated Agent Temperature")
     plt.ylabel("Simulated Agent RMSE")
     plt.tight_layout()
-    plt.savefig(data_path.joinpath(f"figs/{inputs.experiment_name}_temp_vs_rmse.png"))
+    plt.savefig(
+        subdirectory.joinpath(f"figs/{inputs.experiment_name}_temp_vs_rmse.png")
+    )
 
     if "sim_temp" in optimization_data:
         plt.figure(figsize=(11.7, 8.27))
@@ -198,7 +165,7 @@ if __name__ == "__main__":
         ax.set_yscale("log")
         plt.tight_layout()
         plt.savefig(
-            data_path.joinpath(f"figs/{inputs.experiment_name}_recovered_temp.png")
+            subdirectory.joinpath(f"figs/{inputs.experiment_name}_recovered_temp.png")
         )
 
     for param in model_params:
@@ -260,7 +227,9 @@ if __name__ == "__main__":
         {key: val for key, val in pretty_names.items() if key in pretty_cost_names},
     )
     plt.savefig(
-        data_path.joinpath(f"figs/{inputs.experiment_name}_cost_parameter_recovery.png")
+        subdirectory.joinpath(
+            f"figs/{inputs.experiment_name}_cost_parameter_recovery.png"
+        )
     )
 
     plot_simulated_recovery(
@@ -268,7 +237,7 @@ if __name__ == "__main__":
         {key: val for key, val in pretty_names.items() if key not in pretty_cost_names},
     )
     plt.savefig(
-        data_path.joinpath(
+        subdirectory.joinpath(
             f"figs/{inputs.experiment_name}_additional_parameter_recovery.png"
         )
     )

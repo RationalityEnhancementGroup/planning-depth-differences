@@ -1,29 +1,14 @@
-from argparse import ArgumentParser
+import sys
 from pathlib import Path
 
-from costometer.utils import AnalysisObject
+from costometer.utils.scripting_utils import standard_parse_args
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        dest="experiment_name",
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="methods/static",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-    inputs = parser.parse_args()
-
     irl_path = Path(__file__).resolve().parents[4]
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
     )
+
     trial_by_trial_df = analysis_obj.get_trial_by_trial_likelihoods()

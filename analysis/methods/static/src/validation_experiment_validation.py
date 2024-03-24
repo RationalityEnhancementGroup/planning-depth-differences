@@ -1,41 +1,19 @@
 import logging
-from argparse import ArgumentParser
+import sys
 from pathlib import Path
 
 import numpy as np
 import pingouin as pg
-from costometer.utils import (
-    AnalysisObject,
-    get_anova_text,
-    get_correlation_text,
-    get_mann_whitney_text,
-)
+from costometer.utils import get_anova_text, get_correlation_text, get_mann_whitney_text
+from costometer.utils.scripting_utils import standard_parse_args
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        dest="experiment_name",
-        default="ValidationExperiment",
-        type=str,
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="methods/static",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-    inputs = parser.parse_args()
-
     irl_path = Path(__file__).resolve().parents[4]
-    data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
+        default_experiment="ValidationExperiment",
     )
 
     mouselab_data = analysis_obj.dfs["mouselab-mdp"]
@@ -57,7 +35,7 @@ if __name__ == "__main__":
         ]
         + [
             f"num_{node_classification}"
-            for node_classification in analysis_obj.experiment_details.node_classification.keys()
+            for node_classification in analysis_obj.experiment_details.node_classification.keys()  # noqa : E501
         ]
     ]
 

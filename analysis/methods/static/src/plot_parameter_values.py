@@ -1,12 +1,11 @@
-from argparse import ArgumentParser
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from costometer.utils import AnalysisObject, get_static_palette, set_font_sizes
-
-set_font_sizes(small_size=14)
+from costometer.utils import get_static_palette
+from costometer.utils.scripting_utils import standard_parse_args
 
 
 def bic_plot(
@@ -34,29 +33,11 @@ if __name__ == "__main__":
     Example usage:
     python src/plot_bic.py -e MainExperiment
     """
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        dest="experiment_name",
-        default="MainExperiment",
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="methods/static",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-    inputs = parser.parse_args()
-
     irl_path = Path(__file__).resolve().parents[4]
-    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
     )
 
     optimization_data = analysis_obj.query_optimization_data(

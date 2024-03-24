@@ -23,10 +23,7 @@ if __name__ == "__main__":
     inputs = parser.parse_args()
 
     irl_path = Path(__file__).resolve().parents[4]
-    data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
-
-    data_path.joinpath("log").mkdir(parents=True, exist_ok=True)
-    data_path.joinpath("data").mkdir(parents=True, exist_ok=True)
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
 
     bic_dict = {}
     for experiment_name in inputs.experiment_name.split(","):
@@ -84,5 +81,5 @@ if __name__ == "__main__":
 
             bic_dict[experiment_name] = bic_val
 
-        with open(data_path.joinpath("data/Simulated_BIC.pickle"), "wb") as f:
+        with open(subdirectory.joinpath("data/Simulated_BIC.pickle"), "wb") as f:
             pickle.dump(bic_dict, f)

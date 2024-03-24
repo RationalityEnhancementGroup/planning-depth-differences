@@ -1,42 +1,21 @@
 import itertools
 import logging
-from argparse import ArgumentParser
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pingouin as pg
 import seaborn as sns
-from costometer.utils import AnalysisObject, get_correlation_text, set_font_sizes
-
-set_font_sizes()
+from costometer.utils import get_correlation_text
+from costometer.utils.scripting_utils import standard_parse_args
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        default="SoftmaxRecovery",
-        dest="experiment_name",
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="methods/static",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-    inputs = parser.parse_args()
-
     irl_path = Path(__file__).resolve().parents[4]
-    data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
-
-    data_path.joinpath("log").mkdir(parents=True, exist_ok=True)
-    data_path.joinpath("data").mkdir(parents=True, exist_ok=True)
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
+        default_subdirectory="SoftmaxRecovery",
     )
 
     optimization_data = analysis_obj.query_optimization_data(
@@ -66,7 +45,7 @@ if __name__ == "__main__":
         plt.xlabel(f"${sim_latex_mapping[subset[1]]}$")
         plt.ylabel(f"${sim_latex_mapping[subset[0]]}$")
         plt.savefig(
-            data_path.joinpath(
+            subdirectory.joinpath(
                 f"figs/{inputs.experiment_name}_{'_'.join(sorted(subset))}xBIC.png"
             ),
             bbox_inches="tight",

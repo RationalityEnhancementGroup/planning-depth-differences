@@ -1,44 +1,21 @@
 import logging
-from argparse import ArgumentParser
+import sys
 from pathlib import Path
 
 import numpy as np
 import pingouin as pg
-from costometer.utils import (
-    AnalysisObject,
-    get_correlation_text,
-    get_mann_whitney_text,
-    set_font_sizes,
-)
-
-set_font_sizes()
+from costometer.utils import get_correlation_text, get_mann_whitney_text
+from costometer.utils.scripting_utils import standard_parse_args
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        default="SoftmaxRecovery",
-        dest="experiment_name",
-        metavar="experiment_name",
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="methods/static",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-    inputs = parser.parse_args()
-
     irl_path = Path(__file__).resolve().parents[4]
-    data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
+        default_experiment="SoftmaxRecovery",
     )
+
     optimization_data = analysis_obj.query_optimization_data(
         excluded_parameters=analysis_obj.analysis_details.excluded_parameters
     )

@@ -1,44 +1,26 @@
 import itertools
 import logging
-from argparse import ArgumentParser
+import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import pingouin as pg
 from costometer.utils import (
-    AnalysisObject,
     get_correlation_text,
     get_friedman_test_text,
     get_pval_string,
 )
+from costometer.utils.scripting_utils import standard_parse_args
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        dest="experiment_name",
-        metavar="experiment_name",
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="methods/static",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-
-    inputs = parser.parse_args()
-
     irl_path = Path(__file__).resolve().parents[4]
-    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
     )
+
     all_cost_model_df = []
     for (
         excluded_parameter_string,
@@ -140,10 +122,7 @@ if __name__ == "__main__":
 
     all_cost_model_df = pd.concat(all_cost_model_df)
 
-    for (
-        classification,
-        nodes,
-    ) in analysis_obj.experiment_details.node_classification.items():
+    for classification in analysis_obj.experiment_details.node_classification.keys():
         logging.info(f"Full Friedman {classification}")
         friedman_object = pg.friedman(
             dv=f"difference_{classification}",
@@ -154,10 +133,7 @@ if __name__ == "__main__":
         logging.info(get_friedman_test_text(friedman_object))
         logging.info(friedman_object)
 
-    for (
-        classification,
-        nodes,
-    ) in analysis_obj.experiment_details.node_classification.items():
+    for classification in analysis_obj.experiment_details.node_classification.keys():
         logging.info(f"Pair-wise table for {classification}")
         for model_pair in itertools.combinations(
             analysis_obj.analysis_details.trial_by_trial_models, 2

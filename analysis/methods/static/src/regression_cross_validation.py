@@ -49,7 +49,7 @@ if __name__ == "__main__":
     inputs = parser.parse_args()
 
     irl_path = Path(__file__).resolve().parents[4]
-    data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
 
     analysis_obj_test = AnalysisObject(
         inputs.experiment_name_test,
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         excluded_parameters=main_analysis_obj.analysis_details.excluded_parameters
     )
 
-    subdirectory = data_path.joinpath("data/regressions")
+    subdirectory = subdirectory.joinpath("data/regressions")
     subdirectory.mkdir(parents=True, exist_ok=True)
 
     fairy_subset = analysis_obj_baseline.join_optimization_df_and_processed(
@@ -286,7 +286,7 @@ if __name__ == "__main__":
 
     plt.figure(figsize=(11.7, 8.27))
     sns.violinplot(x="variable", y="value", data=all_rmses)
-    plt.savefig(data_path.joinpath("figs/ValidationExperiment_RMSE_violin.png"))
+    plt.savefig(subdirectory.joinpath("figs/ValidationExperiment_RMSE_violin.png"))
 
     for cost_variable_tuple in [
         ("COST", "given_cost"),
@@ -342,8 +342,11 @@ if __name__ == "__main__":
         logging.info(get_mann_whitney_text(comparison))
 
         logging.info(
-            f"Baseline interrupts: {np.mean(combined[combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f} {np.std(combined[combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f}"  # noqa: E501
+            f"Baseline interrupts: "
+            f"{np.mean(combined[combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f}"
+            f"{np.std(combined[combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f}"
         )
         logging.info(
-            f"{np.mean(combined[~combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f} {np.std(combined[~combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f}"  # noqa: E501
+            f"{np.mean(combined[~combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f}"
+            f"{np.std(combined[~combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f}"
         )

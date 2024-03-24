@@ -6,14 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pingouin as pg
 import seaborn as sns
-from costometer.utils import (
-    AnalysisObject,
-    get_static_palette,
-    get_wilcoxon_text,
-    set_font_sizes,
-)
-
-set_font_sizes()
+from costometer.utils import AnalysisObject, get_static_palette, get_wilcoxon_text
 
 
 def plot_participant_average_likelihoods(

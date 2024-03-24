@@ -42,7 +42,7 @@ if __name__ == "__main__":
     inputs = parser.parse_args()
 
     irl_path = Path(__file__).resolve().parents[4]
-    data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
+    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
 
     analysis_obj_test = AnalysisObject(
         inputs.experiment_name_test,
@@ -83,7 +83,7 @@ if __name__ == "__main__":
         excluded_parameter_str=analysis_obj_test.analysis_details.excluded_parameter_str
     )
     hdi_ranges["fairy"] = analysis_obj_fairy.load_hdi_ranges(
-        excluded_parameter_str=analysis_obj_fairy.analysis_details.excluded_parameter_str
+        excluded_parameter_str=analysis_obj_fairy.analysis_details.excluded_parameter_str  # noqa : E501
     )
 
     full_parameter_info = optimization_data.pivot(
@@ -203,7 +203,7 @@ if __name__ == "__main__":
                 comparison = pg.mwu(
                     full_parameter_info[full_parameter_info[f"{block}_{parameter}_in"]][
                         f"diff_{parameter}"
-                    ],  # noqa
+                    ],
                     full_parameter_info[
                         ~full_parameter_info[f"{block}_{parameter}_in"]
                     ][f"diff_{parameter}"],
@@ -234,7 +234,7 @@ if __name__ == "__main__":
     block = "test"
     for parameter, given_param in model_params_given.items():
         model = OLSResults.load(
-            data_path.joinpath(f"data/regressions/{given_param}_model.pkl")
+            subdirectory.joinpath(f"data/regressions/{given_param}_model.pkl")
         )
 
         full_parameter_info[f"predictions_{parameter}"] = model.predict(
@@ -274,10 +274,11 @@ if __name__ == "__main__":
             comparison = pg.mwu(
                 full_parameter_info[
                     full_parameter_info[f"{block}_{parameter}_in_regression"]
-                    == True  # noqa
+                    == True  # noqa : E712
                 ][f"diff_{parameter}"],
                 full_parameter_info[
-                    full_parameter_info[f"{block}_{parameter}_in_regression"] == False
+                    full_parameter_info[f"{block}_{parameter}_in_regression"]
+                    == False  # noqa : E712
                 ][f"diff_{parameter}"],
             )
             logging.info("----------")

@@ -1,14 +1,12 @@
 """Plots information about the number of nodes clicked by the optimal policy using the Q values under different cost parameters."""  # noqa : E501
 import itertools
-from argparse import ArgumentParser
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import seaborn as sns
 import yaml
-from costometer.utils import AnalysisObject, set_font_sizes
-
-set_font_sizes(medium_size=30)
+from costometer.utils.scripting_utils import standard_parse_args
 
 
 def plot_heat_map_for_simulated(sum_df, field, rew1, rew2, name1, name2):
@@ -20,29 +18,12 @@ def plot_heat_map_for_simulated(sum_df, field, rew1, rew2, name1, name2):
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        dest="experiment_name",
-        default="SoftmaxRecovery",
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="methods/static",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-    inputs = parser.parse_args()
-
     irl_path = Path(__file__).resolve().parents[4]
-    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
+        default_experiment="SoftmaxRecovery",
     )
 
     mouselab_data = analysis_obj.dfs["mouselab-mdp"]

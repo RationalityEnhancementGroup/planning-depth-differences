@@ -1,5 +1,5 @@
 import logging
-from argparse import ArgumentParser
+import sys
 from collections import Counter
 from pathlib import Path
 
@@ -7,15 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pingouin as pg
 import seaborn as sns
-from costometer.utils import (
-    AnalysisObject,
-    get_correlation_text,
-    get_static_palette,
-    get_wilcoxon_text,
-    set_font_sizes,
-)
-
-set_font_sizes()
+from costometer.utils import get_correlation_text, get_static_palette, get_wilcoxon_text
+from costometer.utils.scripting_utils import standard_parse_args
 
 
 def plot_participant_average_likelihoods(
@@ -112,30 +105,11 @@ def plot_trial_by_trial_logliks(
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        dest="experiment_name",
-        metavar="experiment_name",
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="methods/static",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-
-    inputs = parser.parse_args()
-
     irl_path = Path(__file__).resolve().parents[4]
-    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
     )
 
     trial_by_trial_df = analysis_obj.get_trial_by_trial_likelihoods()
@@ -237,9 +211,9 @@ if __name__ == "__main__":
             )
             logging.info(
                 f"{get_wilcoxon_text(wilcoxon_object)}; "
-                f"$M_{{{best_model.replace('$','')}}} ="
+                f"$M_{{{best_model.replace('$', '')}}} ="
                 f"{np.median(participant_df[participant_df['Model Name'] == best_model]['avg']):.3f}$; "  # noqa: E501
-                f"$M_{{{model.replace('$','')}}} = "
+                f"$M_{{{model.replace('$', '')}}} = "
                 f"{np.median(participant_df[participant_df['Model Name'] == model]['avg']):.3f}$"  # noqa: E501
             )
 
@@ -252,7 +226,9 @@ if __name__ == "__main__":
         .sort_values(by="mean", ascending=False)
         .iterrows()
     ):
-        logging.info(f"{row_idx} & {row['mean']:.3f} & {row['std']:.3f} \\\ ")  # noqa
+        logging.info(
+            f"{row_idx} & {row['mean']:.3f} & {row['std']:.3f} \\\ "  # noqa : W605
+        )
 
     logging.info("==========")
     logging.info("Correlation between episode and meta-level action log likelihood")

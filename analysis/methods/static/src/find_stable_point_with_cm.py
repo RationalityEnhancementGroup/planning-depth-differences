@@ -1,5 +1,5 @@
 import logging
-from argparse import ArgumentParser
+import sys
 from collections import Counter
 from pathlib import Path
 
@@ -9,39 +9,20 @@ import numpy as np
 import pandas as pd
 import pingouin as pg
 import seaborn as sns
-from costometer.utils import AnalysisObject, get_ttest_text, set_font_sizes
+from costometer.utils import get_ttest_text
+from costometer.utils.scripting_utils import standard_parse_args
 from scipy.stats import mode
-
-set_font_sizes()
 
 if __name__ == "__main__":
     """
     Example:
     python src/find_stable_point_with_cm.py -e MainExperiment
     """
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        dest="experiment_name",
-        metavar="experiment_name",
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="methods/static",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-    inputs = parser.parse_args()
-
     irl_path = Path(__file__).resolve().parents[4]
-    data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
     )
 
     assert (
@@ -90,7 +71,7 @@ if __name__ == "__main__":
     sns.violinplot(x="type", y="count", data=mode_count_df)
     plt.title("Number of trials using mode strategy in trial subset")
     plt.savefig(
-        data_path.joinpath(f"figs/{inputs.experiment_name}_stable_point_mode.png"),
+        subdirectory.joinpath(f"figs/{inputs.experiment_name}_stable_point_mode.png"),
         bbox_inches="tight",
     )
 
@@ -98,7 +79,7 @@ if __name__ == "__main__":
     sns.violinplot(x="type", y="count", data=strategy_count_df)
     plt.title("Number of strategies in trial subset")
     plt.savefig(
-        data_path.joinpath(f"figs/{inputs.experiment_name}_stable_point_count.png"),
+        subdirectory.joinpath(f"figs/{inputs.experiment_name}_stable_point_count.png"),
         bbox_inches="tight",
     )
 

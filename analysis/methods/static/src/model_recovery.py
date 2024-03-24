@@ -5,10 +5,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from costometer.utils import AnalysisObject, set_font_sizes
+from costometer.utils import AnalysisObject
 from statsmodels.tools.eval_measures import bic
-
-set_font_sizes(small_size=14)
 
 if __name__ == "__main__":
     """
