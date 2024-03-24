@@ -14,6 +14,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 from typing import Any, Dict
 
+NO_MATLAB = False
 try:
     import matlab.engine
 except ModuleNotFoundError:
@@ -126,7 +127,7 @@ if __name__ == "__main__":
     optimization_data = analysis_obj.query_optimization_data()
     optimization_data = optimization_data[
         optimization_data.apply(
-            lambda row: set(analysis_obj.excluded_parameters.split(",")).issubset(
+            lambda row: set(analysis_obj.analysis_details.excluded_parameters).issubset(
                 row["model"]
             )
             or (row["Model Name"] == "Null"),

@@ -39,12 +39,12 @@ if __name__ == "__main__":
             experiment_subdirectory=inputs.experiment_subdirectory,
         )
         analysis_obs[experiment_name] = analysis_obj.query_optimization_data(
-            excluded_parameters=analysis_obj.excluded_parameters
+            excluded_parameters=analysis_obj.analysis_details.excluded_parameters
         )
 
     model_params = list(
-        set(analysis_obj.cost_details["constant_values"])
-        - set(analysis_obj.excluded_parameters.split(","))
+        set(analysis_obj.cost_details.constant_values)
+        - set(analysis_obj.analysis_details.excluded_parameters)
     )
 
     for exp1, exp2 in list(combinations(inputs.experiment_names, 2)):
@@ -67,5 +67,5 @@ if __name__ == "__main__":
         logging.info(exp)
         for model_param in model_params:
             logging.info(
-                f"{analysis_obj.cost_details['latex_mapping'][model_param]} & {np.mean((analysis_obs[exp][model_param])):.3f} ({np.std((analysis_obs[exp][model_param])):.3f}) \\\ "  # noqa: W605, E501
+                f"{analysis_obj.cost_details.latex_mapping[model_param]} & {np.mean((analysis_obs[exp][model_param])):.3f} ({np.std((analysis_obs[exp][model_param])):.3f}) \\\ "  # noqa: W605, E501
             )

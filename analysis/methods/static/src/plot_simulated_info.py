@@ -48,7 +48,7 @@ if __name__ == "__main__":
     mouselab_data = analysis_obj.dfs["mouselab-mdp"]
 
     sim_cost_parameters = [
-        f"sim_{param}" for param in analysis_obj.cost_details["constant_values"].keys()
+        f"sim_{param}" for param in analysis_obj.cost_details.constant_values.keys()
     ]
 
     yaml_file = irl_path.joinpath(
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     )
 
     sim_latex_mapping = {
-        f"sim_{k}": v for k, v in analysis_obj.cost_details["latex_mapping"].items()
+        f"sim_{k}": v for k, v in analysis_obj.cost_details.latex_mapping.items()
     }
     for curr_field in list(experiment_setting_details["node_classification"].keys()):
         if len(sim_cost_parameters) == 2:

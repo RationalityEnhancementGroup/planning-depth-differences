@@ -60,14 +60,14 @@ if __name__ == "__main__":
     )
 
     optimization_data = analysis_obj.query_optimization_data(
-        excluded_parameters=analysis_obj.excluded_parameters
+        excluded_parameters=analysis_obj.analysis_details.excluded_parameters
     )
 
     plotting_df = []
-    for param in analysis_obj.cost_details["cost_parameter_args"]:
+    for param in analysis_obj.cost_details.cost_parameter_args:
         curr_df = pd.DataFrame(optimization_data[param].copy(deep=True))
         curr_df["Model Parameter"] = (
-            "$" + analysis_obj.cost_details["latex_mapping"][param] + "$"
+            "$" + analysis_obj.cost_details.latex_mapping[param] + "$"
         )
         curr_df = curr_df.rename(columns={param: "Parameter Value"})
         plotting_df.append(curr_df)

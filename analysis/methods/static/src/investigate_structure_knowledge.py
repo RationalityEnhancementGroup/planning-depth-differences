@@ -98,18 +98,20 @@ if __name__ == "__main__":
 
     mouselab_data = analysis_obj.dfs["mouselab-mdp"]
     relevant_trials = mouselab_data[
-        mouselab_data["block"].isin(analysis_obj.block.split(","))
+        mouselab_data["block"].isin(analysis_obj.analysis_details.blocks)
     ]["trial_index"].unique()
 
-    model_params = list(analysis_obj.cost_details["constant_values"])
+    model_params = list(analysis_obj.cost_details.constant_values)
 
     melted_df = analysis_obj.dfs["quiz-and-demo"].melt(
-        id_vars=["pid", "run"], value_vars=analysis_obj.post_quizzes, value_name="score"
+        id_vars=["pid", "run"],
+        value_vars=analysis_obj.analysis_details.post_quizzes,
+        value_name="score",
     )
     melted_df = melted_df.dropna(subset=["score"])
     scores = melted_df.groupby(["pid"]).sum()["score"].reset_index()
     full_score_pids = scores[
-        scores["score"] == len(analysis_obj.post_quizzes)
+        scores["score"] == len(analysis_obj.analysis_details.post_quizzes)
     ].pid.unique()
     logging.info(f"Number of participants with full score: {len(full_score_pids)}")
 

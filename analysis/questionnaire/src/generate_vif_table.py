@@ -39,7 +39,7 @@ if __name__ == "__main__":
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
     optimization_data = analysis_obj.query_optimization_data(
-        excluded_parameters=analysis_obj.excluded_parameters
+        excluded_parameters=analysis_obj.analysis_details.excluded_parameters
     )
 
     analysis_file_path = irl_path.joinpath(
@@ -50,8 +50,8 @@ if __name__ == "__main__":
         analysis_yaml = yaml.safe_load(f)
 
     model_parameters = list(
-        set(analysis_obj.cost_details["constant_values"])
-        - set(analysis_obj.excluded_parameters.split(","))
+        set(analysis_obj.cost_details.constant_values)
+        - set(analysis_obj.analysis_details.excluded_parameters)
     )
 
     # load data
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     factor_scores = pd.read_csv(
         irl_path.joinpath(
             f"analysis/questionnaire/data/{inputs.experiment_name}/"
-            f"{analysis_obj.loadings}_scores.csv"
+            f"{analysis_obj.analysis_details.loadings}_scores.csv"
         )
     )
     combined_scores = combined_scores.merge(factor_scores)
@@ -98,10 +98,10 @@ if __name__ == "__main__":
         ]
     )
 
-    analysis_obj.cost_details["latex_mapping"] = {
+    analysis_obj.cost_details.latex_mapping = {
         **{
             f"${key}$": val
-            for key, val in analysis_obj.cost_details["latex_mapping"].items()
+            for key, val in analysis_obj.cost_details.latex_mapping.items()
         },
         "const": "Constant",
         "female": "Gender: Woman",
@@ -111,5 +111,5 @@ if __name__ == "__main__":
 
     for variable, vif_value in vif_dict.items():
         print(
-            f"{analysis_obj.cost_details['latex_mapping'][variable]  if variable in analysis_obj.cost_details['latex_mapping'] else variable} & {vif_value:.2f} \\\ "
-        )  # noqa
+            f"{analysis_obj.cost_details.latex_mapping[variable]  if variable in analysis_obj.cost_details.latex_mapping else variable} & {vif_value:.2f} \\\ "
+        )

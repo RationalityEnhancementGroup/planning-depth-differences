@@ -24,9 +24,10 @@ def f_square(r_squared_full, r_squared_base):
 
 def get_data_subset(test, data, params):
     """
-    drop any columns with nans for full model
-    (statsmodels defaults to wrong degrees of freedom numerator
-    with nans only in full model in some cases)
+    Drop any columns with nans for full model.
+
+    (Reason: statsmodels defaults to wrong degrees of freedom numerator
+    with nans only in full model in some cases.)
     """
     cols = (
         [
@@ -175,7 +176,7 @@ if __name__ == "__main__":
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
     optimization_data = analysis_obj.query_optimization_data(
-        excluded_parameters=analysis_obj.excluded_parameters
+        excluded_parameters=analysis_obj.analysis_details.excluded_parameters
     )
 
     analysis_file_path = irl_path.joinpath(
@@ -186,8 +187,8 @@ if __name__ == "__main__":
         analysis_yaml = yaml.safe_load(f)
 
     model_parameters = list(
-        set(analysis_obj.cost_details["constant_values"])
-        - set(analysis_obj.excluded_parameters.split(","))
+        set(analysis_obj.cost_details.constant_values)
+        - set(analysis_obj.analysis_details.excluded_parameters)
     )
 
     # load data
@@ -206,7 +207,7 @@ if __name__ == "__main__":
     factor_scores = pd.read_csv(
         irl_path.joinpath(
             f"analysis/questionnaire/data/{inputs.experiment_name}/"
-            f"{analysis_obj.loadings}_scores.csv"
+            f"{analysis_obj.analysis_details.loadings}_scores.csv"
         )
     )
     combined_scores = combined_scores.merge(factor_scores)

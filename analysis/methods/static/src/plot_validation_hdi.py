@@ -50,7 +50,7 @@ if __name__ == "__main__":
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
     optimization_data_test = analysis_obj_test.query_optimization_data(
-        excluded_parameters=analysis_obj_test.excluded_parameters
+        excluded_parameters=analysis_obj_test.analysis_details.excluded_parameters
     )
     analysis_obj_fairy = AnalysisObject(
         inputs.experiment_name_fairy,
@@ -58,7 +58,7 @@ if __name__ == "__main__":
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
     optimization_data_fairy = analysis_obj_fairy.query_optimization_data(
-        excluded_parameters=analysis_obj_fairy.excluded_parameters
+        excluded_parameters=analysis_obj_fairy.analysis_details.excluded_parameters
     )
 
     optimization_data_test["Block"] = "test"
@@ -72,18 +72,18 @@ if __name__ == "__main__":
     )
 
     model_params = list(
-        set(analysis_obj_test.cost_details["constant_values"])
-        - set(analysis_obj_test.excluded_parameters.split(","))
+        set(analysis_obj_test.cost_details.constant_values)
+        - set(analysis_obj_test.analysis_details.excluded_parameters)
     )
 
     model_params_given = {"depth_cost_weight": "DEPTH", "given_cost": "COST"}
 
     hdi_ranges = {}
     hdi_ranges["test"] = analysis_obj_test.load_hdi_ranges(
-        excluded_parameters=analysis_obj_test.excluded_parameters
+        excluded_parameter_str=analysis_obj_test.analysis_details.excluded_parameter_str
     )
     hdi_ranges["fairy"] = analysis_obj_fairy.load_hdi_ranges(
-        excluded_parameters=analysis_obj_fairy.excluded_parameters
+        excluded_parameter_str=analysis_obj_fairy.analysis_details.excluded_parameter_str
     )
 
     full_parameter_info = optimization_data.pivot(
@@ -191,7 +191,7 @@ if __name__ == "__main__":
                 full_parameter_info[f"diff_{parameter}"],
             )
             logging.info(
-                f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+                f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
                 f" & {get_correlation_text(correlation_object)}"
             )
 
@@ -293,13 +293,13 @@ if __name__ == "__main__":
         "Correlation between parameter spread in test block and error in recovery"
     )
     logging.info("----------")
-    for parameter, given_param in model_params_given.items():
+    for parameter in model_params_given.keys():
         correlation_object = pg.corr(
             full_parameter_info[f"{block}_{parameter}_spread"],
             full_parameter_info[f"diff_{parameter}"],
         )
         logging.info(
-            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
@@ -315,20 +315,20 @@ if __name__ == "__main__":
             full_parameter_info[f"{block}_{parameter}_spread"],
         )
         logging.info(
-            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
     logging.info("----------")
     logging.info("Correlation between inferred temperature and error in recovery")
     logging.info("----------")
-    for parameter, given_param in model_params_given.items():
+    for parameter in model_params_given.keys():
         correlation_object = pg.corr(
             full_parameter_info["temp"],
             full_parameter_info[f"diff_{parameter}"],
         )
         logging.info(
-            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
@@ -337,13 +337,13 @@ if __name__ == "__main__":
         "Correlation between regression estimate " "and parameter spread in test block"
     )
     logging.info("----------")
-    for parameter, given_param in model_params_given.items():
+    for parameter in model_params_given.keys():
         correlation_object = pg.corr(
             full_parameter_info[f"predictions_{parameter}"],
             full_parameter_info[f"{block}_{parameter}_spread"],
         )
         logging.info(
-            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
@@ -352,13 +352,13 @@ if __name__ == "__main__":
         "Correlation between given parameter and parameter spread in test block"
     )
     logging.info("----------")
-    for parameter, given_param in model_params_given.items():
+    for parameter in model_params_given.keys():
         correlation_object = pg.corr(
             full_parameter_info[given_param].astype(np.float64),
             full_parameter_info[f"{block}_{parameter}_spread"],
         )
         logging.info(
-            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
@@ -375,37 +375,37 @@ if __name__ == "__main__":
             full_parameter_info[f"{parameter}"].astype(np.float64),
         )
         logging.info(
-            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
     logging.info("----------")
     logging.info("Correlation between linear regression output and HDI min")
     logging.info("----------")
-    for parameter, given_param in model_params_given.items():
+    for parameter in model_params_given.keys():
         correlation_object = pg.corr(
             full_parameter_info[f"predictions_{parameter}"],
             full_parameter_info[f"{block}_{parameter}_min"],
         )
         logging.info(
-            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
     logging.info("----------")
     logging.info("Correlation between linear regression output and HDI max")
     logging.info("----------")
-    for parameter, given_param in model_params_given.items():
+    for parameter in model_params_given.keys():
         correlation_object = pg.corr(
             full_parameter_info[f"predictions_{parameter}"],
             full_parameter_info[f"{block}_{parameter}_max"],
         )
         logging.info(
-            f"{analysis_obj_test.cost_details['latex_mapping'][parameter]}"
+            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
-    for parameter, given_param in model_params_given.items():
+    for parameter in model_params_given.keys():
         threshold = np.median(full_parameter_info[f"{model_params_given[parameter]}"])
         logging.info("----------")
         logging.info(f"{parameter}, {threshold}")

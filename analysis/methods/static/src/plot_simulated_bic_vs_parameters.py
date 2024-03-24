@@ -40,14 +40,14 @@ if __name__ == "__main__":
     )
 
     optimization_data = analysis_obj.query_optimization_data(
-        excluded_parameters=analysis_obj.excluded_parameters
+        excluded_parameters=analysis_obj.analysis_details.excluded_parameters
     )
 
     sim_latex_mapping = {
-        f"sim_{k}": v for k, v in analysis_obj.cost_details["latex_mapping"].items()
+        f"sim_{k}": v for k, v in analysis_obj.cost_details.latex_mapping.items()
     }
     for subset in itertools.combinations(
-        [f"sim_{param}" for param in analysis_obj.cost_details["latex_mapping"].keys()],
+        [f"sim_{param}" for param in analysis_obj.cost_details.latex_mapping.keys()],
         2,
     ):
         mean_over_sim_param = (
@@ -72,7 +72,7 @@ if __name__ == "__main__":
             bbox_inches="tight",
         )
 
-    for param in analysis_obj.cost_details["constant_values"]:
+    for param in analysis_obj.cost_details.constant_values:
         logging.info("----------")
         logging.info(f"Correlation between {param} and BIC")
         logging.info("----------")

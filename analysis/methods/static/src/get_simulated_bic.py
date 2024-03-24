@@ -37,7 +37,7 @@ if __name__ == "__main__":
         )
 
         optimization_data = analysis_obj.query_optimization_data(
-            excluded_parameters=analysis_obj.excluded_parameters
+            excluded_parameters=analysis_obj.analysis_details.excluded_parameters
         )
 
         # needed for SimulatedParticipant since some cost parameters
@@ -49,16 +49,16 @@ if __name__ == "__main__":
                 experiment_subdirectory=inputs.experiment_subdirectory,
             )
             main_optimization_data = main_analysis_obj.query_optimization_data(
-                excluded_parameters=analysis_obj.excluded_parameters
-            )[list(main_analysis_obj.cost_details["constant_values"])]
+                excluded_parameters=analysis_obj.analysis_details.excluded_parameters
+            )[list(main_analysis_obj.cost_details.constant_values)]
 
             optimization_data = optimization_data.merge(
                 main_optimization_data,
                 left_on=[
                     f"sim_{param}"
-                    for param in main_analysis_obj.cost_details["constant_values"]
+                    for param in main_analysis_obj.cost_details.constant_values
                 ],
-                right_on=list(main_analysis_obj.cost_details["constant_values"]),
+                right_on=list(main_analysis_obj.cost_details.constant_values),
                 how="inner",
             )
             assert len(optimization_data) == len(main_optimization_data)

@@ -48,7 +48,7 @@ if __name__ == "__main__":
         len(
             np.unique(
                 [
-                    session_details["experiment_setting"]
+                    session_details.experiment_setting
                     for session_details in analysis_obj.session_details.values()
                 ]
             )
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     )
     experiment_setting = np.unique(
         [
-            session_details["experiment_setting"]
+            session_details.experiment_setting
             for session_details in analysis_obj.session_details.values()
         ]
     )[0]

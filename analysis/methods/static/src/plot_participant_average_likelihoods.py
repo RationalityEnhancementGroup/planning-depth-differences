@@ -143,7 +143,7 @@ if __name__ == "__main__":
     # look only at relevant block
     mouselab_data = analysis_obj.dfs["mouselab-mdp"]
     relevant_trials = mouselab_data[
-        mouselab_data["block"].isin(analysis_obj.block.split(","))
+        mouselab_data["block"].isin(analysis_obj.analysis_details.blocks)
     ]["trial_index"].unique()
     trial_by_trial_df = trial_by_trial_df[
         trial_by_trial_df["i_episode"].isin(relevant_trials)

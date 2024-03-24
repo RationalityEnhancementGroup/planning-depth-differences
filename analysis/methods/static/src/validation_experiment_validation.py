@@ -57,9 +57,7 @@ if __name__ == "__main__":
         ]
         + [
             f"num_{node_classification}"
-            for node_classification in analysis_obj.experiment_details[
-                "node_classification"
-            ].keys()
+            for node_classification in analysis_obj.experiment_details.node_classification.keys()
         ]
     ]
 

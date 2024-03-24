@@ -89,7 +89,7 @@ if __name__ == "__main__":
     optimization_data = analysis_obj.query_optimization_data()
     optimization_data = optimization_data[
         optimization_data.apply(
-            lambda row: set(analysis_obj.excluded_parameters.split(",")).issubset(
+            lambda row: set(analysis_obj.analysis_details.excluded_parameters).issubset(
                 row["model"]
             )
             or (row["Model Name"] == "Null"),
@@ -97,92 +97,79 @@ if __name__ == "__main__":
         )
     ]
 
-    irl_path.joinpath("data/bms/inputs/").mkdir(parents=True, exist_ok=True)
-    irl_path.joinpath("data/bms/outputs/").mkdir(parents=True, exist_ok=True)
+    pivoted_df = pd.read_csv(
+        irl_path.joinpath(f"data/bms/inputs/{inputs.experiment_name}.csv")
+    )
+    bms_df = pd.read_csv(
+        irl_path.joinpath(f"data/bms/outputs/{inputs.experiment_name}.csv"),
+        header=None,
+    )
 
-    if not irl_path.joinpath(f"data/bms/inputs/{inputs.experiment_name}.csv").is_file():
-        pivoted_df = optimization_data.pivot(
-            index="trace_pid", columns="Model Name", values="bic"
+    bms_df.columns = pivoted_df.columns
+    pivoted_df = pivoted_df.set_index("trace_pid")
+    bms_df = bms_df.set_index("trace_pid")
+
+    results = []
+    for row_idx, row in bms_df.iterrows():
+        logging.info([row_idx, np.max(row), bms_df.columns[np.argmax(row)]])
+        results.append([row_idx, np.max(row), bms_df.columns[np.argmax(row)]])
+
+    new_bms_df = pd.DataFrame(results, columns=["pid", "prob_model", "model_name"])
+
+    new_bms_df = new_bms_df.merge(
+        optimization_data,
+        left_on=["pid", "model_name"],
+        right_on=["trace_pid", "Model Name"],
+    )
+
+    model_params = set(analysis_obj.cost_details.constant_values) - set(
+        analysis_obj.analysis_details.excluded_parameters
+    )
+
+    optimization_data = analysis_obj.query_optimization_data(
+        excluded_parameters=analysis_obj.analysis_details.excluded_parameters
+    )
+    import pingouin as pg
+
+    for param in model_params:
+        logging.info("----------")
+        logging.info(param)
+        logging.info("----------")
+
+        # This is the correlation between
+        # fixed and random effect inferred parameters.
+        correlation_object = pg.corr(
+            optimization_data.sort_values(by="trace_pid")[param],
+            new_bms_df.sort_values(by="pid")[param],
         )
-        pivoted_df = pivoted_df.apply(lambda evidence: -0.5 * evidence)
-        pivoted_df.to_csv(
-            irl_path.joinpath(f"data/bms/inputs/{inputs.experiment_name}.csv")
+        logging.info(get_correlation_text(correlation_object))
+
+        # Non-parametric paired t-test for parameter values
+        wilcoxon_object = pg.wilcoxon(
+            optimization_data.sort_values(by="trace_pid")[param],
+            new_bms_df.sort_values(by="pid")[param],
         )
-        quit()
-    else:
-        pivoted_df = pd.read_csv(
-            irl_path.joinpath(f"data/bms/inputs/{inputs.experiment_name}.csv")
+        logging.info(get_wilcoxon_text(wilcoxon_object))
+
+        plotting_data_fixed = (
+            optimization_data.sort_values(by="trace_pid")[param]
+            .copy(deep=True)
+            .to_frame()
         )
-        bms_df = pd.read_csv(
-            irl_path.joinpath(f"data/bms/outputs/{inputs.experiment_name}.csv"),
-            header=None,
+        plotting_data_fixed["type"] = "fixed"
+
+        plotting_data_random = (
+            new_bms_df.sort_values(by="pid")[param].copy(deep=True).to_frame()
         )
+        plotting_data_random["type"] = "random"
 
-        pivoted_df = pivoted_df.set_index("trace_pid")
-        bms_df.columns = pivoted_df.columns
-        bms_df.index = pivoted_df.index
+        plotting_data = pd.concat([plotting_data_fixed, plotting_data_random])
 
-        results = []
-        for row_idx, row in bms_df.iterrows():
-            logging.info([row_idx, np.max(row), bms_df.columns[np.argmax(row)]])
-            results.append([row_idx, np.max(row), bms_df.columns[np.argmax(row)]])
-
-        new_bms_df = pd.DataFrame(results, columns=["pid", "prob_model", "model_name"])
-
-        new_bms_df = new_bms_df.merge(
-            optimization_data,
-            left_on=["pid", "model_name"],
-            right_on=["trace_pid", "Model Name"],
+        plt.figure()
+        sns.violinplot(data=plotting_data, x="type", y=param)
+        plt.savefig(
+            subdirectory.joinpath(
+                f"figs/{inputs.experiment_name}_{param}_fixed_vs_random.png"
+            ),
+            bbox_inches="tight",
         )
-
-        model_params = set(analysis_obj.cost_details["constant_values"]) - set(
-            analysis_obj.excluded_parameters.split(",")
-        )
-
-        optimization_data = analysis_obj.query_optimization_data(
-            excluded_parameters=analysis_obj.excluded_parameters
-        )
-        import pingouin as pg
-
-        for param in model_params:
-            logging.info("----------")
-            logging.info(param)
-            logging.info("----------")
-
-            # This is the correlation between
-            # fixed and random effect inferred parameters.
-            correlation_object = pg.corr(
-                optimization_data.sort_values(by="trace_pid")[param],
-                new_bms_df.sort_values(by="pid")[param],
-            )
-            logging.info(get_correlation_text(correlation_object))
-
-            # Non-parametric paired t-test for parameter values
-            wilcoxon_object = pg.wilcoxon(
-                optimization_data.sort_values(by="trace_pid")[param],
-                new_bms_df.sort_values(by="pid")[param],
-            )
-            logging.info(get_wilcoxon_text(wilcoxon_object))
-
-            plotting_data_fixed = (
-                optimization_data.sort_values(by="trace_pid")[param]
-                .copy(deep=True)
-                .to_frame()
-            )
-            plotting_data_fixed["type"] = "fixed"
-
-            plotting_data_random = (
-                new_bms_df.sort_values(by="pid")[param].copy(deep=True).to_frame()
-            )
-            plotting_data_random["type"] = "random"
-
-            plotting_data = pd.concat([plotting_data_fixed, plotting_data_random])
-
-            plt.figure()
-            sns.violinplot(data=plotting_data, x="type", y=param)
-            plt.savefig(
-                subdirectory.joinpath(
-                    f"figs/{inputs.experiment_name}_{param}_fixed_vs_random.png"
-                ),
-                bbox_inches="tight",
-            )

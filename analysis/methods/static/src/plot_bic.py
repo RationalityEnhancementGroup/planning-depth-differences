@@ -63,10 +63,7 @@ if __name__ == "__main__":
 
     optimization_data = analysis_obj.query_optimization_data()
 
-    if analysis_obj.excluded_parameters == "":
-        excluded_set = set()
-    else:
-        excluded_set = set(analysis_obj.excluded_parameters.split(","))
+    excluded_set = set(analysis_obj.analysis_details.excluded_parameters)
 
     optimization_data = optimization_data[
         optimization_data.apply(
@@ -109,17 +106,17 @@ if __name__ == "__main__":
     bic_plot(
         bic_df,
         subdirectory,
-        experiment_name=analysis_obj.palette_name
-        if analysis_obj.palette_name
+        experiment_name=analysis_obj.analysis_details.palette_name
+        if analysis_obj.analysis_details.palette_name
         else inputs.experiment_name,
         bic_field="bic",
     )
     if simulated_means:
         plt.axvline(x=np.mean(simulated_means))
-    title_extras = f" ({', '.join(analysis_obj.title_extras)})"
+    title_extras = f" ({', '.join(analysis_obj.analysis_details.title_extras)})"
     plt.title(
         f"Bayesian Information Criterion"
-        f"{title_extras if analysis_obj.title_extras else ''}"
+        f"{title_extras if analysis_obj.analysis_details.title_extras else ''}"
     )
     plt.savefig(
         subdirectory.joinpath(f"figs/{inputs.experiment_name}_bic.png"),

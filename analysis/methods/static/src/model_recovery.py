@@ -39,10 +39,10 @@ if __name__ == "__main__":
 
     optimization_data = analysis_obj.query_optimization_data()
 
-    if analysis_obj.excluded_parameters == "":
+    if analysis_obj.analysis_details.excluded_parameters == "":
         excluded_set = set()
     else:
-        excluded_set = set(analysis_obj.excluded_parameters.split(","))
+        excluded_set = set(analysis_obj.analysis_details.excluded_parameters)
 
     optimization_data = optimization_data[
         optimization_data.apply(
@@ -56,12 +56,12 @@ if __name__ == "__main__":
         optimization_data["applied_policy"] != "RandomPolicy"
     ]
     # unfortunately don't have given cost 1
-    analysis_obj.cost_details["constant_values"]["given_cost"] = 0
+    analysis_obj.cost_details.constant_values["given_cost"] = 0
 
     full_df = []
     for model in (
         optimization_data["model"]
-        .apply(lambda model: tuple(model) if model != "None" else ())
+        .apply(lambda model: tuple(sorted(model)) if model != "None" else ())
         .unique()
     ):
         if model != "":
@@ -70,7 +70,7 @@ if __name__ == "__main__":
                     lambda row: np.all(
                         [
                             row[f"sim_{param}"]
-                            == analysis_obj.cost_details["constant_values"][param]
+                            == analysis_obj.cost_details.constant_values[param]
                             for param in model
                         ]
                     ),
@@ -96,7 +96,7 @@ if __name__ == "__main__":
         )
 
         curr_df = bic_df[["Model Name", "bic"]]
-        curr_df["Simulated Model"] = analysis_obj.model_name_mapping[model]
+        curr_df["Simulated Model"] = analysis_obj.cost_details.model_name_mapping[model]
         full_df.append(curr_df)
 
     full_df = pd.concat(full_df)
@@ -110,7 +110,9 @@ if __name__ == "__main__":
         index="Model Name", columns="Simulated Model", values="bic"
     )
     for col in heat_map_data.columns:
-        heat_map_data[col] = heat_map_data[col] - min(heat_map_data[col])
+        heat_map_data[col] = (heat_map_data[col] - min(heat_map_data[col])) / (
+            max(heat_map_data[col]) - min(heat_map_data[col])
+        )
 
     plt.figure(figsize=(80, 60))
     sns.heatmap(data=heat_map_data, annot=True, fmt=".2f")

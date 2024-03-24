@@ -65,6 +65,17 @@ if __name__ == "__main__":
 
     irl_path = Path(__file__).resolve().parents[4]
     data_path = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
+    logging.basicConfig(
+        level=logging.INFO,
+        handlers=[
+            logging.FileHandler(
+                data_path
+                / "log"
+                / f"{inputs.experiment_name}_{Path(__file__).stem}.log"
+            ),
+            logging.StreamHandler(),
+        ],
+    )
 
     analysis_obj = AnalysisObject(
         inputs.experiment_name,
@@ -73,25 +84,17 @@ if __name__ == "__main__":
     )
 
     optimization_data = analysis_obj.query_optimization_data(
-        excluded_parameters=analysis_obj.excluded_parameters
+        excluded_parameters=analysis_obj.analysis_details.excluded_parameters
     )
 
     optimization_data = analysis_obj.query_optimization_data(
-        excluded_parameters=analysis_obj.excluded_parameters
+        excluded_parameters=analysis_obj.analysis_details.excluded_parameters
     )
-    if analysis_obj.positive:
-        optimization_data = optimization_data[
-            (optimization_data["sim_depth_cost_weight"] >= 0)
-            & (optimization_data["sim_given_cost"] >= 0)
-        ]
 
-    if analysis_obj.excluded_parameters == "":
-        model = tuple()
-    else:
-        model = tuple(sorted(analysis_obj.excluded_parameters.split(",")))
+    model = analysis_obj.analysis_details.excluded_parameters
 
-    model_params = set(analysis_obj.cost_details["constant_values"]) - set(
-        analysis_obj.excluded_parameters.split(",")
+    model_params = set(analysis_obj.cost_details.constant_values) - set(
+        analysis_obj.analysis_details.excluded_parameters
     )
 
     logging.info("==========")
@@ -113,11 +116,11 @@ if __name__ == "__main__":
     latex_mapping = {
         **{
             f"sim_{k}": "$" + v + "$"
-            for k, v in analysis_obj.cost_details["latex_mapping"].items()
+            for k, v in analysis_obj.cost_details.latex_mapping.items()
         },
         **{
             k: "$\widehat{" + v + "}$"  # noqa: W605
-            for k, v in analysis_obj.cost_details["latex_mapping"].items()
+            for k, v in analysis_obj.cost_details.latex_mapping.items()
         },
     }
     cmap = sns.diverging_palette(230, 20, as_cmap=True)
@@ -208,18 +211,18 @@ if __name__ == "__main__":
         )
         res = mod.fit()
 
-        logging.info(param, res.rsquared.round(2))
+        logging.info("%s: %.2f", param, res.rsquared)
 
         df_for_table = pd.DataFrame(
             {"coeff": res.params, "se": res.bse, "p": res.pvalues, "t": res.tvalues}
         )
 
-        analysis_obj.cost_details["latex_mapping"]["Intercept"] = "\\text{Intercept}"
+        analysis_obj.cost_details.latex_mapping["Intercept"] = "\\text{Intercept}"
         for row_idx, row in df_for_table.iterrows():
             pval_string = get_pval_string(row["p"])
 
             logging.info(
-                f"${analysis_obj.cost_details['latex_mapping'][param]}$  &  $\hat{{{analysis_obj.cost_details['latex_mapping'][row_idx]}}}$ & "  # noqa: W605, E501
+                f"${analysis_obj.cost_details.latex_mapping[param]}$  &  $\hat{{{analysis_obj.cost_details.latex_mapping[row_idx]}}}$ & "  # noqa: W605, E501
                 f"${row['coeff']:.3f} ({row['se']:.3f}){pval_string}$ & ${row['t']:.3f}"
                 f"$ \\\\"
             )
@@ -241,8 +244,8 @@ if __name__ == "__main__":
 
     pretty_cost_names = dict(
         zip(
-            analysis_obj.cost_details["cost_parameter_args"],
-            analysis_obj.cost_details["cost_parameter_names"],
+            analysis_obj.cost_details.cost_parameter_args,
+            analysis_obj.cost_details.cost_parameter_names,
         )
     )
     pretty_names = {

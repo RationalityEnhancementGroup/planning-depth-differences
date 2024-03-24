@@ -31,8 +31,12 @@ if __name__ == "__main__":
     )
 
     weights = load_weights(
-        data_path.joinpath(f"inputs/loadings/{analysis_obj.loadings}.csv"),
-        wise_weights=True if "Wise" in analysis_obj.loadings else False,
+        data_path.joinpath(
+            f"inputs/loadings/{analysis_obj.analysis_details.loadings}.csv"
+        ),
+        wise_weights=True
+        if "Wise" in analysis_obj.analysis_details.loadings
+        else False,
     )
 
     individual_items = analysis_obj.dfs["individual_items"]
@@ -47,6 +51,6 @@ if __name__ == "__main__":
     )
     scores.to_csv(
         data_path.joinpath(
-            f"data/{inputs.experiment_name}/{analysis_obj.loadings}_scores.csv"
+            f"data/{inputs.experiment_name}/{analysis_obj.analysis_details.loadings}_scores.csv"
         )
     )

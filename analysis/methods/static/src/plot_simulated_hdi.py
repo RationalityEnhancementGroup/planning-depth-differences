@@ -40,15 +40,15 @@ if __name__ == "__main__":
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
     optimization_data = analysis_obj.query_optimization_data(
-        excluded_parameters=analysis_obj.excluded_parameters
+        excluded_parameters=analysis_obj.analysis_details.excluded_parameters
     )
 
-    model_params = set(analysis_obj.cost_details["constant_values"]) - set(
-        analysis_obj.excluded_parameters.split(",")
+    model_params = set(analysis_obj.cost_details.constant_values) - set(
+        analysis_obj.analysis_details.excluded_parameters
     )
 
     hdi_ranges = analysis_obj.load_hdi_ranges(
-        excluded_parameters=analysis_obj.excluded_parameters
+        excluded_parameter_str=analysis_obj.analysis_details.excluded_parameter_str
     )
 
     for parameter in model_params:
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     logging.info("Statistics for spread of parameters")
     for parameter in model_params:
         logging.info(
-            f"{analysis_obj.cost_details['latex_mapping'][parameter]}"
+            f"{analysis_obj.cost_details.latex_mapping[parameter]}"
             f" & ${optimization_data[f'{parameter}_spread'].mean():.2f}$"
             f" (${optimization_data[f'{parameter}_spread'].std():.2f}$)"
         )
@@ -131,7 +131,7 @@ if __name__ == "__main__":
             optimization_data[f"diff_{parameter}"],
         )
         logging.info(
-            f"{analysis_obj.cost_details['latex_mapping'][parameter]}"
+            f"{analysis_obj.cost_details.latex_mapping[parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
@@ -144,7 +144,7 @@ if __name__ == "__main__":
             optimization_data[f"{parameter}_spread"],
         )
         logging.info(
-            f"{analysis_obj.cost_details['latex_mapping'][parameter]}"
+            f"{analysis_obj.cost_details.latex_mapping[parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
@@ -157,6 +157,6 @@ if __name__ == "__main__":
             optimization_data[f"{parameter}_spread"],
         )
         logging.info(
-            f"{analysis_obj.cost_details['latex_mapping'][parameter]}"
+            f"{analysis_obj.cost_details.latex_mapping[parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )

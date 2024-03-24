@@ -145,7 +145,7 @@ if __name__ == "__main__":
 
     mouselab_data = analysis_obj1.dfs["mouselab-mdp"]
     relevant_trials = mouselab_data[
-        mouselab_data["block"].isin(analysis_obj1.block.split(","))
+        mouselab_data["block"].isin(analysis_obj1.analysis_details.blocks)
     ]["trial_index"].unique()
 
     # only look at test trials
@@ -176,7 +176,7 @@ if __name__ == "__main__":
         trial_by_trial_df2,
         subdirectory,
         "avg",
-        experiment_name=analysis_obj2.palette_name,
+        experiment_name=analysis_obj2.analysis_details.palette_name,
         dodge=0.25,
     )
     plt.savefig(

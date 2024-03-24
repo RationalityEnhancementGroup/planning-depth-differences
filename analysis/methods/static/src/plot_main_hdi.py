@@ -69,11 +69,13 @@ if __name__ == "__main__":
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
     optimization_data = analysis_obj.query_optimization_data(
-        excluded_parameters=analysis_obj.excluded_parameters
+        excluded_parameters=analysis_obj.analysis_details.excluded_parameters
     )
-    hdi_ranges = analysis_obj.load_hdi_ranges(analysis_obj.excluded_parameters)
+    hdi_ranges = analysis_obj.load_hdi_ranges(
+        analysis_obj.analysis_details.excluded_parameter_str
+    )
 
-    for parameter in analysis_obj.cost_details["constant_values"]:
+    for parameter in analysis_obj.cost_details.constant_values:
         logging.info("==========")
 
         plot_hdi(hdi_ranges, parameter)

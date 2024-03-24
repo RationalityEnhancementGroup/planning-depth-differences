@@ -72,7 +72,7 @@ if __name__ == "__main__":
     psych_scores = pd.read_csv(
         irl_path.joinpath(
             f"analysis/questionnaire/data/{inputs.experiment_name}/"
-            f"{analysis_obj.loadings}_scores.csv"
+            f"{analysis_obj.analysis_details.loadings}_scores.csv"
         )
     )
     numeric_combined_scores = numeric_combined_scores.merge(psych_scores, on="pid")

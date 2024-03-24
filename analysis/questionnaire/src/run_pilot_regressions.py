@@ -220,7 +220,7 @@ if __name__ == "__main__":
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
     optimization_data = analysis_obj.query_optimization_data(
-        excluded_parameters=analysis_obj.excluded_parameters
+        excluded_parameters=analysis_obj.analysis_details.excluded_parameters
     )
 
     analysis_file_path = irl_path.joinpath(
@@ -231,8 +231,8 @@ if __name__ == "__main__":
         analysis_yaml = yaml.safe_load(f)
 
     model_parameters = list(
-        set(analysis_obj.cost_details["constant_values"])
-        - set(analysis_obj.excluded_parameters.split(","))
+        set(analysis_obj.cost_details.constant_values)
+        - set(analysis_obj.analysis_details.excluded_parameters)
     )
 
     # load data
@@ -251,7 +251,7 @@ if __name__ == "__main__":
     factor_scores = pd.read_csv(
         irl_path.joinpath(
             f"analysis/questionnaire/data/{inputs.experiment_name}/"
-            f"{analysis_obj.loadings}_scores.csv"
+            f"{analysis_obj.analysis_details.loadings}_scores.csv"
         )
     )
     combined_scores = combined_scores.merge(factor_scores)
@@ -295,7 +295,7 @@ if __name__ == "__main__":
     plot_regression_results(
         full_df,
         analysis_yaml["regressions"][0]["title"],
-        analysis_obj.cost_details["latex_mapping"],
+        analysis_obj.cost_details.latex_mapping,
     )
     plt.tight_layout()
     plt.show()

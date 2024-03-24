@@ -57,7 +57,7 @@ if __name__ == "__main__":
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
     optimization_data_test = analysis_obj_test.query_optimization_data(
-        excluded_parameters=analysis_obj_test.excluded_parameters
+        excluded_parameters=analysis_obj_test.analysis_details.excluded_parameters
     )
 
     analysis_obj_baseline = AnalysisObject(
@@ -66,7 +66,7 @@ if __name__ == "__main__":
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
     optimization_data_baseline = analysis_obj_baseline.query_optimization_data(
-        excluded_parameters=analysis_obj_baseline.excluded_parameters
+        excluded_parameters=analysis_obj_baseline.analysis_details.excluded_parameters
     )
 
     main_analysis_obj = AnalysisObject(
@@ -75,7 +75,7 @@ if __name__ == "__main__":
         experiment_subdirectory=inputs.experiment_subdirectory,
     )
     main_optimization_data = main_analysis_obj.query_optimization_data(
-        excluded_parameters=main_analysis_obj.excluded_parameters
+        excluded_parameters=main_analysis_obj.analysis_details.excluded_parameters
     )
 
     subdirectory = data_path.joinpath("data/regressions")
@@ -94,8 +94,8 @@ if __name__ == "__main__":
     )
 
     model_params = list(
-        set(main_analysis_obj.cost_details["constant_values"])
-        - set(main_analysis_obj.excluded_parameters.split(","))
+        set(main_analysis_obj.cost_details.constant_values)
+        - set(main_analysis_obj.analysis_details.excluded_parameters)
     )
     combined = test_subset.merge(
         fairy_subset[model_params + ["trace_pid"]],
