@@ -59,8 +59,8 @@ if __name__ == "__main__":
         last_strategies = strategies[-20:]
 
         mode_vals.append(["last", mode(last_strategies).mode])
-        mode_counts.append(["last", mode(last_strategies).count[0]])
-        mode_counts.append(["full", mode(strategies).count[0]])
+        mode_counts.append(["last", mode(last_strategies).count])
+        mode_counts.append(["full", mode(strategies).count])
 
         strategy_counts.append(["last", len(np.unique(last_strategies))])
         strategy_counts.append(["full", len(np.unique(strategies))])
@@ -118,4 +118,4 @@ if __name__ == "__main__":
     )
 
     logging.info("Most common strategies (strategy number, number of participants)")
-    logging.info(Counter([val[1][0] for val in mode_vals]).most_common())
+    logging.info(Counter([val[1] for val in mode_vals]).most_common())
