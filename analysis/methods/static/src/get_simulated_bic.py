@@ -3,6 +3,7 @@ from pathlib import Path
 
 import dill as pickle
 from costometer.utils import AnalysisObject
+from costometer.utils.scripting_utils import set_plotting_and_logging_defaults
 from statsmodels.tools.eval_measures import bic
 
 if __name__ == "__main__":
@@ -24,6 +25,12 @@ if __name__ == "__main__":
 
     irl_path = Path(__file__).resolve().parents[4]
     subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
+
+    set_plotting_and_logging_defaults(
+        subdirectory=subdirectory,
+        experiment_name="SimulatedBIC",
+        filename=Path(__file__).stem,
+    )
 
     bic_dict = {}
     for experiment_name in inputs.experiment_name.split(","):

@@ -11,6 +11,7 @@ from costometer.utils import (
     get_mann_whitney_text,
     get_wilcoxon_text,
 )
+from costometer.utils.scripting_utils import set_plotting_and_logging_defaults
 from sklearn import tree
 from sklearn.metrics import balanced_accuracy_score, make_scorer
 from sklearn.model_selection import cross_validate
@@ -43,6 +44,11 @@ if __name__ == "__main__":
 
     irl_path = Path(__file__).resolve().parents[4]
     subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
+    set_plotting_and_logging_defaults(
+        subdirectory=subdirectory,
+        experiment_name="ValidationHDI",
+        filename=Path(__file__).stem,
+    )
 
     analysis_obj_test = AnalysisObject(
         inputs.experiment_name_test,

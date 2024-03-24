@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 import pingouin as pg
 from costometer.utils import AnalysisObject, get_mann_whitney_text
+from costometer.utils.scripting_utils import set_plotting_and_logging_defaults
 
 if __name__ == "__main__":
     """
@@ -29,7 +30,11 @@ if __name__ == "__main__":
     inputs = parser.parse_args()
 
     irl_path = Path(__file__).resolve().parents[4]
-    subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
+    subdirectory = irl_path / "analysis" / inputs.experiment_subdirectory
+
+    set_plotting_and_logging_defaults(
+        subdirectory=subdirectory, experiment_name="Table", filename=Path(__file__).stem
+    )
 
     analysis_obs = {}
     for experiment_name in inputs.experiment_names:

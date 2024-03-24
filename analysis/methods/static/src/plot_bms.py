@@ -120,6 +120,7 @@ if __name__ == "__main__":
 
     irl_path.joinpath("data/bms/inputs/").mkdir(parents=True, exist_ok=True)
     irl_path.joinpath("data/bms/outputs/").mkdir(parents=True, exist_ok=True)
+
     if NO_MATLAB:
         if not irl_path.joinpath(
             f"data/bms/inputs/{inputs.experiment_name}.csv"

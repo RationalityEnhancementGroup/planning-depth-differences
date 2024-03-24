@@ -7,6 +7,7 @@ import numpy as np
 import pingouin as pg
 import seaborn as sns
 from costometer.utils import AnalysisObject, get_static_palette, get_wilcoxon_text
+from costometer.utils.scripting_utils import set_plotting_and_logging_defaults
 
 
 def plot_participant_average_likelihoods(
@@ -119,6 +120,11 @@ if __name__ == "__main__":
 
     irl_path = Path(__file__).resolve().parents[4]
     subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}/")
+    set_plotting_and_logging_defaults(
+        subdirectory=subdirectory,
+        experiment_name="AllVsTest",
+        filename=Path(__file__).stem,
+    )
 
     analysis_obj1 = AnalysisObject(
         inputs.experiment_name1,

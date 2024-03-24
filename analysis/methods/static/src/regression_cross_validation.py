@@ -14,6 +14,7 @@ from costometer.utils import (
     get_ttest_text,
     get_wilcoxon_text,
 )
+from costometer.utils.scripting_utils import set_plotting_and_logging_defaults
 from sklearn.model_selection import StratifiedKFold
 
 if __name__ == "__main__":
@@ -50,6 +51,11 @@ if __name__ == "__main__":
 
     irl_path = Path(__file__).resolve().parents[4]
     subdirectory = irl_path.joinpath(f"analysis/{inputs.experiment_subdirectory}")
+    set_plotting_and_logging_defaults(
+        subdirectory=subdirectory,
+        experiment_name="ValidationRegression",
+        filename=Path(__file__).stem,
+    )
 
     analysis_obj_test = AnalysisObject(
         inputs.experiment_name_test,
