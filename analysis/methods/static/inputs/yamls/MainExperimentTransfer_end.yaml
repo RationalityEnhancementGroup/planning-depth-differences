@@ -3,7 +3,6 @@ sessions:
 cost_function: back_dist_depth_eff_forw
 prior : 'uniform'
 blocks: 'test_end'
-include_null : true
 title_extras: ''
 simulated: False
 palette_name: MainExperiment

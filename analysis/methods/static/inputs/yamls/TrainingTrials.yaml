@@ -1,20 +1,20 @@
 sessions: 
-        - methods_main
+    -methods_main
 post_quizzes:
-        - 'mouselab-quiz-post_Q0'
-        - 'mouselab-quiz-post_Q1'
-        - 'mouselab-quiz-post_Q2'
-        - 'mouselab-quiz-post_Q3'
+    - 'mouselab-quiz-post_Q0'
+    - 'mouselab-quiz-post_Q1'
+    - 'mouselab-quiz-post_Q2'
+    - 'mouselab-quiz-post_Q3'
 cost_function: back_dist_depth_eff_forw
 prior : 'uniform'
-excluded_parameters : 'gamma,kappa'
-included_parameters: 'temp'
+excluded_parameter_str : 'gamma,kappa'
+included_parameters: 
+    - 'temp'
 block: "training"
-include_null : true
 title_extras: ''
 simulated: False
 palette_name: MainExperiment
 trial_by_trial_models:
-        - 'gamma,kappa'
-        - 'back_added_cost,gamma,kappa'
-        - 'gamma,given_cost,kappa'
+    - 'gamma,kappa'
+    - 'back_added_cost,gamma,kappa'
+    - 'gamma,given_cost,kappa'

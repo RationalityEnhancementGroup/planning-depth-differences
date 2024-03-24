@@ -3,9 +3,9 @@ sessions:
 cost_function: back_dist_depth_eff_forw
 simulated: True
 prior: 'uniform'
-excluded_parameters : ''
-included_parameters: 'temp'
+excluded_parameter_str : ''
+included_parameters: 
+    - 'temp'
 block: 'test'
-positive: true
 include_null: True
 palette_name: MainExperiment

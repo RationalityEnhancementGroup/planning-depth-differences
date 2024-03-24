@@ -5,6 +5,7 @@ simulated: True
 prior: 'uniform'
 block: 'test'
 include_null: True
-excluded_parameters : 'gamma,kappa'
-included_parameters: 'temp'
+excluded_parameter_str : 'gamma,kappa'
+included_parameters: 
+    - 'temp'
 palette_name: MainExperiment

@@ -6,4 +6,4 @@ prior: 'uniform'
 block: 'test'
 include_null: True
 params: [""]
-excluded_parameters: 'forw_added_cost,given_cost,distance_multiplier,depth_cost_weight,temp,gamma'
+excluded_parameter_str: 'forw_added_cost,given_cost,distance_multiplier,depth_cost_weight,temp,gamma'

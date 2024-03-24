@@ -3,8 +3,9 @@ sessions:
 cost_function: back_dist_depth_eff_forw
 loadings: WiseEtAl2020_weights
 prior : 'uniform'
-excluded_parameters : 'gamma,kappa'
-included_parameters: 'temp'
+excluded_parameter_str : 'gamma,kappa'
+included_parameters: 
+        - 'temp'
 block: 'test'
 include_null : true
 title_extras: ''
