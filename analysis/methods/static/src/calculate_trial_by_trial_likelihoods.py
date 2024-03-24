@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-from costometer.utils.scripting_utils import standard_parse_args
+from costometer.utils import standard_parse_args
 
 if __name__ == "__main__":
     irl_path = Path(__file__).resolve().parents[4]

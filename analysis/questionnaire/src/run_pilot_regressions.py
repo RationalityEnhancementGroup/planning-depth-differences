@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -13,6 +14,7 @@ from costometer.utils import (
     get_parameter_coefficient,
     get_pval_string,
     get_regression_text,
+    set_plotting_and_logging_defaults,
 )
 from quest_utils.subscale_utils import uppsp_dict
 from sklearn.preprocessing import StandardScaler
@@ -132,18 +134,20 @@ def get_regression_df(
                 ]
             ]
         )
-        print({key: val for key, val in vif_dict.items() if val >= 5})
+        logging.info({key: val for key, val in vif_dict.items() if val >= 5})
 
         full_res = smf.ols(formula=full_regression_formula, data=combined_scores).fit(
             missing="drop"
         )
 
-        print(test["dependent"])
-        print("\t - " + get_regression_text(full_res))
+        logging.info(test["dependent"])
+        logging.info("\t - " + get_regression_text(full_res))
 
         if full_res.f_pvalue < 0.05:
             for param in list(full_res.pvalues[(full_res.pvalues < pval_cutoff)].index):
-                print(f"\t\t - {param}, {get_parameter_coefficient(full_res, param)}")
+                logging.info(
+                    f"\t\t - {param}, {get_parameter_coefficient(full_res, param)}"
+                )
 
         for model_parameter in model_parameters:
             # all undirected tests
@@ -211,8 +215,14 @@ if __name__ == "__main__":
     )
     inputs = parser.parse_args()
 
-    data_path = Path(__file__).resolve().parents[1]
+    subdirectory = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[3]
+
+    set_plotting_and_logging_defaults(
+        subdirectory=subdirectory,
+        experiment_name="PilotRegressions",
+        filename=Path(__file__).stem,
+    )
 
     analysis_obj = AnalysisObject(
         inputs.experiment_name,

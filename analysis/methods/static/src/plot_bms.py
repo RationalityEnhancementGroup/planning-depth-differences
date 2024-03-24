@@ -17,8 +17,7 @@ from typing import Any, Dict
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from costometer.utils import get_static_palette
-from costometer.utils.scripting_utils import standard_parse_args
+from costometer.utils import get_static_palette, standard_parse_args
 
 NO_MATLAB = False
 try:
@@ -182,7 +181,7 @@ if __name__ == "__main__":
         "Exceedance Probabilities",
     ]:
         bms_df[field] = bms_df[field].apply(lambda entry: f"{entry:.2f}")
-    logging.info(f"{' & '.join(bms_df)} \\\ \hline")  # noqa : W605
+    logging.info("%s \\\ \hline", " & ".join(bms_df))  # noqa : W605
 
     # need as numeric rather than object for sorting
     bms_df["Expected number of participants best explained by the model"] = bms_df[
@@ -194,5 +193,11 @@ if __name__ == "__main__":
         ascending=False,
     ).iterrows():
         logging.info(
-            f"{' & '.join([val if not isinstance(val, float) else f'{val:0.2f}' for val in row.values])} \\\\"  # noqa : E501
+            "%s \\\\",
+            " & ".join(
+                [
+                    val if not isinstance(val, float) else f"{val:0.2f}"
+                    for val in row.values
+                ]
+            ),  # noqa : E501
         )

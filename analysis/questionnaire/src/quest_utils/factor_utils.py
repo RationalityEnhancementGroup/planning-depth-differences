@@ -1,3 +1,5 @@
+import logging
+
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
@@ -69,7 +71,7 @@ def get_psychiatric_scores(individual_items, weights, scale_cols=True):
             )
             del individual_items["LSAS_{}".format(col)]
     else:
-        print("LSAS already combined")
+        logging.info("LSAS already combined")
 
     # standard scale columns
     if scale_cols:

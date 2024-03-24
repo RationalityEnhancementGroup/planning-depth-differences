@@ -10,8 +10,8 @@ from costometer.utils import (
     get_correlation_text,
     get_friedman_test_text,
     get_pval_string,
+    standard_parse_args,
 )
-from costometer.utils.scripting_utils import standard_parse_args
 
 if __name__ == "__main__":
     irl_path = Path(__file__).resolve().parents[4]
@@ -98,8 +98,9 @@ if __name__ == "__main__":
             classification
         ) in analysis_obj.experiment_details.node_classification.keys():
             logging.info(
-                f"Correlation of metric '{classification}' between "
-                f"simulated and real data, per participant"
+                "Correlation of metric '%s' between simulated and real data,"
+                " per participant",
+                {classification},
             )
             correlation_obj = pg.corr(
                 sum_over_pids[f"num_{classification}"],
@@ -123,7 +124,7 @@ if __name__ == "__main__":
     all_cost_model_df = pd.concat(all_cost_model_df)
 
     for classification in analysis_obj.experiment_details.node_classification.keys():
-        logging.info(f"Full Friedman {classification}")
+        logging.info("Full Friedman %s", classification)
         friedman_object = pg.friedman(
             dv=f"difference_{classification}",
             within="excluded",  # TODO: why
@@ -134,7 +135,7 @@ if __name__ == "__main__":
         logging.info(friedman_object)
 
     for classification in analysis_obj.experiment_details.node_classification.keys():
-        logging.info(f"Pair-wise table for {classification}")
+        logging.info("Pair-wise table for %s", classification)
         for model_pair in itertools.combinations(
             analysis_obj.analysis_details.trial_by_trial_models, 2
         ):
@@ -166,10 +167,10 @@ if __name__ == "__main__":
 
     for classification in analysis_obj.experiment_details.node_classification.keys():
         for model in analysis_obj.analysis_details.trial_by_trial_models:
-            logging.info(f"Descriptive {model}, {classification} difference")
+            logging.info("Descriptive %s, %s difference", model, classification)
             descriptive_stats = all_cost_model_df[
                 all_cost_model_df["excluded"] == model
             ][f"difference_{classification}"].describe()
             logging.info(
-                f"M={descriptive_stats['mean']:.3f}, SD={descriptive_stats['std']:.3f}"
+                "M=%.3f, SD=%.3f", descriptive_stats["mean"], descriptive_stats["std"]
             )

@@ -2,8 +2,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 import dill as pickle
-from costometer.utils import AnalysisObject
-from costometer.utils.scripting_utils import set_plotting_and_logging_defaults
+from costometer.utils import AnalysisObject, set_plotting_and_logging_defaults
 from statsmodels.tools.eval_measures import bic
 
 if __name__ == "__main__":

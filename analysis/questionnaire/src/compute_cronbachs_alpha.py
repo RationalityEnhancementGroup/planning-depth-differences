@@ -1,24 +1,24 @@
-from argparse import ArgumentParser
+import logging
+import sys
 from pathlib import Path
 
 import pandas as pd
 import pingouin as pg
 import yaml
+from costometer.utils import standard_parse_args
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        dest="experiment_name",
-    )
-    inputs = parser.parse_args()
-
-    data_path = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[3]
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
+        irl_path=irl_path,
+        filename=Path(__file__).stem,
+        default_experiment="QuestMain",
+        default_subdirectory="questionnaire",
+    )
 
     with open(
-        data_path.joinpath(f"inputs/yamls/{inputs.experiment_name}.yaml"), "r"
+        subdirectory.joinpath(f"inputs/yamls/{inputs.experiment_name}.yaml"), "r"
     ) as stream:
         experiment_arguments = yaml.safe_load(stream)
 
@@ -56,11 +56,11 @@ if __name__ == "__main__":
         "zung": "zung",
     }
 
-    for question_id, questionnaire_name in questionnaire_mapping.items():
+    for question_id in questionnaire_mapping.keys():
         matching_columns = [
             col for col in individual_items.columns if col.startswith(question_id)
         ]
         res, ci = pg.cronbach_alpha(
             individual_items[matching_columns], nan_policy="listwise"
         )
-        print(question_id, len(matching_columns), f"{res:0.3f}", ci)
+        logging.info("{question_id}, {len(matching_columns)}, {res:0.3f}, {ci}")

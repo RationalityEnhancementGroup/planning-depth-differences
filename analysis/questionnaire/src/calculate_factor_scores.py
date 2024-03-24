@@ -1,37 +1,21 @@
-from argparse import ArgumentParser
+import sys
 from pathlib import Path
 
-from costometer.utils import AnalysisObject
+from costometer.utils import standard_parse_args
 from quest_utils.factor_utils import get_psychiatric_scores, load_weights
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        default="QuestMain",
-        dest="experiment_name",
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="questionnaire",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-    inputs = parser.parse_args()
-
-    data_path = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[3]
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
+        default_experiment="QuestMain",
+        default_subdirectory="questionnaire",
     )
 
     weights = load_weights(
-        data_path.joinpath(
+        subdirectory.joinpath(
             f"inputs/loadings/{analysis_obj.analysis_details.loadings}.csv"
         ),
         wise_weights=True
@@ -46,11 +30,12 @@ if __name__ == "__main__":
 
     scores = get_psychiatric_scores(individual_items, weights, scale_cols=True)
 
-    data_path.joinpath(f"data/{inputs.experiment_name}").mkdir(
+    subdirectory.joinpath(f"data/{inputs.experiment_name}").mkdir(
         parents=True, exist_ok=True
     )
     scores.to_csv(
-        data_path.joinpath(
-            f"data/{inputs.experiment_name}/{analysis_obj.analysis_details.loadings}_scores.csv"
+        subdirectory.joinpath(
+            f"data/{inputs.experiment_name}/"
+            f"{analysis_obj.analysis_details.loadings}_scores.csv"
         )
     )

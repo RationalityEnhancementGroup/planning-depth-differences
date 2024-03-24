@@ -7,8 +7,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pingouin as pg
 import seaborn as sns
-from costometer.utils import get_correlation_text, get_static_palette, get_wilcoxon_text
-from costometer.utils.scripting_utils import standard_parse_args
+from costometer.utils import (
+    get_correlation_text,
+    get_static_palette,
+    get_wilcoxon_text,
+    standard_parse_args,
+)
 
 
 def plot_participant_average_likelihoods(
@@ -200,8 +204,9 @@ if __name__ == "__main__":
         if model != best_model:
             logging.info("----------")
             logging.info(
-                f"Difference between meta-level action likelihoods "
-                f"for best model and {model}"
+                "Difference between meta-level action"
+                " likelihoods for best model and %s",
+                model,
             )
             logging.info("----------")
             wilcoxon_object = pg.wilcoxon(
@@ -210,11 +215,14 @@ if __name__ == "__main__":
                 alternative="two-sided",
             )
             logging.info(
-                f"{get_wilcoxon_text(wilcoxon_object)}; "
-                f"$M_{{{best_model.replace('$', '')}}} ="
-                f"{np.median(participant_df[participant_df['Model Name'] == best_model]['avg']):.3f}$; "  # noqa: E501
-                f"$M_{{{model.replace('$', '')}}} = "
-                f"{np.median(participant_df[participant_df['Model Name'] == model]['avg']):.3f}$"  # noqa: E501
+                "%s; $M_{%s} = %.3f$; $M_{%s} = %.3f$",
+                get_wilcoxon_text(wilcoxon_object),
+                best_model.replace("$", ""),
+                np.median(
+                    participant_df[participant_df["Model Name"] == best_model]["avg"]
+                ),
+                model.replace("$", ""),
+                np.median(participant_df[participant_df["Model Name"] == model]["avg"]),
             )
 
     logging.info("==========")
@@ -227,7 +235,10 @@ if __name__ == "__main__":
         .iterrows()
     ):
         logging.info(
-            f"{row_idx} & {row['mean']:.3f} & {row['std']:.3f} \\\ "  # noqa : W605
+            "{%d} & {%.3f} & {%.3f} \\\ ",  # noqa : W605
+            row_idx,
+            row["mean"],
+            row["std"],
         )
 
     logging.info("==========")

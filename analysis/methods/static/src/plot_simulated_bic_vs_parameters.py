@@ -6,8 +6,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pingouin as pg
 import seaborn as sns
-from costometer.utils import get_correlation_text
-from costometer.utils.scripting_utils import standard_parse_args
+from costometer.utils import get_correlation_text, standard_parse_args
 
 if __name__ == "__main__":
     irl_path = Path(__file__).resolve().parents[4]
@@ -15,7 +14,7 @@ if __name__ == "__main__":
         description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
         filename=Path(__file__).stem,
-        default_subdirectory="SoftmaxRecovery",
+        default_experiment="SoftmaxRecovery",
     )
 
     optimization_data = analysis_obj.query_optimization_data(
@@ -53,7 +52,7 @@ if __name__ == "__main__":
 
     for param in analysis_obj.cost_details.constant_values:
         logging.info("----------")
-        logging.info(f"Correlation between {param} and BIC")
+        logging.info("Correlation between {param} and BIC")
         logging.info("----------")
         correlation = pg.corr(optimization_data[param], optimization_data["bic"])
         logging.info(get_correlation_text(correlation))

@@ -4,8 +4,12 @@ from pathlib import Path
 
 import numpy as np
 import pingouin as pg
-from costometer.utils import get_anova_text, get_correlation_text, get_mann_whitney_text
-from costometer.utils.scripting_utils import standard_parse_args
+from costometer.utils import (
+    get_anova_text,
+    get_correlation_text,
+    get_mann_whitney_text,
+    standard_parse_args,
+)
 
 if __name__ == "__main__":
     irl_path = Path(__file__).resolve().parents[4]
@@ -41,7 +45,7 @@ if __name__ == "__main__":
 
     for metric in ["pctg_late", "num_nodes"]:
         logging.info("----------")
-        logging.info(f"Difference in behavior between test and fairy blocks: {metric}")
+        logging.info("Difference in behavior between test and fairy blocks: {metric}")
         logging.info("----------")
         comparison = pg.wilcoxon(
             node_classification_per_block[
@@ -58,7 +62,7 @@ if __name__ == "__main__":
     for analysis_pair in [("pctg_late", "DEPTH"), ("num_nodes", "COST")]:
         dv, between = analysis_pair
         logging.info("----------")
-        logging.info(f"ANOVA results for dv: {dv}, between: {between}, within: block")
+        logging.info("ANOVA results for dv: {dv}, between: {between}, within: block")
         logging.info("----------")
         anova_object = pg.mixed_anova(
             data=node_classification_per_block[
@@ -72,7 +76,7 @@ if __name__ == "__main__":
         logging.info(get_anova_text(anova_object))
 
         logging.info("----------")
-        logging.info(f"ANOVA results for dv: {dv}, between: block order, within: block")
+        logging.info("ANOVA results for dv: {dv}, between: block order, within: block")
         logging.info("----------")
         anova_object = pg.mixed_anova(
             data=node_classification_per_block[
@@ -88,7 +92,7 @@ if __name__ == "__main__":
         logging.info("==========")
         for block in node_classification_per_block["block"].unique():
             logging.info("----------")
-            logging.info(f"Correlation between {dv} and {between} for block: {block}")
+            logging.info("Correlation between {dv} and {between} for block: {block}")
             logging.info("----------")
             correlation_obj = pg.corr(
                 node_classification_per_block[
@@ -106,7 +110,7 @@ if __name__ == "__main__":
             node_classification_per_block["block"] == block
         ]
 
-        logging.info(f"Difference in block order for clicks in {block} block")
+        logging.info("Difference in block order for clicks in {block} block")
         comparison = pg.mwu(
             curr_result_df[curr_result_df["FAIRY_GOD_CONDITION"] == 1]["num_clicks"],
             curr_result_df[curr_result_df["FAIRY_GOD_CONDITION"] == 0]["num_clicks"],

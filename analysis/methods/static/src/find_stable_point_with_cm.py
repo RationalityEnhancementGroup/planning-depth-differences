@@ -9,8 +9,7 @@ import numpy as np
 import pandas as pd
 import pingouin as pg
 import seaborn as sns
-from costometer.utils import get_ttest_text
-from costometer.utils.scripting_utils import standard_parse_args
+from costometer.utils import get_ttest_text, standard_parse_args
 from scipy.stats import mode
 
 if __name__ == "__main__":
@@ -113,8 +112,9 @@ if __name__ == "__main__":
     )
     logging.info(get_ttest_text(ttest_obj))
     logging.info(
-        f"$M: {strategy_count_df[strategy_count_df['type'] == 'last']['count'].mean():.3f}, "  # noqa: E501
-        f"SD: {strategy_count_df[strategy_count_df['type'] == 'last']['count'].std():.3f}$"  # noqa: E501
+        "$M: %:.3f, SD: %.3f$",
+        strategy_count_df[strategy_count_df["type"] == "last"]["count"].mean(),
+        strategy_count_df[strategy_count_df["type"] == "last"]["count"].std(),
     )
 
     logging.info("Most common strategies (strategy number, number of participants)")

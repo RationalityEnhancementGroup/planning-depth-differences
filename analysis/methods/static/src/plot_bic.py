@@ -6,8 +6,7 @@ import dill as pickle
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-from costometer.utils import get_static_palette
-from costometer.utils.scripting_utils import standard_parse_args
+from costometer.utils import get_static_palette, standard_parse_args
 from statsmodels.tools.eval_measures import bic
 
 

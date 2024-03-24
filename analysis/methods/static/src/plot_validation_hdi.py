@@ -10,8 +10,8 @@ from costometer.utils import (
     get_correlation_text,
     get_mann_whitney_text,
     get_wilcoxon_text,
+    set_plotting_and_logging_defaults,
 )
-from costometer.utils.scripting_utils import set_plotting_and_logging_defaults
 from sklearn import tree
 from sklearn.metrics import balanced_accuracy_score, make_scorer
 from sklearn.model_selection import cross_validate
@@ -169,11 +169,11 @@ if __name__ == "__main__":
         )
 
         logging.info("----------")
-        logging.info(f"Test vs fairy block spreads for parameter {param}")
+        logging.info("Test vs fairy block spreads for parameter %s", param)
         logging.info("----------")
         logging.info(get_wilcoxon_text(res))
         logging.info(
-            f"test block ($M: {full_parameter_info[f'test_{param}_spread'].mean():.2f},"
+            "test block ($M: {full_parameter_info[f'test_{param}_spread'].mean():.2f},"
             f" SD: {full_parameter_info[f'test_{param}_spread'].std():.2f}$)\n"
             f"baseline block ($M: {full_parameter_info[f'fairy_{param}_spread'].mean():.2f},"  # noqa: E501
             f" SD: {full_parameter_info[f'fairy_{param}_spread'].std():.2f}$) "
@@ -181,7 +181,7 @@ if __name__ == "__main__":
 
     for block in hdi_ranges.keys():
         logging.info("----------")
-        logging.info(f"Spread in {block} block vs MAP error")
+        logging.info("Spread in %s block vs MAP error", block)
         logging.info("----------")
         for parameter in model_params_given.keys():
             full_parameter_info[f"diff_{parameter}"] = full_parameter_info.apply(
@@ -197,8 +197,9 @@ if __name__ == "__main__":
                 full_parameter_info[f"diff_{parameter}"],
             )
             logging.info(
-                f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
-                f" & {get_correlation_text(correlation_object)}"
+                "%s & %s",
+                analysis_obj_test.cost_details.latex_mapping[parameter],
+                get_correlation_text(correlation_object),
             )
 
         for parameter in model_params_given.keys():
@@ -260,10 +261,10 @@ if __name__ == "__main__":
             axis=1,
         )
         logging.info(
+            "%s, %s: in hdi (predictions, regression) %.2f",
             parameter,
             block,
-            f"in hdi (predictions, regression) "
-            f"{np.mean(full_parameter_info[f'{block}_{parameter}_in_regression']):.2f}",
+            np.mean(full_parameter_info[f"{block}_{parameter}_in_regression"]),
         )
 
         if len(full_parameter_info[f"{block}_{parameter}_in_regression"].unique()) == 1:
@@ -289,8 +290,10 @@ if __name__ == "__main__":
             )
             logging.info("----------")
             logging.info(
-                f"Difference in spread when true parameter is "
-                f"contained vs not, block {block} parameter {parameter}"
+                "Difference in spread when true parameter is contained vs not, "
+                "block %s parameter %s",
+                block,
+                parameter,
             )
             logging.info("----------")
             logging.info(get_mann_whitney_text(comparison))
@@ -306,14 +309,15 @@ if __name__ == "__main__":
             full_parameter_info[f"diff_{parameter}"],
         )
         logging.info(
-            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
-            f" & {get_correlation_text(correlation_object, table=True)}"
+            "%s & %s",
+            analysis_obj_test.cost_details.latex_mapping[parameter],
+            get_correlation_text(correlation_object, table=True),
         )
 
     logging.info("----------")
     logging.info(
-        f"Correlation between inferred temperature and "
-        f"parameter spread in {block} block"
+        "Correlation between inferred temperature and parameter spread in %s block",
+        block,
     )
     logging.info("----------")
     for parameter in model_params:
@@ -322,8 +326,9 @@ if __name__ == "__main__":
             full_parameter_info[f"{block}_{parameter}_spread"],
         )
         logging.info(
-            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
-            f" & {get_correlation_text(correlation_object, table=True)}"
+            "%s & %s",
+            analysis_obj_test.cost_details.latex_mapping[parameter],
+            get_correlation_text(correlation_object, table=True),
         )
 
     logging.info("----------")
@@ -335,13 +340,14 @@ if __name__ == "__main__":
             full_parameter_info[f"diff_{parameter}"],
         )
         logging.info(
-            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
-            f" & {get_correlation_text(correlation_object, table=True)}"
+            "%s & %s",
+            analysis_obj_test.cost_details.latex_mapping[parameter],
+            get_correlation_text(correlation_object, table=True),
         )
 
     logging.info("----------")
     logging.info(
-        "Correlation between regression estimate " "and parameter spread in test block"
+        "Correlation between regression estimate and parameter spread in test block"
     )
     logging.info("----------")
     for parameter in model_params_given.keys():
@@ -350,8 +356,9 @@ if __name__ == "__main__":
             full_parameter_info[f"{block}_{parameter}_spread"],
         )
         logging.info(
-            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
-            f" & {get_correlation_text(correlation_object, table=True)}"
+            "%s & %s",
+            analysis_obj_test.cost_details.latex_mapping[parameter],
+            get_correlation_text(correlation_object, table=True),
         )
 
     logging.info("----------")
@@ -365,12 +372,13 @@ if __name__ == "__main__":
             full_parameter_info[f"{block}_{parameter}_spread"],
         )
         logging.info(
-            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
-            f" & {get_correlation_text(correlation_object, table=True)}"
+            "%s & %s",
+            analysis_obj_test.cost_details.latex_mapping[parameter],
+            get_correlation_text(correlation_object, table=True),
         )
 
     logging.info("----------")
-    logging.info(f"Number of participants: {len(full_parameter_info)}")
+    logging.info("Number of participants: %d", len(full_parameter_info))
     logging.info("----------")
 
     logging.info("----------")
@@ -382,8 +390,9 @@ if __name__ == "__main__":
             full_parameter_info[f"{parameter}"].astype(np.float64),
         )
         logging.info(
-            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
-            f" & {get_correlation_text(correlation_object, table=True)}"
+            "%s & %s",
+            analysis_obj_test.cost_details.latex_mapping[parameter],
+            get_correlation_text(correlation_object, table=True),
         )
 
     logging.info("----------")
@@ -395,7 +404,7 @@ if __name__ == "__main__":
             full_parameter_info[f"{block}_{parameter}_min"],
         )
         logging.info(
-            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
+            "{analysis_obj_test.cost_details.latex_mapping[parameter]}"
             f" & {get_correlation_text(correlation_object, table=True)}"
         )
 
@@ -408,14 +417,15 @@ if __name__ == "__main__":
             full_parameter_info[f"{block}_{parameter}_max"],
         )
         logging.info(
-            f"{analysis_obj_test.cost_details.latex_mapping[parameter]}"
-            f" & {get_correlation_text(correlation_object, table=True)}"
+            "%s & %s",
+            analysis_obj_test.cost_details.latex_mapping[parameter],
+            get_correlation_text(correlation_object, table=True),
         )
 
     for parameter in model_params_given.keys():
         threshold = np.median(full_parameter_info[f"{model_params_given[parameter]}"])
         logging.info("----------")
-        logging.info(f"{parameter}, {threshold}")
+        logging.info("%s, %s", parameter, threshold)
         logging.info("----------")
         y_true = (
             full_parameter_info[f"{model_params_given[parameter]}"] >= threshold
@@ -431,6 +441,8 @@ if __name__ == "__main__":
             return_estimator=True,
         )
         logging.info("----------")
-        logging.info(f"Avg cross val score: {res['test_score'].mean():.2f}")
+        logging.info("Avg cross val score: %.2f", res["test_score"].mean())
         logging.info("----------")
-        logging.info(",".join([tree.export_text(est) for est in res["estimator"]]))
+        logging.info(
+            "%s", ",".join([tree.export_text(est) for est in res["estimator"]])
+        )

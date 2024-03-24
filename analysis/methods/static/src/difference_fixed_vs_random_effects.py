@@ -11,8 +11,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from costometer.utils import get_correlation_text, get_static_palette, get_wilcoxon_text
-from costometer.utils.scripting_utils import standard_parse_args
+from costometer.utils import (
+    get_correlation_text,
+    get_static_palette,
+    get_wilcoxon_text,
+    standard_parse_args,
+)
 
 
 def plot_bms_exceedance_probs(

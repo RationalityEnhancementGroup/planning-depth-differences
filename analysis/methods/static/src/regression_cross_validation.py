@@ -13,8 +13,8 @@ from costometer.utils import (
     get_regression_text,
     get_ttest_text,
     get_wilcoxon_text,
+    set_plotting_and_logging_defaults,
 )
-from costometer.utils.scripting_utils import set_plotting_and_logging_defaults
 from sklearn.model_selection import StratifiedKFold
 
 if __name__ == "__main__":
@@ -84,8 +84,8 @@ if __name__ == "__main__":
         excluded_parameters=main_analysis_obj.analysis_details.excluded_parameters
     )
 
-    subdirectory = subdirectory.joinpath("data/regressions")
-    subdirectory.mkdir(parents=True, exist_ok=True)
+    data_path = subdirectory.joinpath("data/regressions")
+    data_path.mkdir(parents=True, exist_ok=True)
 
     fairy_subset = analysis_obj_baseline.join_optimization_df_and_processed(
         optimization_df=optimization_data_baseline,
@@ -112,44 +112,50 @@ if __name__ == "__main__":
 
     for param in model_params:
         logging.info(
-            f"Descriptive statistics for main experiment "
-            f"({inputs.main_experiment_name}) {param}"
+            "Descriptive statistics for main experiment (%s) %s",
+            inputs.main_experiment_name,
+            param,
         )
         logging.info(
-            f"$M: {main_optimization_data[param].mean():.2f}, "
-            f"SD: {main_optimization_data[param].std():.2f}$"
-        )
-
-        logging.info(
-            f"Descriptive statistics for validation experiment " f", test block {param}"
-        )
-        logging.info(
-            f"$M: {test_subset[param].mean():.2f}, "
-            f"SD: {test_subset[param].std():.2f}$"
+            "$M: %.2f, SD: %.2f$",
+            main_optimization_data[param].mean(),
+            main_optimization_data[param].std(),
         )
 
         logging.info(
-            f"Descriptive statistics for validation experiment "
-            f", baseline block {param}"
+            "Descriptive statistics for validation experiment, test block %s", param
         )
         logging.info(
-            f"$M: {fairy_subset[param].mean():.2f}, "
-            f"SD: {fairy_subset[param].std():.2f}$"
+            "$M: %.2f, SD: %.2f$",
+            test_subset[param].mean(),
+            test_subset[param].std(),
+        )
+
+        logging.info(
+            "Descriptive statistics for validation experiment, baseline block %s",
+            param,
+        )
+        logging.info(
+            "$M: %.2f, SD: %.2f$",
+            fairy_subset[param].mean(),
+            fairy_subset[param].std(),
         )
 
         comparison = pg.mwu(test_subset[param], main_optimization_data[param])
         logging.info(
-            f"Comparison between validation experiment's "
-            f"test block and main experiment ({inputs.main_experiment_name}) "
-            f"for cost parameter: {param}"
+            "Comparison between validation experiment's test block and "
+            "main experiment (%s) for cost parameter: %s",
+            inputs.main_experiment_name,
+            param,
         )
         logging.info(get_mann_whitney_text(comparison))
 
         comparison = pg.mwu(fairy_subset[param], main_optimization_data[param])
         logging.info(
-            f"Comparison between validation experiment's baseline  "
-            f"block and main experiment ({inputs.main_experiment_name}) for "
-            f"cost parameter: {param}"
+            "Comparison between validation experiment's baseline block and "
+            "main experiment (%s) for cost parameter: %s",
+            inputs.main_experiment_name,
+            param,
         )
         logging.info(get_mann_whitney_text(comparison))
 
@@ -157,8 +163,9 @@ if __name__ == "__main__":
         # we use combined df
         comparison = pg.wilcoxon(combined[param], combined[f"{param}_fairy"])
         logging.info(
-            f"Comparison between validation experiment's test and "
-            f"baseline blocks for cost parameter: {param}"
+            "Comparison between validation experiment's test and baseline "
+            "blocks for cost parameter: %s",
+            param,
         )
         logging.info(get_wilcoxon_text(comparison))
 
@@ -167,7 +174,7 @@ if __name__ == "__main__":
         ("DEPTH", "depth_cost_weight"),
     ]:
         assigned_cost, inferred_cost = cost_variable_tuple
-        logging.info(f"RMSE for {inferred_cost}")
+        logging.info("RMSE for %s", inferred_cost)
         logging.info(
             (
                 np.sum((combined[assigned_cost] - combined[inferred_cost]) ** 2)
@@ -190,7 +197,6 @@ if __name__ == "__main__":
         assigned_cost, inferred_cost = cost_variable_tuple
         combined["prediction_error_{assigned_cost}"] = 0
 
-        errors = []
         for num_split, indices in enumerate(loo.split(combined, combined["cond"])):
             train_index, test_index = indices
             train_data = combined.iloc[train_index]
@@ -235,9 +241,11 @@ if __name__ == "__main__":
             )
         )
 
-        logging.info(f"RMSE for LOO for {assigned_cost}, {inferred_cost}")
+        logging.info("RMSE for LOO for %s, %s", assigned_cost, inferred_cost)
         logging.info(
-            f"M: ${test_fold_rmses.mean():.2f}$ (SD: ${test_fold_rmses.std():.2f}$)"
+            "$M: %.2f, SD: %.2f$",
+            test_fold_rmses.mean(),
+            test_fold_rmses.std(),
         )
 
         # fit model to all data, save
@@ -250,9 +258,9 @@ if __name__ == "__main__":
         )
         res = mod.fit()
         logging.info(res.summary())
-        res.save(subdirectory.joinpath(f"{assigned_cost}_model.pkl"))
-        logging.info(f"Regression for {assigned_cost}")
-        logging.info(get_regression_text(res))
+        res.save(data_path.joinpath(f"{assigned_cost}_model.pkl"))
+        logging.info("Regression for %s", assigned_cost)
+        logging.info("%s", get_regression_text(res))
 
         combined[f"prediction_error_{assigned_cost}"] = (
             res.predict(combined) - combined[assigned_cost]
@@ -269,7 +277,7 @@ if __name__ == "__main__":
             combined[f"rmse_{assigned_cost}"] < sd_values[inferred_cost]
         ) / len(combined[f"rmse_{assigned_cost}"])
         logging.info(
-            f"Number of participants recovered in at least 1 SD for "
+            "Number of participants recovered in at least 1 SD for "
             f"{assigned_cost}: {percentage_under_sd: .2f}"
         )
 
@@ -284,8 +292,9 @@ if __name__ == "__main__":
     )
     percentage_under_sd = np.sum(under_both) / len(under_both)
     logging.info(
-        f"Number of participants recovered in at least 1 SD of Experiment 1 value for "
-        f"both: {percentage_under_sd: .2f}"
+        "Number of participants recovered in at least 1 SD "
+        "of Experiment 1 value for both: %.2f",
+        percentage_under_sd,
     )
 
     all_rmses = combined.melt(value_vars=["rmse_DEPTH", "rmse_COST"])
@@ -299,7 +308,7 @@ if __name__ == "__main__":
         ("DEPTH", "depth_cost_weight"),
     ]:
         assigned_cost, inferred_cost = cost_variable_tuple
-        logging.info(f"Test subject difference vs variance {assigned_cost}")
+        logging.info("Test subject difference vs variance {assigned_cost}")
         comparison = pg.ttest(
             combined[f"prediction_error_squared_{assigned_cost}"],
             combined[assigned_cost].var(),
@@ -307,6 +316,7 @@ if __name__ == "__main__":
         )
         logging.info(get_ttest_text(comparison))
         logging.info(
+            "%.3f %.3f",
             combined[f"prediction_error_squared_{assigned_cost}"].mean(),
             combined[assigned_cost].var(),
         )
@@ -318,28 +328,36 @@ if __name__ == "__main__":
         assigned_cost, inferred_cost = cost_variable_tuple
 
         logging.info(
-            f"Difference in block order for "
-            f"baseline block MAP estimates {inferred_cost}"
+            "Difference in block order for baseline block MAP estimates %s",
+            inferred_cost,
         )
         comparison = pg.mwu(
             combined[combined["FAIRY_GOD_CONDITION"]][f"{inferred_cost}_fairy"],
             combined[~combined["FAIRY_GOD_CONDITION"]][f"{inferred_cost}_fairy"],
         )
-        logging.info(get_mann_whitney_text(comparison))
+        logging.info("%s", get_mann_whitney_text(comparison))
 
         logging.info(
-            f"Baseline interrupts: "
-            f"{np.mean(combined[combined['FAIRY_GOD_CONDITION']][f'{inferred_cost}_fairy']):.3f}"  # noqa: E501
-            f"{np.std(combined[combined['FAIRY_GOD_CONDITION']][f'{inferred_cost}_fairy']):.3f}"  # noqa: E501
+            "Baseline interrupts: %.3f %.3f",
+            np.mean(
+                combined[combined["FAIRY_GOD_CONDITION"]][f"{inferred_cost}_fairy"]
+            ),  # noqa: E501
+            np.std(
+                combined[combined["FAIRY_GOD_CONDITION"]][f"{inferred_cost}_fairy"]
+            ),  # noqa: E501
         )
         logging.info(
-            f"{np.mean(combined[~combined['FAIRY_GOD_CONDITION']][f'{inferred_cost}_fairy']):.3f}"  # noqa: E501
-            f" {np.std(combined[~combined['FAIRY_GOD_CONDITION']][f'{inferred_cost}_fairy']):.3f}"  # noqa: E501
+            "%.3f %.3f",
+            np.mean(
+                combined[~combined["FAIRY_GOD_CONDITION"]][f"{inferred_cost}_fairy"]
+            ),  # noqa: E501
+            np.std(
+                combined[~combined["FAIRY_GOD_CONDITION"]][f"{inferred_cost}_fairy"]
+            ),  # noqa: E501
         )
 
         logging.info(
-            f"Difference in block order for "
-            f"test block MAP estimates {inferred_cost}"
+            "Difference in block order for test block MAP estimates %s", inferred_cost
         )
         comparison = pg.mwu(
             combined[combined["FAIRY_GOD_CONDITION"]][inferred_cost],
@@ -348,11 +366,12 @@ if __name__ == "__main__":
         logging.info(get_mann_whitney_text(comparison))
 
         logging.info(
-            f"Baseline interrupts: "
-            f"{np.mean(combined[combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f}"
-            f"{np.std(combined[combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f}"
+            "Baseline interrupts: %.3f %.3f",
+            np.mean(combined[combined["FAIRY_GOD_CONDITION"]][inferred_cost]),
+            np.std(combined[combined["FAIRY_GOD_CONDITION"]][inferred_cost]),
         )
         logging.info(
-            f"{np.mean(combined[~combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f}"
-            f"{np.std(combined[~combined['FAIRY_GOD_CONDITION']][inferred_cost]):.3f}"
+            "%.3f %.3f",
+            np.mean(combined[~combined["FAIRY_GOD_CONDITION"]][inferred_cost]),
+            np.std(combined[~combined["FAIRY_GOD_CONDITION"]][inferred_cost]),
         )

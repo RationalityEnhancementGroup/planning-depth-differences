@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     # adapted from:
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.rv_discrete.html
-    fig, ax = plt.subplots(1, 1)
+    _, ax = plt.subplots(1, 1)
     ax.plot(
         prior_inputs["possible_temps"],
         [temp_prior_dict[t] for t in prior_inputs["possible_temps"]],

@@ -6,8 +6,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pingouin as pg
 import seaborn as sns
-from costometer.utils import AnalysisObject, get_static_palette, get_wilcoxon_text
-from costometer.utils.scripting_utils import set_plotting_and_logging_defaults
+from costometer.utils import (
+    AnalysisObject,
+    get_static_palette,
+    get_wilcoxon_text,
+    set_plotting_and_logging_defaults,
+)
 
 
 def plot_participant_average_likelihoods(
@@ -156,19 +160,21 @@ if __name__ == "__main__":
     ]
 
     for model in trial_by_trial_df1["Model Name"].unique():
-        logging.info(f"Mean and standard deviation for {model} last 20 trials"),
+        logging.info("Mean and standard deviation for %s last 20 trials", model)
         model_subset = trial_by_trial_df1[(trial_by_trial_df1["Model Name"] == model)]
         logging.info(
-            f"$M: {model_subset['avg'].mean():.2f}, "
-            f"SD: {model_subset['avg'].std():.2f}$"
+            "$M: %.2f, SD %.2f$",
+            model_subset["avg"].mean(),
+            model_subset["avg"].std(),
         )
 
     for model in trial_by_trial_df2["Model Name"].unique():
-        logging.info(f"Mean and standard deviation for {model} all trials")
+        logging.info("Mean and standard deviation for %s all trials", model)
         model_subset = trial_by_trial_df2[(trial_by_trial_df2["Model Name"] == model)]
         logging.info(
-            f"$M: {model_subset['avg'].mean():.2f}, "
-            f"SD: {model_subset['avg'].std():.2f}$"
+            "$M: %.2f, SD %.2f$",
+            model_subset["avg"].mean(),
+            model_subset["avg"].std(),
         )
 
     plot_participant_average_likelihoods(
@@ -194,4 +200,4 @@ if __name__ == "__main__":
         .sort_values(["pid", "i_episode"])["avg"],
     )
 
-    logging.info(get_wilcoxon_text(comparison))
+    logging.info("%s", get_wilcoxon_text(comparison))

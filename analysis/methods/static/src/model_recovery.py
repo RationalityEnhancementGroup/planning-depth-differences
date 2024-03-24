@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from costometer.utils.scripting_utils import standard_parse_args
+from costometer.utils import standard_parse_args
 from statsmodels.tools.eval_measures import bic
 
 if __name__ == "__main__":
@@ -80,7 +80,7 @@ if __name__ == "__main__":
         )
 
         curr_df = bic_df[["Model Name", "bic"]]
-        curr_df["Simulated Model"] = analysis_obj.cost_details.model_name_mapping[model]
+        curr_df["Simulated Model"] = analysis_obj.model_name_mapping[model]
         full_df.append(curr_df)
 
     full_df = pd.concat(full_df)

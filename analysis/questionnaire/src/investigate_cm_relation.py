@@ -1,4 +1,5 @@
-from argparse import ArgumentParser
+import logging
+import sys
 from collections import Counter
 from pathlib import Path
 
@@ -9,10 +10,8 @@ import pandas as pd
 import pingouin as pg
 import seaborn as sns
 import yaml
-from costometer.utils import AnalysisObject, get_mann_whitney_text, set_font_sizes
+from costometer.utils import get_mann_whitney_text, standard_parse_args
 from scipy.stats import mode
-
-set_font_sizes()
 
 
 def plot_cm_relation(numeric_combined_scores, strategy, col):
@@ -27,33 +26,17 @@ def plot_cm_relation(numeric_combined_scores, strategy, col):
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        dest="experiment_name",
-        default="QuestMain",
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="questionnaire",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-    inputs = parser.parse_args()
-
-    data_path = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[3]
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
+        default_experiment="QuestMain",
+        default_subdirectory="questionnaire",
     )
 
     with open(
-        data_path.joinpath(f"inputs/yamls/{inputs.experiment_name}.yaml"), "r"
+        subdirectory.joinpath(f"inputs/yamls/{inputs.experiment_name}.yaml"), "r"
     ) as stream:
         experiment_arguments = yaml.safe_load(stream)
 
@@ -90,7 +73,7 @@ if __name__ == "__main__":
     mode_vals = {}
     for pid, strategies in exp.participant_strategies.items():
         last_strategies = strategies[-10:]
-        mode_vals[pid] = mode(last_strategies).mode[0]
+        mode_vals[pid] = mode(last_strategies).mode
 
     numeric_combined_scores["optimal"] = numeric_combined_scores["pid"].apply(
         lambda pid: mode_vals[pid] == 21
@@ -139,17 +122,26 @@ if __name__ == "__main__":
                     ][col].values,
                 )
                 if mwu_obj["p-val"][0] < 0.05:
-                    print(strategy, col)
-                    print(get_mann_whitney_text(mwu_obj))
+                    logging.info(strategy, col)
+                    logging.info(get_mann_whitney_text(mwu_obj))
 
-                    print(
-                        f"{numeric_combined_scores[numeric_combined_scores['strategy'] == strategy][col].mean():0.3f}",  # noqa : E501
-                        f"{numeric_combined_scores[numeric_combined_scores['strategy'] != strategy][col].mean():0.3f}",  # noqa : E501
+                    logging.info(
+                        "%.3f %.3f",
+                        numeric_combined_scores[
+                            numeric_combined_scores["strategy"] == strategy
+                        ][
+                            col
+                        ].mean(),  # noqa : E501
+                        numeric_combined_scores[
+                            numeric_combined_scores["strategy"] != strategy
+                        ][
+                            col
+                        ].mean(),  # noqa : E501
                     )
 
                     plot_cm_relation(numeric_combined_scores, strategy, col)
                     plt.savefig(
-                        data_path.joinpath(
+                        subdirectory.joinpath(
                             f"figs/{inputs.experiment_name}_CM_{strategy}_{col}.png"
                         ),
                         bbox_inches="tight",

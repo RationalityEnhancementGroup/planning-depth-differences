@@ -9,8 +9,12 @@ import pandas as pd
 import pingouin as pg
 import seaborn as sns
 import statsmodels.formula.api as smf
-from costometer.utils import get_correlation_text, get_pval_string, get_regression_text
-from costometer.utils.scripting_utils import standard_parse_args
+from costometer.utils import (
+    get_correlation_text,
+    get_pval_string,
+    get_regression_text,
+    standard_parse_args,
+)
 
 
 def plot_simulated_recovery(mle, pretty_name_mapping):
@@ -46,6 +50,7 @@ if __name__ == "__main__":
         description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
         filename=Path(__file__).stem,
+        default_experiment="SoftmaxRecovery",
     )
 
     optimization_data = analysis_obj.query_optimization_data(
@@ -71,8 +76,10 @@ if __name__ == "__main__":
         )
         logging.info("----------")
         logging.info(
-            f"Correlation between inferred {subset[0]} and inferred {subset[1]} "
-            f"for simulated participants"
+            "Correlation between inferred %s and "
+            "inferred %s for simulated participants",
+            subset[0],
+            subset[1],
         )
         logging.info("----------")
         logging.info(get_correlation_text(correlation_object))
@@ -116,8 +123,8 @@ if __name__ == "__main__":
         )
         logging.info("----------")
         logging.info(
-            f"Correlation between inferred and actual {model_param} "
-            f"for simulated participants"
+            "Correlation between inferred and actual %s for simulated participants",
+            model_param,
         )
         logging.info("----------")
         logging.info(get_correlation_text(correlation_object))
@@ -131,7 +138,7 @@ if __name__ == "__main__":
             lambda row: row[f"{param}_diff"] ** 2, axis=1
         )
         logging.info("----------")
-        logging.info(f"RMSE for parameter {param}")
+        logging.info("RMSE for parameter {param}")
         logging.info("----------")
         logging.info(
             np.sqrt(
@@ -170,7 +177,7 @@ if __name__ == "__main__":
 
     for param in model_params:
         logging.info("==========")
-        logging.info(f"Regression with {param} as dependent variable")
+        logging.info("Regression with {param} as dependent variable")
         logging.info("----------")
         mod = smf.ols(
             formula=f"sim_{param}  ~ {' + '.join(model_params)} + 1",
@@ -189,9 +196,13 @@ if __name__ == "__main__":
             pval_string = get_pval_string(row["p"])
 
             logging.info(
-                f"${analysis_obj.cost_details.latex_mapping[param]}$  &  $\hat{{{analysis_obj.cost_details.latex_mapping[row_idx]}}}$ & "  # noqa: W605, E501
-                f"${row['coeff']:.3f} ({row['se']:.3f}){pval_string}$ & ${row['t']:.3f}"
-                f"$ \\\\"
+                "$%s$  &  $\hat{%s}$ & $%.3f (%.3f)%s$ & $%.3f$ \\\\",  # noqa: W605
+                analysis_obj.cost_details.latex_mapping[param],
+                analysis_obj.cost_details.latex_mapping[row_idx],
+                row["coeff"],
+                row["se"],
+                pval_string,
+                row["t"],
             )
 
         logging.info("----------")
@@ -202,11 +213,12 @@ if __name__ == "__main__":
         optimization_data[f"error_{param}"] = optimization_data.apply(
             lambda row: row[param] - row["sim_" + param], axis=1
         )
-        logging.info(f"Absolute error for {param}")
+        logging.info("Absolute error for {param}")
         logging.info(
-            f"Median: {optimization_data[f'error_{param}'].median():.2f}, "
-            f"Range: [{optimization_data[f'error_{param}'].min():.2f}, "
-            f"{optimization_data[f'error_{param}'].max():.2f}]"
+            "Median: %.2f, Range: [%.2f, %.2f}]",
+            optimization_data[f"error_{param}"].median(),
+            optimization_data[f"error_{param}"].min(),
+            optimization_data[f"error_{param}"].max(),
         )
 
     pretty_cost_names = dict(

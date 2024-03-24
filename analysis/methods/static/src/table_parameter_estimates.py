@@ -5,8 +5,11 @@ from pathlib import Path
 
 import numpy as np
 import pingouin as pg
-from costometer.utils import AnalysisObject, get_mann_whitney_text
-from costometer.utils.scripting_utils import set_plotting_and_logging_defaults
+from costometer.utils import (
+    AnalysisObject,
+    get_mann_whitney_text,
+    set_plotting_and_logging_defaults,
+)
 
 if __name__ == "__main__":
     """
@@ -53,7 +56,7 @@ if __name__ == "__main__":
     )
 
     for exp1, exp2 in list(combinations(inputs.experiment_names, 2)):
-        logging.info(f"{exp1}, {exp2}")
+        logging.info("{exp1}, {exp2}")
         logging.info("--------------")
         for model_param in model_params:
             logging.info(model_param)
@@ -61,10 +64,11 @@ if __name__ == "__main__":
                 analysis_obs[exp1][model_param], analysis_obs[exp2][model_param]
             )
             logging.info(
-                f"M_{{{exp1}}} = "
-                f"{np.mean((analysis_obs[exp1][model_param])):.3f}"
-                f", M_{{{exp2}}} = "
-                f"{np.mean((analysis_obs[exp2][model_param])):.3f}"
+                "M_{%s} = %.3f, M_{%s} = %.3f",
+                exp1,
+                np.mean((analysis_obs[exp1][model_param])),
+                exp2,
+                np.mean((analysis_obs[exp2][model_param])),
             )
             logging.info(get_mann_whitney_text(stat_obj))
 
@@ -72,5 +76,8 @@ if __name__ == "__main__":
         logging.info(exp)
         for model_param in model_params:
             logging.info(
-                f"{analysis_obj.cost_details.latex_mapping[model_param]} & {np.mean((analysis_obs[exp][model_param])):.3f} ({np.std((analysis_obs[exp][model_param])):.3f}) \\\ "  # noqa: W605, E501
+                "%s & %.3f (%.3f) \\\ ",  # noqa: W605
+                analysis_obj.cost_details.latex_mapping[model_param],
+                np.mean((analysis_obs[exp][model_param])),
+                np.std((analysis_obs[exp][model_param])),
             )

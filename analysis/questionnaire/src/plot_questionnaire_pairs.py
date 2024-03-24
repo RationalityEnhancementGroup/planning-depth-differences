@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 import yaml
-from costometer.utils import set_font_sizes
+from costometer.utils import set_font_sizes, set_plotting_and_logging_defaults
 
 
 def plot_questionnaire_pairs(numeric_combined_scores, scale=5):
@@ -33,11 +33,17 @@ if __name__ == "__main__":
     )
     inputs = parser.parse_args()
 
-    data_path = Path(__file__).resolve().parents[1]
+    subdirectory = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[3]
 
+    set_plotting_and_logging_defaults(
+        subdirectory=subdirectory,
+        experiment_name="QuestionnairePairs",
+        filename=Path(__file__).stem,
+    )
+
     with open(
-        data_path.joinpath(f"inputs/yamls/{inputs.experiment_name}.yaml"), "r"
+        subdirectory.joinpath(f"inputs/yamls/{inputs.experiment_name}.yaml"), "r"
     ) as stream:
         experiment_arguments = yaml.safe_load(stream)
 
@@ -55,8 +61,8 @@ if __name__ == "__main__":
 
     plot_questionnaire_pairs(numeric_combined_scores)
 
-    data_path.joinpath("figs").mkdir(parents=True, exist_ok=True)
+    subdirectory.joinpath("figs").mkdir(parents=True, exist_ok=True)
     plt.savefig(
-        data_path.joinpath(f"figs/{inputs.experiment_name}_questionnaire_pairs.png"),
+        subdirectory.joinpath(f"figs/{inputs.experiment_name}_questionnaire_pairs.png"),
         bbox_inches="tight",
     )

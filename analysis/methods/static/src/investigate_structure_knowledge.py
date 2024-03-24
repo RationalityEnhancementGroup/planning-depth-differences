@@ -11,8 +11,8 @@ from costometer.utils import (
     get_kruskal_wallis_text,
     get_mann_whitney_text,
     get_static_palette,
+    standard_parse_args,
 )
-from costometer.utils.scripting_utils import standard_parse_args
 
 ###################################################
 # This section contains my plotting function(s)
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     full_score_pids = scores[
         scores["score"] == len(analysis_obj.analysis_details.post_quizzes)
     ].pid.unique()
-    logging.info(f"Number of participants with full score: {len(full_score_pids)}")
+    logging.info("Number of participants with full score: %d", len(full_score_pids))
 
     optimization_data = optimization_data.merge(
         trial_by_trial_df[trial_by_trial_df["i_episode"].isin(relevant_trials)]
@@ -122,21 +122,21 @@ if __name__ == "__main__":
 
     for obs_var in ["avg"] + model_params:
         logging.info("==========")
-        logging.info(f"Comparisons for {obs_var}")
+        logging.info("Comparisons for %s", obs_var)
         omnibus = pg.kruskal(data=optimization_data, dv=obs_var, between="score")
         logging.info("----------")
         logging.info("Omnibus test")
         logging.info(get_kruskal_wallis_text(omnibus))
 
         logging.info("----------")
-        logging.info(f"Pair-wise comparisons: {obs_var}")
+        logging.info("Pair-wise comparisons:  %s", obs_var)
         logging.info("----------")
         pairs = combinations(optimization_data["score"].unique(), 2)
 
         for pair in pairs:
             score1, score2 = pair
             logging.info("----------")
-            logging.info(f"Pair-wise comparison: {obs_var} {score1}, {score2}")
+            logging.info("Pair-wise comparison: %s %d, %d", obs_var, score1, score2)
             logging.info("----------")
 
             pair_comparison = pg.mwu(
@@ -153,6 +153,9 @@ if __name__ == "__main__":
                 optimization_data[optimization_data["score"] == score2][obs_var]
             )
             logging.info(
-                f"$M_{{\\text{{{score1:.0f}}}}}={mean1:.2f}$ "
-                f"vs $M_{{\\text{{{score2:.0f}}}}}={mean2:.2f}$"
+                "$M_{{\\text{%.0f}}}=%.2f$ vs $M_{{\\text{%.0f}}}=%.2f$",
+                score1,
+                mean1,
+                score2,
+                mean2,
             )

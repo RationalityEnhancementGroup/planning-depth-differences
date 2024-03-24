@@ -6,7 +6,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
 import yaml
-from costometer.utils.scripting_utils import standard_parse_args
+from costometer.utils import standard_parse_args
 
 
 def plot_heat_map_for_simulated(sum_df, field, rew1, rew2, name1, name2):

@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -8,7 +9,7 @@ import pandas as pd
 import seaborn as sns
 import statsmodels.formula.api as smf
 import yaml
-from costometer.utils import AnalysisObject
+from costometer.utils import AnalysisObject, set_plotting_and_logging_defaults
 from sklearn.preprocessing import StandardScaler
 
 
@@ -93,7 +94,13 @@ if __name__ == "__main__":
     )
     inputs = parser.parse_args()
 
+    subdirectory = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[3]
+    set_plotting_and_logging_defaults(
+        subdirectory=subdirectory,
+        experiment_name="AllVsTest",
+        filename=Path(__file__).stem,
+    )
 
     analysis_obj = AnalysisObject(
         inputs.experiment_name,
@@ -190,13 +197,12 @@ if __name__ == "__main__":
         )
 
         if full_res.pvalues[test["independent"]] <= bonferroni_corrected_pval:
-            print(full_regression_formula)
-            print(full_res.pvalues[test["independent"]])
-            x = (full_res, base_res)
-            print(test["independent"])
-            print(f"F-squared: {f_square(full_res.rsquared, base_res.rsquared)}")
-            print(f"F-squared: {f_square(full_res.rsquared, 0)}")
-            print(full_res.summary())
+            logging.info(full_regression_formula)
+            logging.info(full_res.pvalues[test["independent"]])
+            logging.info(test["independent"])
+            logging.info("F-squared: {f_square(full_res.rsquared, base_res.rsquared)}")
+            logging.info("F-squared: {f_square(full_res.rsquared, 0)}")
+            logging.info(full_res.summary())
 
         with open(
             irl_path.joinpath(

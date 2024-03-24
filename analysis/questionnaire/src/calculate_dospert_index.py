@@ -1,32 +1,16 @@
-from argparse import ArgumentParser
+import sys
 from pathlib import Path
 
-from costometer.utils import AnalysisObject
+from costometer.utils import standard_parse_args
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        default="QuestMain",
-        dest="experiment_name",
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="questionnaire",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-    inputs = parser.parse_args()
-
-    data_path = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[3]
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
+        default_experiment="QuestMain",
+        default_subdirectory="questionnaire",
     )
 
     # dospert

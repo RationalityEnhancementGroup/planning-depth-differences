@@ -4,8 +4,11 @@ from pathlib import Path
 
 import numpy as np
 import pingouin as pg
-from costometer.utils import get_correlation_text, get_mann_whitney_text
-from costometer.utils.scripting_utils import standard_parse_args
+from costometer.utils import (
+    get_correlation_text,
+    get_mann_whitney_text,
+    standard_parse_args,
+)
 
 if __name__ == "__main__":
     irl_path = Path(__file__).resolve().parents[4]
@@ -49,15 +52,16 @@ if __name__ == "__main__":
     logging.info("Statistics for spread of parameters")
     for parameter in model_params:
         logging.info(
-            f"{analysis_obj.cost_details.latex_mapping[parameter]}"
-            f" & ${optimization_data[f'{parameter}_spread'].mean():.2f}$"
-            f" (${optimization_data[f'{parameter}_spread'].std():.2f}$)"
+            "%s & $%.2f$ ($%.2f$)",
+            analysis_obj.cost_details.latex_mapping[parameter],
+            optimization_data[f"{parameter}_spread"].mean(),
+            optimization_data[f"{parameter}_spread"].std(),
         )
 
     # for cases where we don't vary temperature
     for parameter in model_params:
         logging.info("----------")
-        logging.info(f"Correlation between spread of {parameter} and temperature")
+        logging.info("Correlation between spread of %s and temperature", parameter)
         logging.info("----------")
         correlation_object = pg.corr(
             optimization_data["sim_temp"], optimization_data[f"{parameter}_spread"]
@@ -66,9 +70,9 @@ if __name__ == "__main__":
 
     for parameter in model_params:
         logging.info("----------")
-        logging.info(f"Amount of time true {parameter} is in the outputted interval")
+        logging.info("Amount of time true %s is in the outputted interval", parameter)
         logging.info("----------")
-        logging.info(f"{optimization_data[f'{parameter}_in'].mean():.2f}")
+        logging.info("%.2f", optimization_data[f"{parameter}_in"].mean())
 
     for parameter in model_params:
         optimization_data[f"diff_{parameter}"] = optimization_data.apply(
@@ -79,14 +83,16 @@ if __name__ == "__main__":
         if len(optimization_data[f"{parameter}_in"].unique()) == 1:
             logging.info("----------")
             logging.info(
-                f"True {parameter} value is always in or outside of outputted interval:"
+                "True %s value is always in or outside of outputted interval:",
+                parameter,
             )
             logging.info(optimization_data[f"{parameter}_in"].unique())
         else:
             logging.info("----------")
             logging.info(
-                f"Difference between error when true {parameter} "
-                f"parameter value is in outputted interval vs not."
+                "Difference between error when true %s parameter "
+                "value is in outputted interval vs not.",
+                parameter,
             )
             logging.info("----------")
             comparison = pg.mwu(
@@ -108,8 +114,9 @@ if __name__ == "__main__":
             optimization_data[f"diff_{parameter}"],
         )
         logging.info(
-            f"{analysis_obj.cost_details.latex_mapping[parameter]}"
-            f" & {get_correlation_text(correlation_object, table=True)}"
+            "%s & %s",
+            analysis_obj.cost_details.latex_mapping[parameter],
+            get_correlation_text(correlation_object, table=True),
         )
 
     logging.info("----------")
@@ -121,8 +128,9 @@ if __name__ == "__main__":
             optimization_data[f"{parameter}_spread"],
         )
         logging.info(
-            f"{analysis_obj.cost_details.latex_mapping[parameter]}"
-            f" & {get_correlation_text(correlation_object, table=True)}"
+            "%s & %s",
+            analysis_obj.cost_details.latex_mapping[parameter],
+            get_correlation_text(correlation_object, table=True),
         )
 
     logging.info("----------")
@@ -134,6 +142,7 @@ if __name__ == "__main__":
             optimization_data[f"{parameter}_spread"],
         )
         logging.info(
-            f"{analysis_obj.cost_details.latex_mapping[parameter]}"
-            f" & {get_correlation_text(correlation_object, table=True)}"
+            "%s & %s",
+            analysis_obj.cost_details.latex_mapping[parameter],
+            get_correlation_text(correlation_object, table=True),
         )

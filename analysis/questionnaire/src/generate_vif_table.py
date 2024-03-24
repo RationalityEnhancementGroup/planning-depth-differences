@@ -1,9 +1,10 @@
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
 import pandas as pd
 import yaml
-from costometer.utils import AnalysisObject
+from costometer.utils import AnalysisObject, set_plotting_and_logging_defaults
 from quest_utils.analysis_utils import calculate_vif
 from sklearn.preprocessing import StandardScaler
 
@@ -30,8 +31,14 @@ if __name__ == "__main__":
     )
     inputs = parser.parse_args()
 
-    data_path = Path(__file__).resolve().parents[1]
+    subdirectory = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[3]
+
+    set_plotting_and_logging_defaults(
+        subdirectory=subdirectory,
+        experiment_name="VIF_table",
+        filename=Path(__file__).stem,
+    )
 
     analysis_obj = AnalysisObject(
         inputs.experiment_name,
@@ -110,6 +117,6 @@ if __name__ == "__main__":
     }
 
     for variable, vif_value in vif_dict.items():
-        print(
-            f"{analysis_obj.cost_details.latex_mapping[variable]  if variable in analysis_obj.cost_details.latex_mapping else variable} & {vif_value:.2f} \\\ "
+        logging.info(
+            f"{analysis_obj.cost_details.latex_mapping[variable]  if variable in analysis_obj.cost_details.latex_mapping else variable} & {vif_value:.2f} \\\ "  # noqa : E501, W605
         )

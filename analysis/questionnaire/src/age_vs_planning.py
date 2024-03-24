@@ -1,5 +1,5 @@
+import logging
 import sys
-from argparse import ArgumentParser
 from pathlib import Path
 
 import dill as pickle
@@ -8,7 +8,11 @@ import numpy as np
 import pandas as pd
 import pingouin as pg
 import seaborn as sns
-from costometer.utils import AnalysisObject, get_correlation_text, get_mann_whitney_text
+from costometer.utils import (
+    get_correlation_text,
+    get_mann_whitney_text,
+    standard_parse_args,
+)
 from mouselab.cost_functions import forward_search_cost
 from mouselab.mouselab import MouselabEnv
 from scipy.stats import mode
@@ -21,30 +25,15 @@ sys.path.append(str(Path(__file__).parents[3].joinpath("cluster")))
 from src.cluster_utils import get_human_trajectories  # noqa: E402
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-e",
-        "--exp",
-        default="QuestMain",
-        dest="experiment_name",
-    )
-    parser.add_argument(
-        "-s",
-        "--subdirectory",
-        default="questionnaire",
-        dest="experiment_subdirectory",
-        metavar="experiment_subdirectory",
-    )
-    inputs = parser.parse_args()
-
-    data_path = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[3]
-
-    analysis_obj = AnalysisObject(
-        inputs.experiment_name,
+    analysis_obj, inputs, subdirectory = standard_parse_args(
+        description=sys.modules[__name__].__doc__,
         irl_path=irl_path,
-        experiment_subdirectory=inputs.experiment_subdirectory,
+        filename=Path(__file__).stem,
+        default_experiment="QuestMain",
+        default_subdirectory="questionnaire",
     )
+
     optimization_data = analysis_obj.query_optimization_data(
         excluded_parameters=analysis_obj.analysis_details.excluded_parameters
     )
@@ -85,15 +74,15 @@ if __name__ == "__main__":
         ]
     )
 
-    print("-------")
+    logging.info("-------")
     for model_parameter in model_parameters:
-        print(f"Model parameter: {model_parameter}")
-        print(
+        logging.info("Model parameter: {model_parameter}")
+        logging.info(
             get_correlation_text(
                 pg.corr(combined_scores["age"], combined_scores[model_parameter])
             )
         )
-    print("-------")
+    logging.info("-------")
 
     # now we check which CM are correlated with age
     cm = {}
@@ -117,18 +106,18 @@ if __name__ == "__main__":
         )
 
         if mwu_obj["p-val"][0] < 0.05:
-            print(strategy)
-            print(get_mann_whitney_text(mwu_obj))
-            print(
+            logging.info(strategy)
+            logging.info(get_mann_whitney_text(mwu_obj))
+            logging.info(
                 f"M (strategy): "
                 f"{combined_scores[combined_scores[strategy].astype(bool)]['age'].mean():.03f}"  # noqa : E501
                 f", M (not strategy): "
                 f"{combined_scores[~combined_scores[strategy].astype(bool)]['age'].mean():.03f}"  # noqa : E501
             )
 
-    print("-------")
+    logging.info("-------")
 
-    print("Forward strategy cluster")
+    logging.info("Forward strategy cluster")
     combined_scores["forward_strategy"] = combined_scores.apply(
         lambda row: sum(
             [
@@ -147,14 +136,14 @@ if __name__ == "__main__":
         ].values,
         alternative="greater",
     )
-    print(get_mann_whitney_text(mwu_obj))
-    print(
+    logging.info(get_mann_whitney_text(mwu_obj))
+    logging.info(
         f"M (strategy): "
         f"{combined_scores[combined_scores['forward_strategy'].astype(bool)]['age'].mean():.03f}"  # noqa : E501
         f", M (not strategy): "
         f"{combined_scores[~combined_scores['forward_strategy'].astype(bool)]['age'].mean():.03f}"  # noqa : E501
     )
-    print("-------")
+    logging.info("-------")
     # calculate forward search trials
     traces = get_human_trajectories(
         "quest_main",
@@ -192,8 +181,10 @@ if __name__ == "__main__":
         lambda curr_pid: forward_planning_trial[curr_pid]
     )
 
-    print("Sanity check -- forward trials should be correlated with forward bonus")
-    print(
+    logging.info(
+        "Sanity check -- forward trials should be correlated with forward bonus"
+    )
+    logging.info(
         get_correlation_text(
             pg.corr(
                 combined_scores["forw_added_cost"], combined_scores["forward_trials"]
@@ -201,20 +192,20 @@ if __name__ == "__main__":
         )
     )
 
-    print("Correlation between age and structure understanding")
-    print(
+    logging.info("Correlation between age and structure understanding")
+    logging.info(
         get_correlation_text(
             pg.corr(combined_scores["age"], combined_scores["structure_understanding"])
         )
     )
-    print("Correlation between age and forward trials")
-    print(
+    logging.info("Correlation between age and forward trials")
+    logging.info(
         get_correlation_text(
             pg.corr(combined_scores["age"], combined_scores["forward_trials"])
         )
     )
-    print("Correlation between structure understanding and forward trials")
-    print(
+    logging.info("Correlation between structure understanding and forward trials")
+    logging.info(
         get_correlation_text(
             pg.corr(
                 combined_scores["structure_understanding"],
@@ -223,10 +214,10 @@ if __name__ == "__main__":
         )
     )
 
-    print("-------")
+    logging.info("-------")
     for model_parameter in model_parameters:
-        print(f"Model parameter: {model_parameter}")
-        print(
+        logging.info("Model parameter: {model_parameter}")
+        logging.info(
             get_correlation_text(
                 pg.corr(
                     combined_scores[combined_scores["forward_trials"] != 20]["age"],
@@ -236,15 +227,15 @@ if __name__ == "__main__":
                 )
             )
         )
-    print("-------")
+    logging.info("-------")
 
     sns.distplot(combined_scores["forward_trials"])
     plt.savefig(
-        data_path.joinpath(f"figs/{inputs.experiment_name}_forward_trials.png"),
+        subdirectory.joinpath(f"figs/{inputs.experiment_name}_forward_trials.png"),
         bbox_inches="tight",
     )
 
     with open(
-        data_path.joinpath(f"data/{inputs.experiment_name}_forward_trials.pkl"), "wb"
+        subdirectory.joinpath(f"data/{inputs.experiment_name}_forward_trials.pkl"), "wb"
     ) as f:
         pickle.dump(forward_planning_trial, f)

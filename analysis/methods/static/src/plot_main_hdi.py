@@ -4,8 +4,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pingouin as pg
-from costometer.utils import get_correlation_text
-from costometer.utils.scripting_utils import standard_parse_args
+from costometer.utils import get_correlation_text, standard_parse_args
 
 
 def plot_hdi(hdi_range_dict, param):
@@ -71,16 +70,18 @@ if __name__ == "__main__":
         )
 
         logging.info("----------")
-        logging.info(f"Correlation between BIC and spread for {parameter}")
+        logging.info("Correlation between BIC and spread for %s", parameter)
         logging.info("----------")
         correlation_object = pg.corr(
             optimization_data["bic"], optimization_data[f"{parameter}_spread"]
         )
-        logging.info(parameter)
+        logging.info("%s", parameter)
         logging.info(get_correlation_text(correlation_object))
 
         logging.info("----------")
-        logging.info(f"Correlation between BIC and MAP parameter value for {parameter}")
+        logging.info(
+            "Correlation between BIC and MAP parameter value for %s", parameter
+        )
         logging.info("----------")
         correlation_object = pg.corr(
             optimization_data["bic"], optimization_data[f"{parameter}"]
@@ -89,8 +90,8 @@ if __name__ == "__main__":
 
         logging.info("----------")
         logging.info(
-            f"Correlation between parameter spread and "
-            f"MAP parameter value for {parameter}"
+            "Correlation between parameter spread and MAP parameter value for %s",
+            parameter,
         )
         logging.info("----------")
         correlation_object = pg.corr(

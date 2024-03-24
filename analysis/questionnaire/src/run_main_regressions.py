@@ -1,3 +1,4 @@
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -10,6 +11,7 @@ from costometer.utils import (
     get_parameter_coefficient,
     get_pval_text,
     get_regression_text,
+    set_plotting_and_logging_defaults,
 )
 from quest_utils.subscale_utils import uppsp_dict
 from scipy.stats import mode
@@ -93,7 +95,7 @@ def run_main_regressions(tests, combined_scores, model_parameters, pval_cutoff=0
     )
 
     for test_idx, res in enumerate(results):
-        print(
+        logging.info(
             f"{res['prettyname'].loc[1]} & "
             f"${res.loc[1]['fsquare']:.3f}$ & "
             f"$F({res.loc[1]['df_diff']:.0f}, "
@@ -108,8 +110,8 @@ def run_main_regressions(tests, combined_scores, model_parameters, pval_cutoff=0
         full_res = run_regression(test, data=curr_data, params=model_parameters)
 
         if reject_null[test_idx]:
-            print(test["prettyname"])
-            print("\t - " + get_regression_text(full_res))
+            logging.info(test["prettyname"])
+            logging.info("\t - " + get_regression_text(full_res))
 
             params_to_correct_for = [
                 model_parameter
@@ -129,14 +131,14 @@ def run_main_regressions(tests, combined_scores, model_parameters, pval_cutoff=0
             # if followup, correct
             if len(test["followup"]) > 0:
                 if full_res.pvalues[test["followup"]] < pval_cutoff:
-                    print(
+                    logging.info(
                         f"\t\t - {test['followup']}, "
                         f"{get_parameter_coefficient(full_res, test['followup'], pval=full_res.pvalues[test['followup']])}"  # noqa : E501
                     )
 
             for param_idx, curr_param in enumerate(params_to_correct_for):
                 if coeff_reject_null[param_idx]:
-                    print(
+                    logging.info(
                         f"\t\t - {curr_param}"
                         f", {get_parameter_coefficient(full_res, curr_param, pval=coeff_corrected_pval[param_idx])}"  # noqa : E501
                     )
@@ -167,8 +169,14 @@ if __name__ == "__main__":
     )
     inputs = parser.parse_args()
 
-    data_path = Path(__file__).resolve().parents[1]
+    subdirectory = Path(__file__).resolve().parents[1]
     irl_path = Path(__file__).resolve().parents[3]
+
+    set_plotting_and_logging_defaults(
+        subdirectory=subdirectory,
+        experiment_name="MainRegressions",
+        filename=Path(__file__).stem,
+    )
 
     analysis_obj = AnalysisObject(
         inputs.experiment_name,

@@ -4,8 +4,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from costometer.utils import get_static_palette
-from costometer.utils.scripting_utils import standard_parse_args
+from costometer.utils import get_static_palette, standard_parse_args
 
 
 def bic_plot(
