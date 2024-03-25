@@ -446,9 +446,9 @@ def immediate_ancestor_priority(trial, rng=None):
             ancestor_count = node.get_observed_ancestor_count()
             successor_count = node.get_observed_successor_count()
             score = (
-                    0.6 * immediate_ancestor_count
-                    + 0.2 * ancestor_count
-                    + (0.15 * immediate_successor_count + 0.05 * successor_count)
+                0.6 * immediate_ancestor_count
+                + 0.2 * ancestor_count
+                + (0.15 * immediate_successor_count + 0.05 * successor_count)
             )
             scores.append(score)
             ancestor_scores.append(immediate_ancestor_count)
@@ -482,9 +482,9 @@ def immediate_successor_priority(trial, rng=None):
             ancestor_count = node.get_observed_ancestor_count()
             successor_count = node.get_observed_successor_count()
             score = (
-                    0.6 * immediate_successor_count
-                    + 0.2 * successor_count
-                    + (0.15 * immediate_ancestor_count + 0.05 * ancestor_count)
+                0.6 * immediate_successor_count
+                + 0.2 * successor_count
+                + (0.15 * immediate_ancestor_count + 0.05 * ancestor_count)
             )
             scores.append(score)
             successor_scores.append(immediate_successor_count)
@@ -664,7 +664,7 @@ def positive_forward_satisficing(trial, rng=None):
 
 @strategy(23)
 def check_all_roots(trial, rng=None):
-    """ Explores all root nodes and terminates """
+    """Explores all root nodes and terminates"""
     rng = np.random.default_rng(rng)
     root_nodes = trial.node_map[0].children.copy()
     rng.shuffle(root_nodes)
@@ -675,7 +675,7 @@ def check_all_roots(trial, rng=None):
 
 @strategy(24)
 def check_all_leaves(trial, rng=None):
-    """ Explores all leaf nodes and terminates """
+    """Explores all leaf nodes and terminates"""
     rng = np.random.default_rng(rng)
     leaf_nodes = trial.get_leaf_nodes()
     rng.shuffle(leaf_nodes)

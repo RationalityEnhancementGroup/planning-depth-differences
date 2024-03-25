@@ -6,7 +6,7 @@ from ..env.modified_mouselab import TrialSequence
 from .learning_utils import get_normalized_feature_values
 
 
-def get_accuracy_position( # noqa : N806
+def get_accuracy_position(  # noqa : N806
     position, ground_truth, clicks, pipeline, features, normalized_features, W
 ):
     num_features = len(features)
@@ -116,11 +116,11 @@ def compute_trial_feature_log_likelihood(
     log_likelihoods = []
     feature_len = weights.shape[0]
     beta = 1
-    W = weights # noqa : N806
+    W = weights  # noqa : N806
     if inv_t:
         feature_len -= 1
         beta = weights[-1]
-        W = weights[:-1] # noqa : N806
+        W = weights[:-1]  # noqa : N806
     for i in range(len(click_sequence)):
         click = click_sequence[i]
         unobserved_nodes = trial.get_unobserved_nodes()
