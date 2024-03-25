@@ -141,12 +141,14 @@ def get_regression_df(
         )
 
         logging.info(test["dependent"])
-        logging.info("\t - " + get_regression_text(full_res))
+        logging.info("\t - %s", get_regression_text(full_res))
 
         if full_res.f_pvalue < 0.05:
             for param in list(full_res.pvalues[(full_res.pvalues < pval_cutoff)].index):
                 logging.info(
-                    f"\t\t - {param}, {get_parameter_coefficient(full_res, param)}"
+                    "\t\t - %s, %s",
+                    param,
+                    get_parameter_coefficient(full_res, param),
                 )
 
         for model_parameter in model_parameters:

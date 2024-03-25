@@ -25,10 +25,9 @@ if __name__ == "__main__":
     irl_path = Path(__file__).resolve().parents[4]
     subdirectory = irl_path.joinpath("analysis/methods/static")
 
-    yaml_file = str(
-        irl_path.joinpath(f"data/inputs/yamls/temperatures/{inputs.prior_file}.yaml")
+    yaml_path = irl_path.joinpath(
+        f"data/inputs/yamls/temperatures/{inputs.prior_file}.yaml"
     )
-    yaml_path = Path(yaml_file).resolve()
     with open(str(yaml_path), "r") as stream:
         prior_inputs = yaml.safe_load(stream)
 

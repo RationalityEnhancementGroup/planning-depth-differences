@@ -96,12 +96,13 @@ def run_main_regressions(tests, combined_scores, model_parameters, pval_cutoff=0
 
     for test_idx, res in enumerate(results):
         logging.info(
-            f"{res['prettyname'].loc[1]} & "
-            f"${res.loc[1]['fsquare']:.3f}$ & "
-            f"$F({res.loc[1]['df_diff']:.0f}, "
-            f"{res.loc[1]['df_resid']:.0f}) = "
-            f"{res.loc[1]['F']:.2f}$ & "
-            f"{get_pval_text(corrected_pval[test_idx])}\\\ "  # noqa : W605
+            "%s & $%.3f$ & $F(%.0f, %.0f) = %.2f$ & %s\\ ",
+            res["prettyname"].loc[1],
+            res.loc[1]["fsquare"],
+            res.loc[1]["df_diff"],
+            res.loc[1]["df_resid"],
+            res.loc[1]["F"],
+            get_pval_text(corrected_pval[test_idx]),
         )
 
     for test_idx, test in enumerate(tests):
@@ -111,7 +112,7 @@ def run_main_regressions(tests, combined_scores, model_parameters, pval_cutoff=0
 
         if reject_null[test_idx]:
             logging.info(test["prettyname"])
-            logging.info("\t - " + get_regression_text(full_res))
+            logging.info("\t - %s", get_regression_text(full_res))
 
             params_to_correct_for = [
                 model_parameter
@@ -132,15 +133,23 @@ def run_main_regressions(tests, combined_scores, model_parameters, pval_cutoff=0
             if len(test["followup"]) > 0:
                 if full_res.pvalues[test["followup"]] < pval_cutoff:
                     logging.info(
-                        f"\t\t - {test['followup']}, "
-                        f"{get_parameter_coefficient(full_res, test['followup'], pval=full_res.pvalues[test['followup']])}"  # noqa : E501
+                        "\t\t - %s, %s",
+                        test["followup"],
+                        get_parameter_coefficient(
+                            full_res,
+                            test["followup"],
+                            pval=full_res.pvalues[test["followup"]],
+                        ),
                     )
 
             for param_idx, curr_param in enumerate(params_to_correct_for):
                 if coeff_reject_null[param_idx]:
                     logging.info(
-                        f"\t\t - {curr_param}"
-                        f", {get_parameter_coefficient(full_res, curr_param, pval=coeff_corrected_pval[param_idx])}"  # noqa : E501
+                        "\t\t - %s, %s",
+                        curr_param,
+                        get_parameter_coefficient(
+                            full_res, curr_param, pval=coeff_corrected_pval[param_idx]
+                        ),
                     )
 
     return pvals

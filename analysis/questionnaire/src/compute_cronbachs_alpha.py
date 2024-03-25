@@ -63,4 +63,10 @@ if __name__ == "__main__":
         res, ci = pg.cronbach_alpha(
             individual_items[matching_columns], nan_policy="listwise"
         )
-        logging.info("{question_id}, {len(matching_columns)}, {res:0.3f}, {ci}")
+        logging.info(
+            "question: %s, length: %d, alpha: %0.3f, ci: [%.2f, %.2f]",
+            question_id,
+            len(matching_columns),
+            res,
+            *ci,
+        )

@@ -118,5 +118,9 @@ if __name__ == "__main__":
 
     for variable, vif_value in vif_dict.items():
         logging.info(
-            f"{analysis_obj.cost_details.latex_mapping[variable]  if variable in analysis_obj.cost_details.latex_mapping else variable} & {vif_value:.2f} \\\ "  # noqa : E501, W605
+            "%s & %.2f \\ ",  # noqa: W605
+            analysis_obj.cost_details.latex_mapping[variable]
+            if variable in analysis_obj.cost_details.latex_mapping
+            else variable,
+            vif_value,
         )

@@ -156,10 +156,10 @@ if __name__ == "__main__":
                     axis=1,
                 )
                 logging.info(
+                    "parameter: %s, block: %s in hdi (predictions) %.2f",
                     parameter,
                     block,
-                    f"in hdi (predictions) "
-                    f"{np.mean(full_parameter_info[f'{block}_{parameter}_in']):.2f}",
+                    np.mean(full_parameter_info[f"{block}_{parameter}_in"]),
                 )
 
     for param in model_params:
@@ -173,10 +173,12 @@ if __name__ == "__main__":
         logging.info("----------")
         logging.info(get_wilcoxon_text(res))
         logging.info(
-            "test block ($M: {full_parameter_info[f'test_{param}_spread'].mean():.2f},"
-            f" SD: {full_parameter_info[f'test_{param}_spread'].std():.2f}$)\n"
-            f"baseline block ($M: {full_parameter_info[f'fairy_{param}_spread'].mean():.2f},"  # noqa: E501
-            f" SD: {full_parameter_info[f'fairy_{param}_spread'].std():.2f}$) "
+            "test block ($M: %.2f, SD: %.2f$)\n"
+            "baseline block ($M: %.2f, SD: %.2f$) ",
+            full_parameter_info[f"test_{param}_spread"].mean(),
+            full_parameter_info[f"test_{param}_spread"].std(),
+            full_parameter_info[f"fairy_{param}_spread"].mean(),
+            full_parameter_info[f"fairy_{param}_spread"].std(),
         )
 
     for block in hdi_ranges.keys():
@@ -203,9 +205,12 @@ if __name__ == "__main__":
             )
 
         for parameter in model_params_given.keys():
-            logging.info(parameter, block)
+            logging.info("%s, %s", parameter, block)
             if len(full_parameter_info[f"{block}_{parameter}_in"].unique()) == 1:
-                logging.info(full_parameter_info[f"{block}_{parameter}_in"].unique())
+                logging.info(
+                    "Unique: %d",
+                    full_parameter_info[f"{block}_{parameter}_in"].unique(),
+                )
             else:
                 comparison = pg.mwu(
                     full_parameter_info[full_parameter_info[f"{block}_{parameter}_in"]][
@@ -215,7 +220,7 @@ if __name__ == "__main__":
                         ~full_parameter_info[f"{block}_{parameter}_in"]
                     ][f"diff_{parameter}"],
                 )
-                logging.info(get_mann_whitney_text(comparison))
+                logging.info("%s", get_mann_whitney_text(comparison))
 
     full_parameter_info.rename(
         columns={f"{parameter}_test": parameter for parameter in model_params},
@@ -275,7 +280,7 @@ if __name__ == "__main__":
             )
             logging.info("----------")
             logging.info(
-                full_parameter_info[f"{block}_{parameter}_in_regression"].unique()
+                "%d", full_parameter_info[f"{block}_{parameter}_in_regression"].unique()
             )
         else:
             comparison = pg.mwu(
@@ -296,7 +301,7 @@ if __name__ == "__main__":
                 parameter,
             )
             logging.info("----------")
-            logging.info(get_mann_whitney_text(comparison))
+            logging.info("%s", get_mann_whitney_text(comparison))
 
     logging.info("----------")
     logging.info(
@@ -404,8 +409,9 @@ if __name__ == "__main__":
             full_parameter_info[f"{block}_{parameter}_min"],
         )
         logging.info(
-            "{analysis_obj_test.cost_details.latex_mapping[parameter]}"
-            f" & {get_correlation_text(correlation_object, table=True)}"
+            "%s & %s",
+            analysis_obj_test.cost_details.latex_mapping[parameter],
+            get_correlation_text(correlation_object, table=True),
         )
 
     logging.info("----------")

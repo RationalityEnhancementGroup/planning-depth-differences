@@ -147,10 +147,15 @@ if __name__ == "__main__":
             )
 
             logging.info(
-                f"{analysis_obj.model_name_mapping[() if model_pair[0] == '' else tuple(model_pair[0].split(','))]} & "  # noqa : E501
-                f"{analysis_obj.model_name_mapping[() if model_pair[1] == '' else tuple(model_pair[1].split(','))]} & "  # noqa : E501
-                f"{friedman_object.Q[0]:.3f}"
-                f"{get_pval_string(friedman_object['p-unc'][0])} \\"
+                "%s & %s & %.3f%s \\",
+                analysis_obj.model_name_mapping[
+                    () if model_pair[0] == "" else tuple(model_pair[0].split(","))
+                ],
+                analysis_obj.model_name_mapping[
+                    () if model_pair[1] == "" else tuple(model_pair[1].split(","))
+                ],
+                friedman_object.Q[0],
+                get_pval_string(friedman_object["p-unc"][0]),
             )
 
         for model_pair in itertools.combinations(

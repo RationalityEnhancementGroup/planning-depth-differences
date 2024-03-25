@@ -17,10 +17,8 @@ from mouselab.cost_functions import forward_search_cost
 from mouselab.mouselab import MouselabEnv
 from scipy.stats import mode
 
-"""
-TODO: hack to finish things quicker, would be better to move the whole
-calculation of forward search trials out
-"""
+# TODO: hack to finish things quicker, would be better to move the
+#  whole calculation of forward search trials out
 sys.path.append(str(Path(__file__).parents[3].joinpath("cluster")))
 from src.cluster_utils import get_human_trajectories  # noqa: E402
 
@@ -76,7 +74,7 @@ if __name__ == "__main__":
 
     logging.info("-------")
     for model_parameter in model_parameters:
-        logging.info("Model parameter: {model_parameter}")
+        logging.info("Model parameter: %s", model_parameter)
         logging.info(
             get_correlation_text(
                 pg.corr(combined_scores["age"], combined_scores[model_parameter])
@@ -91,7 +89,7 @@ if __name__ == "__main__":
             exp = pickle.load(f)
         for pid, strategies in exp.participant_strategies.items():
             last_strategies = strategies[-20:]
-            cm[pid] = mode(last_strategies).mode[0]
+            cm[pid] = mode(last_strategies).mode
 
     combined_scores["mode_strategy"] = combined_scores["pid"].apply(
         lambda curr_pid: cm[curr_pid]
@@ -109,10 +107,9 @@ if __name__ == "__main__":
             logging.info(strategy)
             logging.info(get_mann_whitney_text(mwu_obj))
             logging.info(
-                f"M (strategy): "
-                f"{combined_scores[combined_scores[strategy].astype(bool)]['age'].mean():.03f}"  # noqa : E501
-                f", M (not strategy): "
-                f"{combined_scores[~combined_scores[strategy].astype(bool)]['age'].mean():.03f}"  # noqa : E501
+                "M (strategy): %.03f, M (not strategy): %.03f",
+                combined_scores[combined_scores[strategy].astype(bool)]["age"].mean(),
+                combined_scores[~combined_scores[strategy].astype(bool)]["age"].mean(),
             )
 
     logging.info("-------")
@@ -138,10 +135,11 @@ if __name__ == "__main__":
     )
     logging.info(get_mann_whitney_text(mwu_obj))
     logging.info(
-        f"M (strategy): "
-        f"{combined_scores[combined_scores['forward_strategy'].astype(bool)]['age'].mean():.03f}"  # noqa : E501
-        f", M (not strategy): "
-        f"{combined_scores[~combined_scores['forward_strategy'].astype(bool)]['age'].mean():.03f}"  # noqa : E501
+        "M (forward strategy): %.03f, M (not forward strategy): %.03f",
+        combined_scores[combined_scores["forward_strategy"].astype(bool)]["age"].mean(),
+        combined_scores[~combined_scores["forward_strategy"].astype(bool)][
+            "age"
+        ].mean(),
     )
     logging.info("-------")
     # calculate forward search trials
@@ -216,7 +214,7 @@ if __name__ == "__main__":
 
     logging.info("-------")
     for model_parameter in model_parameters:
-        logging.info("Model parameter: {model_parameter}")
+        logging.info("Model parameter: %s", model_parameter)
         logging.info(
             get_correlation_text(
                 pg.corr(

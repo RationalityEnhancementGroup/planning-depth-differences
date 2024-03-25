@@ -122,8 +122,8 @@ if __name__ == "__main__":
                     ][col].values,
                 )
                 if mwu_obj["p-val"][0] < 0.05:
-                    logging.info(strategy, col)
-                    logging.info(get_mann_whitney_text(mwu_obj))
+                    logging.info("strategy %d, column %s", strategy, col)
+                    logging.info("%s", get_mann_whitney_text(mwu_obj))
 
                     logging.info(
                         "%.3f %.3f",

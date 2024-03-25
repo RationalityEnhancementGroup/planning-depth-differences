@@ -277,8 +277,9 @@ if __name__ == "__main__":
             combined[f"rmse_{assigned_cost}"] < sd_values[inferred_cost]
         ) / len(combined[f"rmse_{assigned_cost}"])
         logging.info(
-            "Number of participants recovered in at least 1 SD for "
-            f"{assigned_cost}: {percentage_under_sd: .2f}"
+            "Number of participants recovered in at least 1 SD for %s: %.2f",
+            assigned_cost,
+            percentage_under_sd,
         )
 
     under_both = combined.apply(

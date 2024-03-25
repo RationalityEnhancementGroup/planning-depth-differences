@@ -25,8 +25,7 @@ def columns_to_gillan(col, col_dict):
     if col_parts[0] in col_dict:
         col_parts[0] = col_dict[col_parts[0]]
         return "_".join(col_parts)
-    else:
-        return col
+    return col
 
 
 def load_weights(weights_path, wise_weights=False):
@@ -66,10 +65,9 @@ def get_psychiatric_scores(individual_items, weights, scale_cols=True):
     if "LSAS_25" in individual_items:
         for col in range(25, 49):
             individual_items["LSAS_{}".format(col - 24)] = (
-                individual_items["LSAS_{}".format(col - 24)]
-                + individual_items["LSAS_{}".format(col)]
+                individual_items[f"LSAS_{col - 24}"] + individual_items[f"LSAS_{col}"]
             )
-            del individual_items["LSAS_{}".format(col)]
+            del individual_items[f"LSAS_{col}"]
     else:
         logging.info("LSAS already combined")
 

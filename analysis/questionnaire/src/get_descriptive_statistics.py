@@ -19,8 +19,9 @@ if __name__ == "__main__":
 
     task_motivation = analysis_obj.dfs["quiz-and-demo"]["mouselab-quiz-post_Q5"]
     logging.info(
-        f"Task motivation: ${task_motivation.mean():0.3f}$"
-        f" (SD: ${task_motivation.std():0.3f}$)"
+        "Task motivation: $%0.3f$ (SD: $%0.3f$)",
+        task_motivation.mean(),
+        task_motivation.std(),
     )
 
     logging.info("===========")
@@ -30,11 +31,12 @@ if __name__ == "__main__":
     overall_effort[pd.isnull(overall_effort)] = -1
 
     logging.info(
-        f"Overall effort: ${overall_effort[~overall_effort.isin([-1,4])].mean():0.3f}$"
-        f" (SD: ${overall_effort[~overall_effort.isin([-1,4])].std():0.3f}$)"
+        "Overall effort: $%0.3f$ (SD: $%0.3f$)",
+        overall_effort[~overall_effort.isin([-1, 4])].mean(),
+        overall_effort[~overall_effort.isin([-1, 4])].std(),
     )
-    logging.info("No response: {len(overall_effort[overall_effort == -1])}")
-    logging.info("Uncertain: {len(overall_effort[overall_effort == 4])}")
+    logging.info("No response: %d", len(overall_effort[overall_effort == -1]))
+    logging.info("Uncertain: %d", len(overall_effort[overall_effort == 4]))
     logging.info(Counter(overall_effort))
 
     logging.info("===========")
@@ -43,14 +45,18 @@ if __name__ == "__main__":
     gender = analysis_obj.dfs["quiz-and-demo"]["gender"]
 
     logging.info(
-        f"The final sample of ${len(gender)}$ participants consisted of"
-        f" ${len(gender[gender == 'female'])}$ women, ${len(gender[gender == 'male'])}$"
-        f" men and ${len(gender[~gender.isin(['male','female'])])}$ people who were "
-        f"non-binary or did not provide their gender."
+        "The final sample of $%d$ participants consisted of $%d$ women, "
+        "$%d$ men and $%d$ people who were non-binary or did not provide their gender.",
+        len(gender),
+        len(gender[gender == "female"]),
+        len(gender[gender == "male"]),
+        len(gender[~gender.isin(["male", "female"])]),
     )
     logging.info(
-        f"The median age of participants was ${median(age[~pd.isnull(age)])}$"
-        f" (range ${min(age[~pd.isnull(age)])}$ to ${max(age[~pd.isnull(age)])}$)."
+        "The median age of participants was $%.2f$ (range $%d$ to $%d$).",
+        median(age[~pd.isnull(age)]),
+        min(age[~pd.isnull(age)]),
+        max(age[~pd.isnull(age)]),
     )
-    logging.info("Age data was not provided by ${sum(pd.isnull(age))}$ participants.")
+    logging.info("Age data was not provided by $%d$ participants.", sum(pd.isnull(age)))
     logging.info("===========")

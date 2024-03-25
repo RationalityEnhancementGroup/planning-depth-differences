@@ -112,7 +112,7 @@ if __name__ == "__main__":
     )
     logging.info(get_ttest_text(ttest_obj))
     logging.info(
-        "$M: %:.3f, SD: %.3f$",
+        "$M: %.3f, SD: %.3f$",
         strategy_count_df[strategy_count_df["type"] == "last"]["count"].mean(),
         strategy_count_df[strategy_count_df["type"] == "last"]["count"].std(),
     )

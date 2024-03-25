@@ -56,7 +56,7 @@ if __name__ == "__main__":
     )
 
     for exp1, exp2 in list(combinations(inputs.experiment_names, 2)):
-        logging.info("{exp1}, {exp2}")
+        logging.info("%s, %s", exp1, exp2)
         logging.info("--------------")
         for model_param in model_params:
             logging.info(model_param)
@@ -76,7 +76,7 @@ if __name__ == "__main__":
         logging.info(exp)
         for model_param in model_params:
             logging.info(
-                "%s & %.3f (%.3f) \\\ ",  # noqa: W605
+                "%s & %.3f (%.3f) \\ ",  # noqa: W605
                 analysis_obj.cost_details.latex_mapping[model_param],
                 np.mean((analysis_obs[exp][model_param])),
                 np.std((analysis_obs[exp][model_param])),

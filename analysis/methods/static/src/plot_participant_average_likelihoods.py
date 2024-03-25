@@ -235,7 +235,7 @@ if __name__ == "__main__":
         .iterrows()
     ):
         logging.info(
-            "{%d} & {%.3f} & {%.3f} \\\ ",  # noqa : W605
+            "%s & %.3f & %.3f \\ ",  # noqa : W605
             row_idx,
             row["mean"],
             row["std"],

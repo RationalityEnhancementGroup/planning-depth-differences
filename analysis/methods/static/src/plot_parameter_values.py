@@ -28,10 +28,6 @@ def bic_plot(
 
 
 if __name__ == "__main__":
-    """
-    Example usage:
-    python src/plot_bic.py -e MainExperiment
-    """
     irl_path = Path(__file__).resolve().parents[4]
     analysis_obj, inputs, subdirectory = standard_parse_args(
         description=sys.modules[__name__].__doc__,
@@ -55,4 +51,4 @@ if __name__ == "__main__":
     # for analysis_obj.cost_details[]
     sns.boxplot(x="Model Parameter", y="Parameter Value", data=pd.concat(plotting_df))
 
-    plt.show()
+    plt.savefig(f"figs/{inputs.experiment_name}_model_parameter_values.png")

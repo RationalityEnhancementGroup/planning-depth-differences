@@ -196,7 +196,7 @@ if __name__ == "__main__":
             pval_string = get_pval_string(row["p"])
 
             logging.info(
-                "$%s$  &  $\hat{%s}$ & $%.3f (%.3f)%s$ & $%.3f$ \\\\",  # noqa: W605
+                "$%s$  &  $\hat{%s}$ & $%.3f (%.3f)%s$ & $%.3f$ \\",  # noqa: W605
                 analysis_obj.cost_details.latex_mapping[param],
                 analysis_obj.cost_details.latex_mapping[row_idx],
                 row["coeff"],
@@ -215,7 +215,7 @@ if __name__ == "__main__":
         )
         logging.info("Absolute error for {param}")
         logging.info(
-            "Median: %.2f, Range: [%.2f, %.2f}]",
+            "Median: %.2f, Range: [%.2f, %.2f]",
             optimization_data[f"error_{param}"].median(),
             optimization_data[f"error_{param}"].min(),
             optimization_data[f"error_{param}"].max(),
